@@ -39,6 +39,8 @@ class SignInSignUp extends Component {
       return this.renderSignUp();
     } else if (dialogType === 'signin') {
       return this.renderSignIn();
+    } else if (dialogType === 'reset-password') {
+      return this.renderResetPassword();
     } else {
       return (
         <div></div>
@@ -106,6 +108,9 @@ class SignInSignUp extends Component {
           Already have an account?
           <Button disabled={loading}
             onClick={() => {
+              this.setState(
+                { error: '' }
+              );
               this.props.setDialogType('signin');
             }}>
             Sign In
@@ -181,7 +186,14 @@ class SignInSignUp extends Component {
                 this.storeToState('password1', event.target.value)
               }} />
             <span className="error">{this.state.error}</span>
-            <h6 className="right-align">Forgot password?</h6>
+            <h6 className="clickable"
+              onClick={() => {
+                this.setState(
+                  { error: '' }
+                );
+                this.props.setDialogType('reset-password');
+              }}
+            >Forgot password?</h6>
             <Form.Button positive
               disabled={loading}
               onClick={(event) => {
@@ -196,6 +208,9 @@ class SignInSignUp extends Component {
         <Button
             disabled={loading}
             onClick={() => {
+              this.setState(
+                { error: '' }
+              );
               this.props.setDialogType('signup');
             }}>
             Sign Up
@@ -228,6 +243,59 @@ class SignInSignUp extends Component {
 
   storeToken = (token) => {
     bake_cookie(TOKEN, token);
+  }
+
+  renderResetPassword = () => {
+    const { loading } = this.state;
+    return (
+      <Modal open={true}>
+        <Modal.Header>
+          Reset Your Password
+        </Modal.Header>
+        <Modal.Content>
+          <Form>
+            <Form.Input
+              disabled={loading}
+              icon='mail'
+              iconPosition='left'
+              label='Email Address'
+              placeholder='Enter Email address'
+              onChange={(event) => {
+                this.storeToState('email', event.target.value)
+              }} />
+            <span className="error">{this.state.error}</span>
+            <Form.Button positive
+              disabled={loading}>
+              Submit
+          </Form.Button>
+          </Form>
+        </Modal.Content>
+        <Modal.Actions>
+          Not what you wanted?
+          <Button
+            disabled={loading}
+            onClick={() => {
+              this.setState(
+                { error: '' }
+              );
+              this.props.setDialogType('signup');
+            }}>
+            Sign Up
+          </Button>
+          &nbsp; OR
+          <Button
+            disabled={loading}
+            onClick={() => {
+              this.setState(
+                { error: '' }
+              );
+              this.props.setDialogType('signin');
+            }}>
+            Sign In
+          </Button>
+        </Modal.Actions>
+      </Modal>
+    )
   }
 
   render() {
