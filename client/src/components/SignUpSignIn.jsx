@@ -126,7 +126,7 @@ class SignInSignUp extends Component {
       } else {
         this.setState(
           { loading: true }
-        )
+        );
         axios.post('/api/v1/users/signup', {
           name, username, email, password: password1
         })
@@ -191,6 +191,26 @@ class SignInSignUp extends Component {
         </Modal.Actions>
       </Modal>
     )
+  }
+
+  handleSignIn = (event) => {
+    this.setState(
+      { loading: true }
+    );
+    const { username, password1 } = this.state;
+    axios.post('/api/v1/users/signin', {
+      username, password: password1
+    })
+      .then((loggedUser) => {
+        this.setState(
+          { loading: false, error: 'signin success!' }
+        );
+      })
+      .catch((error) => {
+        this.setState(
+          { loading: false, error: error.response.data.message }
+        );
+      });
   }
 
   render() {
