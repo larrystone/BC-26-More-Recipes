@@ -46,7 +46,7 @@ class RecipeItem extends Component {
   }
 
   handleViewRecipe = () => {
-    this.props.setDialogType('signup')
+    this.props.setDialogType('signup');
   }
 }
 

@@ -4,6 +4,8 @@ import { Form, Modal, Button } from 'semantic-ui-react';
 import axios from 'axios';
 import { bake_cookie } from 'sfcookies';
 
+import { setDialogType } from '../actions/dialog';
+
 const TOKEN = 'more-recipe-token';
 
 import * as validate from '../../../server/middleware/validate';
@@ -102,7 +104,10 @@ class SignInSignUp extends Component {
         </Modal.Content>
         <Modal.Actions>
           Already have an account?
-          <Button disabled={loading}>
+          <Button disabled={loading}
+            onClick={() => {
+              this.props.setDialogType('signin');
+            }}>
             Sign In
           </Button>
         </Modal.Actions>
@@ -189,7 +194,10 @@ class SignInSignUp extends Component {
         <Modal.Actions>
           Don't have an account?
         <Button
-            disabled={loading}>
+            disabled={loading}
+            onClick={() => {
+              this.props.setDialogType('signup');
+            }}>
             Sign Up
         </Button>
         </Modal.Actions>
@@ -237,4 +245,4 @@ const mapStateToProps = (state) => {
   }
 }
 
-export default connect(mapStateToProps, null)(SignInSignUp);
+export default connect(mapStateToProps, { setDialogType })(SignInSignUp);
