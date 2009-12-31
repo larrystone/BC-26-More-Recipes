@@ -33,7 +33,7 @@ class SignInSignUp extends Component {
     if (dialogType === 'signup') {
       return this.renderSignUp();
     } else if (dialogType === 'signin') {
-      // TODO return signIn form
+      return this.renderSignIn();
     } else {
       return (
         <div></div>
@@ -124,20 +124,73 @@ class SignInSignUp extends Component {
           { error: 'Password don\'t match' }
         );
       } else {
+        this.setState(
+          { loading: true }
+        )
         axios.post('/api/v1/users/signup', {
           name, username, email, password: password1
         })
           .then((loggedUser) => {
             this.setState(
-              { error: 'signup success!' }
+              { loading: false, error: 'signup success!' }
             );
           })
           .catch((error) => {
             this.setState(
-              { error: error.response.data.message }
+              { loading: false, error: error.response.data.message }
             );
           });
       }
+  }
+
+  renderSignIn = () => {
+    const { loading } = this.state;
+    return (
+      <Modal open={true}>
+        <Modal.Header>
+          Sign In to Your Account
+        </Modal.Header>
+        <Modal.Content>
+          <Form>
+            <Form.Input
+              disabled={loading}
+              icon='user'
+              iconPosition='left'
+              label='Username or Email'
+              placeholder='Username or Email'
+              onChange={(event) => {
+                this.storeToState('username', event.target.value)
+              }} />
+            <Form.Input
+              disabled={loading}
+              icon='lock'
+              iconPosition='left'
+              label='Password'
+              placeholder='Password'
+              type='password'
+              onChange={(event) => {
+                this.storeToState('password1', event.target.value)
+              }} />
+            <span className="error">{this.state.error}</span>
+            <h6 className="right-align">Forgot password?</h6>
+            <Form.Button positive
+              disabled={loading}
+              onClick={(event) => {
+                this.handleSignIn(event);
+              }}>
+              Sign In
+          </Form.Button>
+          </Form>
+        </Modal.Content>
+        <Modal.Actions>
+          Don't have an account?
+        <Button
+            disabled={loading}>
+            Sign Up
+        </Button>
+        </Modal.Actions>
+      </Modal>
+    )
   }
 
   render() {
