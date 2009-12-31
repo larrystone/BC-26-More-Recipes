@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Form, Modal, Button } from 'semantic-ui-react';
 import axios from 'axios';
+import { bake_cookie } from 'sfcookies';
+
+const TOKEN = 'more-recipe-token';
 
 import * as validate from '../../../server/middleware/validate';
 
@@ -134,6 +137,7 @@ class SignInSignUp extends Component {
             this.setState(
               { loading: false, error: 'signup success!' }
             );
+            this.storeToken(loggedUser.data.user.token);
           })
           .catch((error) => {
             this.setState(
@@ -205,12 +209,17 @@ class SignInSignUp extends Component {
         this.setState(
           { loading: false, error: 'signin success!' }
         );
+        this.storeToken(loggedUser.data.user.token);
       })
       .catch((error) => {
         this.setState(
           { loading: false, error: error.response.data.message }
         );
       });
+  }
+
+  storeToken = (token) => {
+    bake_cookie(TOKEN, token);
   }
 
   render() {
