@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import { Card, Image, Grid, Icon } from 'semantic-ui-react';
 
-class RecipeItem extends Component {
+import { connect } from 'react-redux';
 
+import { setDialogType } from '../actions/dialog';
+
+class RecipeItem extends Component {
   showRecipeActions = () => {
     const { upvotes, downvotes } = this.props.recipe;
     return (
@@ -26,6 +29,9 @@ class RecipeItem extends Component {
         <Image
           alt='food image'
           src={imageUrl} className="clickable" height="180px"
+          onClick={() => {
+            this.handleViewRecipe();
+          }}
         />
         <Card.Content>
           <Card.Header>{name}</Card.Header>
@@ -38,6 +44,10 @@ class RecipeItem extends Component {
       </Card>
     )
   }
+
+  handleViewRecipe = () => {
+    this.props.setDialogType('signup')
+  }
 }
 
-export default RecipeItem;
+export default connect(null, { setDialogType })(RecipeItem);
