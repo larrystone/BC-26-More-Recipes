@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+  <head>    
+    <title>More-Recipes</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/css/materialize.min.css">
+    <link rel="stylesheet" href="css/index.css">
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+  <body>
+    <div>
+
+      <nav>
+        <div class="nav-wrapper green lighten-2">
+          <a href="#!" class="brand-logo center">More-Recipes</a>
+          <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+          <ul class="right hide-on-med-and-down">
+            <li><a class="signup">SIGN UP</a></li>
+            <li><a class="login">LOGIN</a></li>
+          </ul>
+          <ul class="side-nav" id="mobile-demo">
+            <li><a class="signup">SIGN UP</a></li>
+            <li><a class="login">LOGIN</a></li>
+          </ul>
+        </div>
+      </nav>
+
+
+      <section class="valign-wrapper row hide" id="signin">
+        <form action="" method="post" class="col card s10 pull-s1 m4 pull-m4">
+          <div class="card-content">
+            <span class="card-title truncate">Login to Your Account</span>
+            <div class="row">
+              <div class="input-field col s12">
+                <label for="username"><i class="material-icons">account_circle</i> Username or Email</label>
+                <input type="text" class="validate" name="username" id="username" />
+              </div>
+              <div class="input-field col s12">
+                <label for="password"><i class="material-icons">lock_outline</i> Password </label>
+                <input type="password" class="validate" name="password" id="password" />
+              </div>
+              <h6 class="right-align">Forgot password?</h6>
+              <div class="center-align">
+                <input type="submit" class="btn waves-effect waves-light green lighten-2" value="Login">
+              </div>
+              <br/>
+              <div class="card-action right-align">
+                Don't have an account? <a class="signup">Sign Up</a>
+              </div>
+            </div>
+          </div>
+        </form>
+      </section>
+      
+      <section class="valign-wrapper row hide" id="signup">
+        <form action="" method="post" class="col card s10 pull-s1 m4 pull-m4">
+          <div class="card-content">
+            <span class="card-title truncate">Sign Up for an Account</span>
+            <div class="row">
+              <div class="input-field col s12">            
+                <label for="name">Name</label>
+                <input type="text" class="validate" name="name" id="name" />
+              </div>
+              <div class="input-field col s12">
+                <label for="username">Username</label>
+                <input type="text" class="validate" name="username" id="username" />
+              </div>
+              <div class="input-field col s12">
+                <label for="email">Email address</label>
+                <input type="email" class="validate" name="email" id="email" />
+              </div>
+              <div class="input-field col s12">
+                <label for="password">Password </label>
+                <input type="password" class="validate" name="password" id="password" />
+              </div>
+              <div class="input-field col s12">
+                <label for="password">Re-enter Password </label>
+                <input type="password" class="validate" name="password" id="password" />
+              </div>
+              <div class="center-align">
+                <input type="submit" class="btn waves-effect waves-light green lighten-2" value="Continue">
+              </div>
+              <br/>
+              <div class="card-action right-align">
+                Already have an account? <a class="login">LogIn</a>
+              </div>
+            </div>
+          </div>
+        </form>
+      </section>
+
+      <section class="valign-wrapper row intro" id="intro">
+        <div class="col s10 pull-s1 m6 pull-m3 center-align">
+          <h5>More-Recipes lets you manage and share your recipes with people</h5><br/>
+          <h6><a class="btn waves-effect white grey-text darken-text-2 signup">Sign Up</a> &nbsp; or &nbsp; <a class="btn waves-effect white grey-text darken-text-2 login">Login</a> </h6>
+        </div>
+      </section>
+    </div>      
+    
+    <!--scripts includes-->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/js/materialize.min.js"></script>          
+    <script src="js/home.js"></script>
+  </body>
+</html>

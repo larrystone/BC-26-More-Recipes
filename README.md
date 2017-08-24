@@ -19,4 +19,3 @@ A Recipe management and sharing app...
 
 # Author
 **Lawal Lanre E. (Larrystone)** -Aspiring Software Dev.
-`
