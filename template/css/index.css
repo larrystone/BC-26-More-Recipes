@@ -1,3 +1,7 @@
 #intro {
     margin-top: 120px;
 }
+
+.card:hover {
+    cursor: default;
+}
