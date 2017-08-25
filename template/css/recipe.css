@@ -1,0 +1,12 @@
+.search {
+    margin-top: 8px;
+}
+
+#search {
+    border-left: 1px solid grey;
+    padding-left: 2px;
+}
+
+.reviews {
+    margin-top: 10px;
+}

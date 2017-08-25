@@ -1,17 +1,16 @@
-$('.login').on('click', function (e) {
+const hideIntro = () => {
+  $('#intro').addClass('hide');
+};
 
-    $("#signin").removeClass('hide');
-    $("#signup").addClass('hide');
-    $("#intro").addClass('hide');
+$('.login').on('click', () => {
+  $('#signin').removeClass('hide');
+  $('#signup').addClass('hide');
+  hideIntro();
 });
 
-$('.signup').on('click', function (e) {
-
-    $("#signup").removeClass('hide');
-    $("#signin").addClass('hide');
-    $("#intro").addClass('hide');
+$('.signup').on('click', () => {
+  $('#signup').removeClass('hide');
+  $('#signin').addClass('hide');
+  hideIntro();
 });
 
-$(".button-collapse").sideNav();
-
-$('.carousel.carousel-slider').carousel({fullWidth: true});
