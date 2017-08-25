@@ -22,14 +22,15 @@
     
     <aside>
       <ul id="slide-out" class="side-nav">
-        <li><div class="user-view green lighten-2">
-          <!-- <div class="background">
-            <img src="images/office.jpg">
-          </div> -->
-          <img class="circle" src="images/yuna.jpg">
-          <span class="name">John Doe</span>
-          <span class="email">jdandturk@gmail.com</span>
-        </div></li>
+        <li>
+          <div class="user-view">
+            <div class="background">
+              <img src="images/dodo.jpg">
+            </div> 
+            <span class="name white-text">Lanre Lawal</span>
+            <span class="email white-text">larrystone@gmail.com</span>
+          </div>
+        </li>
         <li><a class="waves-effect" href="recipes.html">Home</a></li>
         <li><a class="waves-effect" href="#!">My Recipes</a></li>
         <li><a class="waves-effect" href="#!">My Favorites</a></li>
@@ -41,8 +42,10 @@
         <div class="col s12 m6">
           <div class="card hoverable">
             <div class="card-content grey lighten-4">
-              <span class="card-title"> Ewedu Soup <button class="btn default"><i class="material-icons">star_border</i></button></span>
-              <p>~ Lanre Lawal</p>
+              <span class="card-title"> Ewedu Soup   &nbsp;&nbsp;
+                 <i class="material-icons clickable" id="bookmark">star_border</i> 
+              </span>
+              <span>~ Lanre Lawal</span>
             </div>
             <div class="card-content">
               <span class="card-title">Ingredients</span>
@@ -54,41 +57,66 @@
             </div>
 
             <div class="card-action">
-              <span class="card-title">Preparation</span>
+              <span class="card-title">Directions</span>
               <p>Boil water for 30mins and so on...</p>
             </div>
 
             <div class="card-action truncate">
-                <a href="#" class="like"><i class="material-icons">thumb_up</i>200</a> &nbsp;
-                <a href="#" class="dislike"><i class="material-icons">thumb_down</i>0</a>
+                <i class="material-icons clickable" id="like">thumb_up</i><span id="likes">200</span> &nbsp;
+                <i class="material-icons clickable" id="dislike">thumb_down</i><span id="dislikes">0</span>
             </div>
           </div>
         </div>
 
         <section class="col s12 m6 reviews">
-          <form>
-            <textarea placeholder="Write a review"></textarea>
-            <input type="submit" value="Post Review"/>
-          </form>
-          <section class="reviews">
-            <p>Recent Reviews</p>
+          <div id="post_comment" class="box">
+            <form>
+              <div class="row">
+                <div class="input-field col s12 right-align">
+                  <textarea id="review_text" class="materialize-textarea"></textarea>
+                  <label for="review_text">Write a review</label>
+                  <input type="submit" class="btn waves-effect waves-light green lighten-2" value="Post">
+                </div>
+                  
+              </div>
+            </form>
+          </div>
 
-            <!-- Show the loading shit-->
+          <!-- Pre-loader for reviews-->
+          <div class="center-align" id="preload_reviews">
+            <div class="preloader-wrapper small active">
+              <div class="spinner-layer spinner-green-only">
+                <div class="circle-clipper left">
+                  <div class="circle"></div>
+                </div>
+                <div class="gap-patch">
+                  <div class="circle"></div>
+                </div>
+                <div class="circle-clipper right">
+                  <div class="circle"></div>
+                </div>
+              </div>
+            </div>
+          </div>
             
-
-            <div class="review card">
-              <span class="review_text">Wow. So delicious</span><br/>
-              <span class="reviewer">Gbenga Adeoye</span>
+          <!-- Reviews -->
+          <section class="reviews card hide" id="reviews">
+            <div class="blue-text shift-up">Reviews</div>
+            <div class="review box">
+              <span class="review_text">That's my favorite...</span><br/>
+              <h6 class="reviewer red-text right-align">~ Gbenga Adeoye</h6>
             </div>
                         
-            <div class="review card">
-              I like this meal
+            <div class="review box">
+              <span class="review_text">I am not even sure this guy knows how to prepare this thing</span><br/>
+              <h6 class="reviewer red-text right-align">~ Vivian Patt</h6>
             </div>
 
-            <div class="review">
-              Hmmm. sounds scary to prepare though
+            <div class="review box">
+              <span class="review_text">And so on? What kinda direction is that? Epic fail man</span><br/>
+              <h6 class="reviewer red-text right-align">~ Mike Davies</h6>
             </div>
-        
+      
           </section>
         </section>
 
