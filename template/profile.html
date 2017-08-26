@@ -40,45 +40,48 @@
     <div class="main">
       <header>
         <h5 class="center-align">My Profile</h5>
+        <hr/>
       </header>
 
       <main class="row">
-        <div class="card col s12 m5">
-          <div class="card-content grey lighten-4">
-            <span class="card-title">Basic Information</span>
-            <input type="submit" value="Edit"/>
-
-            <h6>Name</h6>
-            <h6>Lawal Lanre Emmanuel</h6>
-
-            <h6>Username</h6>
-            <h6>larrystone</h6>
-                  
-            <h6>Email</h6>
-            <h6>larrystonegroup@gmail.com</h6>
-
-            <h6>Password</h6>
-            <h6>*************</h6>
+        <div class="col s12 m7">
+          <div class="card">
+            <ul class="collection with-header">
+              <li class="collection-header grey lighten-4"><h5>Basic Information</h5></li>              
+              <li class="collection-item">
+                <div>
+                  <h6 class="green-text">Name<a href="#!" class="secondary-content"><i class="material-icons">edit</i></a></h6>
+                <h6>Lawal Lanre Emmanuel</h6>
+              
+                </div>
+              </li>
+              <li class="collection-item">            
+                <h6 class="green-text">Username<a href="#!" class="secondary-content"><i class="material-icons">edit</i></a></h6>
+                <h6>larrystone</h6></li>
+              <li class="collection-item">
+                <h6 class="green-text">Email<a href="#!" class="secondary-content"><i class="material-icons">edit</i></a></h6>
+                <h6>larrystone@gmail.com</h6>                
+              </li>
+              <li class="collection-item">
+                <h6 class="green-text">Password<a href="#!" class="secondary-content"><i class="material-icons">edit</i></a></h6>
+                <h6>*************</h6>                
+              </li>
+            </ul>
           </div>
         </div>
 
-        <div class="card col s12 m5">
-          <div class="card-content grey lighten-4">
-            <span class="card-title">My Stats</span>
+        <div class="col s12 m5">
+          <div class="card">
+            <ul class="collection with-header">
+              <li class="collection-header grey lighten-4"><h5>My Stats</h5></li>
+              <a href="fav_recipes.html" class="collection-item clickable green-text" id="my-favorites-count">Favorite Recipes<span class="badge">3</span></a>
+              <a href="my_recipes.html" class="collection-item clickable green-text" id="my-recipe-count">My Recipes<span class="badge">2</span></a>
+              <a class="collection-item clickable green-text" id="my-review-count">Reviews<span class="badge">4</span></a>
+            </ul>
           </div>
-          <h5 id="my-favorites-count">Favorite Recipes 3</h5>
-          <h5 id="my-recipe-count">My Recipes 2</h5>
-          <h5 id="my-review-count">Reviews 4</h5>
         </div>
 
       </main>
-
-      <!-- Edit Profile FAB -->
-      <div class="fixed-action-btn click-to-toggle">
-        <a class="btn-floating btn-large green tooltipped" data-position="top" data-delay="50" data-tooltip="Edit Profile">
-          <i class="large material-icons">edit</i>
-        </a> 
-      </div>
     </div>
        
     <!--scripts includes-->
