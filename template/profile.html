@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+  <head>    
+    <title>More-Recipes</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/css/materialize.min.css">
+    <link rel="stylesheet" href="css/recipe.css">
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+  <body>
+
+    <div class="navbar-fixed">
+      <nav>
+        <div class="nav-wrapper green lighten-2">
+          <a href="#" data-activates="slide-out" class="show-on-large button-collapse"><i class="material-icons">menu</i></a>
+          <a href="recipes.html" class="brand-logo center truncate">More-Recipes</a>
+        </div>
+      </nav>
+    </div>
+    
+    <aside>
+      <ul id="slide-out" class="side-nav">
+        <li>
+          <div class="user-view">
+            <div class="background">
+              <img src="images/dodo.jpg">
+            </div> 
+            <a href="profile.html"><span class="name white-text">Lanre Lawal</span>
+            <span class="email white-text">larrystone@gmail.com</span></a>
+          </div>
+        </li>
+        <li><a class="waves-effect blue" href="recipes.html">Home</a></li>
+        <li><a class="waves-effect" href="my_recipes.html">My Recipes</a></li>
+        <li><a class="waves-effect" href="fav_recipes.html">Favorites</a></li>
+      </ul>
+    </aside>
+
+    <div class="main">
+      <header>
+        <h5 class="center-align">My Profile</h5>
+      </header>
+
+      <main class="row">
+        <div class="card col s12 m5">
+          <div class="card-content grey lighten-4">
+            <span class="card-title">Basic Information</span>
+            <input type="submit" value="Edit"/>
+
+            <h6>Name</h6>
+            <h6>Lawal Lanre Emmanuel</h6>
+
+            <h6>Username</h6>
+            <h6>larrystone</h6>
+                  
+            <h6>Email</h6>
+            <h6>larrystonegroup@gmail.com</h6>
+
+            <h6>Password</h6>
+            <h6>*************</h6>
+          </div>
+        </div>
+
+        <div class="card col s12 m5">
+          <div class="card-content grey lighten-4">
+            <span class="card-title">My Stats</span>
+          </div>
+          <h5 id="my-favorites-count">Favorite Recipes 3</h5>
+          <h5 id="my-recipe-count">My Recipes 2</h5>
+          <h5 id="my-review-count">Reviews 4</h5>
+        </div>
+
+      </main>
+
+      <!-- Edit Profile FAB -->
+      <div class="fixed-action-btn click-to-toggle">
+        <a class="btn-floating btn-large green tooltipped" data-position="top" data-delay="50" data-tooltip="Edit Profile">
+          <i class="large material-icons">edit</i>
+        </a> 
+      </div>
+    </div>
+       
+    <!--scripts includes-->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/js/materialize.min.js"></script>          
+    <script src="js/recipe.js"></script>
+  </body>
+</html>
