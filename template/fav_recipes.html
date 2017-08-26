@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+  <head>    
+    <title>More-Recipes</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/css/materialize.min.css">
+    <link rel="stylesheet" href="css/recipe.css">
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+  <body>
+
+    <div class="navbar-fixed">
+      <nav>
+        <div class="nav-wrapper green lighten-2">
+          <a href="#" data-activates="slide-out" class="show-on-large button-collapse"><i class="material-icons">menu</i></a>
+          <a href="recipes.html" class="brand-logo center truncate">More-Recipes</a>
+        </div>
+      </nav>
+    </div>
+    
+    <aside>
+      <ul id="slide-out" class="side-nav">
+        <li>
+          <div class="user-view">
+            <div class="background">
+              <img src="images/dodo.jpg">
+            </div> 
+            <span class="name white-text">Lanre Lawal</span>
+            <span class="email white-text">larrystone@gmail.com</span>
+          </div>
+        </li>
+        <li><a class="waves-effect" href="recipes.html">Home</a></li>
+        <li><a class="waves-effect" href="my_recipes.html">My Recipes</a></li>
+        <li><a class="waves-effect blue" href="fav_recipes.html">Favorites</a></li>
+      </ul>
+    </aside>
+
+    <div class="main">
+       <header class="center-align">
+        <h5> &nbsp; My Favorites</h5>
+      </header> 
+
+      <ul class="collapsible" data-collapsible="accordion">
+        <li>
+          <div class="collapsible-header"><h5><i class="material-icons">filter_drama</i>Uncategorised</h5></div>
+          <section class="collapsible-body row">
+            <div class="col s5 m2">
+              <div class="card hoverable showInfo">
+                <div class="card-content grey lighten-4">
+                  <span class="card-title">Fried Rice</span>
+                </div>
+                <div class="card-action right-align">
+                  - by Maxwell
+                </div>
+                <div class="card-action truncate">
+                    <i class="material-icons">thumb_up</i>180 &nbsp; &nbsp;
+                    <i class="material-icons">thumb_down</i>0
+                </div>
+              </div>
+            </div>
+          </section>
+        </li>
+
+        <li>
+          <div class="collapsible-header"><h5><i class="material-icons">place</i>Local</h5></div>
+          <section class="collapsible-body row">
+            <div class="col s5 m2">
+              <div class="card hoverable showInfo">
+                <div class="card-content grey lighten-4">
+                  <span class="card-title">Amala</span>
+                </div>
+                <div class="card-action right-align">
+                  - by Bolu
+                </div>
+                <div class="card-action truncate">
+                    <i class="material-icons">thumb_up</i>180 &nbsp; &nbsp;
+                    <i class="material-icons">thumb_down</i>10
+                </div>
+              </div>
+            </div>
+
+            <div class="col s5 m2">
+              <div class="card hoverable showInfo">
+                <div class="card-content grey lighten-4">
+                  <span class="card-title">Banga Soup</span>
+                </div>
+                <div class="card-action right-align">
+                  - by Grace
+                </div>
+                <div class="card-action truncate">
+                    <i class="material-icons">thumb_up</i>168 &nbsp; &nbsp;
+                    <i class="material-icons">thumb_down</i>2
+                </div>
+              </div>
+            </div>
+
+            <div class="col s5 m2">
+              <div class="card hoverable showInfo">
+                <div class="card-content grey lighten-4">
+                  <span class="card-title">Tomato Sauce</span>
+                </div>
+                <div class="card-action right-align">
+                  - by Susan
+                </div>
+                <div class="card-action truncate">
+                    <i class="material-icons">thumb_up</i>151 &nbsp; &nbsp;
+                    <i class="material-icons">thumb_down</i>1
+                </div>
+              </div>
+            </div>
+
+            <div class="col s5 m2">
+              <div class="card hoverable showInfo">
+                <div class="card-content grey lighten-4">
+                  <span class="card-title">Yam Poridge</span>
+                </div>
+                <div class="card-action right-align">
+                  - by Mama
+                </div>
+                <div class="card-action truncate">
+                    <i class="material-icons">thumb_up</i>145 &nbsp; &nbsp;
+                    <i class="material-icons">thumb_down</i>0
+                </div>
+              </div>
+            </div>
+
+            <div class="col s5 m2">
+              <div class="card hoverable showInfo">
+                <div class="card-content grey lighten-4">
+                  <span class="card-title">Moin Moin</span>
+                </div>
+                <div class="card-action right-align">
+                  - by Titilayo
+                </div>
+                <div class="card-action truncate">
+                    <i class="material-icons">thumb_up</i>105 &nbsp; &nbsp;
+                    <i class="material-icons">thumb_down</i>3
+                </div>
+              </div>
+            </div>
+          </section>
+        </li>
+
+        <li>
+          <div class="collapsible-header"><h5><i class="material-icons">filter_drama</i>Foreign</h5></div>
+          <div class="collapsible-body"><span>No Item</span></div>
+        </li>
+      </ul>
+
+      <div class="fixed-action-btn click-to-toggle">
+        <a href="#!" class="btn-floating btn-large green tooltipped" data-position="top" data-delay="50" data-tooltip="New Recipe Category">
+          <i class="large material-icons">add</i>
+        </a>
+      </div>
+
+    <!--scripts includes-->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/js/materialize.min.js"></script>          
+    <script src="js/recipe.js"></script>
+  </body>
+</html>
