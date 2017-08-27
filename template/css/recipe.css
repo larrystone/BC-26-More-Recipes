@@ -46,3 +46,7 @@ h5{
 .no-padding {
     padding: 0px;
 }
+
+#title {
+    padding: 10px;
+}
