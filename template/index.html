@@ -10,25 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
   </head>
   <body>
-    <div>
-
-      <nav>
-        <div class="nav-wrapper green lighten-2">
-          <a href="#!" class="brand-logo center">More-Recipes</a>
-          <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
-          <ul class="right hide-on-med-and-down">
-            <li><a class="signup">SIGN UP</a></li>
-            <li><a class="login">LOGIN</a></li>
-          </ul>
-          <ul class="side-nav" id="mobile-demo">
-            <li><a class="signup">SIGN UP</a></li>
-            <li><a class="login">LOGIN</a></li>
-          </ul>
-        </div>
-      </nav>
-
-
-      <section class="valign-wrapper row hide" id="signin">
+    <section class="valign-wrapper row hide" id="signin">
         <form action="" method="post" class="col card s10 pull-s1 m4 pull-m4">
           <div class="card-content">
             <span class="card-title truncate">Login to Your Account</span>
@@ -43,7 +25,7 @@
               </div>
               <h6 class="right-align">Forgot password?</h6>
               <div class="center-align">
-                <input type="submit" class="btn waves-effect waves-light green lighten-2" value="Login">
+                <input type="submit" class="btn waves-effect waves-light green lighten-2 go" value="Login" id="btn-signin">
               </div>
               <br/>
               <div class="card-action right-align">
@@ -52,9 +34,9 @@
             </div>
           </div>
         </form>
-      </section>
-      
-      <section class="valign-wrapper row hide" id="signup">
+    </section>
+    
+    <section class="valign-wrapper row hide" id="signup">
         <form action="" method="post" class="col card s10 pull-s1 m4 pull-m4">
           <div class="card-content">
             <span class="card-title truncate">Sign Up for an Account</span>
@@ -80,7 +62,7 @@
                 <input type="password" class="validate" name="password" id="password" />
               </div>
               <div class="center-align">
-                <input type="submit" class="btn waves-effect waves-light green lighten-2" value="Continue">
+                <input type="submit" class="btn waves-effect waves-light green lighten-2 go" value="Continue" id="btn-signup">
               </div>
               <br/>
               <div class="card-action right-align">
@@ -89,14 +71,35 @@
             </div>
           </div>
         </form>
-      </section>
-
-      <section class="valign-wrapper row intro" id="intro">
-        <div class="col s10 pull-s1 m6 pull-m3 center-align">
-          <h5>More-Recipes lets you manage and share your recipes with people</h5><br/>
-          <h6><a class="btn waves-effect white grey-text darken-text-2 signup">Sign Up</a> &nbsp; or &nbsp; <a class="btn waves-effect white grey-text darken-text-2 login">Login</a> </h6>
+    </section>
+    <section  id="buttons" class="truncate gone">
+          <a class="btn waves-effect white grey-text darken-text-2 signup">Sign Up</a> &nbsp; or &nbsp; <a class="btn waves-effect white grey-text darken-text-2 login">Login</a>
+    </section> 
+    <div class="slider fullscreen gone">
+          <ul class="slides">
+            <li>
+              <img src="images/2.jpg">
+              <div class="caption center-align">
+                <h4>Share Your Exciting Recipe Ideas With The world</h4>
+                <h5 class="light grey-text text-lighten-3">#More-Recipes...</h5>
+              </div>
+            </li>
+            <li>
+              <img src="images/3.png">
+              <div class="caption center-align">
+                <h4>Post And Get Feedbacks On Recipes</h4>
+                <h5 class="light grey-text text-lighten-3">#More-Recipes...</h5>
+              </div>
+            </li>
+            <li>
+              <img src="images/1.jpg">
+              <div class="caption center-align">
+                <h4>Bookmark (and Categorise) Your Favorite Recipes</h4>
+                <h5 class="light grey-text text-lighten-3">#More-Recipes...</h5>
+              </div>
+            </li>
+          </ul>
         </div>
-      </section>
     </div>      
     
     <!--scripts includes-->
