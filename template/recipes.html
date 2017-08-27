@@ -10,7 +10,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
   </head>
   <body>
-
     <div class="navbar-fixed">
       <nav>
         <div class="nav-wrapper green lighten-2">
@@ -48,7 +47,25 @@
         </div>      
       </header>
 
-      <main class="row">
+      <!-- Pre-loader for recipes-->
+      <div class="center-align v-align" id="preload">
+        <div class="preloader-wrapper small active">
+          <div class="spinner-layer spinner-green-only">
+            <div class="circle-clipper left">
+              <div class="circle"></div>
+            </div>
+            <div class="gap-patch">
+              <div class="circle"></div>
+            </div>
+            <div class="circle-clipper right">
+              <div class="circle"></div>
+            </div>
+          </div>
+        </div>
+        <h5>Fetching Great Recipes</h5>
+      </div>
+
+      <main class="row hide" id="load">
         <div class="col s5 m2">
           <div class="card hoverable show_recipe_info">
             <div class="card-content grey lighten-4">
@@ -169,10 +186,8 @@
           </div>
         </div>
 
-      </main>
-
-      <div>
-        <ul class="pagination center-align">
+        <!-- Pagination -->
+        <ul class="col s12 pagination center-align">
           <li class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
           <li class="active blue"><a href="#!">1</a></li>
           <li class="waves-effect"><a href="#!">2</a></li>
@@ -181,7 +196,7 @@
           <li class="waves-effect"><a href="#!">5</a></li>
           <li class="waves-effect"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
         </ul>
-      </div>
+      </main>
     </div>
        
     <!--scripts includes-->

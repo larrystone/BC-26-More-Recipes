@@ -43,7 +43,7 @@ $('#dislike').on('click', () => {
 
 $(() => {
   setTimeout(() => {
-    $('#preload_reviews').css('display', 'none');
-    $('#reviews').removeClass('hide');
-  }, 3000);
+    $('#preload').css('display', 'none');
+    $('#load').removeClass('hide');
+  }, 2000);
 });
