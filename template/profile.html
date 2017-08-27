@@ -5,6 +5,7 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/css/materialize.min.css">
     <link rel="stylesheet" href="css/recipe.css">
+    
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -59,7 +60,7 @@
                 <h6 class="green-text">Username<a href="#!" class="secondary-content"><i class="material-icons">edit</i></a></h6>
                 <h6>larrystone</h6></li>
               <li class="collection-item">
-                <h6 class="green-text">Email<a href="#!" class="secondary-content"><i class="material-icons">edit</i></a></h6>
+                <h6 class="green-text">Email</a></h6>
                 <h6>larrystone@gmail.com</h6>                
               </li>
               <li class="collection-item">
@@ -73,10 +74,11 @@
         <div class="col s12 m5">
           <div class="card">
             <ul class="collection with-header">
-              <li class="collection-header grey lighten-4"><h5>My Stats</h5></li>
-              <a href="fav_recipes.html" class="collection-item clickable green-text" id="my-favorites-count">Favorite Recipes<span class="badge">3</span></a>
-              <a href="my_recipes.html" class="collection-item clickable green-text" id="my-recipe-count">My Recipes<span class="badge">2</span></a>
-              <a class="collection-item clickable green-text" id="my-review-count">Reviews<span class="badge">4</span></a>
+              <li class="collection-header grey lighten-4">
+                <h5>My Stats Chart</h5>
+                <h6>Click a Section to View Details</h6>
+              </li>
+              <div id="statsContainer" style="height: 300px; width: 100%;"></div>
             </ul>
           </div>
         </div>
@@ -85,6 +87,48 @@
     </div>
        
     <!--scripts includes-->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Recipe Stats');
+        data.addColumn('number', 'count');
+        data.addRows([
+          ['Favorite Recipes',     3],
+          ['My Recipes',      2],
+          ['My Reviews',  4],
+        ]);
+
+        var options = {          
+          // title: 'My Stats Chart',
+          is3D: true,
+          legend : {position: 'labeled'}};
+ 
+        var chart = new google.visualization.PieChart(document.getElementById('statsContainer'));
+
+        function selectHandler() {
+          var selectedItem = chart.getSelection()[0];
+          if (selectedItem) {
+            switch (selectedItem.row) {
+              case 0:
+                window.location.href = "fav_recipes.html";
+              break;
+              case 1:
+                window.location.href = "my_recipes.html";
+              break;
+            }
+          }
+        }
+
+        google.visualization.events.addListener(chart, 'select', selectHandler);    
+        chart.draw(data, options);
+      }
+
+    </script>
+    
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/js/materialize.min.js"></script>          
     <script src="js/recipe.js"></script>
