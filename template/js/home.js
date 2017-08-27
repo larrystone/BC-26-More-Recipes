@@ -10,7 +10,7 @@ $('.signup').on('click', () => {
   $('.gone').addClass('hide');
 });
 
-$('.slider').slider();
+$('.slider').slider({ interval: 2000 });
 
 $('.go').on('click', (e) => {
   e.preventDefault();
