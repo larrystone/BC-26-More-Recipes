@@ -43,7 +43,15 @@ $('#dislike').on('click', () => {
 
 $(() => {
   setTimeout(() => {
-    $('#preload_reviews').css('display', 'none');
-    $('#reviews').removeClass('hide');
-  }, 3000);
+    $('#preload').css('display', 'none');
+    $('#load').removeClass('hide');
+  }, 2000);
+});
+
+$('.edit_recipe').on('click', () => {
+  $('div > #title').html('Edit Recipe');
+});
+
+$('#create_recipe').on('click', () => {
+  $('div > #title').html('Create New Recipe');
 });

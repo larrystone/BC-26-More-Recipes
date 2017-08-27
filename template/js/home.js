@@ -1,15 +1,18 @@
-$('.login').on('click', (e) => {
+$('.login').on('click', () => {
   $('#signin').removeClass('hide');
   $('#signup').addClass('hide');
-  $('#intro').addClass('hide');
+  $('.gone').addClass('hide');
 });
 
-$('.signup').on('click', (e) => {
+$('.signup').on('click', () => {
   $('#signup').removeClass('hide');
   $('#signin').addClass('hide');
-  $('#intro').addClass('hide');
+  $('.gone').addClass('hide');
 });
 
-$('.button-collapse').sideNav();
+$('.slider').slider({ interval: 2000 });
 
-$('.carousel.carousel-slider').carousel({ fullWidth: true });
+$('.go').on('click', (e) => {
+  e.preventDefault();
+  window.location.href = 'recipes.html';
+});

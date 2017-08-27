@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en">
-  <head>    
+  <head>
     <title>More-Recipes</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/css/materialize.min.css">
@@ -19,14 +19,14 @@
         </div>
       </nav>
     </div>
-    
+
     <aside>
       <ul id="slide-out" class="side-nav">
         <li>
           <div class="user-view">
             <div class="background">
               <img src="images/dodo.jpg">
-            </div> 
+            </div>
             <span class="name white-text">Lanre Lawal</span>
             <span class="email white-text">larrystone@gmail.com</span>
           </div>
@@ -38,28 +38,34 @@
     </aside>
 
     <div class="main">
-       <header class="center-align">
+      <header class="center-align">
         <h5> &nbsp; My Favorites</h5>
-      </header> 
+      </header>
 
       <ul class="collapsible" data-collapsible="accordion">
         <li>
-          <div class="collapsible-header"><h5><i class="material-icons">filter_drama</i>Uncategorised</h5></div>
+          <div class="collapsible-header"><h5><i class="material-icons">filter_all</i>Uncategorised</h5></div>
           <section class="collapsible-body row">
             <div class="col s5 m2">
-              <div class="card hoverable show_recipe_info">
-                <div class="card-content grey lighten-4">
-                  <span class="card-title">Fried Rice</span>
-                </div>
-                <div class="card-action right-align">
-                  - by Maxwell
-                </div>
-                <div class="card-action truncate">
-                    <i class="material-icons">thumb_up</i>180 &nbsp; &nbsp;
-                    <i class="material-icons">thumb_down</i>0
-                </div>
+              <div class="card hoverable">
+                <ul class="collapsible" data-collapsible="accordion">
+                  <li>
+                    <div class="collapsible-header grey lighten-4"><h5>Fried Rice</h5></div>
+                    <div class="collapsible-body no-padding">
+                      <ul class="collection with-header">
+                        <li class="collection-item right-align">
+                          ~ by Maxwell
+                        </li>
+                        <a class="collection-item clickable green-text show_recipe_info">View<i class="secondary-content material-icons">visibility</i></a>
+                        <a class="collection-item green-text clickable">Move<i class="secondary-content material-icons">forward</i></a>
+                        <a class="collection-item clickable red-text delete_recipe">Delete<i class="secondary-content material-icons">delete_forever</i></a>
+                      </ul>
+                    </div>
+                  </li>
+                </ul>
               </div>
             </div>
+
           </section>
         </li>
 
@@ -67,77 +73,102 @@
           <div class="collapsible-header"><h5><i class="material-icons">place</i>Local</h5></div>
           <section class="collapsible-body row">
             <div class="col s5 m2">
-              <div class="card hoverable show_recipe_info">
-                <div class="card-content grey lighten-4">
-                  <span class="card-title">Amala</span>
-                </div>
-                <div class="card-action right-align">
-                  - by Bolu
-                </div>
-                <div class="card-action truncate">
-                    <i class="material-icons">thumb_up</i>180 &nbsp; &nbsp;
-                    <i class="material-icons">thumb_down</i>10
-                </div>
+              <div class="card hoverable">
+                <ul class="collapsible" data-collapsible="accordion">
+                  <li>
+                    <div class="collapsible-header grey lighten-4"><h5>Amala</h5></div>
+                    <div class="collapsible-body no-padding">
+                      <ul class="collection with-header">
+                        <li class="collection-item right-align">
+                          ~ by Maxwell
+                        </li>
+                        <a class="collection-item clickable green-text show_recipe_info">View<i class="secondary-content material-icons">visibility</i></a>
+                        <a class="collection-item green-text clickable">Move<i class="secondary-content material-icons">forward</i></a>
+                        <a class="collection-item clickable red-text delete_recipe">Delete<i class="secondary-content material-icons">delete_forever</i></a>
+                      </ul>
+                    </div>
+                  </li>
+                </ul>
               </div>
             </div>
 
             <div class="col s5 m2">
-              <div class="card hoverable show_recipe_info">
-                <div class="card-content grey lighten-4">
-                  <span class="card-title">Banga Soup</span>
-                </div>
-                <div class="card-action right-align">
-                  - by Grace
-                </div>
-                <div class="card-action truncate">
-                    <i class="material-icons">thumb_up</i>168 &nbsp; &nbsp;
-                    <i class="material-icons">thumb_down</i>2
-                </div>
+              <div class="card hoverable">
+                <ul class="collapsible" data-collapsible="accordion">
+                  <li>
+                    <div class="collapsible-header grey lighten-4"><h5>Banga Soup</h5></div>
+                    <div class="collapsible-body no-padding">
+                      <ul class="collection with-header">
+                        <li class="collection-item right-align">
+                          ~ by Grace
+                        </li>
+                        <a class="collection-item clickable green-text show_recipe_info">View<i class="secondary-content material-icons">visibility</i></a>
+                        <a class="collection-item green-text clickable">Move<i class="secondary-content material-icons">forward</i></a>
+                        <a class="collection-item clickable red-text delete_recipe">Delete<i class="secondary-content material-icons">delete_forever</i></a>
+                      </ul>
+                    </div>
+                  </li>
+                </ul>
               </div>
             </div>
 
             <div class="col s5 m2">
-              <div class="card hoverable show_recipe_info">
-                <div class="card-content grey lighten-4">
-                  <span class="card-title">Tomato Sauce</span>
-                </div>
-                <div class="card-action right-align">
-                  - by Susan
-                </div>
-                <div class="card-action truncate">
-                    <i class="material-icons">thumb_up</i>151 &nbsp; &nbsp;
-                    <i class="material-icons">thumb_down</i>1
-                </div>
+              <div class="card hoverable">
+                <ul class="collapsible" data-collapsible="accordion">
+                  <li>
+                    <div class="collapsible-header grey lighten-4"><h5>Tomato Sauce</h5></div>
+                    <div class="collapsible-body no-padding">
+                      <ul class="collection with-header">
+                        <li class="collection-item right-align">
+                          ~ by Susan
+                        </li>
+                        <a class="collection-item clickable green-text show_recipe_info">View<i class="secondary-content material-icons">visibility</i></a>
+                        <a class="collection-item green-text clickable">Move<i class="secondary-content material-icons">forward</i></a>
+                        <a class="collection-item clickable red-text delete_recipe">Delete<i class="secondary-content material-icons">delete_forever</i></a>
+                      </ul>
+                    </div>
+                  </li>
+                </ul>
               </div>
             </div>
 
             <div class="col s5 m2">
-              <div class="card hoverable show_recipe_info">
-                <div class="card-content grey lighten-4">
-                  <span class="card-title">Yam Poridge</span>
-                </div>
-                <div class="card-action right-align">
-                  - by Mama
-                </div>
-                <div class="card-action truncate">
-                    <i class="material-icons">thumb_up</i>145 &nbsp; &nbsp;
-                    <i class="material-icons">thumb_down</i>0
-                </div>
+              <div class="card hoverable">
+                <ul class="collapsible" data-collapsible="accordion">
+                  <li>
+                    <div class="collapsible-header grey lighten-4"><h5>Indomie</h5></div>
+                    <div class="collapsible-body no-padding">
+                      <ul class="collection with-header">
+                        <li class="collection-item right-align">
+                          ~ by Lazzy
+                        </li>
+                        <a class="collection-item clickable green-text show_recipe_info">View<i class="secondary-content material-icons">visibility</i></a>
+                        <a class="collection-item green-text clickable">Move<i class="secondary-content material-icons">forward</i></a>
+                        <a class="collection-item clickable red-text delete_recipe">Delete<i class="secondary-content material-icons">delete_forever</i></a>
+                      </ul>
+                    </div>
+                  </li>
+                </ul>
               </div>
             </div>
 
             <div class="col s5 m2">
-              <div class="card hoverable show_recipe_info">
-                <div class="card-content grey lighten-4">
-                  <span class="card-title">Moin Moin</span>
-                </div>
-                <div class="card-action right-align">
-                  - by Titilayo
-                </div>
-                <div class="card-action truncate">
-                    <i class="material-icons">thumb_up</i>105 &nbsp; &nbsp;
-                    <i class="material-icons">thumb_down</i>3
-                </div>
+              <div class="card hoverable">
+                <ul class="collapsible" data-collapsible="accordion">
+                  <li>
+                    <div class="collapsible-header grey lighten-4"><h5>Moin-Moin</h5></div>
+                    <div class="collapsible-body no-padding">
+                      <ul class="collection with-header">
+                        <li class="collection-item right-align">
+                          ~ by Titilayo
+                        </li>
+                        <a class="collection-item clickable green-text show_recipe_info">View<i class="secondary-content material-icons">visibility</i></a>
+                        <a class="collection-item green-text clickable">Move<i class="secondary-content material-icons">forward</i></a>
+                        <a class="collection-item clickable red-text delete_recipe">Delete<i class="secondary-content material-icons">delete_forever</i></a>
+                      </ul>
+                    </div>
+                  </li>
+                </ul>
               </div>
             </div>
           </section>
@@ -150,14 +181,33 @@
       </ul>
 
       <div class="fixed-action-btn click-to-toggle">
-        <a href="#!" class="btn-floating btn-large green tooltipped" data-position="top" data-delay="50" data-tooltip="New Recipe Category">
+        <a class="btn-floating btn-large green tooltipped modal-trigger" href="#new-category" data-position="top" data-delay="50" data-tooltip="New Recipe Category">
           <i class="large material-icons">add</i>
-        </a> 
+        </a>
       </div>
+
+        <div id="new-category" class="modal modal-fixed-footer">
+          <div class="modal-content">
+            <h5 class="center-align">Create New Category</h5><hr/>
+
+            <form class="row">
+              <div class="input-field col s12">
+                <label for="category"> Category Name</label>
+                <input type="text" class="validate" name="category" id="category" required/>
+              </div>
+            </form>
+          </div>
+
+          <div class="modal-footer">
+            <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat ">Cancel</a>
+            <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Create</a>
+          </div>
+        </div>
+
 
     <!--scripts includes-->
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/js/materialize.min.js"></script>          
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/js/materialize.min.js"></script>
     <script src="js/recipe.js"></script>
   </body>
 </html>

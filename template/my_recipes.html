@@ -46,16 +46,16 @@
       <main class="row">
         <div class="col s5 m2">
           <div class="card hoverable">
-            <ul class="row collapsible" data-collapsible="accordion">
+            <ul class="collapsible" data-collapsible="accordion">
               <li>
-                <span class="grey lighten-4 collapsible-header"><h5>Ewedu Soup</h5></span>
-                <span class="collapsible-body">
-                  <ul class="collection">
-                    <li class="collection-item show_recipe_info clickable">View</li>
-                    <li class="collection-item edit_recipe clickable">Edit</li>
-                    <li class="collection-item delete_recipe clickable">Delete</li>
+                <div class="collapsible-header grey lighten-4"><h5>Ewedu Soup</h5></div>
+                <div class="collapsible-body no-padding">
+                  <ul class="collection with-header">
+                    <a class="collection-item clickable green-text show_recipe_info">View<i class="secondary-content material-icons">visibility</i></a>
+                    <a class="collection-item green-text edit_recipe clickable modal-trigger" href="#create_edit_Recipe">Edit<i class="secondary-content material-icons">edit</i></a>
+                    <a class="collection-item clickable red-text delete_recipe">Delete<i class="secondary-content material-icons">delete_forever</i></a>
                   </ul>
-                </span>
+                </div>
               </li>
             </ul>
           </div>
@@ -63,26 +63,60 @@
 
         <div class="col s5 m2">
           <div class="card hoverable">
-            <ul class="row collapsible" data-collapsible="accordion">
+            <ul class="collapsible" data-collapsible="accordion">
               <li>
-                <span class="grey lighten-4 collapsible-header"><h5>Amala Soup</h5></span>
-                <span class="collapsible-body">
-                  <ul class="collection">
-                    <li class="collection-item show_recipe_info clickable">View</li>
-                    <li class="collection-item edit_recipe clickable">Edit</li>
-                    <li class="collection-item delete_recipe clickable">Delete</li>
+                <div class="collapsible-header grey lighten-4"><h5>Amala Soup</h5></div>
+                <div class="collapsible-body no-padding">
+                  <ul class="collection with-header">
+                    <a class="collection-item clickable green-text show_recipe_info">View<i class="secondary-content material-icons">visibility</i></a>
+                    <a class="collection-item green-text edit_recipe clickable modal-trigger" href="#create_edit_Recipe">Edit<i class="secondary-content material-icons">edit</i></a>
+                    <a class="collection-item clickable red-text delete_recipe">Delete<i class="secondary-content material-icons">delete_forever</i></a>
                   </ul>
-                </span>
+                </div>
               </li>
             </ul>
           </div>
         </div>
 
+        <div class="col s5 m2">
+          <div class="card hoverable">
+            <ul class="collapsible" data-collapsible="accordion">
+              <li>
+                <div class="collapsible-header grey lighten-4"><h5>Rice Stew</h5></div>
+                <div class="collapsible-body no-padding">
+                  <ul class="collection with-header">
+                    <a class="collection-item clickable green-text show_recipe_info">View<i class="secondary-content material-icons">visibility</i></a>
+                    <a class="collection-item green-text edit_recipe clickable modal-trigger" href="#create_edit_Recipe">Edit<i class="secondary-content material-icons">edit</i></a>
+                    <a class="collection-item clickable red-text delete_recipe">Delete<i class="secondary-content material-icons">delete_forever</i></a>
+                  </ul>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col s5 m2">
+          <div class="card hoverable">
+            <ul class="collapsible" data-collapsible="accordion">
+              <li>
+                <div class="collapsible-header grey lighten-4"><h5>Beans</h5></div>
+                <div class="collapsible-body no-padding">
+                  <ul class="collection with-header">
+                    <a class="collection-item clickable green-text show_recipe_info">View<i class="secondary-content material-icons">visibility</i></a>
+                    <a class="collection-item green-text edit_recipe clickable modal-trigger" href="#create_edit_Recipe">Edit<i class="secondary-content material-icons">edit</i></a>
+                    <a class="collection-item clickable red-text delete_recipe">Delete<i class="secondary-content material-icons">delete_forever</i></a>
+                  </ul>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
         
       </main>
 
+      <!-- New Recipe FAB -->
       <div class="fixed-action-btn click-to-toggle">
-        <a class="btn-floating btn-large green tooltipped modal-trigger" href="#create_edit_Recipe" data-position="top" data-delay="50" data-tooltip="New Recipe">
+        <a class="btn-floating btn-large green tooltipped modal-trigger" href="#create_edit_Recipe" data-position="top" data-delay="50" data-tooltip="New Recipe" id="create_recipe">
           <i class="large material-icons">add</i>
         </a> 
       </div>
@@ -90,7 +124,7 @@
       <!-- Create/Edit Recipe Dialog -->
       <div id="create_edit_Recipe" class="modal modal-fixed-footer">
         <div class="modal-content">
-          <h5 class="center-align">Create Recipe</h5><hr/>
+          <h5 class="center-align green lighten-2" id="title"></h5>
 
           <form class="row">
             <div class="input-field col s12">
@@ -100,8 +134,10 @@
             <h5>Ingredients</h5>
             <ul>
               <div class="input-field col s12">
-                <li><label for="ingredient1"> Enter ingredient</label>
-                <input type="text" class="validate" name="ingredient1" id="ingredient1"/></li>
+                <li>
+                  <label for="ingredient1"> Enter ingredient</label>
+                  <input type="text" class="validate" name="ingredient1" id="ingredient1"/>
+                </li>
               </div>
               <div class="input-field col s12">
                 <li><label for="ingredient2"> Enter ingredient</label>
@@ -118,14 +154,14 @@
           </form>
 
         </div>
-        <div class="modal-footer">
+        <div class="modal-footer green lighten-2">
           <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat ">Cancel</a>
           <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Save</a>
         </div>
       </div>
 
     </div>
-       
+
     <!--scripts includes-->
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/js/materialize.min.js"></script>          
