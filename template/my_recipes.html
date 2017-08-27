@@ -116,7 +116,7 @@
 
       <!-- New Recipe FAB -->
       <div class="fixed-action-btn click-to-toggle">
-        <a class="btn-floating btn-large green tooltipped modal-trigger" href="#create_edit_Recipe" data-position="top" data-delay="50" data-tooltip="New Recipe">
+        <a class="btn-floating btn-large green tooltipped modal-trigger" href="#create_edit_Recipe" data-position="top" data-delay="50" data-tooltip="New Recipe" id="create_recipe">
           <i class="large material-icons">add</i>
         </a> 
       </div>
@@ -124,7 +124,7 @@
       <!-- Create/Edit Recipe Dialog -->
       <div id="create_edit_Recipe" class="modal modal-fixed-footer">
         <div class="modal-content">
-          <h5 class="center-align">Create/Edit Recipe</h5><hr/>
+          <h5 class="center-align" id="title"></h5><hr/>
 
           <form class="row">
             <div class="input-field col s12">

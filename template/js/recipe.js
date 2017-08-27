@@ -47,3 +47,11 @@ $(() => {
     $('#load').removeClass('hide');
   }, 2000);
 });
+
+$('.edit_recipe').on('click', () => {
+  $('div > #title').html('Edit Recipe');
+});
+
+$('#create_recipe').on('click', () => {
+  $('div > #title').html('Create New Recipe');
+});
