@@ -37,3 +37,12 @@ h5{
     -webkit-transform: translate(-50%,-50%);
     transform: translate(-50%,-50%); 
 }
+
+.dropdown1 {
+    position: relative;
+    top: 20px !important;
+}
+
+.no-padding {
+    padding: 0px;
+}
