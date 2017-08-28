@@ -26,8 +26,10 @@ $('#add_ingredient').on('click', (e) => {
 $('#bookmark').on('click', (e) => {
   if ($(e.target).html() === 'star_border') {
     $(e.target).html('star');
+    $(e.target).addClass('yellow-text');
   } else {
     $(e.target).html('star_border');
+    $(e.target).removeClass('yellow-text');
   }
 });
 
