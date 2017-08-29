@@ -5,7 +5,9 @@
     "node": true,
     "es6": true,
     "mocha": true,
-    "jasmine": true
+    "jasmine": true,
+    "jquery": true,
+    "browser": true
   },
   "rules": {
     "one-var": 0,
