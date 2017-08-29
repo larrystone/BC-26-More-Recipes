@@ -1,3 +1,5 @@
+[![Coverage Status](https://coveralls.io/repos/github/larrystone/BC-26-More-Recipes/badge.svg?branch=master)](https://coveralls.io/github/larrystone/BC-26-More-Recipes?branch=master)
+
 # More-Recipes
 A Recipe management and sharing app...
 
