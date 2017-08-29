@@ -17,7 +17,7 @@ app.use('/api/v1', routes);
 // Homepage route
 app.get('/', (req, res) => {
   res.status(201).json({ title: 'More-Recipes',
-    message: 'Welcome... Please navigate the API via /api/v1/ url prefix' });
+    message: 'Please navigate this API via \'/api/v1/\' url prefix' });
 });
 
 // Define catch all routes for http get requests
