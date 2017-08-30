@@ -1,7 +1,7 @@
 import models from '../models';
 import * as auth from './authen';
 
-const users = models.users;
+const user = models.User;
 
 /**
  * @exports createUser
@@ -13,7 +13,7 @@ export const signUp = (req, res) => {
   const name = req.body.name || '';
   const username = req.body.username || '';
   const email = req.body.email || '';
-  const newUser = users
+  const newUser = user
     .create({
       name,
       username: username.replace(' ', ''),
@@ -24,7 +24,8 @@ export const signUp = (req, res) => {
       const loggedInUser =
         { userId: result.id, username: result.username, email: result.email };
 
-      req.session.user = result;
+        // TODO implement express-sessions later
+      // req.session.user = result;
 
       return res.status(201).send(loggedInUser);
     })
@@ -44,7 +45,7 @@ export const signIn = (req, res) => {
   const usernameOrEmail = (req.body.username || req.body.email || '')
     .replace(' ', '');
 
-  const newUser = users
+  const newUser = user
     .findOne({
       attributes: ['id', 'name', 'username', 'email', 'password'],
       where: {
