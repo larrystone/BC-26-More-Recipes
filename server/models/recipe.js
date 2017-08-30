@@ -17,6 +17,15 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: true,
       defaultValue: 0
+    },
+    userId: {
+      type: DataTypes.INTEGER,
+      onDelete: 'CASCADE',
+      references: {
+        model: 'User',
+        key: 'id',
+        as: 'userId',
+      }
     }
   }, {
     classMethods: {

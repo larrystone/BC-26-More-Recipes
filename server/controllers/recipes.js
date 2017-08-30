@@ -12,13 +12,12 @@ export const createRecipe = (req, res) => {
   const name = req.body.name;
   const ingredients = req.body.ingredients || [];
   const directions = req.body.directions || '';
-  const userId = req.session.user.id;
   const newUser = recipe
     .create({
-      userId,
       name,
       ingredients,
       directions,
+      userId: req.session.user.id
     })
     .then((createdRecipe) => {
       // const createdRecipe = {
