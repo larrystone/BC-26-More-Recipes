@@ -71,6 +71,7 @@ export const signIn = (req, res) => {
             username: userFound.username,
             email: userFound.email });
       }
+      throw new Error();
     })
     .catch(() => res.status(401).send({ error: 'Incorrect Password!' }));
 

@@ -1,34 +1,38 @@
-export const up = (queryInterface, Sequelize) => {
-  queryInterface.createTable('Users', {
-    id: {
-      allowNull: false,
-      autoIncrement: true,
-      primaryKey: true,
-      type: Sequelize.INTEGER
-    },
-    name: {
-      type: Sequelize.STRING
-    },
-    username: {
-      type: Sequelize.STRING
-    },
-    email: {
-      type: Sequelize.STRING
-    },
-    password: {
-      type: Sequelize.STRING
-    },
-    createdAt: {
-      allowNull: false,
-      type: Sequelize.DATE
-    },
-    updatedAt: {
-      allowNull: false,
-      type: Sequelize.DATE
-    }
-  });
-};
+module.exports = {
+  up: (queryInterface, Sequelize) => {
+    queryInterface.createTable('Users', {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: Sequelize.INTEGER
+      },
+      name: {
+        type: Sequelize.STRING
+      },
+      username: {
+        type: Sequelize.STRING,
+        unique: true,
+      },
+      email: {
+        type: Sequelize.STRING,
+        unique: true,
+      },
+      password: {
+        type: Sequelize.STRING
+      },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE
+      }
+    });
+  },
 
-export const down = (queryInterface, /* Sequelize */) => {
-  queryInterface.dropTable('Users');
+  down: (queryInterface, /* Sequelize */) => {
+    queryInterface.dropTable('Users');
+  }
 };
