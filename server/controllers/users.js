@@ -50,8 +50,12 @@ export const signIn = (req, res) => {
       attributes: ['id', 'name', 'username', 'email', 'password'],
       where: {
         $or: [
-          { username: usernameOrEmail },
-          { email: usernameOrEmail }
+          { username: {
+            $iLike: usernameOrEmail }
+          },
+          { email: {
+            $iLike: usernameOrEmail }
+          }
         ]
       }
     })
