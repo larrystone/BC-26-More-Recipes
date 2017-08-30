@@ -1,13 +1,13 @@
-import bcrypt from 'bcrypt';
+import express from 'express';
 
-export const generateHash = (password) => {
-  const salt = bcrypt.genSaltSync(10);
-  const hash = bcrypt.hashSync(password, salt);
+const app = express();
 
-  return hash;
-};
+app.use('*', (req, res, next) => {
+  // check for authentication here
+  if (!req.session.user) {
+    return res.status(401).send({
+      error: 'You do not have the permission to perform this action!' });
+  }
 
-export const verifyHash = (password, hash) => {
-  const status = bcrypt.compareSync(password, hash);
-  return status;
-};
+  next();
+});
