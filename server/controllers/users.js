@@ -1,5 +1,5 @@
 import models from '../models';
-import * as auth from './authen';
+import * as auth from './encryption';
 
 const user = models.User;
 
@@ -10,7 +10,7 @@ const user = models.User;
  * @return {obj}  newUser object
  */
 export const signUp = (req, res) => {
-  const name = req.body.name || '';
+  const name = req.body.name;
   const username = (req.body.username || '').replace(' ', '');
   const email = (req.body.email || '').replace(' ', '');
   const newUser = user
@@ -24,8 +24,7 @@ export const signUp = (req, res) => {
       const loggedInUser =
         { userId: result.id, username: result.username, email: result.email };
 
-        // TODO implement express-sessions later
-      // req.session.user = result;
+      req.session.user = result;
 
       return res.status(201).send(loggedInUser);
     })
@@ -67,7 +66,7 @@ export const signIn = (req, res) => {
       }
 
       if (auth.verifyHash(req.body.password, userFound.password)) {
-        // req.session.user = userFound;
+        req.session.user = userFound;
 
         return res.status(201).send(
           { id: userFound.id,
@@ -94,7 +93,7 @@ export const signOut = (req, res) => {
     const username = req.session.user.username;
     req.session.user = null;
     res.status(201).send({
-      message: `Thanks for your time ${username.toUpperCase()}...` });
+      message: `Thanks for your time @${username.toLowerCase()}...` });
   }
   res.status(201).send({ error: 'User not logged in!' });
 };
