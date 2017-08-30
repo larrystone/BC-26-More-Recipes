@@ -158,7 +158,7 @@ export const deleteRecipe = (req, res) => {
         },
       })
         .then(() => {
-          res.status(204);
+          res.status(204).end();
         });
     })
     .catch(() => res.status(401).send({ error: 'Error Deleting Recipe' }));
