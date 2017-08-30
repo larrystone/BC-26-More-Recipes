@@ -4,7 +4,17 @@ import * as userController from '../../controllers/recipes.js';
 
 const user = express.Router();
 
-// define route controllers for creating sign up, login and sign out
+user.use('*', (req, res, next) => {
+  // check for authentication here
+  if (!req.session.user) {
+    return res.status(401).send({
+      error: 'You do not have the permission to perform this action!' });
+  }
+
+  next();
+});
+
+// define route controllers for adding recipe
 user.post('/', userController.addRecipe);
 
 
