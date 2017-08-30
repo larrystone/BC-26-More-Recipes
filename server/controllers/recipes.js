@@ -40,7 +40,7 @@ export const getUserRecipes = (req, res) => {
     })
     .then((foundRecipes) => {
       if (!foundRecipes) {
-        return res.status(404).send({
+        return res.status(201).send({
           message: 'No User Stored Recipes found',
         });
       }
@@ -63,7 +63,7 @@ export const getAllRecipes = (req, res) => {
     .findAll()
     .then((foundRecipes) => {
       if (!foundRecipes) {
-        return res.status(404).send({
+        return res.status(201).send({
           message: 'No Stored Recipes found',
         });
       }

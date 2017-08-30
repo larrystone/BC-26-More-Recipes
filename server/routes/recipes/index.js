@@ -15,7 +15,7 @@ user.use('*', (req, res, next) => {
 });
 
 // define route controllers for adding recipe
-user.post('/', userController.createRecgipe);
+user.post('/', userController.createRecipe);
 user.get('/', userController.getAllRecipes);
 
 
