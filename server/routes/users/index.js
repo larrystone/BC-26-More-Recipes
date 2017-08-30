@@ -8,6 +8,6 @@ const user = express.Router();
 user.post('/signup', userController.signUp);
 user.post('/signin', userController.signIn);
 
-user.get('/signout', userController.signOut);
+user.post('/signout', userController.signOut);
 
 export default user;

@@ -1,6 +1,7 @@
 import express from 'express';
 import logger from 'morgan';
 import bodyParser from 'body-parser';
+import session from 'express-session';
 
 import routes from './routes';
 
@@ -10,8 +11,11 @@ const port = process.env.PORT || 3000;
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(session({ secret: '!^sl1@#=5',
+  resave: true,
+  saveUninitialized: true }));
 
-// The app's legitimate route prefix
+// The app's legitimate routes prefix
 app.use('/api/v1', routes);
 
 // Homepage route
