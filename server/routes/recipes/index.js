@@ -1,22 +1,16 @@
 import express from 'express';
 
 import * as userController from '../../controllers/recipes';
+import * as auth from '../../controllers/auth';
 
 const user = express.Router();
 
-user.use('*', (req, res, next) => {
-  // check for authentication here
-  if (!req.session.user) {
-    return res.status(401).send({
-      error: 'You do not have the permission to perform this action!' });
-  }
+user.use('*', auth.default);
 
-  next();
-});
-
-// define route controllers for adding recipe
+// define route controllers
 user.post('/', userController.createRecipe);
 user.get('/', userController.getAllRecipes);
 
+user.put('/:recipeId', userController.modifyRecipe);
 
 export default user;

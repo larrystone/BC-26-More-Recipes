@@ -77,34 +77,50 @@ export const getAllRecipes = (req, res) => {
 
 
 /**
- * @exports editRecipe
+ * @exports modifyRecipe
  * @param  {obj} req request object
  * @param  {obj} res result object
  * @return {obj}  newUser object
  */
-export const editRecipe = (req, res) => {
+export const modifyRecipe = (req, res) => {
+  const recipeId = req.params.recipeId;
+  const userId = req.session.user.id;
   const name = req.body.name;
   const ingredients = req.body.ingredients || [];
   const directions = req.body.directions || '';
-  const newUser = recipe
-    .create({
-      name,
-      ingredients,
-      directions,
-      userId: req.session.user.id
+  const newRecipe = recipe
+    .findOne({
+      attributes: ['userId'],
+      where: { id: recipeId }
     })
-    .then((createdRecipe) => {
-      // const createdRecipe = {
-      //   recipeId: result.id,
-      //   name: result.name,
-      //   ingredients: result.ingredients,
-      //   directions: result.directions,
-      //   userId
-      // };
+    .then((recipeFound) => {
+      if (!recipeFound) {
+        return res.status(404).send({
+          error: `No matching recipe with id: ${recipeId}`,
+        });
+      }
 
-      res.status(201).send(createdRecipe);
+      if (recipeFound.userId !== userId) {
+        return res.status(401).send({
+          error: 'You cannot modify this recipe',
+        });
+      }
+
+      recipe.update({
+        name,
+        ingredients,
+        directions
+      }, {
+        where: {
+          id: recipeId
+        },
+        returning: true
+      })
+        .then((result) => {
+          res.status(201).send(result[1]);
+        });
     })
-    .catch(() => res.status(401).send({ error: 'Error Creating Recipe' }));
+    .catch(() => res.status(401).send({ error: 'Error Modifying Recipe' }));
 
-  return newUser;
+  return newRecipe;
 };
