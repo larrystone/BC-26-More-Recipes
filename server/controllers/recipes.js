@@ -35,7 +35,9 @@ export const createRecipe = (req, res) => {
  */
 export const getUserRecipes = (req, res) => {
   const recipes = recipe
-    .findAll()
+    .findAll({
+      where: { userId: req.session.user.id }
+    })
     .then((foundRecipes) => {
       if (!foundRecipes) {
         return res.status(404).send({
