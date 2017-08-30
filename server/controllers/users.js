@@ -4,20 +4,20 @@ import * as auth from './authen';
 const user = models.User;
 
 /**
- * @exports createUser
+ * @exports signUp
  * @param  {obj} req request object
  * @param  {obj} res result object
  * @return {obj}  newUser object
  */
 export const signUp = (req, res) => {
   const name = req.body.name || '';
-  const username = req.body.username || '';
-  const email = req.body.email || '';
+  const username = (req.body.username || '').replace(' ', '');
+  const email = (req.body.email || '').replace(' ', '');
   const newUser = user
     .create({
       name,
-      username: username.replace(' ', ''),
-      email: email.replace(' ', ''),
+      username,
+      email,
       password: auth.generateHash(req.body.password),
     })
     .then((result) => {
@@ -55,31 +55,31 @@ export const signIn = (req, res) => {
         ]
       }
     })
-    .then((result) => {
-      if (!result) {
+    .then((userFound) => {
+      if (!userFound) {
         return res.status(404).send({
           error: 'Username or email does not exist!',
         });
       }
 
-      if (auth.verifyHash(req.body.password, result.password)) {
-        req.session.user = result;
+      if (auth.verifyHash(req.body.password, userFound.password)) {
+        // req.session.user = userFound;
 
         return res.status(201).send(
-          { id: result.id,
-            name: result.name,
-            username: result.username,
-            email: result.email });
+          { id: userFound.id,
+            name: userFound.name,
+            username: userFound.username,
+            email: userFound.email });
       }
     })
-    .catch(error => res.status(401).send(error));
+    .catch(() => res.status(401).send({ error: 'Incorrect Password!' }));
 
   return newUser;
 };
 
 
 /**
- * @exports logOut
+ * @exports signOut
  * @param  {obj} req request object
  * @param  {obj} res result object
  * @return {obj}  undefined
@@ -88,7 +88,7 @@ export const signOut = (req, res) => {
   if (req.session.user) {
     const username = req.session.user.username;
     req.session.user = null;
-    res.status(201).send({ title: 'PostIt bids Goodbye...',
+    res.status(201).send({
       message: `Thanks for your time ${username.toUpperCase()}...` });
   }
   res.status(201).send({ error: 'User not logged in!' });
