@@ -77,23 +77,26 @@ export const getAllRecipes = (req, res) => {
 
 
 /**
- * @exports editRecipe
+ * @exports modifyRecipe
  * @param  {obj} req request object
  * @param  {obj} res result object
  * @return {obj}  newUser object
  */
-export const editRecipe = (req, res) => {
+export const modifyRecipe = (req, res) => {
   const name = req.body.name;
   const ingredients = req.body.ingredients || [];
   const directions = req.body.directions || '';
-  const newUser = recipe
-    .create({
+  const newRecipe = recipe
+    .update({
       name,
       ingredients,
-      directions,
-      userId: req.session.user.id
+      directions
+    }, {
+      where: {
+        userId: req.session.user.id
+      }
     })
-    .then((createdRecipe) => {
+    .then((modifiedRecipe) => {
       // const createdRecipe = {
       //   recipeId: result.id,
       //   name: result.name,
@@ -102,9 +105,9 @@ export const editRecipe = (req, res) => {
       //   userId
       // };
 
-      res.status(201).send(createdRecipe);
+      res.status(201).send(modifiedRecipe);
     })
     .catch(() => res.status(401).send({ error: 'Error Creating Recipe' }));
 
-  return newUser;
+  return newRecipe;
 };
