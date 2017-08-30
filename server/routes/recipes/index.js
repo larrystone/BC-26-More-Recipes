@@ -1,6 +1,6 @@
 import express from 'express';
 
-import * as userController from '../../controllers/recipes.js';
+import * as userController from '../../controllers/recipes';
 
 const user = express.Router();
 
@@ -16,6 +16,7 @@ user.use('*', (req, res, next) => {
 
 // define route controllers for adding recipe
 user.post('/', userController.createRecipe);
+user.get('/', userController.getAllRecipes);
 
 
 export default user;

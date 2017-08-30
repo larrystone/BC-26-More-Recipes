@@ -40,7 +40,7 @@ export const getUserRecipes = (req, res) => {
     })
     .then((foundRecipes) => {
       if (!foundRecipes) {
-        return res.status(404).send({
+        return res.status(201).send({
           message: 'No User Stored Recipes found',
         });
       }
@@ -48,6 +48,29 @@ export const getUserRecipes = (req, res) => {
       return res.status(201).send(foundRecipes);
     })
     .catch(() => res.status(401).send('Unable to get user recipes'));
+
+  return recipes;
+};
+
+/**
+ * @exports getAllRecipes
+ * @param  {obj} req request object
+ * @param  {obj} res result object
+ * @return {obj}  newUser object
+ */
+export const getAllRecipes = (req, res) => {
+  const recipes = recipe
+    .findAll()
+    .then((foundRecipes) => {
+      if (!foundRecipes) {
+        return res.status(201).send({
+          message: 'No Stored Recipes found',
+        });
+      }
+
+      return res.status(201).send(foundRecipes);
+    })
+    .catch(() => res.status(401).send('Unable to fetch recipes'));
 
   return recipes;
 };
