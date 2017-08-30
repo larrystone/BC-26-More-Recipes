@@ -1,5 +1,5 @@
 import models from '../models';
-import * as auth from './authen';
+import * as auth from './encryption';
 
 const user = models.User;
 
@@ -10,7 +10,7 @@ const user = models.User;
  * @return {obj}  newUser object
  */
 export const signUp = (req, res) => {
-  const name = req.body.name || '';
+  const name = req.body.name;
   const username = (req.body.username || '').replace(' ', '');
   const email = (req.body.email || '').replace(' ', '');
   const newUser = user

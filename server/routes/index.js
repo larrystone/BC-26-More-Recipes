@@ -1,7 +1,7 @@
 import express from 'express';
 
-import users from './users.js';
-import recipes from './recipes.js';
+import users from './users';
+import recipes from './recipes';
 
 const routes = express.Router();
 

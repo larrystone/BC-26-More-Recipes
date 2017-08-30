@@ -15,7 +15,7 @@ user.use('*', (req, res, next) => {
 });
 
 // define route controllers for adding recipe
-user.post('/', userController.addRecipe);
+user.post('/', userController.createRecipe);
 
 
 export default user;
