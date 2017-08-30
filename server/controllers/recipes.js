@@ -88,7 +88,7 @@ export const modifyRecipe = (req, res) => {
   const name = req.body.name;
   const ingredients = req.body.ingredients || [];
   const directions = req.body.directions || '';
-  const newRecipe = recipe
+  const modifiedRecipe = recipe
     .findOne({
       attributes: ['userId'],
       where: { id: recipeId }
@@ -122,5 +122,46 @@ export const modifyRecipe = (req, res) => {
     })
     .catch(() => res.status(401).send({ error: 'Error Modifying Recipe' }));
 
-  return newRecipe;
+  return modifiedRecipe;
+};
+
+/**
+ * @exports deleteRecipe
+ * @param  {obj} req request object
+ * @param  {obj} res result object
+ * @return {obj}  newUser object
+ */
+export const deleteRecipe = (req, res) => {
+  const recipeId = req.params.recipeId;
+  const userId = req.session.user.id;
+  const deletedRecipe = recipe
+    .findOne({
+      attributes: ['userId'],
+      where: { id: recipeId }
+    })
+    .then((recipeFound) => {
+      if (!recipeFound) {
+        return res.status(404).send({
+          error: `No matching recipe with id: ${recipeId}`,
+        });
+      }
+
+      if (recipeFound.userId !== userId) {
+        return res.status(401).send({
+          error: 'You cannot delete this recipe',
+        });
+      }
+
+      recipe.destroy({
+        where: {
+          id: recipeId
+        },
+      })
+        .then(() => {
+          res.status(204).end();
+        });
+    })
+    .catch(() => res.status(401).send({ error: 'Error Deleting Recipe' }));
+
+  return deletedRecipe;
 };

@@ -12,5 +12,6 @@ user.post('/', userController.createRecipe);
 user.get('/', userController.getAllRecipes);
 
 user.put('/:recipeId', userController.modifyRecipe);
+user.delete('/:recipeId', userController.deleteRecipe);
 
 export default user;
