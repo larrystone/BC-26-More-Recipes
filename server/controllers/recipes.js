@@ -93,7 +93,7 @@ export const modifyRecipe = (req, res) => {
       directions
     }, {
       where: {
-        userId: req.session.user.id
+        recipeId: req.params.recipeId
       }
     })
     .then((modifiedRecipe) => {
@@ -108,6 +108,6 @@ export const modifyRecipe = (req, res) => {
       res.status(201).send(modifiedRecipe);
     })
     .catch(() => res.status(401).send({ error: 'Error Creating Recipe' }));
-
+    
   return newRecipe;
 };
