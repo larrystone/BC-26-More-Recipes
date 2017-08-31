@@ -1,1 +1,12 @@
 language: node_js
+node_js:
+  - "6"
+# install:
+#   - npm install
+# before_script:
+#   - npm install -g sequelize-cli
+# script:
+#   - npm test
+after_success:
+  - npm run coverage
+  - npm run report-coverage

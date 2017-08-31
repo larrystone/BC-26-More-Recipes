@@ -2,3 +2,5 @@
 npm-debug.log
 .env
 package-lock.json
+.nyc_output
+.coveralls.yml
