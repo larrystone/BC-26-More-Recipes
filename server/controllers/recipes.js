@@ -184,3 +184,23 @@ export const postReview = (req, res) => {
 
   return newReview;
 };
+
+/**
+ * @exports getReviews
+ * @param  {obj} req request object
+ * @param  {obj} res result object
+ * @return {obj}  newUser object
+ */
+export const getReviews = (req, res) => {
+  const recipeId = req.params.recipeId;
+  const newReview = review
+    .findAll({
+      where: { recipeId }
+    })
+    .then((reviews) => {
+      res.status(201).send(reviews);
+    })
+    .catch(() => res.status(401).send({ error: 'Error Fetching Reviews' }));
+
+  return newReview;
+};
