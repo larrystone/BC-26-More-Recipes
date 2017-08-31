@@ -7,7 +7,6 @@ const user = express.Router();
 
 user.use('*', auth.default);
 
-// define route controllers
 user.post('/', recipeController.createRecipe);
 user.get('/', recipeController.getAllRecipes);
 

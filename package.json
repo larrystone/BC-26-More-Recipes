@@ -4,7 +4,9 @@
   "description": "A Recipe management and sharing app",
   "main": "/server/app.js",
   "scripts": {
-    "start": "nodemon --exec babel-node server/app.js"
+    "start": "babel-node server/app.js",
+    "start:dev": "nodemon --exec babel-node server/app.js",
+    "test": "./node_modules/.bin/mocha --timeout 500000 --compilers js:babel-core/register tests/"
   },
   "author": "Lawal Lanre Emmanuel",
   "license": "ISC",
@@ -28,6 +30,7 @@
   },
   "devDependencies": {
     "chai": "^4.0.2",
+    "chai-http": "^3.0.0",
     "eslint": "^4.2.0",
     "eslint-config-airbnb": "^15.0.2",
     "eslint-plugin-import": "^2.7.0",
