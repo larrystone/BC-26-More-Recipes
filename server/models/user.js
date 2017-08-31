@@ -35,6 +35,9 @@ export default (sequelize, DataTypes) => {
         User.hasMany(models.Recipe, {
           foreignKey: 'userId'
         });
+        User.hasMany(models.Review, {
+          foreignKey: 'userId'
+        });
       }
     }
   });
