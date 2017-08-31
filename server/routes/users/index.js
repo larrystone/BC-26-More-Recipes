@@ -6,12 +6,10 @@ import * as auth from '../../controllers/auth';
 
 const user = express.Router();
 
-// define route controllers for creating sign up, login and sign out
 user.post('/signup', userController.signUp);
 user.post('/signin', userController.signIn);
 user.post('/signout', userController.signOut);
 
-// define route for fetching User stored recipes
 user.get('/myRecipes', auth.default);
 user.get('/myRecipes', recipeController.getUserRecipes);
 
