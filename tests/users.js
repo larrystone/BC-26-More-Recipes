@@ -1,4 +1,3 @@
-// import chai from 'chai';
 import chai, { expect } from 'chai';
 import chaiHttp from 'chai-http';
 
@@ -7,12 +6,10 @@ import models from './../server/models';
 
 process.env.NODE_ENV = 'development';
 
-// const should = chai.should();
 const user = models.User;
 
 chai.use(chaiHttp);
 
-// delete all records before running tests
 describe('User', () => {
   beforeEach((done) => {
     user.destroy({
