@@ -1,6 +1,7 @@
 import models from '../models';
 
 const recipe = models.Recipe;
+const review = models.Review;
 
 /**
  * @exports createRecipe
@@ -89,10 +90,7 @@ export const modifyRecipe = (req, res) => {
   const ingredients = req.body.ingredients || [];
   const directions = req.body.directions || '';
   const modifiedRecipe = recipe
-    .findOne({
-      attributes: ['userId'],
-      where: { id: recipeId }
-    })
+    .findById(recipeId)
     .then((recipeFound) => {
       if (!recipeFound) {
         return res.status(404).send({
@@ -135,10 +133,7 @@ export const deleteRecipe = (req, res) => {
   const recipeId = req.params.recipeId;
   const userId = req.session.user.id;
   const deletedRecipe = recipe
-    .findOne({
-      attributes: ['userId'],
-      where: { id: recipeId }
-    })
+    .findById(recipeId)
     .then((recipeFound) => {
       if (!recipeFound) {
         return res.status(404).send({
@@ -164,4 +159,28 @@ export const deleteRecipe = (req, res) => {
     .catch(() => res.status(401).send({ error: 'Error Deleting Recipe' }));
 
   return deletedRecipe;
+};
+
+/**
+ * @exports postReview
+ * @param  {obj} req request object
+ * @param  {obj} res result object
+ * @return {obj}  newUser object
+ */
+export const postReview = (req, res) => {
+  const userId = req.session.user.id;
+  const recipeId = req.params.recipeId;
+  const content = req.body.content;
+  const newReview = review
+    .create({
+      content,
+      userId,
+      recipeId
+    })
+    .then((createdReview) => {
+      res.status(201).send(createdReview);
+    })
+    .catch(() => res.status(401).send({ error: 'Error Posting Review' }));
+
+  return newReview;
 };
