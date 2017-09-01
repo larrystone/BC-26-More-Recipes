@@ -13,6 +13,14 @@ export const signUp = (req, res) => {
   const name = req.body.name;
   const username = (req.body.username || '').replace(' ', '');
   const email = (req.body.email || '').replace(' ', '');
+  const password = req.body.password;
+
+  if (password.length < 6) {
+    return res.status(401).send({
+      error: 'Password must be at least 6 characters!'
+    });
+  }
+
   const newUser = user
     .findOne({
       attributes: ['id'],
@@ -39,7 +47,7 @@ export const signUp = (req, res) => {
           name,
           username,
           email,
-          password: auth.generateHash(req.body.password),
+          password: auth.generateHash(password),
         })
         .then((result) => {
           const createdUser = {
