@@ -16,6 +16,6 @@ user.get('/myRecipes', auth.default);
 user.get('/myRecipes', recipeController.getUserRecipes);
 
 user.post('/:userId/recipes/:recipeId', favoriteController.addToFavorite);
-
+user.get('/:userId/recipes', favoriteController.getFavRecipes);
 
 export default user;
