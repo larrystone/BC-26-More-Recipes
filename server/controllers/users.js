@@ -122,21 +122,3 @@ export const signIn = (req, res) => {
 
   return newUser;
 };
-
-
-/**
- * @exports signOut
- * @param  {obj} req request object
- * @param  {obj} res result object
- * @return {obj}  undefined
- */
-export const signOut = (req, res) => {
-  
-  if (req.session.user) {
-    const username = req.session.user.username;
-    req.session.user = null;
-    res.status(201).send({
-      message: `Thanks for your time @${username.toLowerCase()}...` });
-  }
-  res.status(201).send({ error: 'User not logged in!' });
-};

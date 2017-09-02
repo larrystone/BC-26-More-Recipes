@@ -10,7 +10,6 @@ const user = express.Router();
 
 user.post('/signup', userController.signUp);
 user.post('/signin', userController.signIn);
-user.post('/signout', userController.signOut);
 
 user.get('/myRecipes', auth.default);
 user.get('/myRecipes', recipeController.getUserRecipes);
