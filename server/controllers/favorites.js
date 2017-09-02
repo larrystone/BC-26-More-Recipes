@@ -41,7 +41,7 @@ export const getFavRecipes = (req, res) => {
     .findAll({
       where: { userId },
       include: [
-        { model: models.Recipes }
+        { model: models.Recipe }
       ]
     })
     .then((foundRecipes) => {
@@ -53,7 +53,7 @@ export const getFavRecipes = (req, res) => {
 
       return res.status(201).send(foundRecipes);
     })
-    .catch(() => res.status(401).send('Unable to fetch favorite recipes'));
+    .catch(e => res.status(401).send(`Unable to fetch favorite recipes ${e.message}`));
 
   return favRecipes;
 };
