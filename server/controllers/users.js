@@ -1,6 +1,8 @@
+import jwt from 'jsonwebtoken';
 import models from '../models';
 import * as auth from '../middleware/encryption';
 
+const secret = process.env.secret || '!^sl1@#=5';
 const user = models.User;
 
 /**
@@ -50,10 +52,16 @@ export const signUp = (req, res) => {
           password: auth.generateHash(password),
         })
         .then((result) => {
+          const token = jwt.sign(result, secret, {
+            expiresInMinutes: 1440
+          });
+
           const createdUser = {
+            token,
             userId: result.id,
             username: result.username,
-            email: result.email };
+            email: result.email,
+          };
 
           req.session.user = result;
 
@@ -97,13 +105,16 @@ export const signIn = (req, res) => {
       }
 
       if (auth.verifyHash(req.body.password, userFound.password)) {
-        req.session.user = userFound;
+        const token = jwt.sign(userFound, secret, {
+          expiresInMinutes: 1440
+        });
 
-        return res.status(201).send(
-          { id: userFound.id,
-            name: userFound.name,
-            username: userFound.username,
-            email: userFound.email });
+        return res.status(201).send({
+          token,
+          id: userFound.id,
+          name: userFound.name,
+          username: userFound.username,
+          email: userFound.email });
       }
       throw new Error();
     })
@@ -120,6 +131,7 @@ export const signIn = (req, res) => {
  * @return {obj}  undefined
  */
 export const signOut = (req, res) => {
+  
   if (req.session.user) {
     const username = req.session.user.username;
     req.session.user = null;
