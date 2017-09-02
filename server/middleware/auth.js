@@ -1,9 +1,25 @@
+import jwt from 'jsonwebtoken';
 
 export default (req, res, next) => {
-  if (!req.session.user) {
-    return res.status(401).send({
-      error: 'You do not have the permission to perform this action!' });
-  }
+  const secret = process.env.secret || '!^sl1@#=5';
 
-  next();
+  const token = req.body.token
+    || req.query.token
+    || req.headers['x-access-token'];
+
+  if (token) {
+    jwt.verify(token, secret, (err, decoded) => {
+      if (err) {
+        return res.json({ success: false,
+          message: 'Failed to authenticate token.' });
+      }
+      req.decoded = decoded;
+      next();
+    });
+  } else {
+    return res.status(403).send({
+      success: false,
+      message: 'No token provided.'
+    });
+  }
 };
