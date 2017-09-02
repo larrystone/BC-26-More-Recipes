@@ -4,7 +4,7 @@ import * as userController from '../../controllers/users';
 import * as recipeController from '../../controllers/recipes';
 import * as favoriteController from '../../controllers/favorites';
 
-import * as auth from '../../controllers/auth';
+import * as auth from '../../middleware/auth';
 
 const user = express.Router();
 
@@ -16,7 +16,8 @@ user.get('/myRecipes', auth.default);
 user.get('/myRecipes', recipeController.getUserRecipes);
 
 user.post('/:userId/recipes/:recipeId', favoriteController.addToFavorite);
-user.delete('/:userId/recipes/:recipeId', favoriteController.removeFromFavorites);
+user.delete('/:userId/recipes/:recipeId',
+  favoriteController.removeFromFavorites);
 user.get('/:userId/recipes', favoriteController.getFavRecipes);
 
 

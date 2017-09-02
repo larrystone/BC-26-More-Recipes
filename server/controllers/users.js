@@ -1,5 +1,5 @@
 import models from '../models';
-import * as auth from './encryption';
+import * as auth from '../middleware/encryption';
 
 const user = models.User;
 

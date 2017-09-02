@@ -2,7 +2,7 @@ import express from 'express';
 
 import * as recipeController from '../../controllers/recipes';
 import * as reviewController from '../../controllers/reviews';
-import * as auth from '../../controllers/auth';
+import * as auth from '../../middleware/auth';
 
 const user = express.Router();
 
