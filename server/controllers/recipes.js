@@ -205,7 +205,9 @@ export const getReviews = (req, res) => {
   const newReview = review
     .findAll({
       where: { recipeId },
-      
+      include: [
+        { model: models.User, attributes: ['name'] }
+      ]
     })
     .then((reviews) => {
       res.status(201).send(reviews);
