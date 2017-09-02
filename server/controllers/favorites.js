@@ -33,14 +33,14 @@ export const addToFavorite = (req, res) => {
  * @return {obj}  newUser object
  */
 export const removeFromFavorites = (req, res) => {
-  const userId = req.session.user.id;
+  const userId = req.params.userId;
   const recipeId = req.params.recipeId;
   const newFavorite = favorite
     .destroy({
       where: {
         $and: [
-          userId,
-          recipeId
+          { userId },
+          { recipeId }
         ]
       },
     })
