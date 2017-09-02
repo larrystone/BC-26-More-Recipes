@@ -19,11 +19,41 @@ export const addToFavorite = (req, res) => {
     .then((createdFavorite) => {
       res.status(201).send(createdFavorite);
     })
-    .catch(() => res.status(401).send({ error: 'Error Recipe to Favorites' }));
+    .catch(() => res.status(401).send({ error: 'Error Adding Recipe to Favorites' }));
 
   return newFavorite;
 };
 
 export const removeFromFavorite = () => {
 
+};
+
+
+/**
+ * @exports getFavRecipes
+ * @param  {obj} req request object
+ * @param  {obj} res result object
+ * @return {obj}  newUser object
+ */
+export const getFavRecipes = (req, res) => {
+  const userId = req.params.userId;
+  const favRecipes = favorite
+    .findAll({
+      where: { userId },
+      include: [
+        { model: models.Recipes }
+      ]
+    })
+    .then((foundRecipes) => {
+      if (!foundRecipes) {
+        return res.status(201).send({
+          message: 'No Stored Favorite Recipes found',
+        });
+      }
+
+      return res.status(201).send(foundRecipes);
+    })
+    .catch(() => res.status(401).send('Unable to fetch favorite recipes'));
+
+  return favRecipes;
 };
