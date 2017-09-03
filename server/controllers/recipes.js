@@ -62,7 +62,7 @@ export const getAllRecipes = (req, res) => {
   const recipes = recipe
     .findAll({
       include: [
-        { model: models.User, attributes: ['name'] }
+        { model: models.User, attributes: ['name', 'updatedAt'] }
       ]
     })
     .then((foundRecipes) => {
