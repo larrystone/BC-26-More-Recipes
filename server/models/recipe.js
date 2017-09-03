@@ -38,6 +38,12 @@ export default (sequelize, DataTypes) => {
     Recipe.hasMany(models.Favorite, {
       foreignKey: 'recipeId'
     });
+    Recipe.hasMany(models.Upvote, {
+      foreignKey: 'recipeId'
+    });
+    Recipe.hasMany(models.Downvote, {
+      foreignKey: 'recipeId'
+    });
   };
   return Recipe;
 };
