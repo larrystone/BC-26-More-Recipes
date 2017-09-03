@@ -62,3 +62,60 @@ export const upvoteRecipe = (req, res) => {
   return newUpvote;
 };
 
+/**
+ * @exports downvoteRecipe
+ * @param  {obj} req request object
+ * @param  {obj} res result object
+ * @return {obj}  newUser object
+ */
+export const downvoteRecipe = (req, res) => {
+  const userId = req.userId;
+  const recipeId = req.params.recipeId;
+
+  upvote
+    .findOne({
+      attributes: ['id'],
+      where: {
+        $and: [
+          { userId },
+          { recipeId }
+        ]
+      }
+    })
+    .then((voteFound) => {
+      if (voteFound) {
+        upvote
+          .destroy({
+            where: {
+              $and: [
+                { userId },
+                { recipeId }
+              ]
+            }
+          })
+          .then(() => {
+            recipe
+              .decrement('upvotes', { where: { id: recipeId } });
+          });
+      }
+    });
+
+  const newDownvote = downvote
+    .findOrCreate({ where: { userId, recipeId } })
+    .spread((createdVote, created) => {
+      if (created) {
+        recipe
+          .increment('downvotes', { where: { id: recipeId } });
+
+        return res.status(201).send({ message: 'Recipe Downvoted!' });
+      }
+
+      return res.status(201).send({ message: 'Already Downvoted!' });
+    })
+    // .then((createdReview) => {
+    //   res.status(201).send(createdReview);
+    // })
+    .catch(() => res.status(401).send({ error: 'Error Downvoting Review' }));
+
+  return newDownvote;
+};
