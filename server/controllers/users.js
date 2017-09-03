@@ -13,26 +13,57 @@ export const signUp = (req, res) => {
   const name = req.body.name;
   const username = (req.body.username || '').replace(' ', '');
   const email = (req.body.email || '').replace(' ', '');
+  const password = req.body.password;
+
+  if (password.length < 6) {
+    return res.status(401).send({
+      error: 'Password must be at least 6 characters!'
+    });
+  }
+
   const newUser = user
-    .create({
-      name,
-      username,
-      email,
-      password: auth.generateHash(req.body.password),
+    .findOne({
+      attributes: ['id'],
+      where: {
+        $or: [
+          { username: {
+            $iLike: username }
+          },
+          { email: {
+            $iLike: email }
+          }
+        ]
+      }
     })
-    .then((result) => {
-      const loggedInUser =
-        { userId: result.id, username: result.username, email: result.email };
+    .then((userFound) => {
+      if (userFound) {
+        return res.status(401).send({
+          error: 'Username or email already taken!',
+        });
+      }
 
-      req.session.user = result;
+      user
+        .create({
+          name,
+          username,
+          email,
+          password: auth.generateHash(password),
+        })
+        .then((result) => {
+          const createdUser = {
+            userId: result.id,
+            username: result.username,
+            email: result.email };
 
-      return res.status(201).send(loggedInUser);
-    })
-    .catch(() => res.status(401).send({ error: 'Error Creating user' }));
+          req.session.user = result;
 
-  return newUser;
+          return res.status(201).send(createdUser);
+        })
+        .catch(() => res.status(401).send({ error: 'Error Creating user' }));
+
+      return newUser;
+    });
 };
-
 
 /**
  * @exports signIn

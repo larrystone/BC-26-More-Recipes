@@ -4,7 +4,7 @@ import chaiHttp from 'chai-http';
 import server from './../server/app';
 import models from './../server/models';
 
-process.env.NODE_ENV = 'development';
+process.env.NODE_ENV = 'test';
 
 const user = models.User;
 
