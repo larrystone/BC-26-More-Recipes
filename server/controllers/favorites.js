@@ -9,7 +9,7 @@ const favorite = models.Favorite;
  * @return {obj}  newUser object
  */
 export const addToFavorite = (req, res) => {
-  const userId = req.session.user.id;
+  const userId = req.userId;
   const recipeId = req.params.recipeId;
   const newFavorite = favorite
     .create({

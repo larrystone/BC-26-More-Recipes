@@ -21,7 +21,7 @@
     "body-parser": "^1.17.2",
     "dotenv": "^4.0.0",
     "express": "^4.15.4",
-    "express-session": "^1.15.5",
+    "jsonwebtoken": "^7.4.3",
     "mocha": "^3.4.2",
     "morgan": "^1.8.2",
     "nodemon": "^1.11.0",
