@@ -10,9 +10,7 @@ const recipe = models.Recipe;
  */
 export const createRecipe = (req, res) => {
   const name = req.body.name;
-  const ingredientsString = req.body.ingredients
-    .replace('[\'', '').replace('\']', '');
-  const ingredients = ingredientsString.split('\',\'') || [];
+  const ingredients = req.body.ingredients || '';
   const direction = req.body.direction || '';
   const newUser = recipe
     .create({
@@ -64,7 +62,7 @@ export const getAllRecipes = (req, res) => {
   const recipes = recipe
     .findAll({
       include: [
-        { model: models.User, attributes: ['name'] }
+        { model: models.User, attributes: ['name', 'updatedAt'] }
       ]
     })
     .then((foundRecipes) => {
@@ -92,10 +90,7 @@ export const modifyRecipe = (req, res) => {
   const recipeId = req.params.recipeId;
   const userId = req.userId;
   const name = req.body.name;
-  const ingredientsString = req.body.ingredients
-    .replace('[\'', '').replace('\']', '');
-  const ingredients = ingredientsString.split('\',\'') || [];
-  // const ingredients = req.body.ingredients.split(';;') || [];
+  const ingredients = req.body.ingredients || '';
   const direction = req.body.direction || '';
   const modifiedRecipe = recipe
     .findById(recipeId)

@@ -38,7 +38,7 @@ export const getReviews = (req, res) => {
     .findAll({
       where: { recipeId },
       include: [
-        { model: models.User, attributes: ['name'] }
+        { model: models.User, attributes: ['name', 'updatedAt'] }
       ]
     })
     .then((reviews) => {

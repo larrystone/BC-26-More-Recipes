@@ -66,7 +66,8 @@ export const getFavRecipes = (req, res) => {
     .findAll({
       where: { userId },
       include: [
-        { model: models.Recipe }
+        { model: models.Recipe },
+        { model: models.User, attributes: ['name', 'updatedAt'] }
       ]
     })
     .then((foundRecipes) => {
