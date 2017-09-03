@@ -11,7 +11,7 @@ const user = express.Router();
 user.post('/signup', userController.signUp);
 user.post('/signin', userController.signIn);
 
-user.get('/myRecipes', auth.default);
+user.use('*', auth.default);
 user.get('/myRecipes', recipeController.getUserRecipes);
 
 user.post('/:userId/recipes/:recipeId', favoriteController.addToFavorite);
