@@ -19,7 +19,7 @@ export const createRecipe = (req, res) => {
       name,
       ingredients,
       direction,
-      userId: req.session.user.id
+      userId: req.userId
     })
     .then((createdRecipe) => {
       res.status(201).send(createdRecipe);
@@ -38,7 +38,7 @@ export const createRecipe = (req, res) => {
 export const getUserRecipes = (req, res) => {
   const recipes = recipe
     .findAll({
-      where: { userId: req.session.user.id }
+      where: { userId: req.userId }
     })
     .then((foundRecipes) => {
       if (!foundRecipes) {
@@ -90,7 +90,7 @@ export const getAllRecipes = (req, res) => {
  */
 export const modifyRecipe = (req, res) => {
   const recipeId = req.params.recipeId;
-  const userId = req.session.user.id;
+  const userId = req.userId;
   const name = req.body.name;
   const ingredientsString = req.body.ingredients
     .replace('[\'', '').replace('\']', '');
@@ -139,7 +139,7 @@ export const modifyRecipe = (req, res) => {
  */
 export const deleteRecipe = (req, res) => {
   const recipeId = req.params.recipeId;
-  const userId = req.session.user.id;
+  const userId = req.userId;
   const deletedRecipe = recipe
     .findById(recipeId)
     .then((recipeFound) => {

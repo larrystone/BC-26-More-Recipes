@@ -52,9 +52,9 @@ export const signUp = (req, res) => {
           password: auth.generateHash(password),
         })
         .then((result) => {
-          const token = jwt.sign(result, secret, {
+          const token = jwt.sign(result.password, secret /* , {
             expiresInMinutes: 1440
-          });
+          } */);
 
           const createdUser = {
             token,
@@ -62,8 +62,6 @@ export const signUp = (req, res) => {
             username: result.username,
             email: result.email,
           };
-
-          req.session.user = result;
 
           return res.status(201).send(createdUser);
         })
@@ -105,9 +103,9 @@ export const signIn = (req, res) => {
       }
 
       if (auth.verifyHash(req.body.password, userFound.password)) {
-        const token = jwt.sign(userFound, secret, {
+        const token = jwt.sign(userFound.id, secret /* , {
           expiresInMinutes: 1440
-        });
+        } */);
 
         return res.status(201).send({
           token,

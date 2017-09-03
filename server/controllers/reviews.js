@@ -9,7 +9,7 @@ const review = models.Review;
  * @return {obj}  newUser object
  */
 export const postReview = (req, res) => {
-  const userId = req.session.user.id;
+  const userId = req.userId;
   const recipeId = req.params.recipeId;
   const content = req.body.content;
   const newReview = review
