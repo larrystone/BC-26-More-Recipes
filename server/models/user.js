@@ -29,17 +29,17 @@ export default (sequelize, DataTypes) => {
         }
       }
     },
-  }, {
-    classMethods: {
-      associate: (models) => {
-        User.hasMany(models.Recipe, {
-          foreignKey: 'userId'
-        });
-        User.hasMany(models.Review, {
-          foreignKey: 'userId'
-        });
-      }
-    }
   });
+  User.associate = (models) => {
+    User.hasMany(models.Recipe, {
+      foreignKey: 'userId'
+    });
+    User.hasMany(models.Review, {
+      foreignKey: 'userId'
+    });
+    User.hasMany(models.Favorite, {
+      foreignKey: 'userId'
+    });
+  };
   return User;
 };

@@ -1,7 +1,6 @@
 import models from '../models';
 
 const recipe = models.Recipe;
-const review = models.Review;
 
 /**
  * @exports createRecipe
@@ -11,13 +10,15 @@ const review = models.Review;
  */
 export const createRecipe = (req, res) => {
   const name = req.body.name;
-  const ingredients = req.body.ingredients || [];
-  const directions = req.body.directions || '';
+  const ingredientsString = req.body.ingredients
+    .replace('[\'', '').replace('\']', '');
+  const ingredients = ingredientsString.split('\',\'') || [];
+  const direction = req.body.direction || '';
   const newUser = recipe
     .create({
       name,
       ingredients,
-      directions,
+      direction,
       userId: req.session.user.id
     })
     .then((createdRecipe) => {
@@ -61,7 +62,11 @@ export const getUserRecipes = (req, res) => {
  */
 export const getAllRecipes = (req, res) => {
   const recipes = recipe
-    .findAll()
+    .findAll({
+      include: [
+        { model: models.User, attributes: ['name'] }
+      ]
+    })
     .then((foundRecipes) => {
       if (!foundRecipes) {
         return res.status(201).send({
@@ -71,7 +76,7 @@ export const getAllRecipes = (req, res) => {
 
       return res.status(201).send(foundRecipes);
     })
-    .catch(() => res.status(401).send('Unable to fetch recipes'));
+    .catch(e => res.status(401).send(`Unable to fetch recipes ${e.message}`));
 
   return recipes;
 };
@@ -87,8 +92,11 @@ export const modifyRecipe = (req, res) => {
   const recipeId = req.params.recipeId;
   const userId = req.session.user.id;
   const name = req.body.name;
-  const ingredients = req.body.ingredients || [];
-  const directions = req.body.directions || '';
+  const ingredientsString = req.body.ingredients
+    .replace('[\'', '').replace('\']', '');
+  const ingredients = ingredientsString.split('\',\'') || [];
+  // const ingredients = req.body.ingredients.split(';;') || [];
+  const direction = req.body.direction || '';
   const modifiedRecipe = recipe
     .findById(recipeId)
     .then((recipeFound) => {
@@ -107,7 +115,7 @@ export const modifyRecipe = (req, res) => {
       recipe.update({
         name,
         ingredients,
-        directions
+        direction
       }, {
         where: {
           id: recipeId
@@ -159,48 +167,4 @@ export const deleteRecipe = (req, res) => {
     .catch(() => res.status(401).send({ error: 'Error Deleting Recipe' }));
 
   return deletedRecipe;
-};
-
-/**
- * @exports postReview
- * @param  {obj} req request object
- * @param  {obj} res result object
- * @return {obj}  newUser object
- */
-export const postReview = (req, res) => {
-  const userId = req.session.user.id;
-  const recipeId = req.params.recipeId;
-  const content = req.body.content;
-  const newReview = review
-    .create({
-      content,
-      userId,
-      recipeId
-    })
-    .then((createdReview) => {
-      res.status(201).send(createdReview);
-    })
-    .catch(() => res.status(401).send({ error: 'Error Posting Review' }));
-
-  return newReview;
-};
-
-/**
- * @exports getReviews
- * @param  {obj} req request object
- * @param  {obj} res result object
- * @return {obj}  newUser object
- */
-export const getReviews = (req, res) => {
-  const recipeId = req.params.recipeId;
-  const newReview = review
-    .findAll({
-      where: { recipeId }
-    })
-    .then((reviews) => {
-      res.status(201).send(reviews);
-    })
-    .catch(() => res.status(401).send({ error: 'Error Fetching Reviews' }));
-
-  return newReview;
 };
