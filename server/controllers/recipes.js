@@ -163,3 +163,33 @@ export const deleteRecipe = (req, res) => {
 
   return deletedRecipe;
 };
+
+/**
+ * @exports sortMostUpvotes
+ * @param  {obj} req request object
+ * @param  {obj} res result object
+ * @return {obj}  newUser object
+ */
+export const sortMostUpvotes = (req, res) => {
+  const recipes = recipe
+    .findAll({
+      include: [
+        { model: models.User, attributes: ['name', 'updatedAt'] }
+      ],
+      order: [
+        ['upvotes', 'DESC']
+      ]
+    })
+    .then((foundRecipes) => {
+      if (!foundRecipes) {
+        return res.status(201).send({
+          message: 'No Stored Recipes found',
+        });
+      }
+
+      return res.status(201).send(foundRecipes);
+    })
+    .catch(() => res.status(401).send('Unable to fetch recipes'));
+
+  return recipes;
+};
