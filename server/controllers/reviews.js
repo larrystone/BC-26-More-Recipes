@@ -22,7 +22,7 @@ export const postReview = (req, res) => {
       createdReview.success = true;
       res.status(201).send(createdReview);
     })
-    .catch(() => res.status(401).send({
+    .catch(() => res.status(503).send({
       success: false,
       message: 'Error Posting Review' }));
 
@@ -48,7 +48,7 @@ export const getReviews = (req, res) => {
       reviews.success = true;
       res.status(201).send(reviews);
     })
-    .catch(() => res.status(401).send({
+    .catch(() => res.status(503).send({
       success: false,
       error: 'Error Fetching Reviews' }));
 

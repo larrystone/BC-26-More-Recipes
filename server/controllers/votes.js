@@ -69,7 +69,7 @@ export const upvoteRecipe = (req, res) => {
         success: false,
         message: 'Recipe Already Upvoted!' });
     })
-    .catch(() => res.status(401).send({
+    .catch(() => res.status(503).send({
       success: false,
       message: 'Error Upvoting Review' }));
 
@@ -142,7 +142,7 @@ export const downvoteRecipe = (req, res) => {
         success: false,
         message: 'Recipe Already Downvoted!' });
     })
-    .catch(() => res.status(401).send({
+    .catch(() => res.status(503).send({
       success: true,
       message: 'Error Downvoting Review' }));
 
@@ -176,7 +176,7 @@ export const getUserUpvotes = (req, res) => {
       foundVotes.success = true;
       return res.status(201).send(foundVotes);
     })
-    .catch(() => res.status(401).send({
+    .catch(() => res.status(503).send({
       success: true,
       message: 'Unable to get user upvotes' }));
 
@@ -210,7 +210,7 @@ export const getUserDownvotes = (req, res) => {
       foundVotes.success = true;
       return res.status(201).send(foundVotes);
     })
-    .catch(() => res.status(401).send({
+    .catch(() => res.status(503).send({
       success: false,
       message: 'Unable to get user downvotes' }));
 

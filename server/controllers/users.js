@@ -66,7 +66,7 @@ export const signUp = (req, res) => {
           createdUser.success = true;
           return res.status(201).send(createdUser);
         })
-        .catch(() => res.status(401).send({
+        .catch(() => res.status(503).send({
           success: false,
           message: 'Error Creating user' }));
 
@@ -119,7 +119,7 @@ export const signIn = (req, res) => {
       }
       throw new Error();
     })
-    .catch(() => res.status(401).send({
+    .catch(() => res.status(503).send({
       success: false,
       message: 'Incorrect Password!' }));
 

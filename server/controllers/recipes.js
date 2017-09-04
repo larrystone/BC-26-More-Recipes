@@ -23,7 +23,7 @@ export const createRecipe = (req, res) => {
       createdRecipe.success = true;
       res.status(201).send(createdRecipe);
     })
-    .catch(() => res.status(401).send({
+    .catch(() => res.status(503).send({
       success: false,
       message: 'Error Creating Recipe' }));
 
@@ -52,7 +52,7 @@ export const getUserRecipes = (req, res) => {
       foundRecipes.success = true;
       return res.status(201).send(foundRecipes);
     })
-    .catch(() => res.status(401).send({
+    .catch(() => res.status(503).send({
       success: false,
       message: 'Unable to get user recipes' }));
 
@@ -87,7 +87,7 @@ export const sortMostUpvotes = (req, res) => {
       foundRecipes.success = true;
       return res.status(201).send(foundRecipes);
     })
-    .catch(() => res.status(401).send({
+    .catch(() => res.status(503).send({
       success: false,
       message: 'Unable to fetch recipes' }));
 
@@ -122,7 +122,7 @@ export const getAllRecipes = (req, res) => {
         foundRecipes.success = true;
         return res.status(201).send(foundRecipes);
       })
-      .catch(() => res.status(401).send({
+      .catch(() => res.status(503).send({
         success: false,
         message: 'Unable to fetch recipes' }));
 
@@ -175,7 +175,7 @@ export const modifyRecipe = (req, res) => {
           res.status(201).send(result[1]);
         });
     })
-    .catch(() => res.status(401).send({
+    .catch(() => res.status(503).send({
       success: false,
       message: 'Error Modifying Recipe' }));
 
@@ -217,7 +217,7 @@ export const deleteRecipe = (req, res) => {
           res.status(204).end();
         });
     })
-    .catch(() => res.status(401).send({
+    .catch(() => res.status(503).send({
       success: true,
       message: 'Error Deleting Recipe' }));
 
