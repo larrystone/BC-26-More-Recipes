@@ -1,4 +1,3 @@
-import jwt from 'jsonwebtoken';
 import models from '../models';
 import * as encryption from '../middleware/encryption';
 import * as auth from '../middleware/auth';
@@ -18,7 +17,7 @@ export const signUp = (req, res) => {
   const password = req.body.password;
 
   if (password.length < 6) {
-    return res.status(401).send({
+    return res.status(403).send({
       success: false,
       message: 'Password must be at least 6 characters!'
     });
@@ -40,7 +39,7 @@ export const signUp = (req, res) => {
     })
     .then((userFound) => {
       if (userFound) {
-        return res.status(401).send({
+        return res.status(403).send({
           success: false,
           message: 'Username or email already taken!'
         });

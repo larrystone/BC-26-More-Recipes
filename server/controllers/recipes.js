@@ -154,7 +154,7 @@ export const modifyRecipe = (req, res) => {
       }
 
       if (+recipeFound.userId !== +userId) {
-        return res.status(401).send({
+        return res.status(403).send({
           success: false,
           message: 'You cannot modify this recipe'
         });
@@ -202,7 +202,7 @@ export const deleteRecipe = (req, res) => {
       }
 
       if (+recipeFound.userId !== +userId) {
-        return res.status(401).send({
+        return res.status(403).send({
           success: false,
           message: 'You cannot delete this recipe'
         });
