@@ -1,8 +1,8 @@
 import jwt from 'jsonwebtoken';
 import models from '../models';
-import * as auth from '../middleware/encryption';
+import * as encryption from '../middleware/encryption';
+import * as auth from '../middleware/auth';
 
-const secret = process.env.secret || '!^sl1@#=5';
 const user = models.User;
 
 /**
@@ -51,12 +51,10 @@ export const signUp = (req, res) => {
           name,
           username,
           email,
-          password: auth.generateHash(password),
+          password: encryption.generateHash(password),
         })
         .then((result) => {
-          const token = jwt.sign(result.password, secret /* , {
-            expiresInMinutes: 1440
-          } */);
+          const token = auth.sign(result.id);
 
           const createdUser = {
             success: true,
@@ -109,10 +107,8 @@ export const signIn = (req, res) => {
         });
       }
 
-      if (auth.verifyHash(req.body.password, userFound.password)) {
-        const token = jwt.sign(userFound.id, secret /* , {
-          expiresInMinutes: 1440
-        } */);
+      if (encryption.verifyHash(req.body.password, userFound.password)) {
+        const token = auth.sign(userFound.id);
 
         return res.status(201).send({
           success: true,
