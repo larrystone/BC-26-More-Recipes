@@ -21,4 +21,7 @@ user.get('/:recipeId/reviews', reviewController.getReviews);
 user.post('/:recipeId/upvotes', voteController.upvoteRecipe);
 user.post('/:recipeId/downvotes', voteController.downvoteRecipe);
 
+user.get('/:recipeId/upvotes', voteController.getUserUpvotes);
+user.get('/:recipeId/downvotes', voteController.getUserDownvotes);
+
 export default user;
