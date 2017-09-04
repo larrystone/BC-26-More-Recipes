@@ -5,10 +5,10 @@ cache:
  directories:
   - node_modules
 before_script:
-  - psql -c 'create database travis;' -U postgres
+  - psql -c 'create database more-recipes;' -U postgres
 after_success:
   - npm run coveralls
 after_script:
-  - psql -c 'drop database travis;' -U postgres
+  - psql -c 'drop database more-recipes;' -U postgres
 services:
   - postgresql
