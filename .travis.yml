@@ -1,5 +1,14 @@
 language: node_js
 node_js:
 - "stable"
+cache:
+ directories:
+  - node_modules
+before_script:
+  - psql -c 'create database travis'; -U postgres
 after_success:
   - npm run coveralls
+after_script:
+  - psql -c 'drop database travis'; -U postgres
+services:
+  - postgresql
