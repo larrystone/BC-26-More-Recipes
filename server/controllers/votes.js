@@ -147,6 +147,7 @@ export const getUserUpvotes = (req, res) => {
   const recipeId = req.params.recipeId;
   const upvotes = upvote
     .findAll({
+      attributes: ['recipId'],
       where: { recipeId },
       include: [
         { model: models.User, attributes: ['name'] }
@@ -176,6 +177,7 @@ export const getUserDownvotes = (req, res) => {
   const recipeId = req.params.recipeId;
   const downvotes = downvote
     .findAll({
+      attributes: ['recipId'],
       where: { recipeId },
       include: [
         { model: models.User, attributes: ['name'] }
