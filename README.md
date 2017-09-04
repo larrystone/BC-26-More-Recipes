@@ -46,12 +46,17 @@ This directory holds all routes, controllers, middleware, migrations
 * [Modify Recipe] - PUT http://localhost:3000/api/v1/recipes/:recipeId
 * [Delete Recipe] - DELETE http://localhost:3000/api/v1/recipes/:recipeId
 * [Fetch All Recipes] - GET http://localhost:3000/api/v1/recipes
+* [Fetch Recipes by Most Upvotes] - GET http://localhost:3000/api/v1/recipes?sort=upvotes&order=ascending
 * [Fetch My Recipes] - GET http://localhost:3000/api/v1/users/myRecipes
-* [Modify Recipe] - PUT http://localhost:3000/api/v1/recipes/:recipeId
-* [Post Recipe Review] - POST http://localhost:3000/api/v1/recipes/:recipeId/reviews
 * [Post Recipe Review] - POST http://localhost:3000/api/v1/recipes/:recipeId/reviews
 * [Fetch Recipe Reviews] - GET http://localhost:3000/api/v1/recipes/:recipeId/reviews
-* More API routes to come
+* [Add Recipe to Favorites] - POST http://localhost:3000/api/v1/users/:userId/recipes/:recipeId
+* [Remove Recipe from Favorites] - DELETE http://localhost:3000/api/v1/users/:userId/recipes/:recipeId
+* [Get Favaorite Recipes] - GET http://localhost:3000/api/v1/users/:userId/recipes
+* [Upvote Recipe] - POST http://localhost:3000/api/v1/recipes/:recipeId/upvotes
+* [Downvote Recipe] - POST http://localhost:3000/api/v1/recipes/:recipeId/downvotes
+* [Get Upvote Recipe User List] - GET http://localhost:3000/api/v1/recipes/:recipeId/upvotes
+* [Get Downvote Recipe User List] - GET http://localhost:3000/api/v1/recipes/:recipeId/downvotes
 
 ## Versioning
 
