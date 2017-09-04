@@ -1,30 +1,11 @@
 module.exports = {
   up(queryInterface, Sequelize) {
-    return queryInterface.createTable('Recipes', {
+    return queryInterface.createTable('Downvotes', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
-      },
-      name: {
-        type: Sequelize.STRING
-      },
-      ingredients: {
-        type: Sequelize.STRING
-      },
-      direction: {
-        type: Sequelize.STRING
-      },
-      upvotes: {
-        type: Sequelize.INTEGER,
-        allowNull: true,
-        defaultValue: 0,
-      },
-      downvotes: {
-        type: Sequelize.INTEGER,
-        allowNull: true,
-        defaultValue: 0,
       },
       createdAt: {
         allowNull: false,
@@ -42,10 +23,19 @@ module.exports = {
           key: 'id',
           as: 'userId',
         }
+      },
+      recipeId: {
+        type: Sequelize.INTEGER,
+        onDelete: 'CASCADE',
+        references: {
+          model: 'Recipes',
+          key: 'id',
+          as: 'recipeId',
+        }
       }
     });
   },
-  down(queryInterface, /* Sequelize */) {
-    return queryInterface.dropTable('Recipes');
+  down(queryInterface /* , Sequelize */) {
+    return queryInterface.dropTable('Downvotes');
   }
 };

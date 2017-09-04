@@ -7,7 +7,7 @@ export default (sequelize, DataTypes) => {
     },
     ingredients: DataTypes.STRING,
     direction: DataTypes.STRING,
-    vpvotes: {
+    upvotes: {
       type: DataTypes.INTEGER,
       allowNull: true,
       defaultValue: 0
@@ -36,6 +36,12 @@ export default (sequelize, DataTypes) => {
       foreignKey: 'recipeId'
     });
     Recipe.hasMany(models.Favorite, {
+      foreignKey: 'recipeId'
+    });
+    Recipe.hasMany(models.Upvote, {
+      foreignKey: 'recipeId'
+    });
+    Recipe.hasMany(models.Downvote, {
       foreignKey: 'recipeId'
     });
   };
