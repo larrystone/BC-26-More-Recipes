@@ -7,7 +7,7 @@
     "start": "babel-node server/app.js",
     "start:dev": "nodemon --exec babel-node server/app.js",
     "test": "mocha --timeout 500000 --compilers js:babel-core/register tests/",
-    "coveralls": "NODE_ENV=test nyc npm test && nyc report --reporter=text-lcov | coveralls"
+    "coveralls": "NODE_ENV=${NODE_ENV:=test} nyc npm test && nyc report --reporter=text-lcov | coveralls"
   },
   "author": "Lawal Lanre Emmanuel",
   "license": "ISC",
