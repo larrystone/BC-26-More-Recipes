@@ -22,7 +22,7 @@ export const createRecipe = (req, res) => {
     .then((createdRecipe) => {
       res.status(201).send(createdRecipe);
     })
-    .catch(e => res.status(401).send({ error: `Error Creating Recipe ${e.message}` }));
+    .catch(() => res.status(401).send({ error: 'Error Creating Recipe' }));
 
   return newUser;
 };

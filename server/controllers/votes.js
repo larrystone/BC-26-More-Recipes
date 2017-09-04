@@ -136,3 +136,61 @@ export const downvoteRecipe = (req, res) => {
 
   return newDownvote;
 };
+
+/**
+ * @exports getUserUpvotes
+ * @param  {obj} req request object
+ * @param  {obj} res result object
+ * @return {obj}  newUser object
+ */
+export const getUserUpvotes = (req, res) => {
+  const recipeId = req.params.recipeId;
+  const upvotes = upvote
+    .findAll({
+      where: { recipeId },
+      include: [
+        { model: models.User, attributes: ['name'] }
+      ]
+    })
+    .then((foundVotes) => {
+      if (!foundVotes) {
+        return res.status(201).send({
+          message: 'No User Upvoted this Recipe!',
+        });
+      }
+
+      return res.status(201).send(foundVotes);
+    })
+    .catch(() => res.status(401).send('Unable to get user upvotes'));
+
+  return upvotes;
+};
+
+/**
+ * @exports getUserDownvotes
+ * @param  {obj} req request object
+ * @param  {obj} res result object
+ * @return {obj}  newUser object
+ */
+export const getUserDownvotes = (req, res) => {
+  const recipeId = req.params.recipeId;
+  const downvotes = downvote
+    .findAll({
+      where: { recipeId },
+      include: [
+        { model: models.User, attributes: ['name'] }
+      ]
+    })
+    .then((foundVotes) => {
+      if (!foundVotes) {
+        return res.status(201).send({
+          message: 'No User Downvoted this Recipe!',
+        });
+      }
+
+      return res.status(201).send(foundVotes);
+    })
+    .catch(() => res.status(401).send('Unable to get user downvotes'));
+
+  return downvotes;
+};
