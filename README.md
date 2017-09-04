@@ -1,6 +1,5 @@
 [![Build Status](https://travis-ci.org/larrystone/BC-26-More-Recipes.svg?branch=develop)](https://travis-ci.org/larrystone/BC-26-More-Recipes)
 [![Coverage Status](https://coveralls.io/repos/github/larrystone/BC-26-More-Recipes/badge.svg?branch=develop)](https://coveralls.io/github/larrystone/BC-26-More-Recipes?branch=develop)
-[![Test Coverage](https://codeclimate.com/github/larrystone/BC-26-More-Recipes/badges/coverage.svg)](https://codeclimate.com/larrystone/BC-26-More-Recipes/coverage)
 [![Code Climate](https://codeclimate.com/github/larrystone/BC-26-More-Recipes/badges/gpa.svg)](https://codeclimate.com/github/larrystone/BC-26-More-Recipes)
 
 # More-Recipes
