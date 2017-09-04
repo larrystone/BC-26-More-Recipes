@@ -37,7 +37,13 @@ export const upvoteRecipe = (req, res) => {
           })
           .then(() => {
             recipe
-              .decrement('downvotes', { where: { id: recipeId } });
+              .findOne({
+                where: {
+                  id: recipeId
+                }
+              }).then((option) => {
+                option.decrement('downvotes');
+              });
           });
       }
     });
@@ -47,16 +53,18 @@ export const upvoteRecipe = (req, res) => {
     .spread((createdVote, created) => {
       if (created) {
         recipe
-          .increment('upvotes', { where: { id: recipeId } });
-
+          .findOne({
+            where: {
+              id: recipeId
+            }
+          }).then((option) => {
+            option.increment('upvotes');
+          });
         return res.status(201).send({ message: 'Recipe Upvoted!' });
       }
 
       return res.status(201).send({ message: 'Already Upvoted!' });
     })
-    // .then((createdReview) => {
-    //   res.status(201).send(createdReview);
-    // })
     .catch(() => res.status(401).send({ error: 'Error Upvoting Review' }));
 
   return newUpvote;
@@ -95,7 +103,13 @@ export const downvoteRecipe = (req, res) => {
           })
           .then(() => {
             recipe
-              .decrement('upvotes', { where: { id: recipeId } });
+              .findOne({
+                where: {
+                  id: recipeId
+                }
+              }).then((option) => {
+                option.decrement('upvotes');
+              });
           });
       }
     });
@@ -105,16 +119,19 @@ export const downvoteRecipe = (req, res) => {
     .spread((createdVote, created) => {
       if (created) {
         recipe
-          .increment('downvotes', { where: { id: recipeId } });
+          .findOne({
+            where: {
+              id: recipeId
+            }
+          }).then((option) => {
+            option.increment('downvotes');
+          });
 
         return res.status(201).send({ message: 'Recipe Downvoted!' });
       }
 
       return res.status(201).send({ message: 'Already Downvoted!' });
     })
-    // .then((createdReview) => {
-    //   res.status(201).send(createdReview);
-    // })
     .catch(() => res.status(401).send({ error: 'Error Downvoting Review' }));
 
   return newDownvote;

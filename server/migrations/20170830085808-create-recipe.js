@@ -16,7 +16,7 @@ module.exports = {
       direction: {
         type: Sequelize.STRING
       },
-      vpvotes: {
+      upvotes: {
         type: Sequelize.INTEGER,
         allowNull: true,
         defaultValue: 0,

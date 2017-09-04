@@ -7,7 +7,7 @@ export default (sequelize, DataTypes) => {
     },
     ingredients: DataTypes.STRING,
     direction: DataTypes.STRING,
-    vpvotes: {
+    upvotes: {
       type: DataTypes.INTEGER,
       allowNull: true,
       defaultValue: 0

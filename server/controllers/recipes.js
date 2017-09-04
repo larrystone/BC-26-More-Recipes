@@ -22,7 +22,7 @@ export const createRecipe = (req, res) => {
     .then((createdRecipe) => {
       res.status(201).send(createdRecipe);
     })
-    .catch(() => res.status(401).send({ error: 'Error Creating Recipe' }));
+    .catch(e => res.status(401).send({ error: `Error Creating Recipe ${e.message}` }));
 
   return newUser;
 };
@@ -101,7 +101,7 @@ export const modifyRecipe = (req, res) => {
         });
       }
 
-      if (recipeFound.userId !== userId) {
+      if (+recipeFound.userId !== +userId) {
         return res.status(401).send({
           error: 'You cannot modify this recipe',
         });
@@ -144,7 +144,7 @@ export const deleteRecipe = (req, res) => {
         });
       }
 
-      if (recipeFound.userId !== userId) {
+      if (+recipeFound.userId !== +userId) {
         return res.status(401).send({
           error: 'You cannot delete this recipe',
         });
