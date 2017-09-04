@@ -8,8 +8,6 @@ before_script:
   - export DATABASE_URL=postgres://wktxteol:otDb5vZWpJVzt4spZvsT0nD7w9iYMzqb@pellefant.db.elephantsql.com:5432/wktxteol
 after_success:
   - npm run coveralls
-after_script:
-  - psql -c 'drop database travis;' -U postgres
 services:
   - postgresql
 env:
