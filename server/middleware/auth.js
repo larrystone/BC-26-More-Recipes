@@ -1,8 +1,8 @@
 import jwt from 'jsonwebtoken';
 
-export default (req, res, next) => {
-  const secret = process.env.secret || '!^sl1@#=5';
+const secret = process.env.secret || '!^sl1@#=5';
 
+export const verify = (req, res, next) => {
   const token = req.body.token
     || req.query.token
     || req.headers['x-access-token'];
@@ -23,3 +23,5 @@ export default (req, res, next) => {
     });
   }
 };
+
+export const sign = id => jwt.sign(id, secret);

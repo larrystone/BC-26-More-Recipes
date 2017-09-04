@@ -17,10 +17,12 @@ export const addToFavorite = (req, res) => {
       recipeId
     })
     .then((createdFavorite) => {
+      createdFavorite.success = true;
       res.status(201).send(createdFavorite);
     })
-    .catch(() => res.status(401).send({
-      error: 'Error Adding Recipe to Favorites' }));
+    .catch(() => res.status(503).send({
+      success: false,
+      message: 'Error Adding Recipe to Favorites' }));
 
   return newFavorite;
 };
@@ -47,8 +49,9 @@ export const removeFromFavorites = (req, res) => {
     .then(() => {
       res.status(204).end();
     })
-    .catch(() => res.status(401).send({
-      error: 'Error Removing Recipe from Favorites' }));
+    .catch(() => res.status(503).send({
+      success: false,
+      message: 'Error Removing Recipe from Favorites' }));
 
   return newFavorite;
 };
@@ -73,13 +76,17 @@ export const getFavRecipes = (req, res) => {
     .then((foundRecipes) => {
       if (!foundRecipes) {
         return res.status(201).send({
+          success: true,
           message: 'No Stored Favorite Recipes found',
         });
       }
 
+      foundRecipes.success = true;
       return res.status(201).send(foundRecipes);
     })
-    .catch(() => res.status(401).send('Unable to fetch favorite recipes'));
+    .catch(() => res.status(503).send({
+      success: false,
+      message: 'Unable to fetch favorite recipes' }));
 
   return favRecipes;
 };

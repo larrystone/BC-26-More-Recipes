@@ -19,5 +19,4 @@ user.delete('/:userId/recipes/:recipeId',
   favoriteController.removeFromFavorites);
 user.get('/:userId/recipes', favoriteController.getFavRecipes);
 
-
 export default user;

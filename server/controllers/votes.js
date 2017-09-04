@@ -60,12 +60,18 @@ export const upvoteRecipe = (req, res) => {
           }).then((option) => {
             option.increment('upvotes');
           });
-        return res.status(201).send({ message: 'Recipe Upvoted!' });
+        return res.status(201).send({
+          success: true,
+          message: 'Recipe Upvoted!' });
       }
 
-      return res.status(201).send({ message: 'Already Upvoted!' });
+      return res.status(201).send({
+        success: false,
+        message: 'Recipe Already Upvoted!' });
     })
-    .catch(() => res.status(401).send({ error: 'Error Upvoting Review' }));
+    .catch(() => res.status(503).send({
+      success: false,
+      message: 'Error Upvoting Review' }));
 
   return newUpvote;
 };
@@ -127,12 +133,18 @@ export const downvoteRecipe = (req, res) => {
             option.increment('downvotes');
           });
 
-        return res.status(201).send({ message: 'Recipe Downvoted!' });
+        return res.status(201).send({
+          success: true,
+          message: 'Recipe Downvoted!' });
       }
 
-      return res.status(201).send({ message: 'Already Downvoted!' });
+      return res.status(201).send({
+        success: false,
+        message: 'Recipe Already Downvoted!' });
     })
-    .catch(() => res.status(401).send({ error: 'Error Downvoting Review' }));
+    .catch(() => res.status(503).send({
+      success: true,
+      message: 'Error Downvoting Review' }));
 
   return newDownvote;
 };
@@ -156,13 +168,17 @@ export const getUserUpvotes = (req, res) => {
     .then((foundVotes) => {
       if (!foundVotes) {
         return res.status(201).send({
-          message: 'No User Upvoted this Recipe!',
+          success: true,
+          message: 'No User Upvoted this Recipe!'
         });
       }
 
+      foundVotes.success = true;
       return res.status(201).send(foundVotes);
     })
-    .catch(() => res.status(401).send('Unable to get user upvotes'));
+    .catch(() => res.status(503).send({
+      success: true,
+      message: 'Unable to get user upvotes' }));
 
   return upvotes;
 };
@@ -186,13 +202,17 @@ export const getUserDownvotes = (req, res) => {
     .then((foundVotes) => {
       if (!foundVotes) {
         return res.status(201).send({
-          message: 'No User Downvoted this Recipe!',
+          success: true,
+          message: 'No User Downvoted this Recipe!'
         });
       }
 
+      foundVotes.success = true;
       return res.status(201).send(foundVotes);
     })
-    .catch(() => res.status(401).send('Unable to get user downvotes'));
+    .catch(() => res.status(503).send({
+      success: false,
+      message: 'Unable to get user downvotes' }));
 
   return downvotes;
 };

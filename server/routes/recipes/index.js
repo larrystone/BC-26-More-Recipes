@@ -7,7 +7,7 @@ import * as auth from '../../middleware/auth';
 
 const user = express.Router();
 
-user.use('*', auth.default);
+user.use('*', auth.verify);
 
 user.post('/', recipeController.createRecipe);
 user.get('/', recipeController.getAllRecipes);

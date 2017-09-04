@@ -1,8 +1,7 @@
-import jwt from 'jsonwebtoken';
 import models from '../models';
-import * as auth from '../middleware/encryption';
+import * as encryption from '../middleware/encryption';
+import * as auth from '../middleware/auth';
 
-const secret = process.env.secret || '!^sl1@#=5';
 const user = models.User;
 
 /**
@@ -18,8 +17,9 @@ export const signUp = (req, res) => {
   const password = req.body.password;
 
   if (password.length < 6) {
-    return res.status(401).send({
-      error: 'Password must be at least 6 characters!'
+    return res.status(403).send({
+      success: false,
+      message: 'Password must be at least 6 characters!'
     });
   }
 
@@ -39,8 +39,9 @@ export const signUp = (req, res) => {
     })
     .then((userFound) => {
       if (userFound) {
-        return res.status(401).send({
-          error: 'Username or email already taken!',
+        return res.status(403).send({
+          success: false,
+          message: 'Username or email already taken!'
         });
       }
 
@@ -49,23 +50,25 @@ export const signUp = (req, res) => {
           name,
           username,
           email,
-          password: auth.generateHash(password),
+          password: encryption.generateHash(password),
         })
         .then((result) => {
-          const token = jwt.sign(result.password, secret /* , {
-            expiresInMinutes: 1440
-          } */);
+          const token = auth.sign(result.id);
 
           const createdUser = {
-            token,
+            success: true,
             userId: result.id,
             username: result.username,
             email: result.email,
+            token
           };
 
+          createdUser.success = true;
           return res.status(201).send(createdUser);
         })
-        .catch(() => res.status(401).send({ error: 'Error Creating user' }));
+        .catch(() => res.status(503).send({
+          success: false,
+          message: 'Error Creating user' }));
 
       return newUser;
     });
@@ -98,25 +101,27 @@ export const signIn = (req, res) => {
     .then((userFound) => {
       if (!userFound) {
         return res.status(404).send({
-          error: 'Username or email does not exist!',
+          success: false,
+          message: 'Username or email does not exist!'
         });
       }
 
-      if (auth.verifyHash(req.body.password, userFound.password)) {
-        const token = jwt.sign(userFound.id, secret /* , {
-          expiresInMinutes: 1440
-        } */);
+      if (encryption.verifyHash(req.body.password, userFound.password)) {
+        const token = auth.sign(userFound.id);
 
         return res.status(201).send({
-          token,
+          success: true,
           id: userFound.id,
           name: userFound.name,
           username: userFound.username,
-          email: userFound.email });
+          email: userFound.email,
+          token });
       }
       throw new Error();
     })
-    .catch(() => res.status(401).send({ error: 'Incorrect Password!' }));
+    .catch(() => res.status(503).send({
+      success: false,
+      message: 'Incorrect Password!' }));
 
   return newUser;
 };

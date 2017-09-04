@@ -20,9 +20,12 @@ export const createRecipe = (req, res) => {
       userId: req.userId
     })
     .then((createdRecipe) => {
+      createdRecipe.success = true;
       res.status(201).send(createdRecipe);
     })
-    .catch(() => res.status(401).send({ error: 'Error Creating Recipe' }));
+    .catch(() => res.status(503).send({
+      success: false,
+      message: 'Error Creating Recipe' }));
 
   return newUser;
 };
@@ -41,13 +44,17 @@ export const getUserRecipes = (req, res) => {
     .then((foundRecipes) => {
       if (!foundRecipes) {
         return res.status(201).send({
+          success: true,
           message: 'No User Stored Recipes found',
         });
       }
 
+      foundRecipes.success = true;
       return res.status(201).send(foundRecipes);
     })
-    .catch(() => res.status(401).send('Unable to get user recipes'));
+    .catch(() => res.status(503).send({
+      success: false,
+      message: 'Unable to get user recipes' }));
 
   return recipes;
 };
@@ -72,13 +79,17 @@ export const sortMostUpvotes = (req, res) => {
     .then((foundRecipes) => {
       if (!foundRecipes) {
         return res.status(201).send({
+          success: true,
           message: 'No Stored Recipes found',
         });
       }
 
+      foundRecipes.success = true;
       return res.status(201).send(foundRecipes);
     })
-    .catch(() => res.status(401).send('Unable to fetch recipes'));
+    .catch(() => res.status(503).send({
+      success: false,
+      message: 'Unable to fetch recipes' }));
 
   return recipes;
 };
@@ -103,13 +114,17 @@ export const getAllRecipes = (req, res) => {
       .then((foundRecipes) => {
         if (!foundRecipes) {
           return res.status(201).send({
-            message: 'No Stored Recipes found',
+            success: true,
+            message: 'No Stored Recipes found'
           });
         }
 
+        foundRecipes.success = true;
         return res.status(201).send(foundRecipes);
       })
-      .catch(e => res.status(401).send(`Unable to fetch recipes ${e.message}`));
+      .catch(() => res.status(503).send({
+        success: false,
+        message: 'Unable to fetch recipes' }));
 
     return recipes;
   }
@@ -133,13 +148,15 @@ export const modifyRecipe = (req, res) => {
     .then((recipeFound) => {
       if (!recipeFound) {
         return res.status(404).send({
-          error: `No matching recipe with id: ${recipeId}`,
+          success: false,
+          message: `No matching recipe with id: ${recipeId}`
         });
       }
 
       if (+recipeFound.userId !== +userId) {
-        return res.status(401).send({
-          error: 'You cannot modify this recipe',
+        return res.status(403).send({
+          success: false,
+          message: 'You cannot modify this recipe'
         });
       }
 
@@ -154,10 +171,13 @@ export const modifyRecipe = (req, res) => {
         returning: true
       })
         .then((result) => {
+          result[1].success = true;
           res.status(201).send(result[1]);
         });
     })
-    .catch(() => res.status(401).send({ error: 'Error Modifying Recipe' }));
+    .catch(() => res.status(503).send({
+      success: false,
+      message: 'Error Modifying Recipe' }));
 
   return modifiedRecipe;
 };
@@ -176,13 +196,15 @@ export const deleteRecipe = (req, res) => {
     .then((recipeFound) => {
       if (!recipeFound) {
         return res.status(404).send({
-          error: `No matching recipe with id: ${recipeId}`,
+          success: false,
+          message: `No matching recipe with id: ${recipeId}`
         });
       }
 
       if (+recipeFound.userId !== +userId) {
-        return res.status(401).send({
-          error: 'You cannot delete this recipe',
+        return res.status(403).send({
+          success: false,
+          message: 'You cannot delete this recipe'
         });
       }
 
@@ -195,7 +217,9 @@ export const deleteRecipe = (req, res) => {
           res.status(204).end();
         });
     })
-    .catch(() => res.status(401).send({ error: 'Error Deleting Recipe' }));
+    .catch(() => res.status(503).send({
+      success: true,
+      message: 'Error Deleting Recipe' }));
 
   return deletedRecipe;
 };
