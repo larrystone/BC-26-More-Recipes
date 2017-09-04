@@ -4,11 +4,10 @@ node_js:
 cache:
  directories:
   - node_modules
-before_script:
-  - psql -c 'create database travis;' -U postgres
 after_success:
   - npm run coveralls
-after_script:
-  - psql -c 'drop database travis;' -U postgres
 services:
   - postgresql
+env:
+  - NODE_ENV=test
+  - DATABASE_URL=postgres://wktxteol:otDb5vZWpJVzt4spZvsT0nD7w9iYMzqb@pellefant.db.elephantsql.com:5432/wktxteol
