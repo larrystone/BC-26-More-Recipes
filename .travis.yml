@@ -1,19 +1,5 @@
 language: node_js
 node_js:
-  - "stable"
-cache:
- directories:
-  - node_modules
-install:
-  - npm install
-before_script:
-  - psql -c 'create database travis'; -U postgres
-script:
-  - npm test
+- "stable"
 after_success:
-  - npm run coverage
-  - npm run report-coverage
-after_script:
-  - psql -c 'drop database travis'; -U postgres
-services:
-  - postgresql
+  - npm run coveralls
