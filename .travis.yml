@@ -6,6 +6,7 @@ cache:
   - node_modules
 before_script:
   - psql -c 'create database travis' -U postgres
+  - sequelize db:migrate
 after_success:
   - npm run coveralls
 after_script:
