@@ -52,17 +52,21 @@ export const getUserRecipes = (req, res) => {
   return recipes;
 };
 
+
 /**
- * @exports getAllRecipes
+ * @exports sortMostUpvotes
  * @param  {obj} req request object
  * @param  {obj} res result object
  * @return {obj}  newUser object
  */
-export const getAllRecipes = (req, res) => {
+export const sortMostUpvotes = (req, res) => {
   const recipes = recipe
     .findAll({
       include: [
         { model: models.User, attributes: ['name', 'updatedAt'] }
+      ],
+      order: [
+        ['upvotes', 'DESC']
       ]
     })
     .then((foundRecipes) => {
@@ -74,9 +78,41 @@ export const getAllRecipes = (req, res) => {
 
       return res.status(201).send(foundRecipes);
     })
-    .catch(e => res.status(401).send(`Unable to fetch recipes ${e.message}`));
+    .catch(() => res.status(401).send('Unable to fetch recipes'));
 
   return recipes;
+};
+
+
+/**
+ * @exports getAllRecipes
+ * @param  {obj} req request object
+ * @param  {obj} res result object
+ * @return {obj}  newUser object
+ */
+export const getAllRecipes = (req, res) => {
+  if (req.query.sort === 'upvotes' && req.query.order === 'ascending') {
+    sortMostUpvotes(req, res);
+  } else {
+    const recipes = recipe
+      .findAll({
+        include: [
+          { model: models.User, attributes: ['name', 'updatedAt'] }
+        ]
+      })
+      .then((foundRecipes) => {
+        if (!foundRecipes) {
+          return res.status(201).send({
+            message: 'No Stored Recipes found',
+          });
+        }
+
+        return res.status(201).send(foundRecipes);
+      })
+      .catch(e => res.status(401).send(`Unable to fetch recipes ${e.message}`));
+
+    return recipes;
+  }
 };
 
 
