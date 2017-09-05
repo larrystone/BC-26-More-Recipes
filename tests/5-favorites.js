@@ -76,3 +76,16 @@ describe('/POST Remove recipe to favorites Test', () => {
   });
 });
 
+
+describe('/GET user Favorite\'s Recipes Test', () => {
+  it(`should return an array of Recipes for user id: ${userId}`, (done) => {
+    chai.request(server)
+      .get(`/api/v1/users/${userId}/recipes`)
+      .set('Accept', 'application/json')
+      .set('x-access-token', token)
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(201);
+        done();
+      });
+  });
+});
