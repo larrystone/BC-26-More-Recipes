@@ -63,3 +63,16 @@ describe('/POST Add recipe to favorites Test', () => {
   });
 });
 
+describe('/POST Remove recipe to favorites Test', () => {
+  it(`should remove recipe id: ${recipeId} from favorites`, (done) => {
+    chai.request(server)
+      .delete(`/api/v1/users/${userId}/recipes/${recipeId}`)
+      .set('Accept', 'application/json')
+      .set('x-access-token', token)
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(204);
+        done();
+      });
+  });
+});
+
