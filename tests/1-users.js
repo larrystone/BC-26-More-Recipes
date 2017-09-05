@@ -288,9 +288,3 @@ describe('/POST User Sign In Test', () => {
     });
   });
 });
-
-// user.destroy({
-//   where: { },
-//   truncate: true,
-//   cascade: true
-// });

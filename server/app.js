@@ -19,11 +19,15 @@ app.get('/', (req, res) => {
 });
 
 app.get('*', (req, res) => {
-  res.status(404).send('invalid link');
+  res.status(404).send({
+    success: false,
+    message: 'invalid link' });
 });
 
 app.post('*', (req, res) => {
-  res.status(404).send('invalid link');
+  res.status(404).send({
+    success: false,
+    message: 'invalid link' });
 });
 
 app.listen(port, () => {
