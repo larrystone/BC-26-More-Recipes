@@ -46,3 +46,20 @@ describe('/POST Create User and Recipe', () => {
       });
   });
 });
+
+
+describe('/POST Add recipe to favorites Test', () => {
+  it(`should add recipe id: ${recipeId} to favorites`, (done) => {
+    chai.request(server)
+      .post(`/api/v1/users/${userId}/recipes/${recipeId}`)
+      .set('Accept', 'application/json')
+      .send({
+        token
+      })
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(201);
+        done();
+      });
+  });
+});
+
