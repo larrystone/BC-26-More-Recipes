@@ -74,9 +74,71 @@ describe('/POST upvote Review Test', () => {
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
         expect(res.body).deep.equal({
-          success: true,
+          success: false,
           message: 'Recipe Already Upvoted!'
         });
+        done();
+      });
+  });
+});
+
+
+describe('/POST downvote Review Test', () => {
+  it('should return \'Review downvoted\'', (done) => {
+    chai.request(server)
+      .post(`/api/v1/recipes/${recipeId}/downvotes`)
+      .set('Accept', 'application/json')
+      .send({
+        token
+      })
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(201);
+        expect(res.body).deep.equal({
+          success: true,
+          message: 'Recipe Downvoted!'
+        });
+        done();
+      });
+  });
+
+  it('should return \'Review Already downvoted\'', (done) => {
+    chai.request(server)
+      .post(`/api/v1/recipes/${recipeId}/downvotes`)
+      .set('Accept', 'application/json')
+      .send({
+        token
+      })
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(201);
+        expect(res.body).deep.equal({
+          success: false,
+          message: 'Recipe Already Downvoted!'
+        });
+        done();
+      });
+  });
+});
+
+
+describe('/GET Upvotes/Downvotes on Recipe Test', () => {
+  it('should return array of upvotes', (done) => {
+    chai.request(server)
+      .get(`/api/v1/recipes/${recipeId}/upvotes`)
+      .set('Accept', 'application/json')
+      .set('x-access-token', token)
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(201);
+        done();
+      });
+  });
+
+  it('should return array of downvotes', (done) => {
+    chai.request(server)
+      .get(`/api/v1/recipes/${recipeId}/downvotes`)
+      .set('Accept', 'application/json')
+      .set('x-access-token', token)
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(201);
         done();
       });
   });
