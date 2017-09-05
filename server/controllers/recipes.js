@@ -20,12 +20,18 @@ export const createRecipe = (req, res) => {
       userId: req.userId
     })
     .then((createdRecipe) => {
-      createdRecipe.success = true;
-      res.status(201).send(createdRecipe);
+      res.status(201).send({
+        success: true,
+        id: createdRecipe.id,
+        name: createdRecipe.name,
+        ingredients: createdRecipe.ingredients,
+        direction: createdRecipe.direction,
+        userId: createdRecipe.userId
+      });
     })
-    .catch(() => res.status(503).send({
+    .catch(e => res.status(503).send({
       success: false,
-      message: 'Error Creating Recipe' }));
+      message: `Error Creating Recipe ${e.message}` }));
 
   return newUser;
 };
@@ -172,7 +178,14 @@ export const modifyRecipe = (req, res) => {
       })
         .then((result) => {
           result[1].success = true;
-          res.status(201).send(result[1]);
+          res.status(201).send({
+            success: true,
+            id: result[1].id,
+            name: result[1].name,
+            ingredients: result[1].ingredients,
+            direction: result[1].direction,
+            userId: result[1].userId
+          });
         });
     })
     .catch(() => res.status(503).send({
