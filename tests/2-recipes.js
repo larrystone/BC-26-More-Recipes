@@ -16,7 +16,7 @@ describe('/POST Create User', () => {
       .send({
         name: 'Create Recipe Tester',
         username: 'CreateRecipeTester',
-        email: 'createrecipetester@gmail.com',
+        email: 'createrecipetester@test.com',
         password: 'testing'
       })
       .end((err, res) => {
