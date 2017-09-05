@@ -159,7 +159,7 @@ export const getUserUpvotes = (req, res) => {
   const recipeId = req.params.recipeId;
   const upvotes = upvote
     .findAll({
-      attributes: ['recipId'],
+      attributes: ['recipeId'],
       where: { recipeId },
       include: [
         { model: models.User, attributes: ['name'] }
@@ -177,7 +177,7 @@ export const getUserUpvotes = (req, res) => {
       return res.status(201).send(foundVotes);
     })
     .catch(() => res.status(503).send({
-      success: true,
+      success: false,
       message: 'Unable to get user upvotes' }));
 
   return upvotes;
@@ -193,7 +193,7 @@ export const getUserDownvotes = (req, res) => {
   const recipeId = req.params.recipeId;
   const downvotes = downvote
     .findAll({
-      attributes: ['recipId'],
+      attributes: ['recipeId'],
       where: { recipeId },
       include: [
         { model: models.User, attributes: ['name'] }
