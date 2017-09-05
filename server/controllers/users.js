@@ -1,6 +1,7 @@
 import models from '../models';
 import * as encryption from '../middleware/encryption';
 import * as auth from '../middleware/auth';
+import * as validate from '../middleware/validate';
 
 const user = models.User;
 
@@ -16,11 +17,11 @@ export const signUp = (req, res) => {
   const email = (req.body.email || '').replace(' ', '');
   const password = req.body.password;
 
-  if (password.length < 6) {
+  const validateError = validate.default(req);
+  if (validateError) {
     return res.status(403).send({
       success: false,
-      message: 'Password must be at least 6 characters!'
-    });
+      message: validateError });
   }
 
   const newUser = user
