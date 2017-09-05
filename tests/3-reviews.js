@@ -117,3 +117,16 @@ describe('/POST Review Test', () => {
       });
   });
 });
+
+describe('/GET all Reviews on a Recipe Test', () => {
+  it('should return an array of Reviews', (done) => {
+    chai.request(server)
+      .get(`/api/v1/recipes/${recipeId}/reviews`)
+      .set('Accept', 'application/json')
+      .set('x-access-token', token)
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(201);
+        done();
+      });
+  });
+});

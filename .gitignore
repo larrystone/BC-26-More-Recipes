@@ -2,7 +2,6 @@
 /node_modules
 npm-debug.log
 .env
-package-lock.json
 .nyc_output
 .coveralls.yml
 .travis.1.yml
