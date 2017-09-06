@@ -1,20 +1,27 @@
 import fs from 'fs';
 import path from 'path';
 import Sequelize from 'sequelize';
-import configs from '../config/config';
+// import configs from '../config/config';
 
 const basename = path.basename(module.filename);
-const env = process.env.NODE_ENV || 'test';
-const config = configs[env];
+// const env = process.env.NODE_ENV || 'development';
+// const config = configs[env];
 
 const db = {};
 let sequelize;
 
-if (config.use_env_variable) {
-  sequelize = new Sequelize(process.env[config.use_env_variable]);
+if (process.env.DATABASE_URL_TEST) {
+  sequelize = new Sequelize(process.env.DATABASE_URL_TEST);
 } else {
-  sequelize = new Sequelize(config.database, config.username,
-    config.password, config);
+  const config = {
+    username: process.env.DB_USERNAME,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_DATABASE,
+    host: process.env.DB_HOST,
+    dialect: 'postgres'
+  };
+  sequelize = new Sequelize(process.env.DB_DATABASE, process.env.DB_USERNAME,
+    process.env.DB_PASSWORD, config);
 }
 
 fs
@@ -37,5 +44,6 @@ Object.keys(db).forEach((modelName) => {
 });
 
 db.sequelize = sequelize;
+db.Sequelize = Sequelize;
 
 module.exports = db;
