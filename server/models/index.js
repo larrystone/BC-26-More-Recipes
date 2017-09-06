@@ -1,17 +1,15 @@
 import fs from 'fs';
 import path from 'path';
 import Sequelize from 'sequelize';
-// import configs from '../config/config';
 
 const basename = path.basename(module.filename);
-// const env = process.env.NODE_ENV || 'development';
-// const config = configs[env];
 
 const db = {};
 let sequelize;
 
-if (process.env.DATABASE_URL_TEST) {
-  sequelize = new Sequelize(process.env.DATABASE_URL_TEST);
+if (process.env.DATABASE_URL || process.env.DATABASE_URL_TEST) {
+  sequelize = new Sequelize(process.env.DATABASE_URL
+    || process.env.DATABASE_URL_TEST);
 } else {
   const config = {
     username: process.env.DB_USERNAME,
@@ -44,6 +42,5 @@ Object.keys(db).forEach((modelName) => {
 });
 
 db.sequelize = sequelize;
-db.Sequelize = Sequelize;
 
 module.exports = db;
