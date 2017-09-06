@@ -156,11 +156,13 @@ export const getRecipe = (req, res) => {
         });
       }
 
-      return res.status(201).json({
-        success: true,
-        data: recipeFound
-      });
+      return recipeFound.increment('viewCount');
     })
+    .then(recipeFound => recipeFound.reload())
+    .then(recipeLoaded => res.status(201).json({
+      success: true,
+      data: recipeLoaded
+    }))
     .catch(e => res.status(503).send({
       success: false,
       message: `Unable to fetch recipes ${e.message}` }));
