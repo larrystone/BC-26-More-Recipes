@@ -21,8 +21,8 @@ describe('/POST Create User and Recipe', () => {
         password: 'testing'
       })
       .end((err, res) => {
-        token = res.body.token;
-        userId = res.body.userId;
+        token = res.body.data.token;
+        userId = res.body.data.userId;
         expect(res.statusCode).to.equal(201);
         done();
       });
@@ -39,7 +39,7 @@ describe('/POST Create User and Recipe', () => {
         direction: 'direction and direction and directions'
       })
       .end((err, res) => {
-        recipeId = res.body.id;
+        recipeId = res.body.data.id;
         expect(res.statusCode).to.equal(201);
         expect(res.body.success).to.equal(true);
         done();
@@ -63,7 +63,7 @@ describe('/POST Add recipe to favorites Test', () => {
   });
 });
 
-describe('/POST Remove recipe to favorites Test', () => {
+describe('/POST Remove recipe from favorites Test', () => {
   it(`should remove recipe id: ${recipeId} from favorites`, (done) => {
     chai.request(server)
       .delete(`/api/v1/users/${userId}/recipes/${recipeId}`)

@@ -20,7 +20,7 @@ describe('/POST Create User', () => {
         password: 'testing'
       })
       .end((err, res) => {
-        token = res.body.token;
+        token = res.body.data.token;
         expect(res.statusCode).to.equal(201);
         done();
       });
@@ -40,7 +40,7 @@ describe('/POST Recipe Test', () => {
         direction: 'Light stove and just start cooking'
       })
       .end((err, res) => {
-        recipeId = res.body.id;
+        recipeId = res.body.data.id;
         expect(res.statusCode).to.equal(201);
         expect(res.body.success).to.equal(true);
         done();

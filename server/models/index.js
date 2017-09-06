@@ -1,25 +1,20 @@
 import fs from 'fs';
 import path from 'path';
 import Sequelize from 'sequelize';
+import configs from './../config/config';
 
+const env = process.env.NODE_ENV || 'development';
 const basename = path.basename(module.filename);
-
+const config = configs[env];
 const db = {};
 let sequelize;
 
-if (process.env.DATABASE_URL || process.env.DATABASE_URL_TEST) {
-  sequelize = new Sequelize(process.env.DATABASE_URL
-    || process.env.DATABASE_URL_TEST);
+if (config.use_env_variable) {
+  sequelize = new Sequelize(process.env[config.use_env_variable]);
 } else {
-  const config = {
-    username: process.env.DB_USERNAME,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_DATABASE,
-    host: process.env.DB_HOST,
-    dialect: 'postgres'
-  };
-  sequelize = new Sequelize(process.env.DB_DATABASE, process.env.DB_USERNAME,
-    process.env.DB_PASSWORD, config);
+  sequelize = new Sequelize(
+    config.database, config.username, config.password, config
+  );
 }
 
 fs
