@@ -31,9 +31,9 @@ export const createRecipe = (req, res) => {
         }
       });
     })
-    .catch(e => res.status(503).json({
+    .catch(() => res.status(503).json({
       success: false,
-      message: `Error Creating Recipe ${e.message}` }));
+      message: 'Error Creating Recipe' }));
 
   return newUser;
 };
@@ -77,12 +77,10 @@ export const modifyRecipe = (req, res) => {
         },
         returning: true
       })
-        .then((result) => {
-          res.status(201).json({
-            success: true,
-            data: result[1]
-          });
-        });
+        .then(result => res.status(201).json({
+          success: true,
+          data: result[1]
+        }));
     })
     .catch(() => res.status(503).json({
       success: false,
@@ -122,9 +120,7 @@ export const deleteRecipe = (req, res) => {
           id: recipeId
         },
       })
-        .then(() => {
-          res.status(204).end();
-        });
+        .then(() => res.status(204).end());
     })
     .catch(() => res.status(503).json({
       success: true,
@@ -163,9 +159,9 @@ export const getRecipe = (req, res) => {
       success: true,
       data: recipeLoaded
     }))
-    .catch(e => res.status(503).send({
+    .catch(() => res.status(503).json({
       success: false,
-      message: `Unable to fetch recipes ${e.message}` }));
+      message: 'Unable to fetch recipes' }));
 
   return theRecipe;
 };

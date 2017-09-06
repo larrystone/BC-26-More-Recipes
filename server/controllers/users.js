@@ -19,7 +19,7 @@ export const signUp = (req, res) => {
 
   const validateError = validate.default(req);
   if (validateError) {
-    return res.status(403).send({
+    return res.status(403).json({
       success: false,
       message: validateError });
   }
@@ -40,7 +40,7 @@ export const signUp = (req, res) => {
     })
     .then((userFound) => {
       if (userFound) {
-        return res.status(403).send({
+        return res.status(403).json({
           success: false,
           message: 'Username or email already taken!'
         });
@@ -57,17 +57,17 @@ export const signUp = (req, res) => {
           const token = auth.sign(result.id);
 
           const createdUser = {
-            success: true,
             userId: result.id,
             username: result.username,
             email: result.email,
             token
           };
 
-          createdUser.success = true;
-          return res.status(201).send(createdUser);
+          return res.status(201).json({
+            success: true,
+            data: createdUser });
         })
-        .catch(() => res.status(503).send({
+        .catch(() => res.status(503).json({
           success: false,
           message: 'Error Creating user' }));
 
@@ -101,7 +101,7 @@ export const signIn = (req, res) => {
     })
     .then((userFound) => {
       if (!userFound) {
-        return res.status(404).send({
+        return res.status(404).json({
           success: false,
           message: 'Username or email does not exist!'
         });
@@ -110,17 +110,20 @@ export const signIn = (req, res) => {
       if (encryption.verifyHash(req.body.password, userFound.password)) {
         const token = auth.sign(userFound.id);
 
-        return res.status(201).send({
+        return res.status(201).json({
           success: true,
-          id: userFound.id,
-          name: userFound.name,
-          username: userFound.username,
-          email: userFound.email,
-          token });
+          data: {
+            id: userFound.id,
+            name: userFound.name,
+            username: userFound.username,
+            email: userFound.email,
+            token
+          }
+        });
       }
       throw new Error();
     })
-    .catch(() => res.status(401).send({
+    .catch(() => res.status(401).json({
       success: false,
       message: 'Incorrect Password!' }));
 

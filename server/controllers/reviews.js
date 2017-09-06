@@ -19,10 +19,11 @@ export const postReview = (req, res) => {
       recipeId
     })
     .then((createdReview) => {
-      createdReview.success = true;
-      res.status(201).send(createdReview);
+      res.status(201).json({
+        success: true,
+        createdReview });
     })
-    .catch(() => res.status(503).send({
+    .catch(() => res.status(503).json({
       success: false,
       message: 'Error Posting Review' }));
 
@@ -45,12 +46,13 @@ export const getReviews = (req, res) => {
       ]
     })
     .then((reviews) => {
-      reviews.success = true;
-      res.status(201).send(reviews);
+      res.status(201).json({
+        success: true,
+        data: reviews });
     })
-    .catch(() => res.status(503).send({
+    .catch(() => res.status(503).json({
       success: false,
-      error: 'Error Fetching Reviews' }));
+      message: 'Error Fetching Reviews' }));
 
   return newReview;
 };
