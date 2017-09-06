@@ -20,7 +20,7 @@ describe('/POST Create User and Recipe', () => {
         password: 'testing'
       })
       .end((err, res) => {
-        token = res.body.token;
+        token = res.body.data.token;
         expect(res.statusCode).to.equal(201);
         done();
       });
@@ -37,7 +37,7 @@ describe('/POST Create User and Recipe', () => {
         direction: 'direction and direction and directions'
       })
       .end((err, res) => {
-        recipeId = res.body.id;
+        recipeId = res.body.data.id;
         expect(res.statusCode).to.equal(201);
         expect(res.body.success).to.equal(true);
         done();
@@ -58,13 +58,13 @@ describe('/POST upvote Review Test', () => {
         expect(res.statusCode).to.equal(201);
         expect(res.body).deep.equal({
           success: true,
-          message: 'Recipe Upvoted!'
+          message: `Recipe with id: ${recipeId} Upvoted!`
         });
         done();
       });
   });
 
-  it('should return \'Review Already upvoted\'', (done) => {
+  it('should return \'Recipe Already upvoted\'', (done) => {
     chai.request(server)
       .post(`/api/v1/recipes/${recipeId}/upvotes`)
       .set('Accept', 'application/json')
@@ -75,7 +75,7 @@ describe('/POST upvote Review Test', () => {
         expect(res.statusCode).to.equal(201);
         expect(res.body).deep.equal({
           success: false,
-          message: 'Recipe Already Upvoted!'
+          message: `Recipe with id: ${recipeId} Already Upvoted!`
         });
         done();
       });
@@ -95,7 +95,7 @@ describe('/POST downvote Review Test', () => {
         expect(res.statusCode).to.equal(201);
         expect(res.body).deep.equal({
           success: true,
-          message: 'Recipe Downvoted!'
+          message: `Recipe with id: ${recipeId} Downvoted!`
         });
         done();
       });
@@ -112,7 +112,7 @@ describe('/POST downvote Review Test', () => {
         expect(res.statusCode).to.equal(201);
         expect(res.body).deep.equal({
           success: false,
-          message: 'Recipe Already Downvoted!'
+          message: `Recipe with id: ${recipeId} Already Downvoted!`
         });
         done();
       });

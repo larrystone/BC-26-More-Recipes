@@ -98,7 +98,7 @@ describe('/POST User Sign Up Test', () => {
       })
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
-        expect(res.body).to.have.all.deep.keys('success',
+        expect(res.body.data).to.have.all.deep.keys(
           'userId', 'username', 'email', 'token');
         done();
       });
@@ -116,7 +116,7 @@ describe('/POST User Sign Up Test', () => {
       })
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
-        expect(res.body).to.have.all.deep.keys('success',
+        expect(res.body.data).to.have.all.deep.keys(
           'userId', 'username', 'email', 'token');
         done();
       });
@@ -134,7 +134,7 @@ describe('/POST User Sign Up Test', () => {
       })
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
-        expect(res.body).to.have.all.deep.keys('success',
+        expect(res.body.data).to.have.all.deep.keys(
           'userId', 'username', 'email', 'token');
         done();
       });
@@ -192,7 +192,7 @@ describe('/POST User Sign In Test', () => {
       })
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
-        expect(res.body).to.have.all.deep.keys('success',
+        expect(res.body.data).to.have.all.deep.keys(
           'id', 'name',
           'username', 'email', 'token');
         done();
@@ -210,7 +210,7 @@ describe('/POST User Sign In Test', () => {
         })
         .end((err, res) => {
           expect(res.statusCode).to.equal(201);
-          expect(res.body).to.have.all.deep.keys('success',
+          expect(res.body.data).to.have.all.deep.keys(
             'id', 'name',
             'username', 'email', 'token');
           done();
@@ -227,7 +227,7 @@ describe('/POST User Sign In Test', () => {
         })
         .end((err, res) => {
           expect(res.statusCode).to.equal(201);
-          expect(res.body).to.have.all.deep.keys('success',
+          expect(res.body.data).to.have.all.deep.keys(
             'id', 'name',
             'username', 'email', 'token');
           done();
@@ -244,7 +244,7 @@ describe('/POST User Sign In Test', () => {
         })
         .end((err, res) => {
           expect(res.statusCode).to.equal(201);
-          expect(res.body).to.have.all.deep.keys('success',
+          expect(res.body.data).to.have.all.deep.keys(
             'id', 'name',
             'username', 'email', 'token');
           done();

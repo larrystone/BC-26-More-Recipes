@@ -12,6 +12,7 @@ user.use('*', auth.verify);
 user.post('/', recipeController.createRecipe);
 user.get('/', recipeController.getAllRecipes);
 
+user.get('/:recipeId', recipeController.getRecipe);
 user.put('/:recipeId', recipeController.modifyRecipe);
 user.delete('/:recipeId', recipeController.deleteRecipe);
 
@@ -20,7 +21,6 @@ user.get('/:recipeId/reviews', reviewController.getReviews);
 
 user.post('/:recipeId/upvotes', voteController.upvoteRecipe);
 user.post('/:recipeId/downvotes', voteController.downvoteRecipe);
-
 user.get('/:recipeId/upvotes', voteController.getUserUpvotes);
 user.get('/:recipeId/downvotes', voteController.getUserDownvotes);
 

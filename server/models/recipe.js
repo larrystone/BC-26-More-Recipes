@@ -7,6 +7,10 @@ export default (sequelize, DataTypes) => {
     },
     ingredients: DataTypes.STRING,
     direction: DataTypes.STRING,
+    viewCount: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
+    },
     upvotes: {
       type: DataTypes.INTEGER,
       allowNull: true,
