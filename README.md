@@ -1,6 +1,7 @@
 [![Build Status](https://travis-ci.org/larrystone/BC-26-More-Recipes.svg?branch=develop)](https://travis-ci.org/larrystone/BC-26-More-Recipes)
 [![Coverage Status](https://coveralls.io/repos/github/larrystone/BC-26-More-Recipes/badge.svg?branch=develop)](https://coveralls.io/github/larrystone/BC-26-More-Recipes?branch=develop)
 [![Code Climate](https://codeclimate.com/github/larrystone/BC-26-More-Recipes/badges/gpa.svg)](https://codeclimate.com/github/larrystone/BC-26-More-Recipes)
+[![Issue Count](https://codeclimate.com/github/larrystone/BC-26-More-Recipes/badges/issue_count.svg)](https://codeclimate.com/github/larrystone/BC-26-More-Recipes)
 
 # More-Recipes
 A Recipe management and sharing app...
