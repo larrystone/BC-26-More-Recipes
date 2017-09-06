@@ -142,7 +142,12 @@ export const deleteRecipe = (req, res) => {
 export const getRecipe = (req, res) => {
   const recipeId = req.params.recipeId;
   const theRecipe = recipe
-    .findById(recipeId)
+    .findOne({
+      where: { recipeId },
+      include: [
+        { model: models.User, attributes: ['name', 'updatedAt'] }
+      ]
+    })
     .then((recipeFound) => {
       if (!recipeFound) {
         return res.status(404).json({
