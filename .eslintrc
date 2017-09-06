@@ -16,6 +16,7 @@
     "consistent-return": 0,
     "no-param-reassign": 0,
     "import/no-unresolved": 0,
+    "import/extensions": [2, { "js": "never"}],
     "comma-dangle": 0,
     "curly": ["error", "multi-line"],
     "no-shadow": ["error", { "allow": ["req", "done", "res", "err"] }],
