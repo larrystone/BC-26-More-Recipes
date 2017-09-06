@@ -28,7 +28,7 @@ describe('/POST Create User', () => {
 });
 
 
-describe('/POST Recipe Test', () => {
+describe('/POST Create Recipe Test', () => {
   it('should create and return a recipe', (done) => {
     chai.request(server)
       .post('/api/v1/recipes')
@@ -81,6 +81,103 @@ describe('/POST Recipe Test', () => {
       });
   });
 });
+
+
+describe('/GET Recipe and log View count', () => {
+  it('should return a recipe and set view count to 1', (done) => {
+    chai.request(server)
+      .get(`/api/v1/recipes/${recipeId}`)
+      .set('Accept', 'application/json')
+      .set('x-access-token', token)
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(201);
+        expect(res.body.success).to.equal(true);
+        expect(res.body.data.viewCount).to.equal(1);
+        done();
+      });
+  });
+
+  it('should return a recipe and set view count to 2', (done) => {
+    chai.request(server)
+      .get(`/api/v1/recipes/${recipeId}`)
+      .set('Accept', 'application/json')
+      .set('x-access-token', token)
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(201);
+        expect(res.body.success).to.equal(true);
+        expect(res.body.data.viewCount).to.equal(2);
+        done();
+      });
+  });
+
+  it('should return a recipe and set view count to 3', (done) => {
+    chai.request(server)
+      .get(`/api/v1/recipes/${recipeId}`)
+      .set('Accept', 'application/json')
+      .set('x-access-token', token)
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(201);
+        expect(res.body.success).to.equal(true);
+        expect(res.body.data.viewCount).to.equal(3);
+        done();
+      });
+  });
+
+  it('should return a recipe and set view count to 1', (done) => {
+    chai.request(server)
+      .get(`/api/v1/recipes/${recipeId + 1}`)
+      .set('Accept', 'application/json')
+      .set('x-access-token', token)
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(201);
+        expect(res.body.success).to.equal(true);
+        expect(res.body.data.viewCount).to.equal(1);
+        done();
+      });
+  });
+
+  it('should return a recipe and set view count to 2', (done) => {
+    chai.request(server)
+      .get(`/api/v1/recipes/${recipeId + 1}`)
+      .set('Accept', 'application/json')
+      .set('x-access-token', token)
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(201);
+        expect(res.body.success).to.equal(true);
+        expect(res.body.data.viewCount).to.equal(2);
+        done();
+      });
+  });
+
+  it('should return a recipe and set view count to 3', (done) => {
+    chai.request(server)
+      .get(`/api/v1/recipes/${recipeId + 1}`)
+      .set('Accept', 'application/json')
+      .set('x-access-token', token)
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(201);
+        expect(res.body.success).to.equal(true);
+        expect(res.body.data.viewCount).to.equal(3);
+        done();
+      });
+  });
+
+  it('should return \'No matching recipe with id: 100\'', (done) => {
+    chai.request(server)
+      .get('/api/v1/recipes/100')
+      .set('Accept', 'application/json')
+      .set('x-access-token', token)
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(404);
+        expect(res.body).deep.equal({
+          success: false,
+          message: 'No matching recipe with id: 100'
+        });
+        done();
+      });
+  });
+});
+
 
 describe('/PUT User Recipes Test', () => {
   it('should modify and return a recipe', (done) => {
