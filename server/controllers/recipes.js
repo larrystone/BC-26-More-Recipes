@@ -143,7 +143,7 @@ export const getRecipe = (req, res) => {
   const recipeId = req.params.recipeId;
   const theRecipe = recipe
     .findOne({
-      where: { recipeId },
+      where: { id: recipeId },
       include: [
         { model: models.User, attributes: ['name', 'updatedAt'] }
       ]
@@ -161,9 +161,9 @@ export const getRecipe = (req, res) => {
         data: recipeFound
       });
     })
-    .catch(() => res.status(503).send({
+    .catch(e => res.status(503).send({
       success: false,
-      message: 'Unable to fetch recipes' }));
+      message: `Unable to fetch recipes ${e.message}` }));
 
   return theRecipe;
 };
