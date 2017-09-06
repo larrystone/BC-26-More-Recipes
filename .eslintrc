@@ -1,44 +1,37 @@
 {
-  "root": true,
-  "extends": "airbnb",
-  "env": {
-    "node": true,
-    "es6": true,
-    "mocha": true,
-    "jasmine": true,
-    "jquery": true,
-    "browser": true
-  },
-  "rules": {
-    "one-var": 0,
-    "one-var-declaration-per-line": 0,
-    "new-cap": 0,
-    "consistent-return": 0,
-    "no-param-reassign": 0,
-    "import/no-unresolved": 0,
-    "import/extensions": [2, { "js": "never"}],
-    "comma-dangle": 0,
-    "curly": ["error", "multi-line"],
-    "no-shadow": ["error", { "allow": ["req", "done", "res", "err"] }],
-    "valid-jsdoc": ["error", {
-      "requireReturn": true,
-      "requireReturnType": true,
-      "requireParamDescription": false,
-      "requireReturnDescription": true
-    }],
-    "require-jsdoc": ["error", {
-        "require": {
-            "FunctionDeclaration": true,
-            "MethodDefinition": true,
-            "ClassDeclaration": true
-        }
-    }],
-    "jsx-a11y/href-no-hash": "off",
-    "jsx-a11y/anchor-is-valid": [ "error", {
-            "components": [ "Link" ],
-            "specialLink": [ "hrefLeft", "hrefRight" ],
-            "aspects": [ "noHref", "invalidHref", "preferButton" ]
-          }],
-    "max-len" : [1, 80,2]
-  }
+ "root": true,
+ "extends": "airbnb-base",
+ "env": {
+   "node": true,
+   "es6": true,
+   "mocha": true,
+   "jquery": true,
+   "browser": true
+ },
+ "rules": {
+   "one-var": 0,
+   "one-var-declaration-per-line": 0,
+   "new-cap": 0,
+   "consistent-return": 0,
+   "no-param-reassign": 0,
+   "comma-dangle": 0,
+   "curly": ["error", "multi-line"],
+   "import/no-unresolved": 0,
+   "import/extensions": [2, { "js": "never"}],
+   "no-shadow": ["error", { "allow": ["req", "res", "err"] }],
+   "valid-jsdoc": ["error", {
+     "requireReturn": true,
+     "requireReturnType": true,
+     "requireParamDescription": false,
+     "requireReturnDescription": true
+   }],
+   "require-jsdoc": ["error", {
+       "require": {
+           "FunctionDeclaration": true,
+           "MethodDefinition": true,
+           "ClassDeclaration": true
+       }
+   }],
+   "max-len" : [1, 80,2]
+ }
 }
