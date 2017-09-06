@@ -4,7 +4,7 @@
 [![Issue Count](https://codeclimate.com/github/larrystone/BC-26-More-Recipes/badges/issue_count.svg)](https://codeclimate.com/github/larrystone/BC-26-More-Recipes)
 
 # More-Recipes
-A Recipe management and sharing app...
+A Recipe management and sharing app with great features!
 
 # Features
 - Signup and Login
@@ -46,6 +46,7 @@ This directory holds all routes, controllers, middleware, migrations
 * [Create Recipe] - POST http://localhost:3000/api/v1/recipes
 * [Modify Recipe] - PUT http://localhost:3000/api/v1/recipes/:recipeId
 * [Delete Recipe] - DELETE http://localhost:3000/api/v1/recipes/:recipeId
+* [Get Recipe and Update Count] - GET http://localhost:3000/api/v1/recipes/:recipeId
 * [Fetch All Recipes] - GET http://localhost:3000/api/v1/recipes
 * [Fetch Recipes by Most Upvotes] - GET http://localhost:3000/api/v1/recipes?sort=upvotes&order=ascending
 * [Fetch My Recipes] - GET http://localhost:3000/api/v1/users/myRecipes
@@ -80,9 +81,18 @@ In the project directory, you can run:
 Runs the app in the development mode.<br>
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
+### `npm start:dev`
+
+Starts app with nodemon watcher. Restarts app when changes are made to the source code
+
 ### `npm test`
 
 Launches the test runner in the interactive watch mode.
+
+### `npm run coveralls`
+
+Launches the interactive test runner and display test coverage reports
+
 
 ## Author
 * **Lawal Lanre E. (Larrystone)** -Aspiring Software Dev.
@@ -96,3 +106,4 @@ This project is licensed under the Apache License - see the [LICENSE](LICENSE) f
 * Google Material Icons
 * Materialise CSS
 * Jquery
+* Google Graph API

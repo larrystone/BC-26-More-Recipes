@@ -5,8 +5,7 @@
   "main": "/server/app.js",
   "scripts": {
     "start": "babel-node server/app.js",
-    "start:dev": "dotenv npm run start-dev-nodemon",
-    "start-dev-nodemon":"nodemon --exec babel-node server/app.js",
+    "start:dev": "nodemon --exec babel-node server/app.js",
     "test": "mocha --timeout 500000 --compilers js:babel-core/register tests/",
     "coveralls": "nyc npm test && nyc report --reporter=text-lcov | coveralls"
   },
@@ -26,11 +25,10 @@
     "nodemon": "^1.11.0",
     "pg": "^6.4.1",
     "pg-hstore": "^2.3.2",
-    "sequelize": "^4.8.0",
-    "should": "^11.2.1",
-    "supertest": "^3.0.0"
+    "sequelize": "^4.8.0"
   },
   "devDependencies": {
+    "should": "^11.2.1",
     "chai": "^4.0.2",
     "chai-http": "^3.0.0",
     "coveralls": "^2.13.1",
