@@ -1,17 +1,29 @@
-/** Validate user input
- * @exports default
- * @param  {object} req - request
+/** Validate user input for signup
+ * @exports validateSignUp
+ * @param  {string} name - Full Name
+ * @param  {string} username - Username
+ * @param  {string} email - Username
+ * @param  {string} password - Username
  * @return {string} The status
  */
-export default (req) => {
-  if (!req.body.password || req.body.password.length < 6) {
-    return 'Password must be at least 6 characters!';
+export const validateSignUp = (name, username, email, password) => {
+  if (name.length < 6 || !name.includes(' ')) {
+    return 'Enter a valid full name!';
   }
 
-  if (!req.body.username || req.body.username.length < 3) {
-    return 'Username must be at least 3 characters!';
+  if (username.length < 3) {
+    return 'Username must contain at least 3 alphabets!';
+  }
+
+  if (!/\S+@\S+\.\S{2,}/.test(email)) {
+    return 'Enter a valid email address';
+  }
+
+  if (password.length < 6) {
+    return 'Password must be at least 6 characters!';
   }
 
   return false;
 };
 
+export const validateSignIn = req => false;

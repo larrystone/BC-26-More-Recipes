@@ -12,21 +12,23 @@ const user = models.User;
  * @return {object} The status/created user
  */
 export const signUp = (req, res) => {
-  const name = req.body.name;
-  const username = (req.body.username || '').replace(' ', '');
-  const email = (req.body.email || '').replace(' ', '');
-  const password = req.body.password;
+  const name = (req.body.name || '').replace(/\s\s+/g, ' ');
+  const username = (req.body.username || '').replace(/\s+/g, '');
+  const email = (req.body.email || '').replace(/\s+/g, '');
+  const password = (req.body.password || '');
 
-  const validateError = validate.default(req);
-  if (validateError) {
+  const validateSignUpError =
+    validate.validateSignUp(name, username, email, password);
+
+  if (validateSignUpError) {
     return res.status(403).json({
       success: false,
-      message: validateError });
+      message: validateSignUpError });
   }
 
   const newUser = user
     .findOne({
-      attributes: ['id'],
+      attributes: ['id', 'email', 'username'],
       where: {
         $or: [
           { username: {
@@ -40,9 +42,16 @@ export const signUp = (req, res) => {
     })
     .then((userFound) => {
       if (userFound) {
+        let field;
+        if (userFound.username === username) {
+          field = 'Username';
+        } else {
+          field = 'Email';
+        }
+
         return res.status(403).json({
           success: false,
-          message: 'Username or email already taken!'
+          message: `${field} already taken!`
         });
       }
 
@@ -66,13 +75,13 @@ export const signUp = (req, res) => {
           return res.status(201).json({
             success: true,
             data: createdUser });
-        })
-        .catch(() => res.status(503).json({
-          success: false,
-          message: 'Error Creating user' }));
+        });
 
       return newUser;
-    });
+    })
+    .catch(() => res.status(503).json({
+      success: false,
+      message: 'Error Creating user' }));
 };
 
 /** Sign In a user
