@@ -231,6 +231,47 @@ export const sortMostUpvotes = (req, res) => {
   return recipes;
 };
 
+/**
+ * @exports searchByIngredients
+ * @param  {obj} req request object
+ * @param  {obj} res result object
+ * @return {obj}  newUser object
+ */
+export const searchByIngredients = (req, res) => {
+  const ingredients = req.query.ingredients.split(' ');
+
+  const queryClause = ingredients.map(item => ({
+    ingredients: { $iLike: `%${item}%` } }));
+
+  const recipes = recipe
+    .findAll({
+      where: {
+        $or: queryClause
+      },
+      include: [
+        { model: models.User, attributes: ['name', 'updatedAt'] }
+      ]
+    })
+    .then((foundRecipes) => {
+      if (!foundRecipes) {
+        return res.status(404).json({
+          success: true,
+          message: 'Nothing found',
+        });
+      }
+
+      return res.status(201).json({
+        success: true,
+        data: foundRecipes,
+      });
+    })
+    .catch(e => res.status(503).json({
+      success: false,
+      message: `Unable to search recipes ${e.message}` }));
+
+  return recipes;
+};
+
 
 /**
  * @exports getAllRecipes
@@ -241,6 +282,8 @@ export const sortMostUpvotes = (req, res) => {
 export const getAllRecipes = (req, res) => {
   if (req.query.sort === 'upvotes' && req.query.order === 'ascending') {
     sortMostUpvotes(req, res);
+  } else if (req.query.ingredients) {
+    searchByIngredients(req, res);
   } else {
     const recipes = recipe
       .findAll({
