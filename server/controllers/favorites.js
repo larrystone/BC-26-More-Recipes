@@ -2,11 +2,11 @@ import models from '../models';
 
 const favorite = models.Favorite;
 
-/**
- * @exports addToFavorite
- * @param  {obj} req request object
- * @param  {obj} res result object
- * @return {obj}  newUser object
+/** Add a recipe to user favorite
+ * @exports sortMostUpvotes
+ * @param  {object} req - request
+ * @param  {object} res - response 
+ * @return {object} The status/created favorite
  */
 export const addToFavorite = (req, res) => {
   const userId = req.userId;
@@ -27,11 +27,11 @@ export const addToFavorite = (req, res) => {
 };
 
 
-/**
+/** Remove a recipe from user favorites
  * @exports removeFromFavorites
- * @param  {obj} req request object
- * @param  {obj} res result object
- * @return {obj}  newUser object
+ * @param  {object} req - request
+ * @param  {object} res - response 
+ * @return {object} The status
  */
 export const removeFromFavorites = (req, res) => {
   const userId = req.params.userId;
@@ -56,11 +56,11 @@ export const removeFromFavorites = (req, res) => {
 };
 
 
-/**
- * @exports getFavRecipes
- * @param  {obj} req request object
- * @param  {obj} res result object
- * @return {obj}  newUser object
+/** Get a list of user's favorite recipes
+ * @exports sortMostUpvotes
+ * @param  {object} req - request
+ * @param  {object} res - response 
+ * @return {object} The status/created favorite
  */
 export const getFavRecipes = (req, res) => {
   const userId = req.params.userId;

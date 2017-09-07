@@ -5,11 +5,11 @@ import * as validate from '../middleware/validate';
 
 const user = models.User;
 
-/**
+/** Sign Up user - Create user record
  * @exports signUp
- * @param  {obj} req request object
- * @param  {obj} res result object
- * @return {obj}  newUser object
+ * @param  {object} req - request
+ * @param  {object} res - response 
+ * @return {object} The status/created user
  */
 export const signUp = (req, res) => {
   const name = req.body.name;
@@ -75,11 +75,11 @@ export const signUp = (req, res) => {
     });
 };
 
-/**
+/** Sign In a user
  * @exports signIn
- * @param  {obj} req request object
- * @param  {obj} res result object
- * @return {obj}  newUser object
+ * @param  {object} req - request
+ * @param  {object} res - response 
+ * @return {object} The status/signed in user
  */
 export const signIn = (req, res) => {
   const usernameOrEmail = (req.body.username || req.body.email || '')

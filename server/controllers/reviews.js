@@ -2,11 +2,11 @@ import models from '../models';
 
 const review = models.Review;
 
-/**
+/** Post a review on a recipe
  * @exports postReview
- * @param  {obj} req request object
- * @param  {obj} res result object
- * @return {obj}  newUser object
+ * @param  {object} req - request
+ * @param  {object} res - response 
+ * @return {object} The status/created review
  */
 export const postReview = (req, res) => {
   const userId = req.userId;
@@ -30,11 +30,11 @@ export const postReview = (req, res) => {
   return newReview;
 };
 
-/**
+/** Get a list of reviews on a recipe
  * @exports getReviews
- * @param  {obj} req request object
- * @param  {obj} res result object
- * @return {obj}  newUser object
+ * @param  {object} req - request
+ * @param  {object} res - response 
+ * @return {object} The status/reviews fetched
  */
 export const getReviews = (req, res) => {
   const recipeId = req.params.recipeId;

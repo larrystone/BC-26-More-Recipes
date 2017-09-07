@@ -4,11 +4,11 @@ const upvote = models.Upvote;
 const downvote = models.Downvote;
 const recipe = models.Recipe;
 
-/**
+/** Upvote a Recipe
  * @exports upvoteRecipe
- * @param  {obj} req request object
- * @param  {obj} res result object
- * @return {obj}  newUser object
+ * @param  {object} req - request
+ * @param  {object} res - response 
+ * @return {object} The status of upvote
  */
 export const upvoteRecipe = (req, res) => {
   const userId = req.userId;
@@ -76,11 +76,11 @@ export const upvoteRecipe = (req, res) => {
   return newUpvote;
 };
 
-/**
+/** Downvote a recipe
  * @exports downvoteRecipe
- * @param  {obj} req request object
- * @param  {obj} res result object
- * @return {obj}  newUser object
+ * @param  {object} req - request
+ * @param  {object} res - response 
+ * @return {object} The status of downvote
  */
 export const downvoteRecipe = (req, res) => {
   const userId = req.userId;
@@ -149,11 +149,11 @@ export const downvoteRecipe = (req, res) => {
   return newDownvote;
 };
 
-/**
+/** Fetch a list of users that upvoted a recipe
  * @exports getUserUpvotes
- * @param  {obj} req request object
- * @param  {obj} res result object
- * @return {obj}  newUser object
+ * @param  {object} req - request
+ * @param  {object} res - response 
+ * @return {object} The status/user lists
  */
 export const getUserUpvotes = (req, res) => {
   const recipeId = req.params.recipeId;
@@ -184,11 +184,11 @@ export const getUserUpvotes = (req, res) => {
   return upvotes;
 };
 
-/**
+/** Fetch a list of users that downvoted a recipe
  * @exports getUserDownvotes
- * @param  {obj} req request object
- * @param  {obj} res result object
- * @return {obj}  newUser object
+ * @param  {object} req - request
+ * @param  {object} res - response 
+ * @return {object} The status/user lists
  */
 export const getUserDownvotes = (req, res) => {
   const recipeId = req.params.recipeId;
