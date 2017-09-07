@@ -1,6 +1,7 @@
 import models from '../models';
 
 const recipe = models.Recipe;
+const user = models.User;
 
 /**
  * @exports createRecipe
@@ -274,6 +275,68 @@ export const searchByIngredients = (req, res) => {
 
 
 /**
+ * @exports searchAll
+ * @param  {obj} req request object
+ * @param  {obj} res result object
+ * @return {obj}  newUser object
+ */
+export const searchAll = (req, res) => {
+  let results;
+  const searchTerm = req.query.search;
+
+  const recipes = recipe
+    .findAll({
+      where: {
+        $or: [
+          { name: {
+            $iLike: `%${searchTerm}%` }
+          },
+          { ingredients: {
+            $iLike: `%${searchTerm}%` }
+          }
+        ]
+      },
+      include: [
+        { model: models.User, attributes: ['name', 'updatedAt'] }
+      ]
+    })
+    .then((foundRecipes) => {
+      results = foundRecipes.slice(0);
+    })
+    .then(() => {
+      user
+        .findAll({
+          attributes: ['name'],
+          where: {
+            $or: [
+              { name: {
+                $iLike: `%${searchTerm}%` }
+              },
+              { username: {
+                $iLike: searchTerm }
+              },
+              { email: {
+                $iLike: searchTerm }
+              },
+            ]
+          },
+          include: [
+            { model: models.Recipe }
+          ]
+        })
+        .then(data => res.status(201).json({
+          success: true,
+          data: results.concat(data) }));
+    })
+    .catch(e => res.status(503).json({
+      success: false,
+      message: `Unable to search recipes ${e.message}` }));
+
+  return recipes;
+};
+
+
+/**
  * @exports getAllRecipes
  * @param  {obj} req request object
  * @param  {obj} res result object
@@ -284,6 +347,8 @@ export const getAllRecipes = (req, res) => {
     sortMostUpvotes(req, res);
   } else if (req.query.ingredients) {
     searchByIngredients(req, res);
+  } else if (req.query.search) {
+    searchAll(req, res);
   } else {
     const recipes = recipe
       .findAll({
