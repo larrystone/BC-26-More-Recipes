@@ -11,7 +11,6 @@ export default (sequelize, DataTypes) => {
     },
     userId: {
       type: DataTypes.INTEGER,
-      onDelete: 'CASCADE',
       references: {
         model: 'Users',
         key: 'id',
@@ -26,7 +25,6 @@ export default (sequelize, DataTypes) => {
     });
     Downvote.belongsTo(models.User, {
       foreignKey: 'userId',
-      onDelete: 'CASCADE'
     });
   };
   return Downvote;
