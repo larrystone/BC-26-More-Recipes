@@ -83,6 +83,48 @@ describe('/POST Create Recipe Test', () => {
 });
 
 
+describe('/GET Search recipe by ingredient', () => {
+  it('should return 3 recipes when search by \'water+salt\'', (done) => {
+    chai.request(server)
+      .get('/api/v1/recipes?ingredients=water+salt')
+      .set('Accept', 'application/json')
+      .set('x-access-token', token)
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(201);
+        expect(res.body.success).to.equal(true);
+        expect(res.body.data.length).to.equal(3);
+        done();
+      });
+  });
+
+  it('should return 3 recipes when search by \'water+rice\'', (done) => {
+    chai.request(server)
+      .get('/api/v1/recipes?ingredients=water+rice')
+      .set('Accept', 'application/json')
+      .set('x-access-token', token)
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(201);
+        expect(res.body.success).to.equal(true);
+        expect(res.body.data.length).to.equal(3);
+        done();
+      });
+  });
+
+  it('should return 1 recipes when search by \'maggi\'', (done) => {
+    chai.request(server)
+      .get('/api/v1/recipes?ingredients=maggi')
+      .set('Accept', 'application/json')
+      .set('x-access-token', token)
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(201);
+        expect(res.body.success).to.equal(true);
+        expect(res.body.data.length).to.equal(1);
+        done();
+      });
+  });
+});
+
+
 describe('/GET Recipe and log View count', () => {
   it('should return a recipe and set view count to 1', (done) => {
     chai.request(server)
