@@ -1,3 +1,8 @@
+/** Validate user input
+ * @exports default
+ * @param  {object} req - request
+ * @return {string} The status
+ */
 export default (req) => {
   if (!req.body.password || req.body.password.length < 6) {
     return 'Password must be at least 6 characters!';

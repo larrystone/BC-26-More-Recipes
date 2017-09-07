@@ -2,6 +2,13 @@ import jwt from 'jsonwebtoken';
 
 const secret = process.env.secret || '!^sl1@#=5';
 
+/** Verify JWT token
+ * @exports verify
+ * @param  {object} req - request
+ * @param  {object} res - response 
+ * @param  {object} next
+ * @return {object} The status/continue
+ */
 export const verify = (req, res, next) => {
   const token = req.body.token
     || req.query.token
@@ -24,4 +31,9 @@ export const verify = (req, res, next) => {
   }
 };
 
+/** Sign with JWT token
+ * @exports sign
+ * @param  {object} id - userId
+ * @return {string} The signed token
+ */
 export const sign = id => jwt.sign(id, secret);
