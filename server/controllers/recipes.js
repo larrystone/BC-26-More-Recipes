@@ -278,7 +278,7 @@ export const searchByIngredients = (req, res) => {
  * @exports searchAll
  * @param  {obj} req request object
  * @param  {obj} res result object
- * @return {obj}  newUser object
+ * @return {obj}  object
  */
 export const searchAll = (req, res) => {
   let results;

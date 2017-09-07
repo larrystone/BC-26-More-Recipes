@@ -122,6 +122,129 @@ describe('/GET Search recipe by ingredient', () => {
         done();
       });
   });
+
+  it('should return 0 recipes when search by \'garri\'', (done) => {
+    chai.request(server)
+      .get('/api/v1/recipes?ingredients=garri')
+      .set('Accept', 'application/json')
+      .set('x-access-token', token)
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(201);
+        expect(res.body.success).to.equal(true);
+        expect(res.body.data.length).to.equal(0);
+        done();
+      });
+  });
+
+  it('should return 1 recipes when search by \'leaves\'', (done) => {
+    chai.request(server)
+      .get('/api/v1/recipes?ingredients=leaves')
+      .set('Accept', 'application/json')
+      .set('x-access-token', token)
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(201);
+        expect(res.body.success).to.equal(true);
+        expect(res.body.data.length).to.equal(1);
+        done();
+      });
+  });
+
+  it('should return 1 recipes when search by \'soup\'', (done) => {
+    chai.request(server)
+      .get('/api/v1/recipes?ingredients=maggi')
+      .set('Accept', 'application/json')
+      .set('x-access-token', token)
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(201);
+        expect(res.body.success).to.equal(true);
+        expect(res.body.data.length).to.equal(1);
+        done();
+      });
+  });
+});
+
+
+describe('/GET Search recipe by valid anything (Generic search)', () => {
+  it('should return 1 recipe when search by \'Ewedu+Soup\'', (done) => {
+    chai.request(server)
+      .get('/api/v1/recipes?search=Ewedu+Soup')
+      .set('Accept', 'application/json')
+      .set('x-access-token', token)
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(201);
+        expect(res.body.success).to.equal(true);
+        expect(res.body.data.length).to.equal(1);
+        done();
+      });
+  });
+
+  it('should return 3 recipes when search by \'water\'', (done) => {
+    chai.request(server)
+      .get('/api/v1/recipes?search=water')
+      .set('Accept', 'application/json')
+      .set('x-access-token', token)
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(201);
+        expect(res.body.success).to.equal(true);
+        expect(res.body.data.length).to.equal(3);
+        done();
+      });
+  });
+
+  it('should return 2 recipes when search by \'rice\'', (done) => {
+    chai.request(server)
+      .get('/api/v1/recipes?search=rice')
+      .set('Accept', 'application/json')
+      .set('x-access-token', token)
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(201);
+        expect(res.body.success).to.equal(true);
+        expect(res.body.data.length).to.equal(2);
+        done();
+      });
+  });
+
+  it('should return 1 recipes when search by ' +
+  '\'createrecipetester@test.com\'', (done) => {
+    chai.request(server)
+      .get('/api/v1/recipes?search=createrecipetester@test.com')
+      .set('Accept', 'application/json')
+      .set('x-access-token', token)
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(201);
+        expect(res.body.success).to.equal(true);
+        expect(res.body.data.length).to.equal(1);
+        done();
+      });
+  });
+
+  it('should return 1 recipes when search by ' +
+  '\'createREcipetester\'', (done) => {
+    chai.request(server)
+      .get('/api/v1/recipes?search=createREcipetester')
+      .set('Accept', 'application/json')
+      .set('x-access-token', token)
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(201);
+        expect(res.body.success).to.equal(true);
+        expect(res.body.data.length).to.equal(1);
+        done();
+      });
+  });
+
+  it('should return 0 recipes when search by ' +
+  '\'createreipetester\'', (done) => {
+    chai.request(server)
+      .get('/api/v1/recipes?search=createreipetester')
+      .set('Accept', 'application/json')
+      .set('x-access-token', token)
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(201);
+        expect(res.body.success).to.equal(true);
+        expect(res.body.data.length).to.equal(0);
+        done();
+      });
+  });
 });
 
 
