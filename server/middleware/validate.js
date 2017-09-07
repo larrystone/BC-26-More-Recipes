@@ -15,7 +15,7 @@ export const validateSignUp = (name, username, email, password) => {
     return 'Username must contain at least 3 alphabets!';
   }
 
-  if (!/\S+@\S+\.\S{2,}/.test(email)) {
+  if (!/\S{3,}@\S{2,}\.\S{2,}/.test(email)) {
     return 'Enter a valid email address';
   }
 
