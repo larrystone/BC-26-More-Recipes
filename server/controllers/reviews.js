@@ -1,4 +1,5 @@
 import models from '../models';
+import * as validate from '../middleware/validate';
 
 const review = models.Review;
 
@@ -11,7 +12,15 @@ const review = models.Review;
 export const postReview = (req, res) => {
   const userId = req.userId;
   const recipeId = req.params.recipeId;
-  const content = req.body.content;
+  const content = (req.body.content || '').replace(/\s+/g, ' ');
+
+  const validateReviewContentError = validate.validateReviewContent(content);
+  if (validateReviewContentError) {
+    return res.status(403).json({
+      success: false,
+      message: validateReviewContentError });
+  }
+
   const newReview = review
     .create({
       content,

@@ -72,13 +72,6 @@ export const modifyRecipe = (req, res) => {
       message: validateRecipeError });
   }
 
-  const validateRecipeIdError = validate.validateRecipeId(recipeId);
-  if (validateRecipeIdError) {
-    return res.status(403).json({
-      success: false,
-      message: `Recipe ${validateRecipeIdError}` });
-  }
-
   const validateUserIdError = validate.validateRecipeId(userId);
   if (validateUserIdError) {
     return res.status(403).json({
@@ -135,13 +128,6 @@ export const deleteRecipe = (req, res) => {
   const recipeId = req.params.recipeId;
   const userId = req.userId;
 
-  const validateRecipeIdError = validate.validateRecipeId(recipeId);
-  if (validateRecipeIdError) {
-    return res.status(403).json({
-      success: false,
-      message: `Recipe ${validateRecipeIdError}` });
-  }
-
   const validateUserIdError = validate.validateRecipeId(userId);
   if (validateUserIdError) {
     return res.status(403).json({
@@ -188,6 +174,7 @@ export const deleteRecipe = (req, res) => {
  */
 export const getRecipe = (req, res) => {
   const recipeId = req.params.recipeId;
+
   const theRecipe = recipe
     .findOne({
       where: { id: recipeId },

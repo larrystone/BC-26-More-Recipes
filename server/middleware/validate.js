@@ -41,8 +41,20 @@ export const validateRecipeDetails = (name, ingredients, direction) => {
 };
 
 
-export const validateRecipeId = (id) => {
-  if (isNaN(+id)) {
-    return 'ID invalid!';
+export const validateRecipeId = (req, res, next) => {
+  const recipeId = req.params.recipeId;
+
+  if (isNaN(+recipeId)) {
+    return res.status(403).json({
+      success: false,
+      message: 'Invalid Recipe ID!' });
+  }
+
+  next();
+};
+
+export const validateReviewContent = (message) => {
+  if (message.length < 5) {
+    return 'Review message too short!';
   }
 };
