@@ -115,8 +115,9 @@ export default class Favorite {
           });
         }
 
-        foundRecipes.success = true;
-        return res.status(201).send(foundRecipes);
+        return res.status(201).json({
+          success: true,
+          foundRecipes });
       })
       .catch(() => res.status(503).json({
         success: false,
