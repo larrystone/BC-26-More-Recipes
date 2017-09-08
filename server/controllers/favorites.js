@@ -41,7 +41,7 @@ export const addToFavorite = (req, res) => {
 export const removeFromFavorites = (req, res) => {
   const userId = req.params.userId;
   const recipeId = req.params.recipeId;
-  const newFavorite = favorite
+  const removeFavorite = favorite
     .destroy({
       where: {
         $and: [
@@ -57,7 +57,7 @@ export const removeFromFavorites = (req, res) => {
       success: false,
       message: 'Error Removing Recipe from Favorites' }));
 
-  return newFavorite;
+  return removeFavorite;
 };
 
 

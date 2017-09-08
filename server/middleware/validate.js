@@ -40,6 +40,11 @@ export const validateRecipeDetails = (name, ingredients, direction) => {
   }
 };
 
+export const validateReviewContent = (message) => {
+  if (message.length < 5) {
+    return 'Review message too short!';
+  }
+};
 
 export const validateRecipeId = (req, res, next) => {
   const recipeId = req.params.recipeId;
@@ -53,8 +58,14 @@ export const validateRecipeId = (req, res, next) => {
   next();
 };
 
-export const validateReviewContent = (message) => {
-  if (message.length < 5) {
-    return 'Review message too short!';
+export const validateUserId = (req, res, next) => {
+  const userId = req.params.userId;
+
+  if (isNaN(+userId)) {
+    return res.status(403).json({
+      success: false,
+      message: 'Invalid User ID!' });
   }
+
+  next();
 };
