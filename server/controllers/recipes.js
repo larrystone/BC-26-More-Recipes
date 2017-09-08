@@ -72,13 +72,6 @@ export const modifyRecipe = (req, res) => {
       message: validateRecipeError });
   }
 
-  const validateUserIdError = validate.validateRecipeId(userId);
-  if (validateUserIdError) {
-    return res.status(403).json({
-      success: false,
-      message: `User ${validateUserIdError}` });
-  }
-
   const modifiedRecipe = recipe
     .findById(recipeId)
     .then((recipeFound) => {
@@ -127,13 +120,6 @@ export const modifyRecipe = (req, res) => {
 export const deleteRecipe = (req, res) => {
   const recipeId = req.params.recipeId;
   const userId = req.userId;
-
-  const validateUserIdError = validate.validateRecipeId(userId);
-  if (validateUserIdError) {
-    return res.status(403).json({
-      success: false,
-      message: `User ${validateUserIdError}` });
-  }
 
   const deletedRecipe = recipe
     .findById(recipeId)

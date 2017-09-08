@@ -110,7 +110,7 @@ describe('/GET Search recipe by ingredient', () => {
       });
   });
 
-  it('should return 1 recipes when search by \'maggi\'', (done) => {
+  it('should return 1 recipe when search by \'maggi\'', (done) => {
     chai.request(server)
       .get('/api/v1/recipes?ingredients=maggi')
       .set('Accept', 'application/json')
@@ -123,7 +123,7 @@ describe('/GET Search recipe by ingredient', () => {
       });
   });
 
-  it('should return 0 recipes when search by \'garri\'', (done) => {
+  it('should return 0 recipe when search by \'garri\'', (done) => {
     chai.request(server)
       .get('/api/v1/recipes?ingredients=garri')
       .set('Accept', 'application/json')
@@ -136,7 +136,7 @@ describe('/GET Search recipe by ingredient', () => {
       });
   });
 
-  it('should return 1 recipes when search by \'leaves\'', (done) => {
+  it('should return 1 recipe when search by \'leaves\'', (done) => {
     chai.request(server)
       .get('/api/v1/recipes?ingredients=leaves')
       .set('Accept', 'application/json')
@@ -149,7 +149,7 @@ describe('/GET Search recipe by ingredient', () => {
       });
   });
 
-  it('should return 1 recipes when search by \'soup\'', (done) => {
+  it('should return 1 recipe when search by \'soup\'', (done) => {
     chai.request(server)
       .get('/api/v1/recipes?ingredients=maggi')
       .set('Accept', 'application/json')
@@ -379,9 +379,9 @@ describe('/PUT User Recipes Test', () => {
       });
   });
 
-  it('should return \'No matching recipe with id: 100\'', (done) => {
+  it(`should return 'No matching recipe with id: ${+recipeId * 4}'`, (done) => {
     chai.request(server)
-      .put('/api/v1/recipes/100')
+      .put(`/api/v1/recipes/${recipeId * 4}`)
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .send({
@@ -394,7 +394,7 @@ describe('/PUT User Recipes Test', () => {
         expect(res.statusCode).to.equal(404);
         expect(res.body).deep.equal({
           success: false,
-          message: 'No matching recipe with id: 100'
+          message: `No matching recipe with id: ${recipeId * 4}`
         });
         done();
       });

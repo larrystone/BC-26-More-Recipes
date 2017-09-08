@@ -36,10 +36,10 @@ describe('/POST User Sign Up validation Test', () => {
         password: 'Hacklord'
       })
       .end((err, res) => {
-        expect(res.statusCode).to.equal(503);
+        expect(res.statusCode).to.equal(403);
         expect(res.body).deep.equal({
           success: false,
-          message: 'Error Creating user'
+          message: 'Enter a valid full name!'
         });
         done();
       });
@@ -58,7 +58,7 @@ describe('/POST User Sign Up validation Test', () => {
         expect(res.statusCode).to.equal(403);
         expect(res.body).deep.equal({
           success: false,
-          message: 'Username must be at least 3 characters!'
+          message: 'Username must contain at least 3 alphabets!'
         });
         done();
       });
@@ -74,10 +74,10 @@ describe('/POST User Sign Up validation Test', () => {
         password: 'Hacking'
       })
       .end((err, res) => {
-        expect(res.statusCode).to.equal(503);
+        expect(res.statusCode).to.equal(403);
         expect(res.body).deep.equal({
           success: false,
-          message: 'Error Creating user'
+          message: 'Enter a valid email address'
         });
         done();
       });
@@ -140,7 +140,7 @@ describe('/POST User Sign Up Test', () => {
       });
   });
 
-  it('should return \'Username or email already taken\' error', (done) => {
+  it('should return \'Username already taken\' error', (done) => {
     chai.request(server)
       .post('/api/v1/users/signup')
       .set('Accept', 'application/json')
@@ -154,13 +154,13 @@ describe('/POST User Sign Up Test', () => {
         expect(res.statusCode).to.equal(403);
         expect(res.body).deep.equal({
           success: false,
-          message: 'Username or email already taken!'
+          message: 'Username already taken!'
         });
         done();
       });
   });
 
-  it('should return \'Username or email already taken\' error', (done) => {
+  it('should return \'Username already taken\' error', (done) => {
     chai.request(server)
       .post('/api/v1/users/signup')
       .set('Accept', 'application/json')
@@ -174,7 +174,7 @@ describe('/POST User Sign Up Test', () => {
         expect(res.statusCode).to.equal(403);
         expect(res.body).deep.equal({
           success: false,
-          message: 'Username or email already taken!'
+          message: 'Username already taken!'
         });
         done();
       });

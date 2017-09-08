@@ -15,7 +15,7 @@ user.post('/signin', userController.signIn);
 user.use('*', auth.verify);
 user.get('/myRecipes', recipeController.getUserRecipes);
 
-user.use(':userId/recipes/', validate.validateUserId);
+user.use(':userId/recipes', validate.validateUserId);
 user.post('/:userId/recipes/:recipeId', favoriteController.addToFavorite);
 user.delete('/:userId/recipes/:recipeId',
   favoriteController.removeFromFavorites);
