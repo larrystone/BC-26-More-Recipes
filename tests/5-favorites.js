@@ -49,6 +49,27 @@ describe('/POST Create User and Recipe', () => {
 
 
 describe('/POST Add recipe to favorites Test', () => {
+  it('should return \'Invalid User ID!\'', (done) => {
+    chai.request(server)
+      .post(`/api/v1/users/${userId}/recipes/${recipeId}`)
+      .set('Accept', 'application/json')
+      .send({
+        token: 'eyJhbGciOiJIUzI1NiJ9.c2Rz.H9g9SB2U50q3fbZQk' +
+        '4yJfLBEJRzrcfeX2nqKl-8yIuI',
+        name: 'Ewedu soup',
+        ingredients: 'Water;;Ewedu leaves;;Salt',
+        direction: 'Light stove and just start cooking'
+      })
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(403);
+        expect(res.body).deep.equal({
+          success: false,
+          message: 'Invalid User ID!'
+        });
+        done();
+      });
+  });
+
   it(`should add recipe id: ${recipeId} to favorites`, (done) => {
     chai.request(server)
       .post(`/api/v1/users/${userId}/recipes/${recipeId}`)
