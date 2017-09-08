@@ -12,13 +12,18 @@ export const addToFavorite = (req, res) => {
   const userId = req.userId;
   const recipeId = req.params.recipeId;
   const newFavorite = favorite
-    .create({
-      userId,
-      recipeId
+    .findOrCreate({ where: { userId, recipeId } })
+    .spread((addedReceipe, created) => {
+      if (created) {
+        return res.status(201).json({
+          success: true,
+          message: `Recipe with id: ${recipeId} added to favorites!` });
+      }
+
+      return res.status(201).json({
+        success: false,
+        message: `Recipe with id: ${recipeId} Already added!` });
     })
-    .then(createdFavorite => res.status(201).json({
-      success: true,
-      data: createdFavorite }))
     .catch(() => res.status(503).json({
       success: false,
       message: 'Error Adding Recipe to Favorites' }));
