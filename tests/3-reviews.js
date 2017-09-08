@@ -47,6 +47,41 @@ describe('/POST Create User and Recipe', () => {
 
 
 describe('/POST Review Test', () => {
+  it('should return \'Review message too short!\' for length<5 ', (done) => {
+    chai.request(server)
+      .post(`/api/v1/recipes/${recipeId}/reviews`)
+      .set('Accept', 'application/json')
+      .send({
+        token,
+        content: 'hmm'
+      })
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(403);
+        expect(res.body).deep.equal({
+          success: false,
+          message: 'Review message too short!'
+        });
+        done();
+      });
+  });
+
+  it('should return \'Review message too short!\' for null review', (done) => {
+    chai.request(server)
+      .post(`/api/v1/recipes/${recipeId}/reviews`)
+      .set('Accept', 'application/json')
+      .send({
+        token,
+      })
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(403);
+        expect(res.body).deep.equal({
+          success: false,
+          message: 'Review message too short!'
+        });
+        done();
+      });
+  });
+
   it('should create and return a review', (done) => {
     chai.request(server)
       .post(`/api/v1/recipes/${recipeId}/reviews`)

@@ -8,7 +8,7 @@ const user = models.User;
 /** Sign Up user - Create user record
  * @exports signUp
  * @param  {object} req - request
- * @param  {object} res - response 
+ * @param  {object} res - response
  * @return {object} The status/created user
  */
 export const signUp = (req, res) => {
@@ -87,7 +87,7 @@ export const signUp = (req, res) => {
 /** Sign In a user
  * @exports signIn
  * @param  {object} req - request
- * @param  {object} res - response 
+ * @param  {object} res - response
  * @return {object} The status/signed in user
  */
 export const signIn = (req, res) => {

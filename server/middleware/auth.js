@@ -5,7 +5,7 @@ const secret = process.env.secret || '!^sl1@#=5';
 /** Verify JWT token
  * @exports verify
  * @param  {object} req - request
- * @param  {object} res - response 
+ * @param  {object} res - response
  * @param  {object} next
  * @return {object} The status/continue
  */

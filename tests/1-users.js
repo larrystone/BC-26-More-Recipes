@@ -45,6 +45,26 @@ describe('/POST User Sign Up validation Test', () => {
       });
   });
 
+  it('should return \'Error Creating user\' for single name', (done) => {
+    chai.request(server)
+      .post('/api/v1/users/signup')
+      .set('Accept', 'application/json')
+      .send({
+        name: 'Lovelyn',
+        username: 'Minime',
+        email: 'minim@gmail.com',
+        password: 'Hacklord'
+      })
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(403);
+        expect(res.body).deep.equal({
+          success: false,
+          message: 'Enter a valid full name!'
+        });
+        done();
+      });
+  });
+
   it('should return \'Error Creating user\' for null Username', (done) => {
     chai.request(server)
       .post('/api/v1/users/signup')
@@ -78,6 +98,66 @@ describe('/POST User Sign Up validation Test', () => {
         expect(res.body).deep.equal({
           success: false,
           message: 'Enter a valid email address'
+        });
+        done();
+      });
+  });
+
+  it('should return \'Error Creating user\' for invalid email', (done) => {
+    chai.request(server)
+      .post('/api/v1/users/signup')
+      .set('Accept', 'application/json')
+      .send({
+        name: 'ritta Maxwell',
+        email: 'lasrr@ss',
+        username: 'Henry',
+        password: 'Hacking'
+      })
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(403);
+        expect(res.body).deep.equal({
+          success: false,
+          message: 'Enter a valid email address'
+        });
+        done();
+      });
+  });
+
+  it('should return \'Error Creating user\' for invalid email', (done) => {
+    chai.request(server)
+      .post('/api/v1/users/signup')
+      .set('Accept', 'application/json')
+      .send({
+        name: 'ritta Maxwell',
+        email: 'lr@ss.com',
+        username: 'Henry',
+        password: 'Hacking'
+      })
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(403);
+        expect(res.body).deep.equal({
+          success: false,
+          message: 'Enter a valid email address'
+        });
+        done();
+      });
+  });
+
+  it('should return \'Error Creating user\' for invalid password', (done) => {
+    chai.request(server)
+      .post('/api/v1/users/signup')
+      .set('Accept', 'application/json')
+      .send({
+        name: 'ritta Maxwell',
+        email: 'larrystone@ssa.com',
+        username: 'Henry',
+        password: ''
+      })
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(403);
+        expect(res.body).deep.equal({
+          success: false,
+          message: 'Password must be at least 6 characters!'
         });
         done();
       });

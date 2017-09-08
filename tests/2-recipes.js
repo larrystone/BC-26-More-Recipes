@@ -29,6 +29,66 @@ describe('/POST Create User', () => {
 
 
 describe('/POST Create Recipe Test', () => {
+  it('should return \'Enter a valid recipe name!\'', (done) => {
+    chai.request(server)
+      .post('/api/v1/recipes')
+      .set('Accept', 'application/json')
+      .send({
+        token,
+        name: 'Ew',
+        ingredients: 'Water;;Ewedu leaves;;Salt',
+        direction: 'Light stove and just start cooking'
+      })
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(403);
+        expect(res.body).deep.equal({
+          success: false,
+          message: 'Enter a valid recipe name!'
+        });
+        done();
+      });
+  });
+
+  it('should return \'Enter a valid list of ingredients!\'', (done) => {
+    chai.request(server)
+      .post('/api/v1/recipes')
+      .set('Accept', 'application/json')
+      .send({
+        token,
+        name: 'Ewedu Soup',
+        ingredients: 'water',
+        direction: 'Light stove and just start cooking'
+      })
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(403);
+        expect(res.body).deep.equal({
+          success: false,
+          message: 'Enter a valid list of ingredients!'
+        });
+        done();
+      });
+  });
+
+  it('should return \'Explain the directions clearly please!\'', (done) => {
+    chai.request(server)
+      .post('/api/v1/recipes')
+      .set('Accept', 'application/json')
+      .send({
+        token,
+        name: 'Ewedu Soup',
+        ingredients: 'water;;salt;;maggi',
+        direction: 'Light'
+      })
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(403);
+        expect(res.body).deep.equal({
+          success: false,
+          message: 'Explain the directions clearly please!'
+        });
+        done();
+      });
+  });
+
   it('should create and return a recipe', (done) => {
     chai.request(server)
       .post('/api/v1/recipes')
@@ -451,6 +511,27 @@ describe('/DELETE User Recipes Test', () => {
         expect(res.body).deep.equal({
           success: false,
           message: 'No matching recipe with id: 100'
+        });
+        done();
+      });
+  });
+
+  it('should return \'No matching recipe with id: -1\'', (done) => {
+    chai.request(server)
+      .delete('/api/v1/recipes/-1')
+      .set('Accept', 'application/json')
+      .set('x-access-token', token)
+      .send({
+        token,
+        name: 'Amala Soup',
+        ingredients: 'Water;;Ewedu leaves;;Salt',
+        direction: 'I wil tel you later'
+      })
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(404);
+        expect(res.body).deep.equal({
+          success: false,
+          message: 'No matching recipe with id: -1'
         });
         done();
       });

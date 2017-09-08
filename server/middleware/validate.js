@@ -26,6 +26,19 @@ export const validateSignUp = (name, username, email, password) => {
   return false;
 };
 
+/** Validate user ID on protected routes
+ * @exports validateUserId
+ * @param  {string} userId - User ID
+ * @return {string} The status
+ */
+export const validateUserId = (userId) => {
+  if (isNaN(+userId)) {
+    return 'Invalid User ID!';
+  }
+
+  return false;
+};
+
 /** Validate user input for recipe
  * @exports validateRecipeDetails
  * @param  {string} name - Recipe Name
@@ -77,21 +90,3 @@ export const validateRecipeId = (req, res, next) => {
   next();
 };
 
-/** Validate user ID on protected routes
- * @exports validateUserId
- * @param  {object} req - Request
- * @param  {object} res - Response
- * @param  {function} next - Next controller
- * @return {object} The status/next()
- */
-export const validateUserId = (req, res, next) => {
-  const userId = req.params.userId;
-
-  if (isNaN(+userId)) {
-    return res.status(403).json({
-      success: false,
-      message: 'Invalid User ID!' });
-  }
-
-  next();
-};

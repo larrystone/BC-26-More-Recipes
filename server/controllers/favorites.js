@@ -1,16 +1,25 @@
 import models from '../models';
+import * as validate from '../middleware/validate';
 
 const favorite = models.Favorite;
 
 /** Add a recipe to user favorite
  * @exports sortMostUpvotes
  * @param  {object} req - request
- * @param  {object} res - response 
+ * @param  {object} res - response
  * @return {object} The status/created favorite
  */
 export const addToFavorite = (req, res) => {
   const userId = req.userId;
   const recipeId = req.params.recipeId;
+
+  const validateUserIdError = validate.validateUserId(userId);
+  if (validateUserIdError) {
+    return res.status(403).json({
+      success: false,
+      message: validateUserIdError });
+  }
+
   const newFavorite = favorite
     .findOrCreate({ where: { userId, recipeId } })
     .spread((addedReceipe, created) => {
@@ -35,11 +44,19 @@ export const addToFavorite = (req, res) => {
 /** Remove a recipe from user favorites
  * @exports removeFromFavorites
  * @param  {object} req - request
- * @param  {object} res - response 
+ * @param  {object} res - response
  * @return {object} The status
  */
 export const removeFromFavorites = (req, res) => {
   const userId = req.params.userId;
+
+  const validateUserIdError = validate.validateUserId(userId);
+  if (validateUserIdError) {
+    return res.status(403).json({
+      success: false,
+      message: validateUserIdError });
+  }
+
   const recipeId = req.params.recipeId;
   const removeFavorite = favorite
     .destroy({
@@ -64,7 +81,7 @@ export const removeFromFavorites = (req, res) => {
 /** Get a list of user's favorite recipes
  * @exports sortMostUpvotes
  * @param  {object} req - request
- * @param  {object} res - response 
+ * @param  {object} res - response
  * @return {object} The status/created favorite
  */
 export const getFavRecipes = (req, res) => {
