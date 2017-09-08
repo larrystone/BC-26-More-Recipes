@@ -2,16 +2,18 @@ import bcrypt from 'bcrypt';
 
 /**
  * Class Definition for the Encryption Object
- * 
+ *
  * @export
  * @class Encryption
  */
 export default class Encryption {
-  /** 
- * @exports generateHash
- * @param  {string} password -User  Password
- * @return {string} The encrypted password
- */
+  /**
+   * Generate Hash for password string
+   *
+   * @param {string} password 
+   * @returns {string} hashed password
+   * @memberof Encryption
+   */
   generateHash(password) {
     this.salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(password, this.salt);

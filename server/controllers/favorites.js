@@ -5,14 +5,14 @@ const favorite = models.Favorite;
 
 /**
  * Class Definition for the Favorite Object
- * 
+ *
  * @export
  * @class Favorite
  */
 export default class Favorite {
   /**
    * Add a recipe to user favorite
-   * 
+   *
    * @param {object} req - HTTP Request
    * @param {object} res - HTTP Response
    * @returns {object} Class instance
@@ -51,7 +51,7 @@ export default class Favorite {
 
   /**
    * Remove a recipe from user favorites
-   * 
+   *
    * @param {object} req - HTTP Request
    * @param {object} res - HTTP Response
    * @returns {object} Class instance
@@ -90,7 +90,7 @@ export default class Favorite {
 
   /**
    * Get a list of user's favorite recipes
-   * 
+   *
    * @param {object} req - HTTP Request
    * @param {object} res - HTTP Response
    * @returns {object} Class instance

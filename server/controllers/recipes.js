@@ -8,14 +8,14 @@ const trimWhiteSpaces = param => (param || '')
 
 /**
  * Class Definition for the Recipe Object
- * 
+ *
  * @export
  * @class Recipe
  */
 export default class Recipe {
   /**
    * Create a new recipe record
-   * 
+   *
    * @param {object} req - HTTP Request
    * @param {object} res - HTTP Response
    * @returns {object} - Class instance
@@ -63,7 +63,7 @@ export default class Recipe {
 
   /**
    * Modify recipe record
-   * 
+   *
    * @param {object} req - HTTP Request
    * @param {object} res - HTTP Response
    * @returns {object} Class instance
@@ -127,7 +127,7 @@ export default class Recipe {
 
   /**
    * Delete Recipe record
-   * 
+   *
    * @param {object} req - HTTP Request
    * @param {object} res - HTTP Response
    * @returns {object} Class instance
@@ -170,7 +170,7 @@ export default class Recipe {
 
   /**
    * Fetch a recipe record
-   * 
+   *
    * @param {object} req - HTTP Request
    * @param {object} res - HTTP Response
    * @returns {object} Class instance
@@ -210,7 +210,7 @@ export default class Recipe {
 
   /**
    * Fetch a list user owned recipes
-   * 
+   *
    * @param {object} req - HTTP Request
    * @param {object} res - HTTP Response
    * @returns {object} Class instance
@@ -244,7 +244,7 @@ export default class Recipe {
 
   /**
    * Fetch all recipes in the database
-   * 
+   *
    * @param {object} req - HTTP Request
    * @param {object} res - HTTP Response
    * @returns {object} Class instance

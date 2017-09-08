@@ -13,14 +13,14 @@ const trimWhiteSpaces = (param, value) => (param || '')
 
 /**
  * Class Definition for the User Object
- * 
+ *
  * @export
  * @class User
  */
 export default class User {
   /**
    * Sign Up user (Create new user)
-   * 
+   *
    * @param {object} req - HTTP Request
    * @param {object} res - HTTP Response
    * @returns {object} Class instance
@@ -102,7 +102,7 @@ export default class User {
 
   /**
    * Sign In a user (Search for user)
-   * 
+   *
    * @param {object} req - HTTP Request
    * @param {object} res - HTTP Response
    * @returns {object} Class instance

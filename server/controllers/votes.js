@@ -6,14 +6,14 @@ const recipe = models.Recipe;
 
 /**
  * Class Definition for the Vote Object
- * 
+ *
  * @export
  * @class Vote
  */
 export default class Vote {
   /**
    * Upvote a Recipe
-   * 
+   *
    * @param {object} req - HTTP Request
    * @param {object} res - HTTP Response
    * @returns {object} Class instance
@@ -87,7 +87,7 @@ export default class Vote {
 
   /**
    * Downvote a recipe
-   * 
+   *
    * @param {object} req - HTTP Request
    * @param {object} res - HTTP Response
    * @returns {object} Class instance
@@ -162,7 +162,7 @@ export default class Vote {
 
   /**
    * Fetch a list of users that upvoted a recipe
-   * 
+   *
    * @param {object} req - HTTP Request
    * @param {object} res - HTTP Response
    * @returns {obejct} Class instance
@@ -200,7 +200,7 @@ export default class Vote {
 
   /**
    * Fetch a list of users that downvoted a recipe
-   * 
+   *
    * @param {object} req - HTTP Request
    * @param {object} res - HTTP Response
    * @returns {object} Class instance

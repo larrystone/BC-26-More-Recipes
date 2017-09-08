@@ -5,14 +5,14 @@ const user = models.User;
 
 /**
  * Class Definition for the Search Recipe Object
- * 
+ *
  * @export
  * @class Search
  */
 export default class Search {
   /**
    * Fetch list of recipes ordered (descending) by number of upvotes
-   * 
+   *
    * @param {object} req - HTTP Request
    * @param {object} res - HTTP Response
    * @returns {object} Class instance
@@ -49,7 +49,7 @@ export default class Search {
 
   /**
    * Search for recipe by Recipe name, Ingredients or Name of User
-   * 
+   *
    * @param {object} req - HTTP Request
    * @param {object} res - HTTP Response
    * @returns {object} Class instance
@@ -112,7 +112,7 @@ export default class Search {
 
   /**
    * Fetch list of recipes based ingredients supplied
-   * 
+   *
    * @param {object} req - HTTP Request
    * @param {object} res - HTTP Response
    * @returns {object} Class instance

@@ -4,14 +4,14 @@ import * as validate from '../middleware/validate';
 const review = models.Review;
 /**
  * Class Definition for the Review Object
- * 
+ *
  * @export
  * @class Review
  */
 export default class Review {
   /**
    * Post a review on a recipe
-   * 
+   *
    * @param {object} req - HTTP Request
    * @param {object} res - HTTP Response
    * @returns {object} Class instance
@@ -49,7 +49,7 @@ export default class Review {
 
   /**
    * Get a list of reviews on a recipe
-   * 
+   *
    * @param {object} req - HTTP Request
    * @param {object} res - HTTP Response
    * @returns {object} Class instance

@@ -2,14 +2,14 @@ import jwt from 'jsonwebtoken';
 
 /**
  * Class Definition for the Authentication Object using Jason Web Token
- * 
+ *
  * @export
  * @class Auth
  */
 export default class Auth {
   /**
    * Verify JWT token
-   * 
+   *
    * @param {object} req - HTTP Request
    * @param {object} res - HTTP Response
    * @param {function} next - HTTP Next()
@@ -43,7 +43,7 @@ export default class Auth {
 
   /**
    * Sign (Hash) User ID with JWT token
-   * 
+   *
    * @param {string} id - User Id
    * @returns {string} Encrypted string
    * @memberof Auth
