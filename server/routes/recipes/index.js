@@ -1,28 +1,40 @@
 import express from 'express';
 import * as validate from '../../middleware/validate';
-import * as recipeController from '../../controllers/recipes';
-import * as reviewController from '../../controllers/reviews';
-import * as voteController from '../../controllers/votes';
-import * as auth from '../../middleware/auth';
+import * as Recipe from '../../controllers/recipes';
+import * as Review from '../../controllers/reviews';
+import * as Vote from '../../controllers/votes';
+import * as Auth from '../../middleware/auth';
 
 const user = express.Router();
+const newRecipe = new Recipe.default();
+const newReview = new Review.default();
+const newVote = new Vote.default();
+const newAuth = new Auth.default();
 
-user.use('*', auth.verify);
+user.use('*', newAuth.verify);
 
-user.post('/', recipeController.createRecipe);
-user.get('/', recipeController.getAllRecipes);
+user.route('/')
+  .post(newRecipe.createRecipe)
+  .get(newRecipe.getAllRecipes);
 
-user.use('/:recipeId', validate.validateRecipeId);
-user.get('/:recipeId', recipeController.getRecipe);
-user.put('/:recipeId', recipeController.modifyRecipe);
-user.delete('/:recipeId', recipeController.deleteRecipe);
+// user.use('/:recipeId', validate.validateRecipeId);
 
-user.post('/:recipeId/reviews', reviewController.postReview);
-user.get('/:recipeId/reviews', reviewController.getReviews);
+user.route('/:recipeId')
+  .all(validate.validateRecipeId)
+  .get(newRecipe.getRecipe)
+  .put(newRecipe.modifyRecipe)
+  .delete(newRecipe.deleteRecipe);
 
-user.post('/:recipeId/upvotes', voteController.upvoteRecipe);
-user.post('/:recipeId/downvotes', voteController.downvoteRecipe);
-user.get('/:recipeId/upvotes', voteController.getUserUpvotes);
-user.get('/:recipeId/downvotes', voteController.getUserDownvotes);
+user.route('/:recipeId/reviews')
+  .post(newReview.postReview)
+  .get(newReview.getReviews);
+
+user.route('/:recipeId/upvotes')
+  .post(newVote.upvoteRecipe)
+  .get(newVote.getUserUpvotes);
+
+user.route('/:recipeId/downvotes')
+  .post(newVote.downvoteRecipe)
+  .get(newVote.getUserDownvotes);
 
 export default user;
