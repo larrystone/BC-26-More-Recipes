@@ -26,6 +26,13 @@ export const validateSignUp = (name, username, email, password) => {
   return false;
 };
 
+/** Validate user input for recipe
+ * @exports validateRecipeDetails
+ * @param  {string} name - Recipe Name
+ * @param  {string} ingredients - Recipe Ingredients
+ * @param  {string} direction - Recipe directioins
+ * @return {string} The status
+ */
 export const validateRecipeDetails = (name, ingredients, direction) => {
   if (name.length < 3) {
     return 'Enter a valid recipe name!';
@@ -40,12 +47,24 @@ export const validateRecipeDetails = (name, ingredients, direction) => {
   }
 };
 
+/** Validate user input for review on recipe
+ * @exports validateReviewContent
+ * @param  {string} message - Recipe review message
+ * @return {string} The status
+ */
 export const validateReviewContent = (message) => {
   if (message.length < 5) {
     return 'Review message too short!';
   }
 };
 
+/** Validate recipe ID on protected routes
+ * @exports validateRecipeId
+ * @param  {object} req - Request
+ * @param  {object} res - Response
+ * @param  {function} next - Next controller
+ * @return {object} The status/next()
+ */
 export const validateRecipeId = (req, res, next) => {
   const recipeId = req.params.recipeId;
 
@@ -58,6 +77,13 @@ export const validateRecipeId = (req, res, next) => {
   next();
 };
 
+/** Validate user ID on protected routes
+ * @exports validateUserId
+ * @param  {object} req - Request
+ * @param  {object} res - Response
+ * @param  {function} next - Next controller
+ * @return {object} The status/next()
+ */
 export const validateUserId = (req, res, next) => {
   const userId = req.params.userId;
 
