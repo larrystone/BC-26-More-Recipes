@@ -64,12 +64,19 @@ export const modifyRecipe = (req, res) => {
   const direction = (req.body.direction || '').replace(/\s+/g, ' ');
 
   const validateRecipeError =
-    validate.validateModifyRecipe(name, ingredients, direction, recipeId);
+    validate.validateRecipeDetails(name, ingredients, direction, recipeId);
 
   if (validateRecipeError) {
     return res.status(403).json({
       success: false,
       message: validateRecipeError });
+  }
+
+  const validateIdError = validate.validateRecipeId(recipeId);
+  if (validateIdError) {
+    return res.status(403).json({
+      success: false,
+      message: `Recipe ${validateIdError}` });
   }
 
   const modifiedRecipe = recipe

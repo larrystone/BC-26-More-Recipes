@@ -41,13 +41,8 @@ export const validateRecipeDetails = (name, ingredients, direction) => {
 };
 
 
-export const validateModifyRecipe = (name, ingredients, direction, recipeId) => {
-  const detailsError = validateRecipeDetails(name, ingredients, direction);
-  if (detailsError) {
-    return detailsError;
-  }
-
-  if (isNaN(+recipeId)) {
-    return 'Invalid Recipe ID!';
+export const validateRecipeId = (id) => {
+  if (isNaN(+id)) {
+    return 'ID invalid!';
   }
 };
