@@ -1,4 +1,5 @@
 import models from '../models';
+import * as validate from '../middleware/validate';
 
 const favorite = models.Favorite;
 
@@ -11,6 +12,14 @@ const favorite = models.Favorite;
 export const addToFavorite = (req, res) => {
   const userId = req.userId;
   const recipeId = req.params.recipeId;
+
+  const validateUserIdError = validate.validateUserId(userId);
+  if (validateUserIdError) {
+    return res.status(403).json({
+      success: false,
+      message: validateUserIdError });
+  }
+
   const newFavorite = favorite
     .findOrCreate({ where: { userId, recipeId } })
     .spread((addedReceipe, created) => {
@@ -40,6 +49,14 @@ export const addToFavorite = (req, res) => {
  */
 export const removeFromFavorites = (req, res) => {
   const userId = req.params.userId;
+
+  const validateUserIdError = validate.validateUserId(userId);
+  if (validateUserIdError) {
+    return res.status(403).json({
+      success: false,
+      message: validateUserIdError });
+  }
+
   const recipeId = req.params.recipeId;
   const removeFavorite = favorite
     .destroy({
