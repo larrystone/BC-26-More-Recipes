@@ -1,7 +1,7 @@
 /** Define the Downvote database model/association
  * @exports Downvote
  * @param  {object} sequelize - sequelize
- * @param  {object} DataTypes - sequelize Datatypes 
+ * @param  {object} DataTypes - sequelize Datatypes
  * @return {object} The Downvote model
  */
 export default (sequelize, DataTypes) => {
