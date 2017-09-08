@@ -43,9 +43,9 @@ export const signUp = (req, res) => {
     .then((userFound) => {
       if (userFound) {
         let field;
-        if (userFound.username === username) {
+        if (userFound.username.toUpperCase === username.toUpperCase) {
           field = 'Username';
-        } else {
+        } else if (userFound.email === email) {
           field = 'Email';
         }
 

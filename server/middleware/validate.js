@@ -26,7 +26,7 @@ export const validateSignUp = (name, username, email, password) => {
   return false;
 };
 
-export const validateCreateModifyRecipe = (name, ingredients, direction) => {
+export const validateRecipeDetails = (name, ingredients, direction) => {
   if (name.length < 3) {
     return 'Enter a valid recipe name!';
   }
@@ -36,6 +36,18 @@ export const validateCreateModifyRecipe = (name, ingredients, direction) => {
   }
 
   if (direction.length < 15) {
-    return 'Explain the directions clearly!';
+    return 'Explain the directions clearly please!';
+  }
+};
+
+
+export const validateModifyRecipe = (name, ingredients, direction, recipeId) => {
+  const detailsError = validateRecipeDetails(name, ingredients, direction);
+  if (detailsError) {
+    return detailsError;
+  }
+
+  if (isNaN(+recipeId)) {
+    return 'Invalid Recipe ID!';
   }
 };

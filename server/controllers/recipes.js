@@ -16,7 +16,7 @@ export const createRecipe = (req, res) => {
   const direction = (req.body.direction || '').replace(/\s+/g, ' ');
 
   const validateRecipeError =
-    validate.validateCreateModifyRecipe(name, ingredients, direction);
+    validate.validateRecipeDetails(name, ingredients, direction);
 
   if (validateRecipeError) {
     return res.status(403).json({
@@ -57,11 +57,21 @@ export const createRecipe = (req, res) => {
  * @return {object} The modified recipe
  */
 export const modifyRecipe = (req, res) => {
-  const recipeId = req.params.recipeId;
   const userId = req.userId;
-  const name = req.body.name;
-  const ingredients = req.body.ingredients || '';
-  const direction = req.body.direction || '';
+  const recipeId = req.params.recipeId || 0;
+  const name = (req.body.name || '').replace(/\s\s+/g, ' ');
+  const ingredients = (req.body.ingredients || '').replace(/\s+/g, ' ');
+  const direction = (req.body.direction || '').replace(/\s+/g, ' ');
+
+  const validateRecipeError =
+    validate.validateModifyRecipe(name, ingredients, direction, recipeId);
+
+  if (validateRecipeError) {
+    return res.status(403).json({
+      success: false,
+      message: validateRecipeError });
+  }
+
   const modifiedRecipe = recipe
     .findById(recipeId)
     .then((recipeFound) => {
