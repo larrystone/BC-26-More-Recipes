@@ -91,8 +91,8 @@ export const signUp = (req, res) => {
  * @return {object} The status/signed in user
  */
 export const signIn = (req, res) => {
-  const usernameOrEmail = (req.body.username || req.body.email || '')
-    .replace(' ', '');
+  const usernameOrEmail = (req.body.email || req.body.username || '')
+    .replace(/\s+/g, '');
 
   const newUser = user
     .findOne({

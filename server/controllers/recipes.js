@@ -1,4 +1,5 @@
 import models from '../models';
+import * as validate from '../middleware/validate';
 
 const recipe = models.Recipe;
 const user = models.User;
@@ -10,10 +11,20 @@ const user = models.User;
  * @return {object} The created recipe
  */
 export const createRecipe = (req, res) => {
-  const name = req.body.name;
-  const ingredients = req.body.ingredients || '';
-  const direction = req.body.direction || '';
-  const newUser = recipe
+  const name = (req.body.name || '').replace(/\s\s+/g, ' ');
+  const ingredients = (req.body.ingredients || '').replace(/\s+/g, ' ');
+  const direction = (req.body.direction || '').replace(/\s+/g, ' ');
+
+  const validateRecipeError =
+    validate.validateCreateModifyRecipe(name, ingredients, direction);
+
+  if (validateRecipeError) {
+    return res.status(403).json({
+      success: false,
+      message: validateRecipeError });
+  }
+
+  const newRecipe = recipe
     .create({
       name,
       ingredients,
@@ -36,7 +47,7 @@ export const createRecipe = (req, res) => {
       success: false,
       message: 'Error Creating Recipe' }));
 
-  return newUser;
+  return newRecipe;
 };
 
 /** Modify recipe record

@@ -26,4 +26,16 @@ export const validateSignUp = (name, username, email, password) => {
   return false;
 };
 
-export const validateSignIn = req => false;
+export const validateCreateModifyRecipe = (name, ingredients, direction) => {
+  if (name.length < 3) {
+    return 'Enter a valid recipe name!';
+  }
+
+  if (ingredients.length < 10) {
+    return 'Enter a valid list of ingredients!';
+  }
+
+  if (direction.length < 15) {
+    return 'Explain the directions clearly!';
+  }
+};
