@@ -1,4 +1,9 @@
-
+/** Define the Review database model/association
+ * @exports Review
+ * @param  {object} sequelize - sequelize
+ * @param  {object} DataTypes - sequelize Datatypes 
+ * @return {object} The Review model
+ */
 export default (sequelize, DataTypes) => {
   const Review = sequelize.define('Review', {
     content: DataTypes.STRING,

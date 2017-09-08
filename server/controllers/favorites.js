@@ -2,23 +2,28 @@ import models from '../models';
 
 const favorite = models.Favorite;
 
-/**
- * @exports addToFavorite
- * @param  {obj} req request object
- * @param  {obj} res result object
- * @return {obj}  newUser object
+/** Add a recipe to user favorite
+ * @exports sortMostUpvotes
+ * @param  {object} req - request
+ * @param  {object} res - response 
+ * @return {object} The status/created favorite
  */
 export const addToFavorite = (req, res) => {
   const userId = req.userId;
   const recipeId = req.params.recipeId;
   const newFavorite = favorite
-    .create({
-      userId,
-      recipeId
+    .findOrCreate({ where: { userId, recipeId } })
+    .spread((addedReceipe, created) => {
+      if (created) {
+        return res.status(201).json({
+          success: true,
+          message: `Recipe with id: ${recipeId} added to favorites!` });
+      }
+
+      return res.status(201).json({
+        success: false,
+        message: `Recipe with id: ${recipeId} Already added!` });
     })
-    .then(createdFavorite => res.status(201).json({
-      success: true,
-      data: createdFavorite }))
     .catch(() => res.status(503).json({
       success: false,
       message: 'Error Adding Recipe to Favorites' }));
@@ -27,16 +32,16 @@ export const addToFavorite = (req, res) => {
 };
 
 
-/**
+/** Remove a recipe from user favorites
  * @exports removeFromFavorites
- * @param  {obj} req request object
- * @param  {obj} res result object
- * @return {obj}  newUser object
+ * @param  {object} req - request
+ * @param  {object} res - response 
+ * @return {object} The status
  */
 export const removeFromFavorites = (req, res) => {
   const userId = req.params.userId;
   const recipeId = req.params.recipeId;
-  const newFavorite = favorite
+  const removeFavorite = favorite
     .destroy({
       where: {
         $and: [
@@ -52,15 +57,15 @@ export const removeFromFavorites = (req, res) => {
       success: false,
       message: 'Error Removing Recipe from Favorites' }));
 
-  return newFavorite;
+  return removeFavorite;
 };
 
 
-/**
- * @exports getFavRecipes
- * @param  {obj} req request object
- * @param  {obj} res result object
- * @return {obj}  newUser object
+/** Get a list of user's favorite recipes
+ * @exports sortMostUpvotes
+ * @param  {object} req - request
+ * @param  {object} res - response 
+ * @return {object} The status/created favorite
  */
 export const getFavRecipes = (req, res) => {
   const userId = req.params.userId;

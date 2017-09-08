@@ -1,19 +1,30 @@
 import models from '../models';
+import * as validate from '../middleware/validate';
 
 const recipe = models.Recipe;
 const user = models.User;
 
-/**
+/** Create a new recipe record
  * @exports createRecipe
- * @param  {obj} req request object
- * @param  {obj} res result object
- * @return {obj}  newUser object
+ * @param  {object} req - request
+ * @param  {object} res - response 
+ * @return {object} The created recipe
  */
 export const createRecipe = (req, res) => {
-  const name = req.body.name;
-  const ingredients = req.body.ingredients || '';
-  const direction = req.body.direction || '';
-  const newUser = recipe
+  const name = (req.body.name || '').replace(/\s\s+/g, ' ');
+  const ingredients = (req.body.ingredients || '').replace(/\s+/g, ' ');
+  const direction = (req.body.direction || '').replace(/\s+/g, ' ');
+
+  const validateRecipeError =
+    validate.validateRecipeDetails(name, ingredients, direction);
+
+  if (validateRecipeError) {
+    return res.status(403).json({
+      success: false,
+      message: validateRecipeError });
+  }
+
+  const newRecipe = recipe
     .create({
       name,
       ingredients,
@@ -36,21 +47,31 @@ export const createRecipe = (req, res) => {
       success: false,
       message: 'Error Creating Recipe' }));
 
-  return newUser;
+  return newRecipe;
 };
 
-/**
+/** Modify recipe record
  * @exports modifyRecipe
- * @param  {obj} req request object
- * @param  {obj} res result object
- * @return {obj}  newUser object
+ * @param  {object} req - request
+ * @param  {object} res - response 
+ * @return {object} The modified recipe
  */
 export const modifyRecipe = (req, res) => {
-  const recipeId = req.params.recipeId;
   const userId = req.userId;
-  const name = req.body.name;
-  const ingredients = req.body.ingredients || '';
-  const direction = req.body.direction || '';
+  const recipeId = req.params.recipeId || 0;
+  const name = (req.body.name || '').replace(/\s\s+/g, ' ');
+  const ingredients = (req.body.ingredients || '').replace(/\s+/g, ' ');
+  const direction = (req.body.direction || '').replace(/\s+/g, ' ');
+
+  const validateRecipeError =
+    validate.validateRecipeDetails(name, ingredients, direction, recipeId);
+
+  if (validateRecipeError) {
+    return res.status(403).json({
+      success: false,
+      message: validateRecipeError });
+  }
+
   const modifiedRecipe = recipe
     .findById(recipeId)
     .then((recipeFound) => {
@@ -90,15 +111,16 @@ export const modifyRecipe = (req, res) => {
   return modifiedRecipe;
 };
 
-/**
+/** Delete a recipe record
  * @exports deleteRecipe
- * @param  {obj} req request object
- * @param  {obj} res result object
- * @return {obj}  newUser object
+ * @param  {object} req - request
+ * @param  {object} res - response
+ * @return {object} The status of deletion
  */
 export const deleteRecipe = (req, res) => {
   const recipeId = req.params.recipeId;
   const userId = req.userId;
+
   const deletedRecipe = recipe
     .findById(recipeId)
     .then((recipeFound) => {
@@ -130,14 +152,15 @@ export const deleteRecipe = (req, res) => {
   return deletedRecipe;
 };
 
-/**
+/** Fetch a recipe record
  * @exports getRecipe
- * @param  {obj} req request object
- * @param  {obj} res result object
- * @return {obj}  newUser object
+ * @param  {object} req - request
+ * @param  {object} res - response 
+ * @return {object} The fetch status/found recipe
  */
 export const getRecipe = (req, res) => {
   const recipeId = req.params.recipeId;
+
   const theRecipe = recipe
     .findOne({
       where: { id: recipeId },
@@ -167,11 +190,11 @@ export const getRecipe = (req, res) => {
   return theRecipe;
 };
 
-/**
+/** Fetch a list user owned recipes
  * @exports getUserRecipes
- * @param  {obj} req request object
- * @param  {obj} res result object
- * @return {obj}  newUser object
+ * @param  {object} req - request
+ * @param  {object} res - response 
+ * @return {object} The fetch status/found recipes
  */
 export const getUserRecipes = (req, res) => {
   const recipes = recipe
@@ -197,11 +220,11 @@ export const getUserRecipes = (req, res) => {
   return recipes;
 };
 
-/**
+/** Fetch list of recipes ordered (descending) by number of upvotes
  * @exports sortMostUpvotes
- * @param  {obj} req request object
- * @param  {obj} res result object
- * @return {obj}  newUser object
+ * @param  {object} req - request
+ * @param  {object} res - response 
+ * @return {object} The fetch status/found recipes
  */
 export const sortMostUpvotes = (req, res) => {
   const recipes = recipe
@@ -232,11 +255,11 @@ export const sortMostUpvotes = (req, res) => {
   return recipes;
 };
 
-/**
- * @exports searchByIngredients
- * @param  {obj} req request object
- * @param  {obj} res result object
- * @return {obj}  newUser object
+/** Fetch list of recipes based ingredients supplied
+ * @exports sortMostUpvotes
+ * @param  {object} req - request (req.params.ingredients)
+ * @param  {object} res - response 
+ * @return {object} The fetch status/found recipes
  */
 export const searchByIngredients = (req, res) => {
   const ingredients = req.query.ingredients.split(' ');
@@ -274,11 +297,11 @@ export const searchByIngredients = (req, res) => {
 };
 
 
-/**
+/** Search for recipe by Recipe name, Ingredients or Name of User
  * @exports searchAll
- * @param  {obj} req request object
- * @param  {obj} res result object
- * @return {obj}  object
+ * @param  {object} req - request (req.params.search)
+ * @param  {object} res - response 
+ * @return {object} The fetch status/found recipes
  */
 export const searchAll = (req, res) => {
   let results;
@@ -336,14 +359,14 @@ export const searchAll = (req, res) => {
 };
 
 
-/**
+/** Fetch all recipes in the database
  * @exports getAllRecipes
- * @param  {obj} req request object
- * @param  {obj} res result object
- * @return {obj}  newUser object
+ * @param  {object} req - request
+ * @param  {object} res - response 
+ * @return {object} The fetch status/found recipes
  */
 export const getAllRecipes = (req, res) => {
-  if (req.query.sort === 'upvotes' && req.query.order === 'ascending') {
+  if (req.query.sort === 'upvotes' && req.query.order === 'descending') {
     sortMostUpvotes(req, res);
   } else if (req.query.ingredients) {
     searchByIngredients(req, res);

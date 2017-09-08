@@ -1,17 +1,26 @@
 import models from '../models';
+import * as validate from '../middleware/validate';
 
 const review = models.Review;
 
-/**
+/** Post a review on a recipe
  * @exports postReview
- * @param  {obj} req request object
- * @param  {obj} res result object
- * @return {obj}  newUser object
+ * @param  {object} req - request
+ * @param  {object} res - response 
+ * @return {object} The status/created review
  */
 export const postReview = (req, res) => {
   const userId = req.userId;
   const recipeId = req.params.recipeId;
-  const content = req.body.content;
+  const content = (req.body.content || '').replace(/\s+/g, ' ');
+
+  const validateReviewContentError = validate.validateReviewContent(content);
+  if (validateReviewContentError) {
+    return res.status(403).json({
+      success: false,
+      message: validateReviewContentError });
+  }
+
   const newReview = review
     .create({
       content,
@@ -30,11 +39,11 @@ export const postReview = (req, res) => {
   return newReview;
 };
 
-/**
+/** Get a list of reviews on a recipe
  * @exports getReviews
- * @param  {obj} req request object
- * @param  {obj} res result object
- * @return {obj}  newUser object
+ * @param  {object} req - request
+ * @param  {object} res - response 
+ * @return {object} The status/reviews fetched
  */
 export const getReviews = (req, res) => {
   const recipeId = req.params.recipeId;

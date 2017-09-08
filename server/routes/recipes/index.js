@@ -1,5 +1,5 @@
 import express from 'express';
-
+import * as validate from '../../middleware/validate';
 import * as recipeController from '../../controllers/recipes';
 import * as reviewController from '../../controllers/reviews';
 import * as voteController from '../../controllers/votes';
@@ -12,6 +12,7 @@ user.use('*', auth.verify);
 user.post('/', recipeController.createRecipe);
 user.get('/', recipeController.getAllRecipes);
 
+user.use('/:recipeId', validate.validateRecipeId);
 user.get('/:recipeId', recipeController.getRecipe);
 user.put('/:recipeId', recipeController.modifyRecipe);
 user.delete('/:recipeId', recipeController.deleteRecipe);

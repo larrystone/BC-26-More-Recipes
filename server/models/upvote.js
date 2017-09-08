@@ -1,3 +1,9 @@
+/** Define the Upvote database model/association
+ * @exports Upvote
+ * @param  {object} sequelize - sequelize
+ * @param  {object} DataTypes - sequelize Datatypes 
+ * @return {object} The Upvote model
+ */
 export default (sequelize, DataTypes) => {
   const Upvote = sequelize.define('Upvote', {
     recipeId: {

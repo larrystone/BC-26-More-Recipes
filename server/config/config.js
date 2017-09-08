@@ -1,5 +1,8 @@
 require('dotenv').config();
 
+/** Export database variables using
+ * @exports default
+ */
 module.exports = {
   development: {
     username: process.env.DB_USERNAME,

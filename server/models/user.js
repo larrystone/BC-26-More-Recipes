@@ -1,3 +1,9 @@
+/** Define the User database model/association
+ * @exports User
+ * @param  {object} sequelize - sequelize
+ * @param  {object} DataTypes - sequelize Datatypes 
+ * @return {object} The User model
+ */
 export default (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
     name: {
