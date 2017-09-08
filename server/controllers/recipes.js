@@ -16,8 +16,8 @@ export default class Recipe {
   /**
    * Create a new recipe record
    * 
-   * @param {any} req - HTTP Request
-   * @param {any} res - HTTP Response
+   * @param {object} req - HTTP Request
+   * @param {object} res - HTTP Response
    * @returns {object} - Class instance
    * @memberof Recipe
    */
@@ -65,7 +65,7 @@ export default class Recipe {
    * Modify recipe record
    * 
    * @param {object} req - HTTP Request
-   * @param {any} res - HTTP Response
+   * @param {object} res - HTTP Response
    * @returns {object} Class instance
    * @memberof Recipe
    */

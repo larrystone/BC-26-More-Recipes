@@ -50,8 +50,8 @@ export default class Search {
   /**
    * Search for recipe by Recipe name, Ingredients or Name of User
    * 
-   * @param {any} req - HTTP Request
-   * @param {any} res - HTTP Response
+   * @param {object} req - HTTP Request
+   * @param {object} res - HTTP Response
    * @returns {object} Class instance
    * @memberof Search
    */
