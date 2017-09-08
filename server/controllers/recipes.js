@@ -7,7 +7,7 @@ const user = models.User;
 /** Create a new recipe record
  * @exports createRecipe
  * @param  {object} req - request
- * @param  {object} res - response 
+ * @param  {object} res - response
  * @return {object} The created recipe
  */
 export const createRecipe = (req, res) => {
@@ -53,7 +53,7 @@ export const createRecipe = (req, res) => {
 /** Modify recipe record
  * @exports modifyRecipe
  * @param  {object} req - request
- * @param  {object} res - response 
+ * @param  {object} res - response
  * @return {object} The modified recipe
  */
 export const modifyRecipe = (req, res) => {
@@ -155,7 +155,7 @@ export const deleteRecipe = (req, res) => {
 /** Fetch a recipe record
  * @exports getRecipe
  * @param  {object} req - request
- * @param  {object} res - response 
+ * @param  {object} res - response
  * @return {object} The fetch status/found recipe
  */
 export const getRecipe = (req, res) => {
@@ -193,7 +193,7 @@ export const getRecipe = (req, res) => {
 /** Fetch a list user owned recipes
  * @exports getUserRecipes
  * @param  {object} req - request
- * @param  {object} res - response 
+ * @param  {object} res - response
  * @return {object} The fetch status/found recipes
  */
 export const getUserRecipes = (req, res) => {
@@ -223,7 +223,7 @@ export const getUserRecipes = (req, res) => {
 /** Fetch list of recipes ordered (descending) by number of upvotes
  * @exports sortMostUpvotes
  * @param  {object} req - request
- * @param  {object} res - response 
+ * @param  {object} res - response
  * @return {object} The fetch status/found recipes
  */
 export const sortMostUpvotes = (req, res) => {
@@ -258,7 +258,7 @@ export const sortMostUpvotes = (req, res) => {
 /** Fetch list of recipes based ingredients supplied
  * @exports sortMostUpvotes
  * @param  {object} req - request (req.params.ingredients)
- * @param  {object} res - response 
+ * @param  {object} res - response
  * @return {object} The fetch status/found recipes
  */
 export const searchByIngredients = (req, res) => {
@@ -300,7 +300,7 @@ export const searchByIngredients = (req, res) => {
 /** Search for recipe by Recipe name, Ingredients or Name of User
  * @exports searchAll
  * @param  {object} req - request (req.params.search)
- * @param  {object} res - response 
+ * @param  {object} res - response
  * @return {object} The fetch status/found recipes
  */
 export const searchAll = (req, res) => {
@@ -362,7 +362,7 @@ export const searchAll = (req, res) => {
 /** Fetch all recipes in the database
  * @exports getAllRecipes
  * @param  {object} req - request
- * @param  {object} res - response 
+ * @param  {object} res - response
  * @return {object} The fetch status/found recipes
  */
 export const getAllRecipes = (req, res) => {

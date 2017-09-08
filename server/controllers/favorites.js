@@ -5,7 +5,7 @@ const favorite = models.Favorite;
 /** Add a recipe to user favorite
  * @exports sortMostUpvotes
  * @param  {object} req - request
- * @param  {object} res - response 
+ * @param  {object} res - response
  * @return {object} The status/created favorite
  */
 export const addToFavorite = (req, res) => {
@@ -35,7 +35,7 @@ export const addToFavorite = (req, res) => {
 /** Remove a recipe from user favorites
  * @exports removeFromFavorites
  * @param  {object} req - request
- * @param  {object} res - response 
+ * @param  {object} res - response
  * @return {object} The status
  */
 export const removeFromFavorites = (req, res) => {
@@ -64,7 +64,7 @@ export const removeFromFavorites = (req, res) => {
 /** Get a list of user's favorite recipes
  * @exports sortMostUpvotes
  * @param  {object} req - request
- * @param  {object} res - response 
+ * @param  {object} res - response
  * @return {object} The status/created favorite
  */
 export const getFavRecipes = (req, res) => {

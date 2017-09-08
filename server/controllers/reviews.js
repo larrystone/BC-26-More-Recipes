@@ -6,7 +6,7 @@ const review = models.Review;
 /** Post a review on a recipe
  * @exports postReview
  * @param  {object} req - request
- * @param  {object} res - response 
+ * @param  {object} res - response
  * @return {object} The status/created review
  */
 export const postReview = (req, res) => {
@@ -42,7 +42,7 @@ export const postReview = (req, res) => {
 /** Get a list of reviews on a recipe
  * @exports getReviews
  * @param  {object} req - request
- * @param  {object} res - response 
+ * @param  {object} res - response
  * @return {object} The status/reviews fetched
  */
 export const getReviews = (req, res) => {
