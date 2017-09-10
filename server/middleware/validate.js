@@ -7,6 +7,7 @@
  * @return {string} The status
  */
 export const validateSignUp = (name, username, email, password) => {
+  const pattern = /\S{3,}@\S{2,}\.\S{2,}/;
   if (name.length < 6 || !name.includes(' ')) {
     return 'Enter a valid full name!';
   }
@@ -15,7 +16,7 @@ export const validateSignUp = (name, username, email, password) => {
     return 'Username must contain at least 3 alphabets!';
   }
 
-  if (!/\S{3,}@\S{2,}\.\S{2,}/.test(email)) {
+  if (!pattern.test(email)) {
     return 'Enter a valid email address';
   }
 

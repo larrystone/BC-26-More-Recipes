@@ -1,8 +1,10 @@
 import chai, { expect } from 'chai';
 import chaiHttp from 'chai-http';
-import * as encryption from './../server/middleware/encryption';
+import * as Encryption from './../server/middleware/encryption';
 
 import server from './../server/app';
+
+const newEncrytion = new Encryption.default();
 
 chai.use(chaiHttp);
 
@@ -211,13 +213,13 @@ describe('Protected routes (auth middleware)', () => {
 
 describe('Test encryption (encryption middleware)', () => {
   const password = 'myPassWord';
-  const hash = encryption.generateHash(password);
+  const hash = newEncrytion.generateHash(password);
   it('should return \'true\' for match', () => {
-    expect(encryption.verifyHash(password, hash)).to.equal(true);
+    expect(newEncrytion.verifyHash(password, hash)).to.equal(true);
   });
 
   it('should return \'false\' for non-match', () => {
-    expect(encryption.verifyHash('myPassword', hash)).to.equal(false);
+    expect(newEncrytion.verifyHash('myPassword', hash)).to.equal(false);
   });
 });
 

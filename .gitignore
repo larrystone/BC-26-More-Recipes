@@ -4,4 +4,3 @@ npm-debug.log
 .env
 .nyc_output
 .coveralls.yml
-.travis.1.yml
