@@ -83,6 +83,7 @@ export default class User {
 
             const createdUser = {
               userId: result.id,
+              name: result.name,
               username: result.username,
               email: result.email,
               token
@@ -90,6 +91,7 @@ export default class User {
 
             return res.status(201).json({
               success: true,
+              message: 'New user created/token generated!',
               data: createdUser });
           });
       })
@@ -137,15 +139,18 @@ export default class User {
         if (newEncryption.verifyHash(req.body.password, userFound.password)) {
           const token = newAuth.sign(userFound.id);
 
+          const loggedUser = {
+            userId: userFound.id,
+            name: userFound.name,
+            username: userFound.username,
+            email: userFound.email,
+            token
+          };
+
           return res.status(201).json({
             success: true,
-            data: {
-              id: userFound.id,
-              name: userFound.name,
-              username: userFound.username,
-              email: userFound.email,
-              token
-            }
+            message: 'User Signed In/token generated!',
+            data: loggedUser
           });
         }
         res.status(401).json({

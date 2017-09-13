@@ -45,13 +45,8 @@ export default class Recipe {
       .then((createdRecipe) => {
         res.status(201).json({
           success: true,
-          data: {
-            id: createdRecipe.id,
-            name: createdRecipe.name,
-            ingredients: createdRecipe.ingredients,
-            direction: createdRecipe.direction,
-            userId: createdRecipe.userId
-          }
+          message: 'New Recipe created',
+          data: createdRecipe
         });
       })
       .catch(() => res.status(500).json({
@@ -115,6 +110,7 @@ export default class Recipe {
         })
           .then(result => res.status(201).json({
             success: true,
+            message: 'Recipe record updated',
             data: result[1]
           }));
       })
@@ -202,6 +198,7 @@ export default class Recipe {
       .then(recipeFound => recipeFound.reload())
       .then(recipeLoaded => res.status(201).json({
         success: true,
+        message: 'Recipe found',
         data: recipeLoaded
       }))
       .catch(() => res.status(500).json({
@@ -236,6 +233,7 @@ export default class Recipe {
 
         return res.status(201).json({
           success: true,
+          message: 'User Recipes found',
           data: foundRecipes });
       })
       .catch(() => res.status(500).json({
@@ -279,6 +277,7 @@ export default class Recipe {
 
           return res.status(201).json({
             success: true,
+            message: 'Recipes found',
             data: foundRecipes });
         })
         .catch(() => res.status(500).json({

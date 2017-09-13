@@ -38,6 +38,7 @@ export default class Review {
       .then((createdReview) => {
         res.status(201).json({
           success: true,
+          message: 'New review created',
           createdReview });
       })
       .catch(() => res.status(500).json({
@@ -68,6 +69,7 @@ export default class Review {
       .then((reviews) => {
         res.status(201).json({
           success: true,
+          message: 'Reviews found',
           data: reviews });
       })
       .catch(() => res.status(500).json({

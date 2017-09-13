@@ -38,6 +38,7 @@ export default class Search {
 
         return res.status(201).json({
           success: true,
+          message: 'Recipe(s) found',
           data: foundRecipes });
       })
       .catch(() => res.status(500).json({
@@ -101,6 +102,7 @@ export default class Search {
           })
           .then(data => res.status(201).json({
             success: true,
+            message: 'Recipe(s) found',
             data: results.concat(data) }));
       })
       .catch(() => res.status(500).json({
@@ -143,6 +145,7 @@ export default class Search {
 
         return res.status(201).json({
           success: true,
+          message: 'Recipe(s) found',
           data: foundRecipes,
         });
       })
