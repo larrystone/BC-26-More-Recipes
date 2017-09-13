@@ -40,7 +40,7 @@ export default class Search {
           success: true,
           data: foundRecipes });
       })
-      .catch(() => res.status(503).json({
+      .catch(() => res.status(500).json({
         success: false,
         message: 'Unable to fetch recipes' }));
 
@@ -103,7 +103,7 @@ export default class Search {
             success: true,
             data: results.concat(data) }));
       })
-      .catch(() => res.status(503).json({
+      .catch(() => res.status(500).json({
         success: false,
         message: 'Unable to search recipes' }));
 
@@ -146,7 +146,7 @@ export default class Search {
           data: foundRecipes,
         });
       })
-      .catch(() => res.status(503).json({
+      .catch(() => res.status(500).json({
         success: false,
         message: 'Unable to search recipes' }));
 

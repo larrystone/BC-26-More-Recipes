@@ -37,7 +37,7 @@ export default class User {
         username, email, password);
 
     if (validateSignUpError) {
-      return res.status(403).json({
+      return res.status(400).json({
         success: false,
         message: validateSignUpError });
     }
@@ -65,7 +65,7 @@ export default class User {
             field = 'Email';
           }
 
-          return res.status(403).json({
+          return res.status(409).json({
             success: false,
             message: `${field} already taken!`
           });
@@ -93,9 +93,9 @@ export default class User {
               data: createdUser });
           });
       })
-      .catch(e => res.status(503).json({
+      .catch(() => res.status(500).json({
         success: false,
-        message: `Error Creating user ${e.message}}` }));
+        message: 'Error Creating user' }));
 
     return this;
   }

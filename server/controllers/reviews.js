@@ -24,7 +24,7 @@ export default class Review {
 
     const validateReviewContentError = validate.validateReviewContent(content);
     if (validateReviewContentError) {
-      return res.status(403).json({
+      return res.status(400).json({
         success: false,
         message: validateReviewContentError });
     }
@@ -40,7 +40,7 @@ export default class Review {
           success: true,
           createdReview });
       })
-      .catch(() => res.status(503).json({
+      .catch(() => res.status(500).json({
         success: false,
         message: 'Error Posting Review' }));
 
@@ -70,7 +70,7 @@ export default class Review {
           success: true,
           data: reviews });
       })
-      .catch(() => res.status(503).json({
+      .catch(() => res.status(500).json({
         success: false,
         message: 'Error Fetching Reviews' }));
 

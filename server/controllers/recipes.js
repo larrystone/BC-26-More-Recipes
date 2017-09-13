@@ -30,7 +30,7 @@ export default class Recipe {
     validate.validateRecipeDetails(name, ingredients, direction);
 
     if (validateRecipeError) {
-      return res.status(403).json({
+      return res.status(401).json({
         success: false,
         message: validateRecipeError });
     }
@@ -54,7 +54,7 @@ export default class Recipe {
           }
         });
       })
-      .catch(() => res.status(503).json({
+      .catch(() => res.status(500).json({
         success: false,
         message: 'Error Creating Recipe' }));
 
@@ -81,7 +81,7 @@ export default class Recipe {
       direction, recipeId);
 
     if (validateRecipeError) {
-      return res.status(403).json({
+      return res.status(400).json({
         success: false,
         message: validateRecipeError });
     }
@@ -97,7 +97,7 @@ export default class Recipe {
         }
 
         if (+recipeFound.userId !== +userId) {
-          return res.status(403).json({
+          return res.status(401).json({
             success: false,
             message: 'You cannot modify this recipe'
           });
@@ -118,7 +118,7 @@ export default class Recipe {
             data: result[1]
           }));
       })
-      .catch(() => res.status(503).json({
+      .catch(() => res.status(500).json({
         success: false,
         message: 'Error Modifying Recipe' }));
 
@@ -148,7 +148,7 @@ export default class Recipe {
         }
 
         if (+recipeFound.userId !== +userId) {
-          return res.status(403).json({
+          return res.status(401).json({
             success: false,
             message: 'You cannot delete this recipe'
           });
@@ -159,10 +159,13 @@ export default class Recipe {
             id: recipeId
           },
         })
-          .then(() => res.status(204).end());
+          .then(() => res.status(205).json({
+            success: true,
+            message: 'Recipe Deleted!'
+          }));
       })
-      .catch(() => res.status(503).json({
-        success: true,
+      .catch(() => res.status(500).json({
+        success: false,
         message: 'Error Deleting Recipe' }));
 
     return this;
@@ -201,7 +204,7 @@ export default class Recipe {
         success: true,
         data: recipeLoaded
       }))
-      .catch(() => res.status(503).json({
+      .catch(() => res.status(500).json({
         success: false,
         message: 'Unable to fetch recipes' }));
 
@@ -235,7 +238,7 @@ export default class Recipe {
           success: true,
           data: foundRecipes });
       })
-      .catch(() => res.status(503).json({
+      .catch(() => res.status(500).json({
         success: false,
         message: 'Unable to get user recipes' }));
 
@@ -278,7 +281,7 @@ export default class Recipe {
             success: true,
             data: foundRecipes });
         })
-        .catch(() => res.status(503).json({
+        .catch(() => res.status(500).json({
           success: false,
           message: 'Unable to fetch recipes' }));
 

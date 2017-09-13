@@ -24,7 +24,7 @@ export default class Favorite {
 
     const validateUserIdError = validate.validateUserId(userId);
     if (validateUserIdError) {
-      return res.status(403).json({
+      return res.status(401).json({
         success: false,
         message: validateUserIdError });
     }
@@ -38,11 +38,11 @@ export default class Favorite {
             message: `Recipe with id: ${recipeId} added to favorites!` });
         }
 
-        return res.status(201).json({
+        return res.status(409).json({
           success: false,
           message: `Recipe with id: ${recipeId} Already added!` });
       })
-      .catch(() => res.status(503).json({
+      .catch(() => res.status(500).json({
         success: false,
         message: 'Error Adding Recipe to Favorites' }));
 
@@ -62,7 +62,7 @@ export default class Favorite {
 
     const validateUserIdError = validate.validateUserId(userId);
     if (validateUserIdError) {
-      return res.status(403).json({
+      return res.status(401).json({
         success: false,
         message: validateUserIdError });
     }
@@ -79,9 +79,12 @@ export default class Favorite {
         },
       })
       .then(() => {
-        res.status(204).end();
+        res.status(205).json({
+          success: true,
+          message: 'Recipe Removed from Favorites'
+        });
       })
-      .catch(() => res.status(503).json({
+      .catch(() => res.status(500).json({
         success: false,
         message: 'Error Removing Recipe from Favorites' }));
 
@@ -119,7 +122,7 @@ export default class Favorite {
           success: true,
           foundRecipes });
       })
-      .catch(() => res.status(503).json({
+      .catch(() => res.status(500).json({
         success: false,
         message: 'Unable to fetch favorite recipes' }));
 
