@@ -30,7 +30,7 @@ export default class Recipe {
     validate.validateRecipeDetails(name, ingredients, direction);
 
     if (validateRecipeError) {
-      return res.status(401).json({
+      return res.status(400).json({
         success: false,
         message: validateRecipeError });
     }

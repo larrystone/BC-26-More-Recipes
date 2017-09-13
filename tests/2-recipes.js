@@ -20,7 +20,7 @@ describe('/POST Create User', () => {
         password: 'testing'
       })
       .end((err, res) => {
-        token = res.body.data.token;
+        token = res.body.recipe.token;
         expect(res.statusCode).to.equal(201);
         done();
       });
@@ -40,7 +40,7 @@ describe('/POST Create Recipe Test', () => {
         direction: 'Light stove and just start cooking'
       })
       .end((err, res) => {
-        expect(res.statusCode).to.equal(403);
+        expect(res.statusCode).to.equal(400);
         expect(res.body).deep.equal({
           success: false,
           message: 'Enter a valid recipe name!'
@@ -60,7 +60,7 @@ describe('/POST Create Recipe Test', () => {
         direction: 'Light stove and just start cooking'
       })
       .end((err, res) => {
-        expect(res.statusCode).to.equal(403);
+        expect(res.statusCode).to.equal(400);
         expect(res.body).deep.equal({
           success: false,
           message: 'Enter a valid list of ingredients!'
@@ -80,7 +80,7 @@ describe('/POST Create Recipe Test', () => {
         direction: 'Light'
       })
       .end((err, res) => {
-        expect(res.statusCode).to.equal(403);
+        expect(res.statusCode).to.equal(400);
         expect(res.body).deep.equal({
           success: false,
           message: 'Explain the directions clearly please!'
@@ -100,7 +100,7 @@ describe('/POST Create Recipe Test', () => {
         direction: 'Light stove and just start cooking'
       })
       .end((err, res) => {
-        recipeId = res.body.data.id;
+        recipeId = res.body.recipe.id;
         expect(res.statusCode).to.equal(201);
         expect(res.body.success).to.equal(true);
         done();
@@ -152,7 +152,7 @@ describe('/GET Search recipe by ingredient', () => {
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
         expect(res.body.success).to.equal(true);
-        expect(res.body.data.length).to.equal(3);
+        expect(res.body.recipe.length).to.equal(3);
         done();
       });
   });
@@ -165,7 +165,7 @@ describe('/GET Search recipe by ingredient', () => {
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
         expect(res.body.success).to.equal(true);
-        expect(res.body.data.length).to.equal(3);
+        expect(res.body.recipe.length).to.equal(3);
         done();
       });
   });
@@ -178,7 +178,7 @@ describe('/GET Search recipe by ingredient', () => {
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
         expect(res.body.success).to.equal(true);
-        expect(res.body.data.length).to.equal(1);
+        expect(res.body.recipe.length).to.equal(1);
         done();
       });
   });
@@ -191,7 +191,7 @@ describe('/GET Search recipe by ingredient', () => {
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
         expect(res.body.success).to.equal(true);
-        expect(res.body.data.length).to.equal(0);
+        expect(res.body.recipe.length).to.equal(0);
         done();
       });
   });
@@ -204,7 +204,7 @@ describe('/GET Search recipe by ingredient', () => {
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
         expect(res.body.success).to.equal(true);
-        expect(res.body.data.length).to.equal(1);
+        expect(res.body.recipe.length).to.equal(1);
         done();
       });
   });
@@ -217,7 +217,7 @@ describe('/GET Search recipe by ingredient', () => {
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
         expect(res.body.success).to.equal(true);
-        expect(res.body.data.length).to.equal(1);
+        expect(res.body.recipe.length).to.equal(1);
         done();
       });
   });
@@ -233,7 +233,7 @@ describe('/GET Search recipe by valid anything (Generic search)', () => {
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
         expect(res.body.success).to.equal(true);
-        expect(res.body.data.length).to.equal(1);
+        expect(res.body.recipe.length).to.equal(1);
         done();
       });
   });
@@ -246,7 +246,7 @@ describe('/GET Search recipe by valid anything (Generic search)', () => {
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
         expect(res.body.success).to.equal(true);
-        expect(res.body.data.length).to.equal(3);
+        expect(res.body.recipe.length).to.equal(3);
         done();
       });
   });
@@ -259,7 +259,7 @@ describe('/GET Search recipe by valid anything (Generic search)', () => {
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
         expect(res.body.success).to.equal(true);
-        expect(res.body.data.length).to.equal(2);
+        expect(res.body.recipe.length).to.equal(2);
         done();
       });
   });
@@ -273,7 +273,7 @@ describe('/GET Search recipe by valid anything (Generic search)', () => {
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
         expect(res.body.success).to.equal(true);
-        expect(res.body.data.length).to.equal(1);
+        expect(res.body.recipe.length).to.equal(1);
         done();
       });
   });
@@ -287,7 +287,7 @@ describe('/GET Search recipe by valid anything (Generic search)', () => {
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
         expect(res.body.success).to.equal(true);
-        expect(res.body.data.length).to.equal(1);
+        expect(res.body.recipe.length).to.equal(1);
         done();
       });
   });
@@ -301,7 +301,7 @@ describe('/GET Search recipe by valid anything (Generic search)', () => {
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
         expect(res.body.success).to.equal(true);
-        expect(res.body.data.length).to.equal(0);
+        expect(res.body.recipe.length).to.equal(0);
         done();
       });
   });
@@ -317,7 +317,7 @@ describe('/GET Recipe and log View count', () => {
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
         expect(res.body.success).to.equal(true);
-        expect(res.body.data.viewCount).to.equal(1);
+        expect(res.body.recipe.viewCount).to.equal(1);
         done();
       });
   });
@@ -330,7 +330,7 @@ describe('/GET Recipe and log View count', () => {
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
         expect(res.body.success).to.equal(true);
-        expect(res.body.data.viewCount).to.equal(2);
+        expect(res.body.recipe.viewCount).to.equal(2);
         done();
       });
   });
@@ -343,7 +343,7 @@ describe('/GET Recipe and log View count', () => {
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
         expect(res.body.success).to.equal(true);
-        expect(res.body.data.viewCount).to.equal(3);
+        expect(res.body.recipe.viewCount).to.equal(3);
         done();
       });
   });
@@ -356,7 +356,7 @@ describe('/GET Recipe and log View count', () => {
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
         expect(res.body.success).to.equal(true);
-        expect(res.body.data.viewCount).to.equal(1);
+        expect(res.body.recipe.viewCount).to.equal(1);
         done();
       });
   });
@@ -369,7 +369,7 @@ describe('/GET Recipe and log View count', () => {
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
         expect(res.body.success).to.equal(true);
-        expect(res.body.data.viewCount).to.equal(2);
+        expect(res.body.recipe.viewCount).to.equal(2);
         done();
       });
   });
@@ -382,7 +382,7 @@ describe('/GET Recipe and log View count', () => {
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
         expect(res.body.success).to.equal(true);
-        expect(res.body.data.viewCount).to.equal(3);
+        expect(res.body.recipe.viewCount).to.equal(3);
         done();
       });
   });
@@ -468,7 +468,7 @@ describe('/DELETE User Recipes Test', () => {
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
-        expect(res.statusCode).to.equal(204);
+        expect(res.statusCode).to.equal(205);
         done();
       });
   });
@@ -479,7 +479,7 @@ describe('/DELETE User Recipes Test', () => {
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
-        expect(res.statusCode).to.equal(204);
+        expect(res.statusCode).to.equal(205);
         done();
       });
   });
@@ -490,7 +490,7 @@ describe('/DELETE User Recipes Test', () => {
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
-        expect(res.statusCode).to.equal(204);
+        expect(res.statusCode).to.equal(205);
         done();
       });
   });

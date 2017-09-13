@@ -20,7 +20,7 @@ describe('/POST Create User and Recipe', () => {
         password: 'testing'
       })
       .end((err, res) => {
-        token = res.body.data.token;
+        token = res.body.recipe.token;
         expect(res.statusCode).to.equal(201);
         done();
       });
@@ -37,7 +37,7 @@ describe('/POST Create User and Recipe', () => {
         direction: 'direction and direction and directions'
       })
       .end((err, res) => {
-        recipeId = res.body.data.id;
+        recipeId = res.body.recipe.id;
         expect(res.statusCode).to.equal(201);
         expect(res.body.success).to.equal(true);
         done();
@@ -72,7 +72,7 @@ describe('/POST upvote Review Test', () => {
         token
       })
       .end((err, res) => {
-        expect(res.statusCode).to.equal(201);
+        expect(res.statusCode).to.equal(409);
         expect(res.body).deep.equal({
           success: false,
           message: `Recipe with id: ${recipeId} Already Upvoted!`
@@ -109,7 +109,7 @@ describe('/POST downvote Review Test', () => {
         token
       })
       .end((err, res) => {
-        expect(res.statusCode).to.equal(201);
+        expect(res.statusCode).to.equal(409);
         expect(res.body).deep.equal({
           success: false,
           message: `Recipe with id: ${recipeId} Already Downvoted!`

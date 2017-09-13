@@ -17,7 +17,7 @@ describe('/POST User Sign Up validation Test', () => {
         password: 'Hack'
       })
       .end((err, res) => {
-        expect(res.statusCode).to.equal(403);
+        expect(res.statusCode).to.equal(400);
         expect(res.body).deep.equal({
           success: false,
           message: 'Password must be at least 6 characters!'
@@ -36,7 +36,7 @@ describe('/POST User Sign Up validation Test', () => {
         password: 'Hacklord'
       })
       .end((err, res) => {
-        expect(res.statusCode).to.equal(403);
+        expect(res.statusCode).to.equal(400);
         expect(res.body).deep.equal({
           success: false,
           message: 'Enter a valid full name!'
@@ -56,7 +56,7 @@ describe('/POST User Sign Up validation Test', () => {
         password: 'Hacklord'
       })
       .end((err, res) => {
-        expect(res.statusCode).to.equal(403);
+        expect(res.statusCode).to.equal(400);
         expect(res.body).deep.equal({
           success: false,
           message: 'Enter a valid full name!'
@@ -75,7 +75,7 @@ describe('/POST User Sign Up validation Test', () => {
         password: 'Hacklord'
       })
       .end((err, res) => {
-        expect(res.statusCode).to.equal(403);
+        expect(res.statusCode).to.equal(400);
         expect(res.body).deep.equal({
           success: false,
           message: 'Username must contain at least 3 alphabets!'
@@ -94,7 +94,7 @@ describe('/POST User Sign Up validation Test', () => {
         password: 'Hacking'
       })
       .end((err, res) => {
-        expect(res.statusCode).to.equal(403);
+        expect(res.statusCode).to.equal(400);
         expect(res.body).deep.equal({
           success: false,
           message: 'Enter a valid email address'
@@ -114,7 +114,7 @@ describe('/POST User Sign Up validation Test', () => {
         password: 'Hacking'
       })
       .end((err, res) => {
-        expect(res.statusCode).to.equal(403);
+        expect(res.statusCode).to.equal(400);
         expect(res.body).deep.equal({
           success: false,
           message: 'Enter a valid email address'
@@ -134,7 +134,7 @@ describe('/POST User Sign Up validation Test', () => {
         password: 'Hacking'
       })
       .end((err, res) => {
-        expect(res.statusCode).to.equal(403);
+        expect(res.statusCode).to.equal(400);
         expect(res.body).deep.equal({
           success: false,
           message: 'Enter a valid email address'
@@ -154,7 +154,7 @@ describe('/POST User Sign Up validation Test', () => {
         password: ''
       })
       .end((err, res) => {
-        expect(res.statusCode).to.equal(403);
+        expect(res.statusCode).to.equal(400);
         expect(res.body).deep.equal({
           success: false,
           message: 'Password must be at least 6 characters!'
@@ -178,8 +178,8 @@ describe('/POST User Sign Up Test', () => {
       })
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
-        expect(res.body.data).to.have.all.deep.keys(
-          'userId', 'username', 'email', 'token');
+        expect(res.body.recipe).to.have.all.deep.keys(
+          'userId', 'name', 'username', 'email', 'token');
         done();
       });
   });
@@ -196,8 +196,8 @@ describe('/POST User Sign Up Test', () => {
       })
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
-        expect(res.body.data).to.have.all.deep.keys(
-          'userId', 'username', 'email', 'token');
+        expect(res.body.recipe).to.have.all.deep.keys(
+          'userId', 'name', 'username', 'email', 'token');
         done();
       });
   });
@@ -214,8 +214,8 @@ describe('/POST User Sign Up Test', () => {
       })
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
-        expect(res.body.data).to.have.all.deep.keys(
-          'userId', 'username', 'email', 'token');
+        expect(res.body.recipe).to.have.all.deep.keys(
+          'userId', 'name', 'username', 'email', 'token');
         done();
       });
   });
@@ -231,7 +231,7 @@ describe('/POST User Sign Up Test', () => {
         password: 'westsddae',
       })
       .end((err, res) => {
-        expect(res.statusCode).to.equal(403);
+        expect(res.statusCode).to.equal(409);
         expect(res.body).deep.equal({
           success: false,
           message: 'Username already taken!'
@@ -251,7 +251,7 @@ describe('/POST User Sign Up Test', () => {
         password: 'westsddae',
       })
       .end((err, res) => {
-        expect(res.statusCode).to.equal(403);
+        expect(res.statusCode).to.equal(409);
         expect(res.body).deep.equal({
           success: false,
           message: 'Username already taken!'
@@ -272,8 +272,8 @@ describe('/POST User Sign In Test', () => {
       })
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
-        expect(res.body.data).to.have.all.deep.keys(
-          'id', 'name',
+        expect(res.body.recipe).to.have.all.deep.keys(
+          'userId', 'name',
           'username', 'email', 'token');
         done();
       });
@@ -290,8 +290,8 @@ describe('/POST User Sign In Test', () => {
         })
         .end((err, res) => {
           expect(res.statusCode).to.equal(201);
-          expect(res.body.data).to.have.all.deep.keys(
-            'id', 'name',
+          expect(res.body.recipe).to.have.all.deep.keys(
+            'userId', 'name',
             'username', 'email', 'token');
           done();
         });
@@ -307,8 +307,8 @@ describe('/POST User Sign In Test', () => {
         })
         .end((err, res) => {
           expect(res.statusCode).to.equal(201);
-          expect(res.body.data).to.have.all.deep.keys(
-            'id', 'name',
+          expect(res.body.recipe).to.have.all.deep.keys(
+            'userId', 'name',
             'username', 'email', 'token');
           done();
         });
@@ -324,8 +324,8 @@ describe('/POST User Sign In Test', () => {
         })
         .end((err, res) => {
           expect(res.statusCode).to.equal(201);
-          expect(res.body.data).to.have.all.deep.keys(
-            'id', 'name',
+          expect(res.body.recipe).to.have.all.deep.keys(
+            'userId', 'name',
             'username', 'email', 'token');
           done();
         });

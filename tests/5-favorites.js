@@ -21,8 +21,8 @@ describe('/POST Create User and Recipe', () => {
         password: 'testing'
       })
       .end((err, res) => {
-        token = res.body.data.token;
-        userId = res.body.data.userId;
+        token = res.body.recipe.token;
+        userId = res.body.recipe.userId;
         expect(res.statusCode).to.equal(201);
         done();
       });
@@ -39,7 +39,7 @@ describe('/POST Create User and Recipe', () => {
         direction: 'direction and direction and directions'
       })
       .end((err, res) => {
-        recipeId = res.body.data.id;
+        recipeId = res.body.recipe.id;
         expect(res.statusCode).to.equal(201);
         expect(res.body.success).to.equal(true);
         done();
@@ -61,7 +61,7 @@ describe('/POST Add recipe to favorites Test', () => {
         direction: 'Light stove and just start cooking'
       })
       .end((err, res) => {
-        expect(res.statusCode).to.equal(403);
+        expect(res.statusCode).to.equal(401);
         expect(res.body).deep.equal({
           success: false,
           message: 'Invalid User ID!'
@@ -91,7 +91,7 @@ describe('/POST Remove recipe from favorites Test', () => {
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
-        expect(res.statusCode).to.equal(204);
+        expect(res.statusCode).to.equal(205);
         done();
       });
   });
