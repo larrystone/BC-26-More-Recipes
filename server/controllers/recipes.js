@@ -94,7 +94,7 @@ export default class Recipe {
         if (+recipeFound.userId !== +userId) {
           return res.status(401).json({
             success: false,
-            message: 'You cannot modify this recipe'
+            message: 'You cannot modify a recipe not created by You!'
           });
         }
 
@@ -195,7 +195,7 @@ export default class Recipe {
 
         return recipeFound.increment('viewCount');
       })
-      .then(recipeFound => recipeFound.reload())
+      .then(recipesFound => recipesFound.reload())
       .then(recipeLoaded => res.status(201).json({
         success: true,
         message: 'Recipe found',
