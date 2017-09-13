@@ -46,7 +46,7 @@ export default class Recipe {
         res.status(201).json({
           success: true,
           message: 'New Recipe created',
-          data: createdRecipe
+          recipe: createdRecipe
         });
       })
       .catch(() => res.status(500).json({
@@ -111,7 +111,7 @@ export default class Recipe {
           .then(result => res.status(201).json({
             success: true,
             message: 'Recipe record updated',
-            data: result[1]
+            recipe: result[1]
           }));
       })
       .catch(() => res.status(500).json({
@@ -199,7 +199,7 @@ export default class Recipe {
       .then(recipeLoaded => res.status(201).json({
         success: true,
         message: 'Recipe found',
-        data: recipeLoaded
+        recipe: recipeLoaded
       }))
       .catch(() => res.status(500).json({
         success: false,
@@ -234,7 +234,7 @@ export default class Recipe {
         return res.status(201).json({
           success: true,
           message: 'User Recipes found',
-          data: foundRecipes });
+          recipe: foundRecipes });
       })
       .catch(() => res.status(500).json({
         success: false,
@@ -244,7 +244,7 @@ export default class Recipe {
   }
 
   /**
-   * Fetch all recipes in the database
+   * Fetch all recipes in the recipebase
    *
    * @param {object} req - HTTP Request
    * @param {object} res - HTTP Response
@@ -278,7 +278,7 @@ export default class Recipe {
           return res.status(201).json({
             success: true,
             message: 'Recipes found',
-            data: foundRecipes });
+            recipe: foundRecipes });
         })
         .catch(() => res.status(500).json({
           success: false,

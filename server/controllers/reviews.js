@@ -70,7 +70,7 @@ export default class Review {
         res.status(201).json({
           success: true,
           message: 'Reviews found',
-          data: reviews });
+          recipe: reviews });
       })
       .catch(() => res.status(500).json({
         success: false,

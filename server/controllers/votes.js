@@ -190,7 +190,7 @@ export default class Vote {
         return res.status(201).json({
           success: true,
           message: 'User upvotes found',
-          data: foundVotes });
+          recipe: foundVotes });
       })
       .catch(() => res.status(500).json({
         success: false,
@@ -229,7 +229,7 @@ export default class Vote {
         return res.status(201).json({
           success: true,
           message: 'User downvotes found',
-          data: foundVotes });
+          recipe: foundVotes });
       })
       .catch(() => res.status(500).json({
         success: false,

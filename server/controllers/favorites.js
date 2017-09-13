@@ -120,7 +120,8 @@ export default class Favorite {
 
         return res.status(201).json({
           success: true,
-          foundRecipes });
+          message: 'Favorite Recipe(s) found',
+          recipe: foundRecipes });
       })
       .catch(() => res.status(500).json({
         success: false,

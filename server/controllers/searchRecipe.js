@@ -39,7 +39,7 @@ export default class Search {
         return res.status(201).json({
           success: true,
           message: 'Recipe(s) found',
-          data: foundRecipes });
+          recipe: foundRecipes });
       })
       .catch(() => res.status(500).json({
         success: false,
@@ -100,10 +100,10 @@ export default class Search {
               { model: models.Recipe }
             ]
           })
-          .then(data => res.status(201).json({
+          .then(recipe => res.status(201).json({
             success: true,
             message: 'Recipe(s) found',
-            data: results.concat(data) }));
+            recipe: results.concat(recipe) }));
       })
       .catch(() => res.status(500).json({
         success: false,
@@ -146,7 +146,7 @@ export default class Search {
         return res.status(201).json({
           success: true,
           message: 'Recipe(s) found',
-          data: foundRecipes,
+          recipe: foundRecipes,
         });
       })
       .catch(() => res.status(500).json({
