@@ -16,16 +16,30 @@
         <nav class="nav-extended green lighten-2">
           <div class="nav-wrapper">
             <a class="brand-logo center truncate">More-Recipes</a>
+            <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+              <li><span class="chip clickable">2</span></li>  
+              <li><a class="dropdown-button" data-activates="dropdown2">Larrystone<i class="material-icons right">arrow_drop_down</i></a></li>
+            </ul>
+            <ul class="side-nav" id="mobile-demo">
+                <li><a href="#">Notifications <span class="chip">2</span></a></li>
+                <li><a href="profile.html">My Profile</a>
+                <li><a href="index.html">Sign Out</a></li>
+            </ul>
           </div>
-          
           <div>
               <ul>
-                <li><a class="active" href="dashboard.html">Home</a></li>
+                <li><a href="dashboard.html">Home</a></li>
                 <li><a href="my_recipes.html">My Recipes</a></li>
                 <li><a href="my_favs.html">My Favorites</a></li>
               </ul>
             </div>
           </div>
+          <ul id="dropdown2" class="dropdown-content">
+              <li><a href="profile.html" >My Profile</a></li>
+              <li><a href="index.html">Sign Out</a></li>
+            </ul>     
+          </nav>
         </nav>
 
         <!-- Slider Sections-->
