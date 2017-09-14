@@ -5,7 +5,7 @@ $('.show_recipe_info').on('click', () => {
 });
 
 $('.delete_recipe').on('click', (e) => {
-  $(e.target).closest('div .col').remove();
+  $(e.target).closest('div .col .s6').remove();
 });
 
 $('#add_ingredient').on('click', (e) => {

@@ -105,3 +105,7 @@ h5{
     position: absolute;
     top: -12px;
 }
+
+.clickable {
+    cursor: pointer;
+}
