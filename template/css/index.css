@@ -1,15 +1,107 @@
 .v-align {
     z-index: 10;
-    position:absolute;
-    top:70%;
+    position:relative;
+    top: 54%;
     left:50%;
     -ms-transform: translateX(-50%) translateY(-50%);
     -webkit-transform: translate(-50%,-50%);
     transform: translate(-50%,-50%); 
 } 
 
+.v-align2 {
+    z-index: 10;
+    position:absolute;
+    top:50%;
+    left:50%;
+    -ms-transform: translateX(-50%) translateY(-50%);
+    -webkit-transform: translate(-50%,-50%);
+    transform: translate(-50%,-50%); 
+}
+
 .show {
     position: absolute;
-    z-index: 10;
-    top: 50%;
+    z-index: 12;
+    width: 50%;
+    bottom: -45%;
+}
+
+.full-title {
+    font-family: "Marmelad",Helvetica;
+    /* text-transform: uppercase; */
+    letter-spacing: 1px;
+    font-size: 22px;
+}
+
+.rounded-line {
+    height: 3px;
+    width: 300px;
+    max-width: 100%;
+    margin: 5px auto 0;
+    background-color: #b6b5b5;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.hoverable{
+    cursor: pointer;
+}
+
+.hoverable:hover {
+    top: -10px;
+}
+
+.brand-logo {
+    font-family: 'Courgette', cursive;
+}
+
+.push-content-down {
+    margin-top: 70px;
+}
+
+#search-input {
+    border: 2px solid rgba(0, 152, 0, 0.27);
+    border-radius: 15px 0px 0px 15px;
+    margin: 0px;
+    height: 34px;
+}
+
+#search-button {
+    border-radius: 0px 15px 15px 0px;
+    margin: 0px;
+}
+
+.no-padding {
+    padding: 0px;
+}
+
+#title {
+    padding: 10px;
+}
+
+h5{
+    font-size: 18px;
+}
+
+.search {
+    margin-top: 8px;
+}
+
+.reviews {
+    margin-top: 5px;
+    padding: 10px;
+}
+
+.box {
+    padding: 10px;
+    background: #f5f5f5;
+    border-radius: 5px;
+    border: 1px solid #bdbdbd;
+    margin-bottom: 10px;
+}
+
+.shift-up {
+    position: absolute;
+    top: -12px;
 }

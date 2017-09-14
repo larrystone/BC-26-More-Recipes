@@ -4,89 +4,122 @@
     <title>More-Recipes</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/css/materialize.min.css">
-    <link rel="stylesheet" href="css/recipe.css">
-    
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Marmelad|Courgette">
+    <link rel="stylesheet" href="css/index.css">
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
   </head>
-  <body>
-
-    <div class="navbar-fixed">
-      <nav>
-        <div class="nav-wrapper green lighten-2">
-          <a href="#" data-activates="slide-out" class="show-on-large button-collapse"><i class="material-icons">menu</i></a>
-          <a href="recipes.html" class="brand-logo center truncate">More-Recipes</a>
-        </div>
-      </nav>
-    </div>
-    
-    <aside>
-      <ul id="slide-out" class="side-nav">
-        <li>
-          <div class="user-view">
-            <div class="background">
-              <img src="images/dodo.jpg">
-            </div> 
-            <a href="profile.html"><span class="name white-text">Lanre Lawal</span>
-            <span class="email white-text">larrystone@gmail.com</span></a>
-          </div>
-        </li>
-        <li><a class="waves-effect blue" href="recipes.html">Home</a></li>
-        <li><a class="waves-effect" href="my_recipes.html">My Recipes</a></li>
-        <li><a class="waves-effect" href="fav_recipes.html">Favorites</a></li>
-      </ul>
-    </aside>
-
-    <div class="main">
-      <header>
-        <h5 class="center-align">My Profile</h5>
-        <hr/>
-      </header>
-
-      <main class="row">
-        <div class="col s12 m7">
-          <div class="card">
-            <ul class="collection with-header">
-              <li class="collection-header grey lighten-4"><h5>Basic Information</h5></li>              
-              <li class="collection-item">
-                <div>
-                  <h6 class="green-text">Name<a href="#!" class="secondary-content"><i class="material-icons">edit</i></a></h6>
-                <h6>Lawal Lanre Emmanuel</h6>
-              
-                </div>
-              </li>
-              <li class="collection-item">            
-                <h6 class="green-text">Username<a href="#!" class="secondary-content"><i class="material-icons">edit</i></a></h6>
-                <h6>larrystone</h6></li>
-              <li class="collection-item">
-                <h6 class="green-text">Email</a></h6>
-                <h6>larrystone@gmail.com</h6>                
-              </li>
-              <li class="collection-item">
-                <h6 class="green-text">Password<a href="#!" class="secondary-content"><i class="material-icons">edit</i></a></h6>
-                <h6>*************</h6>                
-              </li>
+  <body>    
+    <header>
+      <div class="navbar-fixed">
+        <nav class="nav-extended green lighten-2">
+          <div class="nav-wrapper">
+            <a class="brand-logo center truncate">More-Recipes</a>
+            <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li><a href="profile.html">Larrystone</a></li>
+                <li><a class="signup"><span class="chip">2</span></a></li>
+            </ul>
+            <ul class="side-nav" id="mobile-demo">
+                <li><a href="profile.html">My Profile</a>
+                <li><a class="login">Sign Out</a></li>
+                <li><a class="signup">Notifications <span class="chip">2</span></a></li>
             </ul>
           </div>
-        </div>
-
-        <div class="col s12 m5">
-          <div class="card">
-            <ul class="collection with-header">
-              <li class="collection-header grey lighten-4">
-                <h5>My Stats Chart</h5>
-                <h6>Click a Section to View Details</h6>
-              </li>
-              <div id="statsContainer" style="height: 300px; width: 100%;"></div>
-            </ul>
+          
+          <div class="nav-content">
+              <ul>
+                <li><a class="active" href="dashboard.html">Home</a></li>
+                <li><a href="#my_recipes">My Recipes</a></li>
+              </ul>
+            </div>
           </div>
-        </div>
+        </nav>
 
-      </main>
-    </div>
-       
+        <!-- Slider Sections-->
+        <div class="push-content-down load hide grey lighten-5">
+
+          <!-- Profile Section-->
+          <div id="profile" class="recipes grey lighten-5" class="row">
+            <div class="row">
+              <div class="col s12 m7">
+            <div class="card">
+              <ul class="collection with-header">
+                <li class="collection-header grey lighten-4"><h5>Basic Information</h5></li>              
+                <li class="collection-item">
+                  <div>
+                    <h6 class="green-text">Name</h6>
+                    <input value="Lawal Lanre Emmanuel" type="text" name="name" id="name" />
+                  </div>
+                </li>
+                <li class="collection-item">            
+                  <h6 class="green-text">Username</h6>
+                  <input value="larrystone" type="text" name="username" id="name" />
+                </li>
+                <li class="collection-item">
+                  <h6 class="green-text">Email</a></h6>
+                  <h6>larrystone@gmail.com</h6>                
+                </li>
+                <li class="collection-item">
+                  <h6 class="green-text">Password</h6>
+                  <input value="larrystone" type="password" name="password1" id="password1" /> 
+                </li>
+                <li class="collection-item">
+                    <h6 class="green-text">Re-Enter Password</h6>
+                    <input value="larrystone" type="password" name="password2" id="password2" /> 
+                  </li>
+                <li class="collection-item center">
+                    <button class="btn primary green lighten-2" id="save">Save Changes</button>  
+                </li>
+              </ul>
+            </div>
+              </div>
+            
+              <div class="col s12 m5">
+              <div class="card large">
+                <ul class="collection with-header">
+                  <li class="collection-header grey lighten-4">
+                    <h5>My Stats Chart</h5>
+                  </li>
+                  <div id="statsContainer" style="height: 300px; width: 100%;"></div>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </header>
+
+    <footer class="page-footer load green lighten-2 hide">
+        <div class="container">
+            <div class="row">
+              <div class="col l6 s12">
+                <h5 class="white-text">More-Recipes...</h5>
+                <p class="grey-text text-lighten-4">An Andela Bootcamp LOS/26 project</p>
+              </div>
+              <div class="col l4 offset-l2 s12">
+                <h5 class="white-text">Project links</h5>
+                <ul>
+                  <li><a class="grey-text text-lighten-3" href="https://github.com/larrystone/BC-26-More-Recipes">Github</a></li>
+                  <li><a class="grey-text text-lighten-3" href="https://www.pivotaltracker.com/n/projects/2096195">Pivotal Tracker</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+      <div class="footer-copyright">
+        <div class="container">
+        Copyright © 2017 Lawal Lanre (Larrystone)
+        </div>
+      </div>
+    </footer>
+
     <!--scripts includes-->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/js/materialize.min.js"></script>          
+    <script src="js/recipe.js"></script>
+
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
       google.charts.load('current', {'packages':['corechart']});
@@ -103,34 +136,16 @@
         ]);
 
         var options = {          
-          // title: 'My Stats Chart',
           is3D: true,
           legend : {position: 'labeled'}};
  
         var chart = new google.visualization.PieChart(document.getElementById('statsContainer'));
-
-        function selectHandler() {
-          var selectedItem = chart.getSelection()[0];
-          if (selectedItem) {
-            switch (selectedItem.row) {
-              case 0:
-                window.location.href = "fav_recipes.html";
-              break;
-              case 1:
-                window.location.href = "my_recipes.html";
-              break;
-            }
-          }
-        }
-
-        google.visualization.events.addListener(chart, 'select', selectHandler);    
         chart.draw(data, options);
       }
-
     </script>
-    
-    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/js/materialize.min.js"></script>          
-    <script src="js/recipe.js"></script>
   </body>
 </html>
+
+
+
+      
