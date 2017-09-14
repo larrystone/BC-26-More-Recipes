@@ -18,23 +18,28 @@
             <a class="brand-logo center truncate">More-Recipes</a>
             <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
-                <li><a href="profile.html">Larrystone</a></li>
-                <li><a class="signup"><span class="chip">2</span></a></li>
+              <li><span class="chip">2</span></li>  
+              <li><a class="dropdown-button" data-activates="dropdown2">Larrystone<i class="material-icons right">arrow_drop_down</i></a></li>
             </ul>
             <ul class="side-nav" id="mobile-demo">
+                <li><a href="#">Notifications <span class="chip">2</span></a></li>
                 <li><a href="profile.html">My Profile</a>
-                <li><a class="login">Sign Out</a></li>
-                <li><a class="signup">Notifications <span class="chip">2</span></a></li>
+                <li><a href="index.html">Sign Out</a></li>
             </ul>
           </div>
           
-          <div class="nav-content">
+            <div>
               <ul>
                 <li><a class="active" href="dashboard.html">Home</a></li>
-                <li><a href="#my_recipes">My Recipes</a></li>
+                <li><a href="my_recipes.html">My Recipes</a></li>
+                <li><a href="my_favs.html">My Favorites</a></li>
               </ul>
             </div>
           </div>
+          <ul id="dropdown2" class="dropdown-content">
+            <li><a href="profile.html" >My Profile</a></li>
+            <li><a href="index.html">Sign Out</a></li>
+          </ul>     
         </nav>
 
         <!-- Slider Sections-->
@@ -145,7 +150,3 @@
     </script>
   </body>
 </html>
-
-
-
-      

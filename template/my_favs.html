@@ -18,13 +18,13 @@
             <a class="brand-logo center truncate">More-Recipes</a>
             <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
-                <li><a href="profile.html">Larrystone</a></li>
-                <li><span class="signup"><span class="chip">2</span></span></li>
+              <li><span class="chip">2</span></li>
+              <li><a class="dropdown-button" data-activates="dropdown2">Larrystone<i class="material-icons right">arrow_drop_down</i></a></li>
             </ul>
             <ul class="side-nav" id="mobile-demo">
-                <li><a href="profile.html">My Profile</a>
-                <li><a>Sign Out</a></li>
-                <li><a>Notifications <span class="chip">2</span></a></li>
+              <li><a href="#">Notifications <span class="chip">2</span></a></li>
+              <li><a href="profile.html">My Profile</a>
+              <li><a href="index.html">Sign Out</a></li>
             </ul>
           </div>
           
@@ -36,6 +36,11 @@
               </ul>
             </div>
           </div>
+
+          <ul id="dropdown2" class="dropdown-content">
+            <li><a href="profile.html" >My Profile</a></li>
+            <li><a href="index.html">Sign Out</a></li>
+          </ul>     
         </nav>
 
         <!-- Pre-loader for recipes-->
@@ -271,30 +276,6 @@
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/js/materialize.min.js"></script>          
     <script src="js/recipe.js"></script>
-
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript">
-      google.charts.load('current', {'packages':['corechart']});
-      google.charts.setOnLoadCallback(drawChart);
-
-      function drawChart() {
-        var data = new google.visualization.DataTable();
-        data.addColumn('string', 'Recipe Stats');
-        data.addColumn('number', 'count');
-        data.addRows([
-          ['Favorite Recipes',     3],
-          ['My Recipes',      2],
-          ['My Reviews',  4],
-        ]);
-
-        var options = {          
-          is3D: true,
-          legend : {position: 'labeled'}};
- 
-        var chart = new google.visualization.PieChart(document.getElementById('statsContainer'));
-        chart.draw(data, options);
-      }
-    </script>
   </body>
 </html>
 
