@@ -37,7 +37,7 @@ export default class User {
         username, email, password);
 
     if (validateSignUpError) {
-      return res.status(403).json({
+      return res.status(400).json({
         success: false,
         message: validateSignUpError });
     }
@@ -65,7 +65,7 @@ export default class User {
             field = 'Email';
           }
 
-          return res.status(403).json({
+          return res.status(409).json({
             success: false,
             message: `${field} already taken!`
           });
@@ -83,6 +83,7 @@ export default class User {
 
             const createdUser = {
               userId: result.id,
+              name: result.name,
               username: result.username,
               email: result.email,
               token
@@ -90,12 +91,13 @@ export default class User {
 
             return res.status(201).json({
               success: true,
-              data: createdUser });
+              message: 'New user created/token generated!',
+              recipe: createdUser });
           });
       })
-      .catch(e => res.status(503).json({
+      .catch(() => res.status(500).json({
         success: false,
-        message: `Error Creating user ${e.message}}` }));
+        message: 'Error Creating user' }));
 
     return this;
   }
@@ -137,15 +139,18 @@ export default class User {
         if (newEncryption.verifyHash(req.body.password, userFound.password)) {
           const token = newAuth.sign(userFound.id);
 
+          const loggedUser = {
+            userId: userFound.id,
+            name: userFound.name,
+            username: userFound.username,
+            email: userFound.email,
+            token
+          };
+
           return res.status(201).json({
             success: true,
-            data: {
-              id: userFound.id,
-              name: userFound.name,
-              username: userFound.username,
-              email: userFound.email,
-              token
-            }
+            message: 'User Signed In/token generated!',
+            recipe: loggedUser
           });
         }
         res.status(401).json({

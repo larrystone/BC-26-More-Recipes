@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+  <head>    
+    <title>More-Recipes</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/css/materialize.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Marmelad|Courgette">
+    <link rel="stylesheet" href="css/index.css">
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+  <body>    
+    <header>
+      <div class="navbar-fixed">
+        <nav class="nav-extended green lighten-2">
+          <div class="nav-wrapper">
+            <a class="brand-logo center truncate">More-Recipes</a>
+            <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+              <li><span class="chip clickable">2</span></li>  
+              <li><a class="dropdown-button" data-activates="dropdown2">Larrystone<i class="material-icons right">arrow_drop_down</i></a></li>
+            </ul>
+            <ul class="side-nav" id="mobile-demo">
+                <li><a href="#">Notifications <span class="chip">2</span></a></li>
+                <li><a href="profile.html">My Profile</a>
+                <li><a href="index.html">Sign Out</a></li>
+            </ul>
+          </div>
+          <div>
+              <ul>
+                <li><a href="dashboard.html">Home</a></li>
+                <li><a href="my_recipes.html">My Recipes</a></li>
+                <li><a href="my_favs.html">My Favorites</a></li>
+              </ul>
+            </div>
+          </div>
+          <ul id="dropdown2" class="dropdown-content">
+              <li><a href="profile.html" >My Profile</a></li>
+              <li><a href="index.html">Sign Out</a></li>
+            </ul>     
+          </nav>
+        </nav>
+
+        <!-- Slider Sections-->
+        <div class="push-content-down">
+            <div class="parallax-container">
+                <div class="parallax"><img src="images/egusi-soup.jpg"></div>
+            </div>
+            <div class="row">
+                <div class="col s12">
+                  <div class="card">
+                    <div class="card-content grey lighten-4">
+                      <span class="card-title"> Egusi Soup   &nbsp;&nbsp;
+                         <i class="material-icons clickable" id="bookmark">star_border</i> 
+                      </span>
+                      <span>~ Lanre Lawal</span>
+                    </div>
+                    <div class="card-content row">
+                      <div class="col s12 m6">
+                          <span class="card-title">Ingredients</span>
+                          <ul>
+                            <li>* Ewedu leaves</li>
+                            <li>* Salt</li>
+                            <li>* Water</li>
+                          </ul>
+                      </div>
+                      <div class="col s12 m6 direct">
+                          <span class="card-title">Directions</span>
+                          <p>Boil water for 30mins and so on...</p>
+                        </div>
+                    </div>
+         
+                    <div class="card-action vote_details row">
+                        <div class="col s4 m3">
+                            <i class="material-icons">visibility</i> <span id="views">&nbsp;520</span>
+                        </div>
+                        <div class="col s4 m3">
+                            <i class="material-icons green-text clickable" id="like">thumb_up</i> <span id="likes">&nbsp;500</span>
+                        </div>
+                        <div class="col s4 m3">
+                              <i class="material-icons red-text clickable" id="dislike">thumb_down</i> <span id="dislikes">&nbsp;0</span>
+                        </div>
+                      </div>
+                  </div>
+                </div>
+        
+                <section class="col s12 reviews">
+                  <div id="post_comment" class="box">
+                    <form>
+                      <div class="row">
+                        <div class="input-field col s12 right-align">
+                          <textarea id="review_text" class="materialize-textarea"></textarea>
+                          <label for="review_text">Write a review</label>
+                          <input type="submit" class="btn waves-effect waves-light green lighten-2" value="Post">
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+        
+                  <!-- Pre-loader for reviews-->
+                  <div class="center-align" id="preload">
+                    <div class="preloader-wrapper small active">
+                      <div class="spinner-layer spinner-green-only">
+                        <div class="circle-clipper left">
+                          <div class="circle"></div>
+                        </div>
+                        <div class="gap-patch">
+                          <div class="circle"></div>
+                        </div>
+                        <div class="circle-clipper right">
+                          <div class="circle"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <h5>Loading Reviews</h5>
+                  </div>
+                    
+                  <!-- Reviews -->
+                  <section class="reviews card hide load">
+                    <div class="blue-text shift-up">Reviews</div>
+                    <div class="review box">
+                      <span class="review_text">That's my favorite...</span><br/>
+                      <h6 class="reviewer red-text right-align">~ Gbenga Adeoye</h6>
+                    </div>
+                                
+                    <div class="review box">
+                      <span class="review_text">I am not even sure this guy knows how to prepare this thing</span><br/>
+                      <h6 class="reviewer red-text right-align">~ Vivian Patt</h6>
+                    </div>
+        
+                    <div class="review box">
+                      <span class="review_text">And so on? What kinda direction is that?</span><br/>
+                      <h6 class="reviewer red-text right-align">~ Mike Davies</h6>
+                    </div>
+              
+                  </section>
+                </section>
+              </div>
+        </div>
+      </div>
+    </header>
+
+
+
+    <footer class="page-footer load green lighten-2">
+        <div class="container">
+            <div class="row">
+              <div class="col l6 s12">
+                <h5 class="white-text">More-Recipes...</h5>
+                <p class="grey-text text-lighten-4">An Andela Bootcamp LOS/26 project</p>
+              </div>
+              <div class="col l4 offset-l2 s12">
+                <h5 class="white-text">Project links</h5>
+                <ul>
+                  <li><a class="grey-text text-lighten-3" href="https://github.com/larrystone/BC-26-More-Recipes">Github</a></li>
+                  <li><a class="grey-text text-lighten-3" href="https://www.pivotaltracker.com/n/projects/2096195">Pivotal Tracker</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+      <div class="footer-copyright">
+        <div class="container">
+        Copyright © 2017 Lawal Lanre (Larrystone)
+        </div>
+      </div>
+    </footer>
+
+    <!--scripts includes-->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/js/materialize.min.js"></script>          
+    <script src="js/recipe.js"></script>
+  </body>
+</html>
+
+
+
+      

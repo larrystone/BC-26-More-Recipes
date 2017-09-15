@@ -10,7 +10,7 @@ export default class Encryption {
   /**
    * Generate Hash for password string
    *
-   * @param {string} password 
+   * @param {string} password
    * @returns {string} hashed password
    * @memberof Encryption
    */

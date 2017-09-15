@@ -4,163 +4,220 @@
     <title>More-Recipes</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/css/materialize.min.css">
-    <link rel="stylesheet" href="css/recipe.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Marmelad|Courgette">
+    <link rel="stylesheet" href="css/index.css">
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
   </head>
-  <body>
-
-    <div class="navbar-fixed">
-      <nav>
-        <div class="nav-wrapper green lighten-2">
-          <a href="#" data-activates="slide-out" class="show-on-large button-collapse"><i class="material-icons">menu</i></a>
-          <a href="recipes.html" class="brand-logo center truncate">More-Recipes</a>
-        </div>
-      </nav>
-    </div>
-    
-    <aside>
-      <ul id="slide-out" class="side-nav">
-        <li>
-          <div class="user-view">
-            <div class="background">
-              <img src="images/dodo.jpg">
-            </div> 
-            <a href="profile.html"><span class="name white-text">Lanre Lawal</span>
-            <span class="email white-text">larrystone@gmail.com</span></a>
-          </div>
-        </li>
-        <li><a class="waves-effect" href="recipes.html">Home</a></li>
-        <li><a class="waves-effect blue" href="my_recipes.html">My Recipes</a></li>
-        <li><a class="waves-effect" href="fav_recipes.html">Favorites</a></li>
-      </ul>
-    </aside>
-
-    <div class="main">
-      <header class="center-align">
-        <h5> &nbsp; My Recipes</h5>
-        <hr/>
-      </header> 
-  
-      <main class="row">
-        <div class="col s5 m2">
-          <div class="card hoverable">
-            <ul class="collapsible" data-collapsible="accordion">
-              <li>
-                <div class="collapsible-header grey lighten-4"><h5>Ewedu Soup</h5></div>
-                <div class="collapsible-body no-padding">
-                  <ul class="collection with-header">
-                    <a class="collection-item clickable green-text show_recipe_info">View<i class="secondary-content material-icons">visibility</i></a>
-                    <a class="collection-item green-text edit_recipe clickable modal-trigger" href="#create_edit_Recipe">Edit<i class="secondary-content material-icons">edit</i></a>
-                    <a class="collection-item clickable red-text delete_recipe">Delete<i class="secondary-content material-icons red-text">delete_forever</i></a>
-                  </ul>
-                </div>
-              </li>
+  <body>    
+    <header>
+      <div class="navbar-fixed">
+        <nav class="nav-extended green lighten-2">
+          <div class="nav-wrapper">
+            <a class="brand-logo center truncate">More-Recipes</a>
+            <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+              <li><span class="chip clickable">2</span></li>  
+              <li><a class="dropdown-button" data-activates="dropdown2">Larrystone<i class="material-icons right">arrow_drop_down</i></a></li>
+            </ul>
+            <ul class="side-nav" id="mobile-demo">
+                <li><a href="#">Notifications <span class="chip">2</span></a></li>
+                <li><a href="profile.html">My Profile</a>
+                <li><a href="index.html">Sign Out</a></li>
             </ul>
           </div>
-        </div>
-
-        <div class="col s5 m2">
-          <div class="card hoverable">
-            <ul class="collapsible" data-collapsible="accordion">
-              <li>
-                <div class="collapsible-header grey lighten-4"><h5>Amala Soup</h5></div>
-                <div class="collapsible-body no-padding">
-                  <ul class="collection with-header">
-                    <a class="collection-item clickable green-text show_recipe_info">View<i class="secondary-content material-icons">visibility</i></a>
-                    <a class="collection-item green-text edit_recipe clickable modal-trigger" href="#create_edit_Recipe">Edit<i class="secondary-content material-icons">edit</i></a>
-                    <a class="collection-item clickable red-text delete_recipe">Delete<i class="secondary-content material-icons red-text">delete_forever</i></a>
-                  </ul>
-                </div>
-              </li>
-            </ul>
+          
+          <div>
+              <ul>
+                <li><a href="dashboard.html">Home</a></li>
+                <li class="active"><a href="#">My Recipes</a></li>
+                <li><a href="my_favs.html">My Favorites</a></li>
+              </ul>
+            </div>
           </div>
-        </div>
 
-        <div class="col s5 m2">
-          <div class="card hoverable">
-            <ul class="collapsible" data-collapsible="accordion">
-              <li>
-                <div class="collapsible-header grey lighten-4"><h5>Rice Stew</h5></div>
-                <div class="collapsible-body no-padding">
-                  <ul class="collection with-header">
-                    <a class="collection-item clickable green-text show_recipe_info">View<i class="secondary-content material-icons">visibility</i></a>
-                    <a class="collection-item green-text edit_recipe clickable modal-trigger" href="#create_edit_Recipe">Edit<i class="secondary-content material-icons">edit</i></a>
-                    <a class="collection-item clickable red-text delete_recipe">Delete<i class="secondary-content material-icons red-text">delete_forever</i></a>
-                  </ul>
-                </div>
-              </li>
-            </ul>
-          </div>
-        </div>
+          <ul id="dropdown2" class="dropdown-content">
+            <li><a href="profile.html" >My Profile</a></li>
+            <li><a href="index.html">Sign Out</a></li>
+          </ul>     
+        </nav>
 
-        <div class="col s5 m2">
-          <div class="card hoverable">
-            <ul class="collapsible" data-collapsible="accordion">
-              <li>
-                <div class="collapsible-header grey lighten-4"><h5>Beans</h5></div>
-                <div class="collapsible-body no-padding">
-                  <ul class="collection with-header">
-                    <a class="collection-item clickable green-text show_recipe_info">View<i class="secondary-content material-icons">visibility</i></a>
-                    <a class="collection-item green-text edit_recipe clickable modal-trigger" href="#create_edit_Recipe">Edit<i class="secondary-content material-icons">edit</i></a>
-                    <a class="collection-item clickable red-text delete_recipe">Delete<i class="secondary-content material-icons red-text">delete_forever</i></a>
-                  </ul>
-                </div>
-              </li>
-            </ul>
-          </div>
-        </div>
+        <!-- Pre-loader for recipes-->
+        <div class="center-align v-align2" id="preload">
+           <div class="preloader-wrapper small active">
+             <div class="spinner-layer spinner-green-only">
+               <div class="circle-clipper left">
+                 <div class="circle"></div>
+               </div>
+               <div class="gap-patch">
+                 <div class="circle"></div>
+               </div>
+               <div class="circle-clipper right">
+                 <div class="circle"></div>
+               </div>
+             </div>
+           </div>
+           <h5>Loading Larrystone's Recipes</h5>
+         </div>
+
+        <!-- Slider Sections-->
+        <div class="push-content-down load hide grey lighten-5">
+         <!--My recipes-->
+          <div id="my_recipes" class="recipes grey lighten-5 row">
+            <div class="col s12">
+            <header class="center-align">
+                <span class="full-title">My Recipes</span>
+                <div class="rounded-line"></div>
+            </header> 
         
-      </main>
-
-      <!-- New Recipe FAB -->
-      <div class="fixed-action-btn click-to-toggle">
-        <a class="btn-floating btn-large green tooltipped modal-trigger" href="#create_edit_Recipe" data-position="top" data-delay="50" data-tooltip="New Recipe" id="create_recipe">
-          <i class="large material-icons">add</i>
-        </a> 
-      </div>
-
-      <!-- Create/Edit Recipe Dialog -->
-      <div id="create_edit_Recipe" class="modal modal-fixed-footer">
-        <div class="modal-content">
-          <h5 class="center-align green lighten-2" id="title"></h5>
-
-          <form class="row">
-            <div class="input-field col s12">
-              <label for="title"> Recipe Title</label>
-              <input type="text" class="validate" name="title" id="title" required/>
-            </div>
-            <h5>Ingredients</h5>
-            <ul>
-              <div class="input-field col s12">
-                <li>
-                  <label for="ingredient1"> Enter ingredient</label>
-                  <input type="text" class="validate" name="ingredient1" id="ingredient1"/>
-                </li>
+            <main class="row card large">
+              <div class="col s6 m3">
+                  <div class="card medium">
+                      <div class="card-image">
+                          <img src="images/efo.jpg" height="180px">
+                        </div>
+                        <div class="card-content">
+                            <span class="card-title">Efo Soup</span>
+                            <p class="truncate">A proud yoruba heritage</p>
+                        </div>
+                        <div class="card-action vote_details row">
+                            <div class="col s4">
+                                <a class="clickable show_recipe_info"><i class="material-icons green-text">visibility</i>View</a>
+                            </div>
+                            <div class="col s4 center">
+                                <a class="move_item edit_recipe clickable modal-trigger" href="#create_edit_Recipe"><i class="material-icons green-text">edit</i>Edit</a>
+                            </div>
+                            <div class="col s4 center">
+                                <a class="clickable delete_recipe"><i class="material-icons red-text">delete_forever</i>Delete</a>
+                            </div>
+                          </div>
+                  </div>
               </div>
-              <div class="input-field col s12">
-                <li><label for="ingredient2"> Enter ingredient</label>
-                <input type="text" class="validate" name="ingredient2" id="ingredient2"/></li>
+      
+              <div class="col s6 m3">
+                  <div class="card medium">
+                      <div class="card-image">
+                          <img src="images/egusi-soup.jpg" height="180px">
+                        </div>
+                        <div class="card-content">
+                            <span class="card-title">Egusi</span>
+                            <p class="truncate">One of Nigeria's finest!</p>
+                        </div>
+                        <div class="card-action vote_details row">
+                            <div class="col s4">
+                                <a class="clickable show_recipe_info"><i class="material-icons green-text">visibility</i>View</a>
+                            </div>
+                            <div class="col s4 center">
+                                <a class="move_item edit_recipe clickable modal-trigger" href="#create_edit_Recipe"><i class="material-icons green-text">edit</i>Edit</a>
+                            </div>
+                            <div class="col s4 center">
+                                <a class="clickable delete_recipe"><i class="material-icons red-text">delete_forever</i>Delete</a>
+                            </div>
+                          </div>
+                  </div>
               </div>
-            </ul>
-            <a class="clickable" id="add_ingredient">+More ingredient</a>
-            
-            <h5>Procedure</h5>
-            <div class="input-field col s12 right-align">
-              <textarea id="procedure" class="materialize-textarea"></textarea>
-              <label for="procedure">Write Recipe Preparation Precedure</label>
+      
+              <div class="col s6 m3">
+                  <div class="card medium">
+                      <div class="card-image">
+                          <img src="images/Dodo.jpg" height="180px">
+                        </div>
+                        <div class="card-content">
+                            <span class="card-title">Fried Plaintain</span>
+                            <p class="truncate">Everyone loves dodo!</p>
+                        </div>
+                        <div class="card-action vote_details row">
+                            <div class="col s4">
+                                <a class="clickable show_recipe_info"><i class="material-icons green-text">visibility</i>View</a>
+                            </div>
+                            <div class="col s4 center">
+                                <a class="move_item edit_recipe clickable modal-trigger" href="#create_edit_Recipe"><i class="material-icons green-text">edit</i>Edit</a>
+                            </div>
+                            <div class="col s4 center">
+                                <a class="clickable delete_recipe"><i class="material-icons red-text">delete_forever</i>Delete</a>
+                            </div>
+                          </div>
+                  </div>
+              </div>
+                  
+            </main>
+      
+            <!-- New Recipe FAB -->
+            <div class="fixed-action-btn click-to-toggle">
+              <a class="btn-floating btn-large green tooltipped modal-trigger" href="#create_edit_Recipe" data-position="top" data-delay="50" data-tooltip="New Recipe" id="create_recipe">
+                <i class="large material-icons">add</i>
+              </a> 
             </div>
-          </form>
+      
+            <!-- Create/Edit Recipe Dialog -->
+            <div id="create_edit_Recipe" class="modal modal-fixed-footer">
+              <div class="modal-content">
+                <h5 class="center-align" id="title"></h5>
+                <form class="row">
+                  <div class="input-field col s12">
+                    <input type="text" class="validate" name="title" id="title" required/>
+                    <label for="title"> Recipe Title</label>
+                  </div>
+                  <h5>Ingredients</h5>
+                  <ul>
+                    <div class="input-field col s12">
+                      <li>
+                        <label for="ingredient1"> Enter ingredient</label>
+                        <input type="text" class="validate" name="ingredient1" id="ingredient1"/>
+                      </li>
+                    </div>
+                    <div class="input-field col s12">
+                      <li><label for="ingredient2"> Enter ingredient</label>
+                      <input type="text" class="validate" name="ingredient2" id="ingredient2"/></li>
+                    </div>
+                  </ul>
+                  <a class="clickable" id="add_ingredient">+More ingredient</a>
+                  
+                  <h5>Procedure</h5>
+                  <div class="input-field col s12">
+                    <textarea id="procedure" class="materialize-textarea"></textarea>
+                    <label for="procedure">Write Recipe Preparation Precedure</label>
+                  </div>
+                </form>
+      
+              </div>
+              <div class="modal-footer lighten-2">
+                <a href="#!" class="grey lighten-2 modal-action modal-close waves-effect waves-green btn-flat ">Cancel</a>
+                <a href="#!" class="green modal-action modal-close waves-effect waves-green btn-flat">Save</a>
+              </div>
+            </div>
+          </div>
+          </div>
 
         </div>
-        <div class="modal-footer green lighten-2">
-          <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat ">Cancel</a>
-          <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Save</a>
+      </div>
+    </header>
+
+
+
+    <footer class="page-footer load green lighten-2 hide">
+        <div class="container">
+            <div class="row">
+              <div class="col l6 s12">
+                <h5 class="white-text">More-Recipes...</h5>
+                <p class="grey-text text-lighten-4">An Andela Bootcamp LOS/26 project</p>
+              </div>
+              <div class="col l4 offset-l2 s12">
+                <h5 class="white-text">Project links</h5>
+                <ul>
+                  <li><a class="grey-text text-lighten-3" href="https://github.com/larrystone/BC-26-More-Recipes">Github</a></li>
+                  <li><a class="grey-text text-lighten-3" href="https://www.pivotaltracker.com/n/projects/2096195">Pivotal Tracker</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+      <div class="footer-copyright">
+        <div class="container">
+        Copyright © 2017 Lawal Lanre (Larrystone)
         </div>
       </div>
-
-    </div>
+    </footer>
 
     <!--scripts includes-->
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
@@ -168,3 +225,7 @@
     <script src="js/recipe.js"></script>
   </body>
 </html>
+
+
+
+      

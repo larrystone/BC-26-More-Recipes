@@ -38,9 +38,10 @@ export default class Search {
 
         return res.status(201).json({
           success: true,
-          data: foundRecipes });
+          message: 'Recipe(s) found',
+          recipe: foundRecipes });
       })
-      .catch(() => res.status(503).json({
+      .catch(() => res.status(500).json({
         success: false,
         message: 'Unable to fetch recipes' }));
 
@@ -99,11 +100,12 @@ export default class Search {
               { model: models.Recipe }
             ]
           })
-          .then(data => res.status(201).json({
+          .then(recipes => res.status(201).json({
             success: true,
-            data: results.concat(data) }));
+            message: 'Recipe(s) found',
+            recipe: results.concat(recipes) }));
       })
-      .catch(() => res.status(503).json({
+      .catch(() => res.status(500).json({
         success: false,
         message: 'Unable to search recipes' }));
 
@@ -143,10 +145,11 @@ export default class Search {
 
         return res.status(201).json({
           success: true,
-          data: foundRecipes,
+          message: 'Recipe(s) found',
+          recipe: foundRecipes,
         });
       })
-      .catch(() => res.status(503).json({
+      .catch(() => res.status(500).json({
         success: false,
         message: 'Unable to search recipes' }));
 

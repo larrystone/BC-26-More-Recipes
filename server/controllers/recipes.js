@@ -30,7 +30,7 @@ export default class Recipe {
     validate.validateRecipeDetails(name, ingredients, direction);
 
     if (validateRecipeError) {
-      return res.status(403).json({
+      return res.status(400).json({
         success: false,
         message: validateRecipeError });
     }
@@ -45,16 +45,11 @@ export default class Recipe {
       .then((createdRecipe) => {
         res.status(201).json({
           success: true,
-          data: {
-            id: createdRecipe.id,
-            name: createdRecipe.name,
-            ingredients: createdRecipe.ingredients,
-            direction: createdRecipe.direction,
-            userId: createdRecipe.userId
-          }
+          message: 'New Recipe created',
+          recipe: createdRecipe
         });
       })
-      .catch(() => res.status(503).json({
+      .catch(() => res.status(500).json({
         success: false,
         message: 'Error Creating Recipe' }));
 
@@ -81,7 +76,7 @@ export default class Recipe {
       direction, recipeId);
 
     if (validateRecipeError) {
-      return res.status(403).json({
+      return res.status(400).json({
         success: false,
         message: validateRecipeError });
     }
@@ -97,9 +92,9 @@ export default class Recipe {
         }
 
         if (+recipeFound.userId !== +userId) {
-          return res.status(403).json({
+          return res.status(401).json({
             success: false,
-            message: 'You cannot modify this recipe'
+            message: 'You cannot modify a recipe not created by You!'
           });
         }
 
@@ -115,10 +110,11 @@ export default class Recipe {
         })
           .then(result => res.status(201).json({
             success: true,
-            data: result[1]
+            message: 'Recipe record updated',
+            recipe: result[1]
           }));
       })
-      .catch(() => res.status(503).json({
+      .catch(() => res.status(500).json({
         success: false,
         message: 'Error Modifying Recipe' }));
 
@@ -148,7 +144,7 @@ export default class Recipe {
         }
 
         if (+recipeFound.userId !== +userId) {
-          return res.status(403).json({
+          return res.status(401).json({
             success: false,
             message: 'You cannot delete this recipe'
           });
@@ -159,10 +155,13 @@ export default class Recipe {
             id: recipeId
           },
         })
-          .then(() => res.status(204).end());
+          .then(() => res.status(205).json({
+            success: true,
+            message: 'Recipe Deleted!'
+          }));
       })
-      .catch(() => res.status(503).json({
-        success: true,
+      .catch(() => res.status(500).json({
+        success: false,
         message: 'Error Deleting Recipe' }));
 
     return this;
@@ -196,12 +195,13 @@ export default class Recipe {
 
         return recipeFound.increment('viewCount');
       })
-      .then(recipeFound => recipeFound.reload())
+      .then(recipesFound => recipesFound.reload())
       .then(recipeLoaded => res.status(201).json({
         success: true,
-        data: recipeLoaded
+        message: 'Recipe found',
+        recipe: recipeLoaded
       }))
-      .catch(() => res.status(503).json({
+      .catch(() => res.status(500).json({
         success: false,
         message: 'Unable to fetch recipes' }));
 
@@ -233,9 +233,10 @@ export default class Recipe {
 
         return res.status(201).json({
           success: true,
-          data: foundRecipes });
+          message: 'User Recipes found',
+          recipe: foundRecipes });
       })
-      .catch(() => res.status(503).json({
+      .catch(() => res.status(500).json({
         success: false,
         message: 'Unable to get user recipes' }));
 
@@ -243,7 +244,7 @@ export default class Recipe {
   }
 
   /**
-   * Fetch all recipes in the database
+   * Fetch all recipes in the recipebase
    *
    * @param {object} req - HTTP Request
    * @param {object} res - HTTP Response
@@ -276,9 +277,10 @@ export default class Recipe {
 
           return res.status(201).json({
             success: true,
-            data: foundRecipes });
+            message: 'Recipes found',
+            recipe: foundRecipes });
         })
-        .catch(() => res.status(503).json({
+        .catch(() => res.status(500).json({
           success: false,
           message: 'Unable to fetch recipes' }));
 

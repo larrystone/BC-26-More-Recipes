@@ -20,7 +20,7 @@ export const validateSignUp = (name, username, email, password) => {
     return 'Enter a valid email address';
   }
 
-  if (password.length < 6) {
+  if (password.trim().length === 0 || password.length < 6) {
     return 'Password must be at least 6 characters!';
   }
 

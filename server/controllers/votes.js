@@ -74,11 +74,11 @@ export default class Vote {
             message: `Recipe with id: ${recipeId} Upvoted!` });
         }
 
-        return res.status(201).json({
+        return res.status(409).json({
           success: false,
           message: `Recipe with id: ${recipeId} Already Upvoted!` });
       })
-      .catch(() => res.status(503).json({
+      .catch(() => res.status(500).json({
         success: false,
         message: 'Error Upvoting Recipe' }));
 
@@ -149,11 +149,11 @@ export default class Vote {
             message: `Recipe with id: ${recipeId} Downvoted!` });
         }
 
-        return res.status(201).json({
+        return res.status(409).json({
           success: false,
           message: `Recipe with id: ${recipeId} Already Downvoted!` });
       })
-      .catch(() => res.status(503).json({
+      .catch(() => res.status(500).json({
         success: true,
         message: 'Error Downvoting Recipe' }));
 
@@ -189,9 +189,10 @@ export default class Vote {
 
         return res.status(201).json({
           success: true,
-          data: foundVotes });
+          message: 'User upvotes found',
+          recipe: foundVotes });
       })
-      .catch(() => res.status(503).json({
+      .catch(() => res.status(500).json({
         success: false,
         message: 'Unable to get user upvotes' }));
 
@@ -227,9 +228,10 @@ export default class Vote {
 
         return res.status(201).json({
           success: true,
-          data: foundVotes });
+          message: 'User downvotes found',
+          recipe: foundVotes });
       })
-      .catch(() => res.status(503).json({
+      .catch(() => res.status(500).json({
         success: false,
         message: 'Unable to get user downvotes' }));
 
