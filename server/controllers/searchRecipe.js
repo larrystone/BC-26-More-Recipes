@@ -100,10 +100,10 @@ export default class Search {
               { model: models.Recipe }
             ]
           })
-          .then(recipe => res.status(201).json({
+          .then(recipes => res.status(201).json({
             success: true,
             message: 'Recipe(s) found',
-            recipe: results.concat(recipe) }));
+            recipe: results.concat(recipes) }));
       })
       .catch(() => res.status(500).json({
         success: false,

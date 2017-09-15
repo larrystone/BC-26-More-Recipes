@@ -12,7 +12,8 @@ $('#add_ingredient').on('click', (e) => {
   $(e.target).siblings('ul').append(`
     <div class="input-field col s12">
       <li><label for="ingredient2"> Enter ingredient</label>
-        <input type="text" class="validate" name="ingredient2" id="ingredient2"/></li>
+        <input type="text" class="validate" 
+        name="ingredient2" id="ingredient2"/></li>
     </div>`);
 });
 
