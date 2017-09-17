@@ -1,8 +1,11 @@
 import models from '../models';
 import * as validate from '../middleware/validate';
 import * as Search from './searchRecipe';
+import * as notify from './../services/notify';
 
 const recipe = models.Recipe;
+const favorite = models.Favorite;
+
 const trimWhiteSpaces = param => (param || '')
   .replace(/\s+/g, ' ');
 
@@ -108,11 +111,28 @@ export default class Recipe {
           },
           returning: true
         })
-          .then(result => res.status(201).json({
-            success: true,
-            message: 'Recipe record updated',
-            recipe: result[1]
-          }));
+          .then((result) => {
+            favorite
+              .findAll({
+                attributes: ['userId'],
+                where: { recipeId },
+                include: [
+                  { model: models.User, attributes: ['email'] }
+                ]
+              })
+              .then((foundUsers) => {
+                const userEmails = foundUsers.map(user => user.User.email);
+                notify.default(userEmails,
+                  'Favorite Recipe Modified',
+                  'One of your favorite recipes has been modified');
+
+                res.status(201).json({
+                  success: true,
+                  message: 'Recipe record updated',
+                  recipe: result[1],
+                });
+              });
+          });
       })
       .catch(() => res.status(500).json({
         success: false,
