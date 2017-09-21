@@ -157,7 +157,11 @@ export default class User {
           success: false,
           message: 'Incorrect Password!'
         });
-      });
+      })
+      .catch(() => res.status(500).json({
+        success: false,
+        message: 'Error Signing In User'
+      }));
 
     return this;
   }

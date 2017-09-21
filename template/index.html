@@ -1,259 +1,262 @@
 <!doctype html>
 <html lang="en">
-  <head>    
-    <title>More-Recipes</title>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/css/materialize.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Marmelad|Courgette">
-    <link rel="stylesheet" href="css/index.css">
 
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  </head>
-  <body>
-    <section class="v-align show hide" id="signin">
-      <form action="" method="post" class="col card s10 push-s1 m8 push-m2">
-        <div class="card-content">
-          <span class="card-title truncate">Login to Your Account</span>
-          <div class="row">
-            <div class="input-field col s12">
-              <label for="username"><i class="material-icons">account_circle</i> Username or Email</label>
-              <input type="text" class="validate" name="username" id="username" />
-            </div>
-            <div class="input-field col s12">
-              <label for="password"><i class="material-icons">lock_outline</i> Password </label>
-              <input type="password" class="validate" name="password" id="password" />
-            </div>
-            <h6 class="right-align">Forgot password?</h6>
-            <div class="center-align">
-              <input type="submit" class="btn waves-effect waves-light green lighten-2 go" value="Login" id="btn-signin">
-            </div>
-            <br/>
-            <div class="card-action right-align">
-              Don't have an account? <a class="signup">Sign Up</a>
-            </div>
+<head>
+  <title>More-Recipes</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/css/materialize.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Marmelad|Courgette">
+  <link rel="stylesheet" href="css/index.css">
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+  <section class="v-align show hide" id="signin">
+    <form action="" method="post" class="col card s10 push-s1 m8 push-m2">
+      <div class="card-content">
+        <span class="card-title truncate">Login to Your Account</span>
+        <div class="row">
+          <div class="input-field col s12">
+            <label for="username"><i class="material-icons">account_circle</i> Username or Email</label>
+            <input type="text" class="validate" name="username" id="username" />
           </div>
-        </div>
-      </form>
-    </section>
-      <section class="v-align show hide" id="signup">
-          <form action="" method="post" class="col card s10 pull-s1 m6 pull-m2">
-            <div class="card-content">
-              <span class="card-title truncate">Sign Up for an Account</span>
-              <div class="row">
-                <div class="input-field col s12">            
-                  <label for="name">Name</label>
-                  <input type="text" class="validate" name="name" id="name" />
-                </div>
-                <div class="input-field col s12">
-                  <label for="username">Username</label>
-                  <input type="text" class="validate" name="username" id="username" />
-                </div>
-                <div class="input-field col s12">
-                  <label for="email">Email address</label>
-                  <input type="email" class="validate" name="email" id="email" />
-                </div>
-                <div class="input-field col s12">
-                  <label for="password">Password </label>
-                  <input type="password" class="validate" name="password" id="password" />
-                </div>
-                <div class="input-field col s12">
-                  <label for="password">Re-enter Password </label>
-                  <input type="password" class="validate" name="password" id="password" />
-                </div>
-                <div class="center-align">
-                  <input type="submit" class="btn waves-effect waves-light green lighten-2 go" value="Continue" id="btn-signup">
-                </div>
-                <br/>
-                <div class="card-action right-align">
-                  Already have an account? <a class="login">LogIn</a>
-                </div>
-              </div>
-            </div>
-          </form>
-      </section>
-    <header>
-      <a name='top'></a>
-      <div class="navbar-fixed">
-        <nav>
-          <div class="nav-wrapper green lighten-2">
-            <a class="brand-logo center truncate">More-Recipes</a>
-            <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
-            <ul id="nav-mobile" class="right hide-on-med-and-down">
-                <li><a class="login">Sign In</a></li>
-                <li><a class="signup">Sign Up</a></li>
-            </ul>
-            <ul class="side-nav" id="mobile-demo">
-                <li><a class="login">Sign In</a></li>
-                <li><a class="signup">Sign Up</a></li>
-            </ul>
+          <div class="input-field col s12">
+            <label for="password"><i class="material-icons">lock_outline</i> Password </label>
+            <input type="password" class="validate" name="password" id="password" />
           </div>
-        </nav>
-      </div>
-    </header>
-    
-    <main>
-        
-      <div class="parallax-container">
-          <div class="parallax"><img src="images/egusi.jpg"></div>
-          <h4 class="white-text v-align center">It's all about the food and sometimes...the drinks!</h4>
-      </div>
-
-      <div class="white row container">
-        <h3 class="header">More-Recipes</h3>
-        <p class="grey-text text-darken-3 lighten-3"> More-Recipes is your social media for connecting with wonderful delicacies! </p>
-        <ul>
-          <li>- Share your recipe ideas and inventions with the world</li>
-          <li>- Try something new from others' recipe ideas </li>
-          <li>- Share your feedback about the new experience (Upvote, downvote or express how you feel in your own words!)</li>
-          <li>- Like a recipe? Yes, you can add it to your own favorite recipes list</li>
-        </ul>    
-      </div>
-      
-      <div class="parallax-container">
-        <div class="parallax"><img src="images/efo.jpg"></div>
-        <h4 class="white-text v-align center">So, anyone feeling hungry yet?  </h4>
-      </div>
-
-      <div class="recipes grey lighten-5">
-        <div class="row container ">
+          <h6 class="right-align">Forgot password?</h6>
           <div class="center-align">
-              <span class="full-title">Featured Recipes</span>
-              <div class="rounded-line"></div>
+            <input type="submit" class="btn waves-effect waves-light green lighten-2 go" value="Login" id="btn-signin">
           </div>
-          <div class="col s12 m6 l4">
-              <div class="card medium hoverable card-item">
-                <div class="card-image">
-                  <img src="images/cake.jpg">
-                </div>
-                <div class="card-content">
-                    <span class="card-title">Chocolate Cake</span>
-                    <p class="truncate">A desert respected all over</p>
-                    <p class="truncate">Added by Larrystone</p>
-                </div>
-                <div class="card-action vote_details">
-                    <div class="left">
-                      <i class="material-icons green-text">thumb_up</i> <span>&nbsp;500</span>
-                    </div>
-                    <div class="right">
-                      <i class="material-icons red-text">thumb_down</i><span>&nbsp;0&nbsp;</span>
-                      </div>
-                  </div>
-              </div>
+          <br/>
+          <div class="card-action right-align">
+            Don't have an account? <a class="signup">Sign Up</a>
           </div>
-
-          <div class="col s12 m6 l4">
-              <div class="card medium hoverable card-item">
-                  <div class="card-image">
-                    <img src="images/bhindi.jpg">
-                  </div>
-                  <div class="card-content">
-                      <span class="card-title">Bhindi</span>
-                      <p class="truncate">Priceless vegetable meal from Mali</p>
-                      <p class="truncate">Added by Rowland</p>
-                  </div>
-                  <div class="card-action vote_details">
-                      <div class="left">
-                          <i class="material-icons green-text">thumb_up</i>&nbsp;400
-                      </div>
-                      <div class="right">
-                          <i class="material-icons red-text">thumb_down</i>&nbsp;20&nbsp;&nbsp;
-                      </div>
-                    </div>
-
-              </div>
-          </div>
-
-          <div class="col s12 m6 l4">
-              <div class="card medium hoverable card-item">
-                  <div class="card-image">
-                    <img src="images/fried-rice.jpg">
-                  </div>
-                  <div class="card-content">
-                      <span class="card-title">Fried</span>
-                      <p class="truncate">Nothing taste better...</p>
-                      <p class="truncate">Added by Shayo</p>
-                  </div>
-                  <div class="card-action vote_details">
-                      <div class="left">
-                          <i class="material-icons green-text">thumb_up</i> <span>&nbsp;390</span>
-                      </div>
-                      <div class="right">
-                            <i class="material-icons red-text">thumb_down</i><span>&nbsp;0&nbsp;&nbsp;</span>
-                      </div>
-                    </div>
-              </div>
-          </div>
-          <div class="col s12 m6 l4">
-              <div class="card medium hoverable card-item">
-                  <div class="card-image">
-                    <img src="images/Dodo.jpg">
-                  </div>
-                  <div class="card-content">
-                      <span class="card-title">Fried Plaintain (Dodo)</span>
-                      <p class="truncate">Everyone loves dodo!</p>
-                      <p class="truncate">Added by Larrystone</p>
-                  </div>
-                  <div class="card-action vote_details">
-                      <div class="left">
-                          <i class="material-icons green-text">thumb_up</i> <span>&nbsp;350</span>
-                      </div>
-                      <div class="right">
-                            <i class="material-icons red-text">thumb_down</i><span>&nbsp;0&nbsp;&nbsp;</span>
-                      </div>
-                    </div>
-              </div>
-          </div>
-
-          <div class="col s12 m6 l4">
-              <div class="card medium hoverable card-item">
-                <div class="card-image">
-                  <img src="images/egusi-soup.jpg">
-                </div>
-                <div class="card-content">
-                  <span class="card-title">Egusi Soup</span>
-                  <p class="truncate">One of the best Nigerian delicacy</p>
-                  <p class="truncate">Added by Larrystone</p>
-                </div>
-                <div class="card-action vote_details">
-                    <div class="left">
-                        <i class="material-icons green-text">thumb_up</i> <span>&nbsp;200</span>
-                    </div>
-                    <div class="right">
-                          <i class="material-icons red-text">thumb_down</i><span>&nbsp;0&nbsp;&nbsp;</span>
-                    </div>
-                  </div>
-              </div>
-          </div>
+        </div>
       </div>
-    </main>
+    </form>
+  </section>
+  <section class="v-align show hide" id="signup">
+    <form action="" method="post" class="col card s10 pull-s1 m6 pull-m2">
+      <div class="card-content">
+        <span class="card-title truncate">Sign Up for an Account</span>
+        <div class="row">
+          <div class="input-field col s12">
+            <label for="name">Name</label>
+            <input type="text" class="validate" name="name" id="name" />
+          </div>
+          <div class="input-field col s12">
+            <label for="username">Username</label>
+            <input type="text" class="validate" name="username" id="username" />
+          </div>
+          <div class="input-field col s12">
+            <label for="email">Email address</label>
+            <input type="email" class="validate" name="email" id="email" />
+          </div>
+          <div class="input-field col s12">
+            <label for="password">Password </label>
+            <input type="password" class="validate" name="password" id="password" />
+          </div>
+          <div class="input-field col s12">
+            <label for="password">Re-enter Password </label>
+            <input type="password" class="validate" name="password" id="password" />
+          </div>
+          <div class="center-align">
+            <input type="submit" class="btn waves-effect waves-light green lighten-2 go" value="Continue" id="btn-signup">
+          </div>
+          <br/>
+          <div class="card-action right-align">
+            Already have an account? <a class="login">LogIn</a>
+          </div>
+        </div>
+      </div>
+    </form>
+  </section>
+  <header>
+    <a name='top'></a>
+    <div class="navbar-fixed">
+      <nav>
+        <div class="nav-wrapper green lighten-2">
+          <a class="brand-logo center truncate">More-Recipes</a>
+          <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+          <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li><a class="login">Sign In</a></li>
+            <li><a class="signup">Sign Up</a></li>
+          </ul>
+          <ul class="side-nav" id="mobile-demo">
+            <li><a class="login">Sign In</a></li>
+            <li><a class="signup">Sign Up</a></li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+  </header>
 
-    <footer class="page-footer  green lighten-2">
-        <div class="container">
-            <div class="row">
-              <div class="col l6 s12">
-                <h5 class="white-text">More-Recipes...</h5>
-                <p class="grey-text text-lighten-4">An Andela Bootcamp LOS/26 project</p>
+  <main>
+
+    <div class="parallax-container">
+      <div class="parallax"><img src="images/egusi.jpg"></div>
+      <h4 class="white-text v-align center">It's all about the food and sometimes...the drinks!</h4>
+    </div>
+
+    <div class="white row container">
+      <h3 class="header">More-Recipes</h3>
+      <p class="grey-text text-darken-3 lighten-3"> More-Recipes is your social media for connecting with wonderful delicacies! </p>
+      <ul>
+        <li>- Share your recipe ideas and inventions with the world</li>
+        <li>- Try something new from others' recipe ideas </li>
+        <li>- Share your feedback about the new experience (Upvote, downvote or express how you feel in your own words!)</li>
+        <li>- Like a recipe? Yes, you can add it to your own favorite recipes list</li>
+      </ul>
+    </div>
+
+    <div class="parallax-container">
+      <div class="parallax"><img src="images/efo.jpg"></div>
+      <h4 class="white-text v-align center">So, anyone feeling hungry yet? </h4>
+    </div>
+
+    <div class="recipes grey lighten-5">
+      <div class="row container ">
+        <div class="center-align">
+          <span class="full-title">Featured Recipes</span>
+          <div class="rounded-line"></div>
+        </div>
+        <div class="col s12 m6 l4">
+          <div class="card medium hoverable card-item">
+            <div class="card-image">
+              <img src="images/cake.jpg">
+            </div>
+            <div class="card-content">
+              <span class="card-title">Chocolate Cake</span>
+              <p class="truncate">A desert respected all over</p>
+              <p class="truncate">Added by Larrystone</p>
+            </div>
+            <div class="card-action vote_details">
+              <div class="left">
+                <i class="material-icons green-text">thumb_up</i> <span>&nbsp;500</span>
               </div>
-              <div class="col l4 offset-l2 s12">
-                <h5 class="white-text">Project links</h5>
-                <ul>
-                  <li><a class="grey-text text-lighten-3" href="https://github.com/larrystone/BC-26-More-Recipes">Github</a></li>
-                  <li><a class="grey-text text-lighten-3" href="https://www.pivotaltracker.com/n/projects/2096195">Pivotal Tracker</a></li>
-                </ul>
+              <div class="right">
+                <i class="material-icons red-text">thumb_down</i><span>&nbsp;0&nbsp;</span>
               </div>
             </div>
           </div>
-      <div class="footer-copyright">
-        <div class="container">
-        Copyright © 2017 Lawal Lanre (Larrystone)
+        </div>
+
+        <div class="col s12 m6 l4">
+          <div class="card medium hoverable card-item">
+            <div class="card-image">
+              <img src="images/bhindi.jpg">
+            </div>
+            <div class="card-content">
+              <span class="card-title">Bhindi</span>
+              <p class="truncate">Priceless vegetable meal from Mali</p>
+              <p class="truncate">Added by Rowland</p>
+            </div>
+            <div class="card-action vote_details">
+              <div class="left">
+                <i class="material-icons green-text">thumb_up</i>&nbsp;400
+              </div>
+              <div class="right">
+                <i class="material-icons red-text">thumb_down</i>&nbsp;20&nbsp;&nbsp;
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="col s12 m6 l4">
+          <div class="card medium hoverable card-item">
+            <div class="card-image">
+              <img src="images/fried-rice.jpg">
+            </div>
+            <div class="card-content">
+              <span class="card-title">Fried</span>
+              <p class="truncate">Nothing taste better...</p>
+              <p class="truncate">Added by Shayo</p>
+            </div>
+            <div class="card-action vote_details">
+              <div class="left">
+                <i class="material-icons green-text">thumb_up</i> <span>&nbsp;390</span>
+              </div>
+              <div class="right">
+                <i class="material-icons red-text">thumb_down</i><span>&nbsp;0&nbsp;&nbsp;</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col s12 m6 l4">
+          <div class="card medium hoverable card-item">
+            <div class="card-image">
+              <img src="images/Dodo.jpg">
+            </div>
+            <div class="card-content">
+              <span class="card-title">Fried Plaintain (Dodo)</span>
+              <p class="truncate">Everyone loves dodo!</p>
+              <p class="truncate">Added by Larrystone</p>
+            </div>
+            <div class="card-action vote_details">
+              <div class="left">
+                <i class="material-icons green-text">thumb_up</i> <span>&nbsp;350</span>
+              </div>
+              <div class="right">
+                <i class="material-icons red-text">thumb_down</i><span>&nbsp;0&nbsp;&nbsp;</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col s12 m6 l4">
+          <div class="card medium hoverable card-item">
+            <div class="card-image">
+              <img src="images/egusi-soup.jpg">
+            </div>
+            <div class="card-content">
+              <span class="card-title">Egusi Soup</span>
+              <p class="truncate">One of the best Nigerian delicacy</p>
+              <p class="truncate">Added by Larrystone</p>
+            </div>
+            <div class="card-action vote_details">
+              <div class="left">
+                <i class="material-icons green-text">thumb_up</i> <span>&nbsp;200</span>
+              </div>
+              <div class="right">
+                <i class="material-icons red-text">thumb_down</i><span>&nbsp;0&nbsp;&nbsp;</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </footer>
+  </main>
 
-    <!--scripts includes-->
-    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/js/materialize.min.js"></script>          
-    <script src="js/home.js"></script>
-  </body>
+  <footer class="page-footer  green lighten-2">
+    <div class="container">
+      <div class="row">
+        <div class="col l6 s12">
+          <h5 class="white-text">More-Recipes...</h5>
+          <p class="grey-text text-lighten-4">An Andela Bootcamp LOS/26 project</p>
+        </div>
+        <div class="col l4 offset-l2 s12">
+          <h5 class="white-text">Project links</h5>
+          <ul>
+            <li><a class="grey-text text-lighten-3" href="https://github.com/larrystone/BC-26-More-Recipes">Github</a></li>
+            <li><a class="grey-text text-lighten-3" href="https://www.pivotaltracker.com/n/projects/2096195">Pivotal Tracker</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-copyright">
+      <div class="container">
+        Copyright © 2017 Lawal Lanre (Larrystone)
+      </div>
+    </div>
+  </footer>
+
+  <!--scripts includes-->
+  <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/js/materialize.min.js"></script>
+  <script src="js/home.js"></script>
+</body>
+
 </html>
