@@ -17,8 +17,16 @@ const newAuth = new Auth.default();
 user.post('/signup', newUser.signUp);
 user.post('/signin', newUser.signIn);
 
+
 user.use('*', newAuth.verify);
 user.get('/myRecipes', newRecipe.getUserRecipes);
+
+user.route('/:userId/profile')
+  .get(newUser.getUser)
+
+// TODO update user details and password routes
+  .patch(newUser.getUser);
+user.patch('/:userId/password', newUser.getUser);
 
 user.route('/:userId/recipes/:recipeId')
   .post(newFavorite.addToFavorite)
