@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
-import { Button } from 'semantic-ui-react'
+import { Button } from 'semantic-ui-react';
+import { connect } from 'react-redux';
+
+import { setDialogType } from '../actions/dialog';
 
 /**
  * Header component
@@ -15,12 +18,20 @@ class Header extends Component {
         More-Recipes
       </div>
       <div className="nav-item">
-        <Button basic>
+        <Button basic
+          onClick={() => {
+            this.props.setDialogType('signin')
+          }}
+        >
           SignIn
         </Button>
       </div>
       <div className="nav-item">
-        <Button basic>
+        <Button basic
+          onClick={() => {
+            this.props.setDialogType('signin')
+          }}
+        >
           SignUp
         </Button>
       </div>
@@ -32,4 +43,4 @@ class Header extends Component {
   }
 }
 
-export default Header;
+export default connect(null, { setDialogType })(Header);

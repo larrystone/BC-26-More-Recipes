@@ -187,9 +187,9 @@ export default class User {
 
   /**
    * Get the user record (e.g for profile page)
-   * 
-   * @param {any} req 
-   * @param {any} res 
+   *
+   * @param {any} req
+   * @param {any} res
    * @returns {null} Null
    * @memberof User
    */
@@ -225,9 +225,9 @@ export default class User {
 
   /**
    * Update the user record (e.g from profile page)
-   * 
-   * @param {any} req 
-   * @param {any} res 
+   *
+   * @param {any} req
+   * @param {any} res
    * @returns {null} Null
    * @memberof User
    */

@@ -2,17 +2,17 @@ import nodemailer from 'nodemailer';
 
 /**
  * Mailer class definition
- * 
+ *
  * @export
  * @class Nodemailer
  */
 export default class Mailer {
   /**
    * Send mail
-   * 
-   * @param {object} receivers 
+   *
+   * @param {object} receivers
    * @param {string} subject Subject of the mail
-   * @param {any} message 
+   * @param {any} message
    * @returns {object} Nodemailer instance
    * @memberof Nodemailer
    */

@@ -35,7 +35,7 @@ class Home extends Component {
             <li> ~ Share your recipe ideas and inventions with the world</li>
             <li> ~ Try something new from others' recipe ideas </li>
             <li> ~ Share your feedback about the new experience (Upvote, downvote or express how you feel in your own words!)</li>
-            <li> ~ Like a recipe? Yes, you can add it to your own favorite recipes list</li>
+            <li> ~ Like a recipe? go on and add it to your favorite recipes list !</li>
           </ul>
         </div>
 
