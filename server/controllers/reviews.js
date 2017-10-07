@@ -1,7 +1,10 @@
 import models from '../models';
 import * as validate from '../middleware/validate';
+import * as notify from './../services/notify';
 
 const review = models.Review;
+const recipe = models.Recipe;
+
 /**
  * Class Definition for the Review Object
  *
@@ -18,7 +21,7 @@ export default class Review {
    * @memberof Review
    */
   postReview(req, res) {
-    const userId = req.userId;
+    const userId = req.user.id;
     const recipeId = req.params.recipeId;
     const content = (req.body.content || '').replace(/\s+/g, ' ');
 
@@ -36,10 +39,27 @@ export default class Review {
         recipeId
       })
       .then((createdReview) => {
-        res.status(201).json({
-          success: true,
-          message: 'New review created',
-          createdReview });
+        recipe
+          .findOne({
+            attributes: ['userId'],
+            where: { id: recipeId },
+            include: [
+              { model: models.User, attributes: ['email'] }
+            ]
+          })
+          .then((recipeOwner) => {
+            const recipeOwnerEmail = recipeOwner.User.email;
+            notify.default(recipeOwnerEmail,
+              'New Review on Recipe',
+              'Someone recently posted a review on one of your Recipes'
+            );
+
+            return res.status(201).json({
+              success: true,
+              message: 'New review created',
+              createdReview,
+              recipeOwnerEmail });
+          });
       })
       .catch(() => res.status(500).json({
         success: false,

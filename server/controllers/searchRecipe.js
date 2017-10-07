@@ -39,11 +39,13 @@ export default class Search {
         return res.status(201).json({
           success: true,
           message: 'Recipe(s) found',
-          recipe: foundRecipes });
+          recipe: foundRecipes
+        });
       })
       .catch(() => res.status(500).json({
         success: false,
-        message: 'Unable to fetch recipes' }));
+        message: 'Unable to fetch recipes'
+      }));
 
     return this;
   }
@@ -64,11 +66,15 @@ export default class Search {
       .findAll({
         where: {
           $or: [
-            { name: {
-              $iLike: `%${searchTerm}%` }
+            {
+              name: {
+                $iLike: `%${searchTerm}%`
+              }
             },
-            { ingredients: {
-              $iLike: `%${searchTerm}%` }
+            {
+              ingredients: {
+                $iLike: `%${searchTerm}%`
+              }
             }
           ]
         },
@@ -85,14 +91,20 @@ export default class Search {
             attributes: ['name'],
             where: {
               $or: [
-                { name: {
-                  $iLike: `%${searchTerm}%` }
+                {
+                  name: {
+                    $iLike: `%${searchTerm}%`
+                  }
                 },
-                { username: {
-                  $iLike: searchTerm }
+                {
+                  username: {
+                    $iLike: searchTerm
+                  }
                 },
-                { email: {
-                  $iLike: searchTerm }
+                {
+                  email: {
+                    $iLike: searchTerm
+                  }
                 },
               ]
             },
@@ -103,11 +115,13 @@ export default class Search {
           .then(recipes => res.status(201).json({
             success: true,
             message: 'Recipe(s) found',
-            recipe: results.concat(recipes) }));
+            recipe: results.concat(recipes)
+          }));
       })
       .catch(() => res.status(500).json({
         success: false,
-        message: 'Unable to search recipes' }));
+        message: 'Unable to search recipes'
+      }));
 
     return this;
   }
@@ -124,7 +138,8 @@ export default class Search {
     const ingredients = req.query.ingredients.split(' ');
 
     const queryClause = ingredients.map(item => ({
-      ingredients: { $iLike: `%${item}%` } }));
+      ingredients: { $iLike: `%${item}%` }
+    }));
 
     recipe
       .findAll({
@@ -151,8 +166,52 @@ export default class Search {
       })
       .catch(() => res.status(500).json({
         success: false,
-        message: 'Unable to search recipes' }));
+        message: 'Unable to search recipes'
+      }));
+
+    return this;
+  }
+
+  /**
+   *  Fetch list of recipes based on name supplied
+   * 
+   * @param {any} req 
+   * @param {any} res 
+   * @returns {object} Classs instance
+   * @memberof Search
+   */
+  searchByName(req, res) {
+    const recipes = req.query.recipes;
+
+    recipe
+      .findAll({
+        where: {
+          name: { $iLike: `%${recipes}%` }
+        },
+        include: [
+          { model: models.User, attributes: ['name', 'updatedAt'] }
+        ]
+      })
+      .then((foundRecipes) => {
+        if (!foundRecipes) {
+          return res.status(404).json({
+            success: true,
+            message: 'Nothing found',
+          });
+        }
+
+        return res.status(201).json({
+          success: true,
+          message: 'Recipe(s) found',
+          recipe: foundRecipes,
+        });
+      })
+      .catch(() => res.status(500).json({
+        success: false,
+        message: 'Unable to search recipes'
+      }));
 
     return this;
   }
 }
+

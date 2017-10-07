@@ -1,8 +1,11 @@
 import models from '../models';
 import * as validate from '../middleware/validate';
 import * as Search from './searchRecipe';
+import * as notify from './../services/notify';
 
 const recipe = models.Recipe;
+const favorite = models.Favorite;
+
 const trimWhiteSpaces = param => (param || '')
   .replace(/\s+/g, ' ');
 
@@ -23,24 +26,27 @@ export default class Recipe {
    */
   createRecipe(req, res) {
     const name = trimWhiteSpaces(req.body.name);
+    const description = trimWhiteSpaces(req.body.description);
     const ingredients = trimWhiteSpaces(req.body.ingredients);
     const direction = trimWhiteSpaces(req.body.direction);
 
     const validateRecipeError =
-    validate.validateRecipeDetails(name, ingredients, direction);
+      validate.validateRecipeDetails(name, ingredients, direction);
 
     if (validateRecipeError) {
       return res.status(400).json({
         success: false,
-        message: validateRecipeError });
+        message: validateRecipeError
+      });
     }
 
     recipe
       .create({
         name,
+        description,
         ingredients,
         direction,
-        userId: req.userId
+        userId: req.user.id
       })
       .then((createdRecipe) => {
         res.status(201).json({
@@ -51,7 +57,8 @@ export default class Recipe {
       })
       .catch(() => res.status(500).json({
         success: false,
-        message: 'Error Creating Recipe' }));
+        message: 'Error Creating Recipe'
+      }));
 
     return this;
   }
@@ -65,20 +72,22 @@ export default class Recipe {
    * @memberof Recipe
    */
   modifyRecipe(req, res) {
-    const userId = req.userId;
+    const userId = req.user.id;
     const recipeId = req.params.recipeId || 0;
     const name = trimWhiteSpaces(req.body.name);
+    const description = trimWhiteSpaces(req.body.description);
     const ingredients = trimWhiteSpaces(req.body.ingredients);
     const direction = (req.body.direction);
 
     const validateRecipeError =
-    validate.validateRecipeDetails(name, ingredients,
-      direction, recipeId);
+      validate.validateRecipeDetails(name, ingredients,
+        direction, recipeId);
 
     if (validateRecipeError) {
       return res.status(400).json({
         success: false,
-        message: validateRecipeError });
+        message: validateRecipeError
+      });
     }
 
     recipe
@@ -100,6 +109,7 @@ export default class Recipe {
 
         recipe.update({
           name,
+          description,
           ingredients,
           direction
         }, {
@@ -108,15 +118,33 @@ export default class Recipe {
           },
           returning: true
         })
-          .then(result => res.status(201).json({
-            success: true,
-            message: 'Recipe record updated',
-            recipe: result[1]
-          }));
+          .then((result) => {
+            favorite
+              .findAll({
+                attributes: ['userId'],
+                where: { recipeId },
+                include: [
+                  { model: models.User, attributes: ['email'] }
+                ]
+              })
+              .then((foundUsers) => {
+                const userEmails = foundUsers.map(user => user.User.email);
+                notify.default(userEmails,
+                  'Favorite Recipe Modified',
+                  'One of your favorite recipes has been modified');
+
+                res.status(201).json({
+                  success: true,
+                  message: 'Recipe record updated',
+                  recipe: result[1],
+                });
+              });
+          });
       })
       .catch(() => res.status(500).json({
         success: false,
-        message: 'Error Modifying Recipe' }));
+        message: 'Error Modifying Recipe'
+      }));
 
     return this;
   }
@@ -131,7 +159,7 @@ export default class Recipe {
    */
   deleteRecipe(req, res) {
     const recipeId = req.params.recipeId;
-    const userId = req.userId;
+    const userId = req.user.id;
 
     recipe
       .findById(recipeId)
@@ -162,7 +190,8 @@ export default class Recipe {
       })
       .catch(() => res.status(500).json({
         success: false,
-        message: 'Error Deleting Recipe' }));
+        message: 'Error Deleting Recipe'
+      }));
 
     return this;
   }
@@ -203,7 +232,8 @@ export default class Recipe {
       }))
       .catch(() => res.status(500).json({
         success: false,
-        message: 'Unable to fetch recipes' }));
+        message: 'Unable to fetch recipes'
+      }));
 
     return this;
   }
@@ -217,11 +247,14 @@ export default class Recipe {
    * @memberof Recipe
    */
   getUserRecipes(req, res) {
-    const userId = req.userId;
+    const userId = req.user.id;
 
     recipe
       .findAll({
-        where: { userId }
+        where: { userId },
+        include: [
+          { model: models.User, attributes: ['name', 'updatedAt'] }
+        ]
       })
       .then((foundRecipes) => {
         if (!foundRecipes) {
@@ -234,11 +267,13 @@ export default class Recipe {
         return res.status(201).json({
           success: true,
           message: 'User Recipes found',
-          recipe: foundRecipes });
+          recipe: foundRecipes
+        });
       })
       .catch(() => res.status(500).json({
         success: false,
-        message: 'Unable to get user recipes' }));
+        message: 'Unable to get user recipes'
+      }));
 
     return this;
   }
@@ -258,6 +293,8 @@ export default class Recipe {
       newSearch.sortMostUpvotes(req, res);
     } else if (req.query.ingredients) {
       newSearch.searchByIngredients(req, res);
+    } else if (req.query.recipes) {
+      newSearch.searchByName(req, res);
     } else if (req.query.search) {
       newSearch.searchAll(req, res);
     } else {
@@ -278,11 +315,13 @@ export default class Recipe {
           return res.status(201).json({
             success: true,
             message: 'Recipes found',
-            recipe: foundRecipes });
+            recipe: foundRecipes
+          });
         })
         .catch(() => res.status(500).json({
           success: false,
-          message: 'Unable to fetch recipes' }));
+          message: 'Unable to fetch recipes'
+        }));
 
       return this;
     }

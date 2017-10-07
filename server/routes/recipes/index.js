@@ -17,8 +17,6 @@ user.route('/')
   .post(newRecipe.createRecipe)
   .get(newRecipe.getAllRecipes);
 
-// user.use('/:recipeId', validate.validateRecipeId);
-
 user.route('/:recipeId')
   .all(validate.validateRecipeId)
   .get(newRecipe.getRecipe)

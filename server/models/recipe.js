@@ -10,6 +10,9 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    description: {
+      type: DataTypes.STRING,
+    },
     ingredients: DataTypes.STRING,
     direction: DataTypes.STRING,
     viewCount: {

@@ -20,7 +20,7 @@ export default class Vote {
    * @memberof Vote
    */
   upvoteRecipe(req, res) {
-    const userId = req.userId;
+    const userId = req.user.id;
     const recipeId = req.params.recipeId;
 
     downvote
@@ -94,7 +94,7 @@ export default class Vote {
    * @memberof Vote
    */
   downvoteRecipe(req, res) {
-    const userId = req.userId;
+    const userId = req.user.id;
     const recipeId = req.params.recipeId;
 
     upvote

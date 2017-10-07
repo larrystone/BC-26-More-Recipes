@@ -28,7 +28,7 @@ export default class Auth {
           return res.json({ success: false,
             message: 'Failed to authenticate token.' });
         }
-        req.userId = decoded;
+        req.user = decoded;
         next();
       });
     } else {
@@ -44,12 +44,12 @@ export default class Auth {
   /**
    * Sign (Hash) User ID with JWT token
    *
-   * @param {string} id - User Id
+   * @param {object} user - User id and email address
    * @returns {string} Encrypted string
    * @memberof Auth
    */
-  sign(id) {
+  sign(user) {
     this.secret = process.env.secret || '!^sl1@#=5';
-    return jwt.sign(id, this.secret);
+    return jwt.sign(user, this.secret);
   }
 }
