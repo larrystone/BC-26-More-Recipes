@@ -1,6 +1,7 @@
 //colors
 $color_green_lighten_2: #81c784;
 $color_nobel_approx: #b6b5b5;
+$color_white: #fff;
 
 //fonts
 $font_0: Marmelad;
@@ -20,12 +21,10 @@ $font_3: cursive;
 
 main {
   flex: 1 0 auto;
-  top: 90px;
-	position: relative;
 }
 
 footer {
-	flex: 0 0 120px;
+	flex: 0 0 130px;
 	padding: 15px;
 	margin-top: 130px;
 	color: #fff;
@@ -82,4 +81,17 @@ a:hover {
 
 h5 {
 	font-size: 18px;
+}
+
+.overlay {
+  position: relative;
+  top: -150px;
+  text-align: center;
+  color: $color_white;
+}
+
+.intro {
+  font-family: $font_3;
+  padding-left: 10px; 
+  font-size: 15px;
 }
