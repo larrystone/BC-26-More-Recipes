@@ -21,7 +21,7 @@ export default class Review {
    * @memberof Review
    */
   postReview(req, res) {
-    const userId = req.userId;
+    const userId = req.user.id;
     const recipeId = req.params.recipeId;
     const content = (req.body.content || '').replace(/\s+/g, ' ');
 

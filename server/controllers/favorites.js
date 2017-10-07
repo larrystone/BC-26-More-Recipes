@@ -19,7 +19,7 @@ export default class Favorite {
    * @memberof Favorite
    */
   addToFavorite(req, res) {
-    const userId = req.userId;
+    const userId = req.user.id;
     const recipeId = req.params.recipeId;
 
     const validateUserIdError = validate.validateUserId(userId);

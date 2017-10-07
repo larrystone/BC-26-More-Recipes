@@ -39,7 +39,8 @@ export default class User {
     if (validateSignUpError) {
       return res.status(400).json({
         success: false,
-        message: validateSignUpError });
+        message: validateSignUpError
+      });
     }
 
     user
@@ -47,11 +48,15 @@ export default class User {
         attributes: ['id', 'email', 'username'],
         where: {
           $or: [
-            { username: {
-              $iLike: username }
+            {
+              username: {
+                $iLike: username
+              }
             },
-            { email: {
-              $iLike: email }
+            {
+              email: {
+                $iLike: email
+              }
             }
           ]
         }
@@ -79,7 +84,11 @@ export default class User {
             password: newEncryption.generateHash(password),
           })
           .then((result) => {
-            const token = newAuth.sign(result.id);
+            const token = newAuth.sign({
+              id: result.id,
+              email: result.email,
+              username: result.username,
+            });
 
             const createdUser = {
               userId: result.id,
@@ -92,12 +101,14 @@ export default class User {
             return res.status(201).json({
               success: true,
               message: 'New user created/token generated!',
-              recipe: createdUser });
+              recipe: createdUser
+            });
           });
       })
       .catch(() => res.status(500).json({
         success: false,
-        message: 'Error Creating user' }));
+        message: 'Error Creating user'
+      }));
 
     return this;
   }
@@ -119,11 +130,15 @@ export default class User {
         attributes: ['id', 'name', 'username', 'email', 'password'],
         where: {
           $or: [
-            { username: {
-              $iLike: usernameOrEmail }
+            {
+              username: {
+                $iLike: usernameOrEmail
+              }
             },
-            { email: {
-              $iLike: usernameOrEmail }
+            {
+              email: {
+                $iLike: usernameOrEmail
+              }
             }
           ]
         }
@@ -137,7 +152,11 @@ export default class User {
         }
 
         if (newEncryption.verifyHash(req.body.password, userFound.password)) {
-          const token = newAuth.sign(userFound.id);
+          const token = newAuth.sign({
+            id: userFound.id,
+            email: userFound.email,
+            username: userFound.username
+          });
 
           const loggedUser = {
             userId: userFound.id,
@@ -161,6 +180,82 @@ export default class User {
       .catch(() => res.status(500).json({
         success: false,
         message: 'Error Signing In User'
+      }));
+
+    return this;
+  }
+
+  /**
+   * Get the user record (e.g for profile page)
+   * 
+   * @param {any} req 
+   * @param {any} res 
+   * @returns {null} Null
+   * @memberof User
+   */
+  getUser(req, res) {
+    const userId = req.params.userId;
+
+    user
+      .findOne({
+        attributes: ['id', 'name', 'username', 'email'],
+        where: { id: userId }
+      })
+      .then((userFound) => {
+        const loggedUser = {
+          userId: userFound.id,
+          name: userFound.name,
+          username: userFound.username,
+          email: userFound.email,
+        };
+
+        return res.status(201).json({
+          success: true,
+          message: 'User found!',
+          user: loggedUser
+        });
+      })
+      .catch(() => res.status(500).json({
+        success: false,
+        message: 'Error Fetching User'
+      }));
+
+    return this;
+  }
+
+  /**
+   * Update the user record (e.g from profile page)
+   * 
+   * @param {any} req 
+   * @param {any} res 
+   * @returns {null} Null
+   * @memberof User
+   */
+  updateUser(req, res) {
+    const userId = req.params.userId;
+
+    user
+      .findOne({
+        attributes: ['id', 'name', 'username', 'email'],
+        where: { id: userId }
+      })
+      .then((userFound) => {
+        const loggedUser = {
+          userId: userFound.id,
+          name: userFound.name,
+          username: userFound.username,
+          email: userFound.email,
+        };
+
+        return res.status(201).json({
+          success: true,
+          message: 'User found!',
+          user: loggedUser
+        });
+      })
+      .catch(() => res.status(500).json({
+        success: false,
+        message: 'Error Fetching User'
       }));
 
     return this;
