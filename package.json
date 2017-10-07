@@ -26,9 +26,7 @@
     "nodemon": "^1.11.0",
     "pg": "^6.4.1",
     "pg-hstore": "^2.3.2",
-    "sequelize": "^4.8.0",
-    "webpack": "^3.6.0",
-    "webpack-dev-server": "^2.8.2"
+    "sequelize": "^4.8.0"
   },
   "devDependencies": {
     "should": "^11.2.1",

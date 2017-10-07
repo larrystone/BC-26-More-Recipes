@@ -101,7 +101,7 @@ export default class User {
             return res.status(201).json({
               success: true,
               message: 'New user created/token generated!',
-              recipe: createdUser
+              user: createdUser
             });
           });
       })
@@ -169,7 +169,7 @@ export default class User {
           return res.status(201).json({
             success: true,
             message: 'User Signed In/token generated!',
-            recipe: loggedUser
+            user: loggedUser
           });
         }
         res.status(401).json({

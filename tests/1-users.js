@@ -5,6 +5,8 @@ import server from './../server/app';
 
 chai.use(chaiHttp);
 
+let token, userId;
+
 describe('/POST User Sign Up validation Test', () => {
   it('should return \'Password must be at least 6 characters!\'', (done) => {
     chai.request(server)
@@ -178,7 +180,7 @@ describe('/POST User Sign Up Test', () => {
       })
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
-        expect(res.body.recipe).to.have.all.deep.keys(
+        expect(res.body.user).to.have.all.deep.keys(
           'userId', 'name', 'username', 'email', 'token');
         done();
       });
@@ -196,7 +198,7 @@ describe('/POST User Sign Up Test', () => {
       })
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
-        expect(res.body.recipe).to.have.all.deep.keys(
+        expect(res.body.user).to.have.all.deep.keys(
           'userId', 'name', 'username', 'email', 'token');
         done();
       });
@@ -214,7 +216,7 @@ describe('/POST User Sign Up Test', () => {
       })
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
-        expect(res.body.recipe).to.have.all.deep.keys(
+        expect(res.body.user).to.have.all.deep.keys(
           'userId', 'name', 'username', 'email', 'token');
         done();
       });
@@ -272,7 +274,7 @@ describe('/POST User Sign In Test', () => {
       })
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
-        expect(res.body.recipe).to.have.all.deep.keys(
+        expect(res.body.user).to.have.all.deep.keys(
           'userId', 'name',
           'username', 'email', 'token');
         done();
@@ -290,7 +292,7 @@ describe('/POST User Sign In Test', () => {
         })
         .end((err, res) => {
           expect(res.statusCode).to.equal(201);
-          expect(res.body.recipe).to.have.all.deep.keys(
+          expect(res.body.user).to.have.all.deep.keys(
             'userId', 'name',
             'username', 'email', 'token');
           done();
@@ -307,7 +309,7 @@ describe('/POST User Sign In Test', () => {
         })
         .end((err, res) => {
           expect(res.statusCode).to.equal(201);
-          expect(res.body.recipe).to.have.all.deep.keys(
+          expect(res.body.user).to.have.all.deep.keys(
             'userId', 'name',
             'username', 'email', 'token');
           done();
@@ -323,8 +325,10 @@ describe('/POST User Sign In Test', () => {
           password: 'westsddae',
         })
         .end((err, res) => {
+          token = res.body.user.token;
+          userId = res.body.user.userId;
           expect(res.statusCode).to.equal(201);
-          expect(res.body.recipe).to.have.all.deep.keys(
+          expect(res.body.user).to.have.all.deep.keys(
             'userId', 'name',
             'username', 'email', 'token');
           done();
@@ -366,5 +370,22 @@ describe('/POST User Sign In Test', () => {
           done();
         });
     });
+  });
+});
+
+describe('/GET User profile Test', () => {
+  it('should return a user if any', (done) => {
+    chai.request(server)
+      .get(`/api/v1/users/${userId}/profile`)
+      .set('Accept', 'application/json')
+      .set('x-access-token', token)
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(201);
+        expect(res.body.success).to.equal(true);
+        expect(res.body.user).to.have.all.deep.keys(
+          'userId', 'name',
+          'username', 'email');
+        done();
+      });
   });
 });

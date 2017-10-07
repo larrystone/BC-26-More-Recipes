@@ -21,8 +21,8 @@ describe('/POST Create User and Recipe', () => {
         password: 'testing'
       })
       .end((err, res) => {
-        token = res.body.recipe.token;
-        userId = res.body.recipe.userId;
+        token = res.body.user.token;
+        userId = res.body.user.userId;
         expect(res.statusCode).to.equal(201);
         done();
       });
