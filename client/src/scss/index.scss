@@ -26,7 +26,7 @@ main {
 footer {
 	flex: 0 0 130px;
 	padding: 15px;
-	margin-top: 130px;
+	margin-top: 50px;
 	color: #fff;
 	background-color: $color_green_lighten_2;
 	display: flex;
@@ -95,4 +95,9 @@ h5 {
   font-family: $font_3;
   padding-left: 10px; 
   font-size: 15px;
+  text-align: center;
+}
+
+.clickable {
+  cursor: pointer;
 }
