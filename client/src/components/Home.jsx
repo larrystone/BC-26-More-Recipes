@@ -17,7 +17,7 @@ class Home extends Component {
           <p> More-Recipes is your social media for connecting with wonderful delicacies! </p>
           <ul>
             <li> ~ Share your recipe ideas and inventions with the world</li>
-            <li> ~ Try something new from others recipe ideas </li>
+            <li> ~ Try something new from others' recipe ideas </li>
             <li> ~ Share your feedback about the new experience (Upvote, downvote or express how you feel in your own words!)</li>
             <li> ~ Like a recipe? Yes, you can add it to your own favorite recipes list</li>
           </ul>
@@ -37,8 +37,9 @@ class Home extends Component {
         <HomeHeader />
         <main>
           {this.renderIntro()}
-          <center><span className="full-title">Featured Recipes</span></center>
+          <div className="full-title">Featured Recipes</div>
           <div className="rounded-line" />
+          
         </main>
         <Footer />
       </div>
