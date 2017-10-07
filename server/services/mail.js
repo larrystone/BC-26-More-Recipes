@@ -44,9 +44,8 @@ export default class Mailer {
         if (error) {
           return error.message;
         }
-        // console.log('Message sent: %s', JSON.stringify(info));
         // Preview only available when sending through an Ethereal account
-        console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+        // console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
         return info.messageId;
       });
     });
