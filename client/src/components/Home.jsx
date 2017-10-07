@@ -1,9 +1,25 @@
 import React, { Component } from 'react';
+import { Card } from 'semantic-ui-react';
 
 import HomeHeader from './HomeHeader';
 import Footer from './Footer';
+import RecipeItem from './RecipeItem';
+
+import SampleRecipes from '../SampleRecipes.json';
 
 class Home extends Component {
+  renderSampleRecipes = () => {
+    const samples = SampleRecipes;
+    return (
+      samples.map(sample => (
+        <RecipeItem
+          key={sample.id}
+          recipe={sample}
+        />
+      ))
+    );
+  }
+
   renderIntro = () => {
     return (
       <div>
@@ -39,7 +55,10 @@ class Home extends Component {
           {this.renderIntro()}
           <div className="full-title">Featured Recipes</div>
           <div className="rounded-line" />
-          
+
+          <Card.Group>
+            {this.renderSampleRecipes()}
+          </Card.Group>
         </main>
         <Footer />
       </div>
