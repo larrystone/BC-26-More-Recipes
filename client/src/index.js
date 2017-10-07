@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 
 import './scss/index.scss';
 
+import Home from './components/Home.jsx';
+
 ReactDOM.render(
-  <div>Welcome to More-Recipes</div>, document.querySelector('#root')
+  <Home />, document.querySelector('#root')
 );
