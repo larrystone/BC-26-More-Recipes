@@ -1,0 +1,46 @@
+//colors
+$color_green_lighten_2: #81c784;
+
+//fonts
+$font_0: Marmelad;
+$font_1: Helvetica;
+$font_2: Courgette;
+$font_3: cursive;
+
+#root, .body {
+	height: 100%;
+}
+
+.body {
+	display: flex;
+	flex-direction: column;
+	margin: 0;
+	font-size: 0.9em;
+}
+
+main {
+	flex: 1 0 auto;
+}
+
+header {
+	color: #fff;
+	background-color: $color_green_lighten_2;
+	box-shadow: 1px 2px 2px grey;
+	display: flex;
+	align-items: center;
+	padding: 15px;
+	position: fixed;
+	width: 100%;
+	z-index: 9;
+}
+
+.brand-logo {
+	font-size: 22px;
+	font-family: $font_2, $font_3;
+	margin-right: auto;
+	margin-left: auto;
+}
+
+#title {
+	padding: 10px;
+}
