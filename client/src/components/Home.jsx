@@ -6,14 +6,12 @@ import Footer from './Footer';
 class Home extends Component {
   render() {
     return (
-      <div>
+      <div className='body'>
         <HomeHeader />
-
-        <div className="recipes">
+        <main>
           <center><span className="full-title">Featured Recipes</span></center>
           <div className="rounded-line" />
-        </div>
-
+        </main>
         <Footer />
       </div>
     );

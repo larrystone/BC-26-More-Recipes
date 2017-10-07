@@ -1,5 +1,6 @@
 //colors
 $color_green_lighten_2: #81c784;
+$color_nobel_approx: #b6b5b5;
 
 //fonts
 $font_0: Marmelad;
@@ -15,14 +16,28 @@ $font_3: cursive;
 	display: flex;
 	flex-direction: column;
 	margin: 0;
-	font-size: 0.9em;
 }
 
 main {
-	flex: 1 0 auto;
+  flex: 1 0 auto;
+  top: 90px;
+	position: relative;
 }
 
+footer {
+	flex: 0 0 120px;
+	padding: 15px;
+	margin-top: 130px;
+	color: #fff;
+	background-color: $color_green_lighten_2;
+	display: flex;
+	justify-content: space-around;
+}
 
+ul {
+  list-style: none;
+  padding: 0px;
+}
 
 header {
 	color: #fff;
@@ -43,6 +58,28 @@ header {
 	margin-left: auto;
 }
 
-#title {
-	padding: 10px;
+a:hover {
+	text-decoration: none;
+	cursor: pointer;
+}
+
+.full-title {
+	font-family: $font_0, $font_1;
+	letter-spacing: 1px;
+	font-size: 22px;
+}
+
+.rounded-line {
+	height: 3px;
+	width: 320px;
+	max-width: 100%;
+	margin: 5px auto 0;
+	background-color: $color_nobel_approx;
+	//Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+	border-radius: 5px;
+	margin-bottom: 10px;
+}
+
+h5 {
+	font-size: 18px;
 }
