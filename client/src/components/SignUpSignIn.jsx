@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Form, Modal, Button } from 'semantic-ui-react'
+import { Form, Modal, Button } from 'semantic-ui-react';
+import axios from 'axios';
 
 import * as validate from '../../../server/middleware/validate';
 
@@ -13,8 +14,7 @@ class SignInSignUp extends Component {
       email: '',
       password1: '',
       password2: '',
-      status: 'login',
-      error: 'error',
+      error: '',
       loading: false
     };
   }
@@ -124,7 +124,19 @@ class SignInSignUp extends Component {
           { error: 'Password don\'t match' }
         );
       } else {
-        //TODO use axios to connect to backend
+        axios.post('/api/v1/users/signup', {
+          name, username, email, password: password1
+        })
+          .then((loggedUser) => {
+            this.setState(
+              { error: 'signup success!' }
+            );
+          })
+          .catch((error) => {
+            this.setState(
+              { error: error.response.data.message }
+            );
+          });
       }
   }
 
