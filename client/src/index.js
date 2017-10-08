@@ -7,8 +7,25 @@ import './scss/index.scss';
 
 import reducer from './reducers';
 import Home from './components/Home.jsx';
+import { verifyUser } from './helpers/jwt';
 
 const store = createStore(reducer);
+
+const TOKEN = 'more-recipe-token';
+
+const authenticateUser = () => {
+  const user = verifyUser();
+  if (user) {
+    store.dispatch(
+      logUser(user)
+    )
+    return true;
+  }
+
+  bake_cookie(TOKEN, null);
+
+  return false;
+}
 
 ReactDOM.render(
   <Provider store={store}>
