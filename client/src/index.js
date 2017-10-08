@@ -34,14 +34,29 @@ const authenticateUser = () => {
   return false;
 }
 
-ReactDOM.render(
-  <Provider store={store}>
-    <Router history={createBrowserHistory()}>
+const getRoutes = () => {
+  if (authenticateUser()) {
+    return (
       <Switch>
         <Route exact path="/" component={Home} />
         <Route path="/dashboard" component={Dashboard} />
         <Redirect to='/' />
       </Switch>
+    )
+  } else {
+    return (
+      <Switch>
+        <Route exact path="/" component={Home} />
+        <Redirect to='/' />
+      </Switch>
+    )
+  }
+}
+
+ReactDOM.render(
+  <Provider store={store}>
+    <Router history={createBrowserHistory()}>
+      {getRoutes()}
     </Router>
   </Provider>, document.querySelector('#root')
 );
