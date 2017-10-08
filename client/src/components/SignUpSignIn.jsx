@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Form, Modal, Button } from 'semantic-ui-react';
 import axios from 'axios';
 import { bake_cookie } from 'sfcookies';
+import { createBrowserHistory } from 'history';
 
 import { setDialogType } from '../actions/dialog';
 
@@ -144,10 +145,8 @@ class SignInSignUp extends Component {
           name, username, email, password: password1
         })
           .then((loggedUser) => {
-            this.setState(
-              { loading: false, error: 'signup success!' }
-            );
             this.storeToken(loggedUser.data.user.token);
+            this.redirectToDashboard();
           })
           .catch((error) => {
             this.setState(
@@ -229,10 +228,8 @@ class SignInSignUp extends Component {
       username, password: password1
     })
       .then((loggedUser) => {
-        this.setState(
-          { loading: false, error: 'signin success!' }
-        );
         this.storeToken(loggedUser.data.user.token);
+        this.redirectToDashboard();
       })
       .catch((error) => {
         this.setState(
@@ -243,6 +240,11 @@ class SignInSignUp extends Component {
 
   storeToken = (token) => {
     bake_cookie(TOKEN, token);
+  }
+
+  redirectToDashboard = () => {
+    createBrowserHistory().replace('/dashboard');
+    window.location.reload();
   }
 
   renderResetPassword = () => {
