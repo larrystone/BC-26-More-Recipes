@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Form, Modal, Button } from 'semantic-ui-react'
 
+import * as validate from '../../../server/middleware/validate';
 
 class SignInSignUp extends Component {
   constructor(props) {
@@ -13,7 +14,7 @@ class SignInSignUp extends Component {
       password1: '',
       password2: '',
       status: 'login',
-      error: '',
+      error: 'error',
       loading: false
     };
   }
@@ -33,6 +34,10 @@ class SignInSignUp extends Component {
       return this.renderSignUp();
     } else if (dialogType === 'signin') {
       // TODO return signIn form
+    } else {
+      return (
+        <div></div>
+      )
     }
   }
 
@@ -82,7 +87,7 @@ class SignInSignUp extends Component {
               onChange={(event) => {
                 this.storeToState('password2', event.target.value)
               }} />
-            <h6 className="red-text"><em>{this.state.error}</em></h6>
+            <span className="error">{this.state.error}</span>
             <Form.Button positive
               disabled={loading}
               onClick={(event) => {
@@ -102,8 +107,28 @@ class SignInSignUp extends Component {
     )
   }
 
+  handleSignUp = (event) => {
+    const { name, username, email, password1, password2 } = this.state;
+
+    const error = validate.validateSignUp(
+      name, username, email, password1
+    );
+
+    if (error) {
+      this.setState(
+        { error }
+      );
+    } else
+      if (password1 !== password2) {
+        this.setState(
+          { error: 'Password don\'t match' }
+        );
+      } else {
+        //TODO use axios to connect to backend
+      }
+  }
+
   render() {
-    console.log(this.props.dialogType)
     return (
       <div>
         {this.showSignInSignUp()}

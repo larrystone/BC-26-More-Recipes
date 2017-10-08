@@ -2,6 +2,7 @@
 $color_green_lighten_2: #81c784;
 $color_nobel_approx: #b6b5b5;
 $color_white: #fff;
+$color_red: #F71111;
 
 //fonts
 $font_0: Marmelad;
@@ -100,4 +101,10 @@ h5 {
 
 .clickable {
   cursor: pointer;
+}
+
+.error {
+	color: $color_red;
+	font-style: italic;
+	font-size: 14px;
 }
