@@ -4,6 +4,7 @@ import { Card } from 'semantic-ui-react';
 import HomeHeader from './HomeHeader';
 import Footer from './Footer';
 import RecipeItem from './RecipeItem';
+import SignUpSignIn from './SignUpSignIn';
 
 import SampleRecipes from '../SampleRecipes.json';
 
@@ -52,6 +53,7 @@ class Home extends Component {
       <div className='body'>
         <HomeHeader />
         <main>
+          <SignUpSignIn />
           {this.renderIntro()}
           <div className="full-title">Featured Recipes</div>
           <div className="rounded-line" />

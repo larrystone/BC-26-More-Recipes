@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { setDialogType } from '../actions/dialog';
 
 /**
- * Header component
+ * Home Header component
  * 
  * @export
  * @class Header
@@ -29,7 +29,7 @@ class Header extends Component {
       <div className="nav-item">
         <Button basic
           onClick={() => {
-            this.props.setDialogType('signin')
+            this.props.setDialogType('signup')
           }}
         >
           SignUp
