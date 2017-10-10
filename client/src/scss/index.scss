@@ -40,26 +40,28 @@ ul {
 }
 
 .flex-item {
-	margin-right: 15px;
+	margin-right: 10px;
 }
 
 header {
 	color: #fff;
+	padding: 10px 15px 10px 0px;
 	background-color: $color_green_lighten_2;
 	box-shadow: 1px 2px 2px grey;
-	display: flex;
-	align-items: center;
-	padding: 15px;
 	position: fixed;
 	width: 100%;
 	z-index: 9;
 }
 
+.flex-row {
+	display: flex;
+	align-items: center;
+}
+
 .brand-logo {
 	font-size: 22px;
 	font-family: $font_2, $font_3;
-	margin-right: auto;
-	margin-left: auto;
+	margin: 0px auto;
 }
 
 a:hover {
