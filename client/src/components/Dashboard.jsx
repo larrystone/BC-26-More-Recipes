@@ -1,16 +1,37 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 import DashboardHeader from './DashboardHeader';
 import Footer from './Footer';
 
 class Dashboard extends Component {
+  showDashboardSection = () => {
+    const { dashboardSection } = this.props;
+    if (dashboardSection === 'home') {
+      return (
+        <div>Welcome home</div>
+      )
+    } else if (dashboardSection === 'my_recipes') {
+      return (
+        <div>Welcome to My recipes</div>
+      )
+    } else if (dashboardSection === 'my_favs') {
+      return (
+        <div>Welcome to My favs</div>
+      )
+    } else {
+      return <div></div>
+    }
+  }
+
   render() {
     return (
       <div className='body'>
         <DashboardHeader />
         <main>
-          <div className="push-down">This is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the Dashboard
-          This is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the DashboardThis is the Dashboard</div>
+          <div className="push-down">
+            {this.showDashboardSection()}
+          </div>
         </main>
         <Footer />
       </div>
@@ -18,4 +39,10 @@ class Dashboard extends Component {
   }
 }
 
-export default Dashboard;
+const mapStateToProps = (state) => {
+  return {
+    dashboardSection: state.dashboard
+  }
+}
+
+export default connect(mapStateToProps, null)(Dashboard);

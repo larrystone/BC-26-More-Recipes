@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Form, Modal, Button } from 'semantic-ui-react';
+import { Form, Message, Icon, Modal, Button } from 'semantic-ui-react';
 import axios from 'axios';
 import { bake_cookie } from 'sfcookies';
 import { createBrowserHistory } from 'history';
@@ -95,7 +95,7 @@ class SignInSignUp extends Component {
               onChange={(event) => {
                 this.storeToState('password2', event.target.value)
               }} />
-            <span className="error">{this.state.error}</span>
+            {this.showError()}
             <Form.Button positive
               disabled={loading}
               onClick={(event) => {
@@ -156,6 +156,22 @@ class SignInSignUp extends Component {
       }
   }
 
+  showError = () => {
+    const { error } = this.state;
+
+    if (error) {
+      return (
+        <Message negative attached floating compact>
+          <Message.Content className="error">
+            {this.state.error}
+          </Message.Content>
+        </Message>
+      )
+    } else {
+      return <div></div>
+    }
+  }
+
   renderSignIn = () => {
     const { loading } = this.state;
     return (
@@ -184,7 +200,6 @@ class SignInSignUp extends Component {
               onChange={(event) => {
                 this.storeToState('password1', event.target.value)
               }} />
-            <span className="error">{this.state.error}</span>
             <h6 className="clickable"
               onClick={() => {
                 this.setState(
@@ -193,6 +208,7 @@ class SignInSignUp extends Component {
                 this.props.setDialogType('reset-password');
               }}
             >Forgot password?</h6>
+            {this.showError()}
             <Form.Button positive
               disabled={loading}
               onClick={(event) => {

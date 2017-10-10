@@ -1,6 +1,6 @@
 import { DASHBOARD_SECTION } from '../constants';
 
-let section = '';
+let section = 'home';
 
 export default (state = section, action) => {
   switch (action.type) {
