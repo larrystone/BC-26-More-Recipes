@@ -18,7 +18,8 @@ class Main extends Component {
     this.state = {
       recipes: null,
       searchCategory: 'recipes',
-      searchTerm: ''
+      searchTerm: '',
+      searching: false
     }
   }
 
@@ -44,8 +45,6 @@ class Main extends Component {
     this.fetchTopRecipes();
   }
 
-
-
   renderRecipes() {
     const recipes = this.state.recipes;
     if (!recipes) {
@@ -58,7 +57,7 @@ class Main extends Component {
     } else if (recipes.length === 0) {
       return (
         <Message
-          style={{ width: '100%', marginTop: '10px' }}
+          style={{ width: '100%', margin: '10px' }}
           color='green'
           size='large'>
           <Message.Header content="Nothing found!" />
@@ -81,7 +80,31 @@ class Main extends Component {
     }
   }
 
+  handleSearch = () => {
+    this.setState(
+      {searching: true}
+    )
+    const { searchTerm, searchCategory } = this.state;
+    axios({
+      method: 'GET',
+      url: `/api/v1/recipes?${searchCategory}=${searchTerm.replace(/\s+/g, '+')}`,
+      headers: { 'x-access-token': TOKEN }
+    })
+      .then((response) => {
+        this.setState(
+          {
+            recipes: response.data.recipe,
+            searching: false
+          }
+        )
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
   render() {
+    const { searching } = this.state;
     return (
       <div>
         <div className="flex-row">
@@ -91,6 +114,7 @@ class Main extends Component {
           </div>
           <div>
             <Input type='text' placeholder='Search for recipe...' action
+              disabled={searching}
               onChange={(event) => {
                 this.setState(
                   { searchTerm: event.target.value }
@@ -98,6 +122,7 @@ class Main extends Component {
               }}>
               <input />
               <Select compact options={options} defaultValue='recipes'
+                disabled={searching}
                 onChange={(event, data) => {
                   this.setState(
                     { searchCategory: data.value }
@@ -105,6 +130,7 @@ class Main extends Component {
                 }}
               />
               <Button animated positive
+                disabled={searching}
                 onClick={() => { this.handleSearch() }}>
                 <Button.Content hidden>Go</Button.Content>
                 <Button.Content visible>
