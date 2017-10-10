@@ -1,0 +1,110 @@
+//colors
+$color_green_lighten_2: #81c784;
+$color_nobel_approx: #b6b5b5;
+$color_white: #fff;
+$color_red: #F71111;
+
+//fonts
+$font_0: Marmelad;
+$font_1: Helvetica;
+$font_2: Courgette;
+$font_3: cursive;
+
+#root, .body {
+	height: 100%;
+}
+
+.body {
+	display: flex;
+	flex-direction: column;
+	margin: 0;
+}
+
+main {
+  flex: 1 0 auto;
+}
+
+footer {
+	flex: 0 0 130px;
+	padding: 15px;
+	margin-top: 50px;
+	color: #fff;
+	background-color: $color_green_lighten_2;
+	display: flex;
+	justify-content: space-around;
+}
+
+ul {
+  list-style: none;
+  padding: 0px;
+}
+
+header {
+	color: #fff;
+	background-color: $color_green_lighten_2;
+	box-shadow: 1px 2px 2px grey;
+	display: flex;
+	align-items: center;
+	padding: 15px;
+	position: fixed;
+	width: 100%;
+	z-index: 9;
+}
+
+.brand-logo {
+	font-size: 22px;
+	font-family: $font_2, $font_3;
+	margin-right: auto;
+	margin-left: auto;
+}
+
+a:hover {
+	text-decoration: none;
+	cursor: pointer;
+}
+
+.full-title {
+	font-family: $font_0, $font_1;
+	letter-spacing: 1px;
+  font-size: 22px;
+  text-align: center;
+}
+
+.rounded-line {
+	height: 3px;
+	width: 320px;
+	max-width: 100%;
+	margin: 5px auto 0;
+	background-color: $color_nobel_approx;
+	//Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+	border-radius: 5px;
+	margin-bottom: 10px;
+}
+
+h5 {
+	font-size: 18px;
+}
+
+.overlay {
+  position: relative;
+  top: -150px;
+  text-align: center;
+  color: $color_white;
+}
+
+.intro {
+  font-family: $font_3;
+  padding-left: 10px; 
+  font-size: 15px;
+  text-align: center;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.error {
+	color: $color_red;
+	font-style: italic;
+	font-size: 14px;
+}

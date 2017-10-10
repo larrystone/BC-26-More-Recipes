@@ -173,10 +173,10 @@ export default class Search {
   }
 
   /**
-   *  Fetch list of recipes based on name supplied
-   * 
-   * @param {any} req 
-   * @param {any} res 
+   * Fetch list of recipes based on name supplied
+   *
+   * @param {any} req
+   * @param {any} res
    * @returns {object} Classs instance
    * @memberof Search
    */

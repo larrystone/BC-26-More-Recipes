@@ -2,17 +2,17 @@ import nodemailer from 'nodemailer';
 
 /**
  * Mailer class definition
- * 
+ *
  * @export
  * @class Nodemailer
  */
 export default class Mailer {
   /**
    * Send mail
-   * 
-   * @param {object} receivers 
+   *
+   * @param {object} receivers
    * @param {string} subject Subject of the mail
-   * @param {any} message 
+   * @param {any} message
    * @returns {object} Nodemailer instance
    * @memberof Nodemailer
    */
@@ -44,9 +44,8 @@ export default class Mailer {
         if (error) {
           return error.message;
         }
-        // console.log('Message sent: %s', JSON.stringify(info));
         // Preview only available when sending through an Ethereal account
-        console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+        // console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
         return info.messageId;
       });
     });
