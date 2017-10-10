@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, Loader, Input, Message, Select, Button } from 'semantic-ui-react';
+import { Card, Loader, Icon, Input, Message, Select, Button } from 'semantic-ui-react';
 import axios from 'axios';
 import { read_cookie } from 'sfcookies';
 
@@ -104,10 +104,12 @@ class Main extends Component {
                   )
                 }}
               />
-              <Button type='submit' positive
-                icon='search'
-                onClick={() => { this.handleSearch() }}
-              >
+              <Button animated positive
+                onClick={() => { this.handleSearch() }}>
+                <Button.Content hidden>Go</Button.Content>
+                <Button.Content visible>
+                  <Icon name='search' />
+                </Button.Content>
               </Button>
             </Input>
           </div>
