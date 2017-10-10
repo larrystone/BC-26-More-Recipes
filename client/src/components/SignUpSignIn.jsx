@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Form, Message, Icon, Modal, Button } from 'semantic-ui-react';
+import { Form, Message, Modal, Button } from 'semantic-ui-react';
 import axios from 'axios';
 import { bake_cookie } from 'sfcookies';
 import { createBrowserHistory } from 'history';

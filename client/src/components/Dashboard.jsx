@@ -3,13 +3,14 @@ import { connect } from 'react-redux';
 
 import DashboardHeader from './DashboardHeader';
 import Footer from './Footer';
+import RecipeHome from './RecipeHome';
 
 class Dashboard extends Component {
   showDashboardSection = () => {
     const { dashboardSection } = this.props;
     if (dashboardSection === 'home') {
       return (
-        <div>Welcome home</div>
+        <RecipeHome/>
       )
     } else if (dashboardSection === 'my_recipes') {
       return (

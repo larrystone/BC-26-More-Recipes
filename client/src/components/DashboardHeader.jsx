@@ -71,7 +71,7 @@ class Header extends Component {
               onClick={() => { this.setDashboardSection('my_favs') }}
               active={this.isActive('my_fav')}
               disabled={this.isActive('my_favs')}
-            >My Favs</Button>
+            >My Favorites</Button>
           </Button.Group>
         </div>
       </header>

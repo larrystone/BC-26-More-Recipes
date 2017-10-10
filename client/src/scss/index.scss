@@ -56,6 +56,7 @@ header {
 .flex-row {
 	display: flex;
 	align-items: center;
+	flex-wrap: wrap;
 }
 
 .brand-logo {
@@ -117,5 +118,6 @@ h5 {
 
 .push-down {
 	top: 90px;
+	margin: 0px 10px;
 	position: relative;
 }
