@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, Loader } from 'semantic-ui-react';
+import { Card, Loader, Input, Message, Select, Button } from 'semantic-ui-react';
 import axios from 'axios';
 import { read_cookie } from 'sfcookies';
 
@@ -7,11 +7,18 @@ import RecipeItem from './RecipeItem';
 
 const TOKEN = read_cookie('more-recipe-token');
 
+const options = [
+  { key: 'recipes', text: 'by Name', value: 'recipes' },
+  { key: 'ingredients', text: 'by Ingredient', value: 'ingredients' }
+]
+
 class Main extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      recipes: null
+      recipes: null,
+      searchCategory: 'recipes',
+      searchTerm: ''
     }
   }
 
@@ -34,10 +41,10 @@ class Main extends Component {
   }
 
   componentDidMount() {
-    setTimeout(() => {
-      this.fetchTopRecipes();
-    }, 3000)
+    this.fetchTopRecipes();
   }
+
+
 
   renderRecipes() {
     const recipes = this.state.recipes;
@@ -50,7 +57,15 @@ class Main extends Component {
       )
     } else if (recipes.length === 0) {
       return (
-        <div>No recipes found!!!</div>
+        <Message
+          style={{ width: '100%', marginTop: '10px' }}
+          color='green'
+          size='large'>
+          <Message.Header content="Nothing found!" />
+          <Message.Content className="error">
+            Sorry, no recipes found!!!
+          </Message.Content>
+        </Message>
       )
     } else {
       return (
@@ -74,7 +89,28 @@ class Main extends Component {
             <div className="full-title">Top Picks</div>
             <div className="rounded-line"></div>
           </div>
-          <div>Search box here</div>
+          <div>
+            <Input type='text' placeholder='Search for recipe...' action
+              onChange={(event) => {
+                this.setState(
+                  { searchTerm: event.target.value }
+                )
+              }}>
+              <input />
+              <Select compact options={options} defaultValue='recipes'
+                onChange={(event, data) => {
+                  this.setState(
+                    { searchCategory: data.value }
+                  )
+                }}
+              />
+              <Button type='submit' positive
+                icon='search'
+                onClick={() => { this.handleSearch() }}
+              >
+              </Button>
+            </Input>
+          </div>
         </div>
         <Card.Group>
           {this.renderRecipes()}

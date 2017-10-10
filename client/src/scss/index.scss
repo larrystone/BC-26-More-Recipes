@@ -27,7 +27,7 @@ main {
 footer {
 	flex: 0 0 125px;
 	padding: 5px;
-	margin-top: 100px;
+	margin-top: 120px;
 	color: #fff;
 	background-color: $color_green_lighten_2;
 	display: flex;
@@ -45,7 +45,6 @@ ul {
 
 header {
 	color: #fff;
-	padding: 10px 15px 10px 0px;
 	background-color: $color_green_lighten_2;
 	box-shadow: 1px 2px 2px grey;
 	position: fixed;
@@ -54,6 +53,7 @@ header {
 }
 
 .flex-row {
+	padding: 10px 15px 10px 0px;
 	display: flex;
 	align-items: center;
 	flex-wrap: wrap;
@@ -117,7 +117,7 @@ h5 {
 }
 
 .push-down {
-	top: 90px;
+	top: 110px;
 	margin: 0px 10px;
 	position: relative;
 }

@@ -45,7 +45,7 @@ class Header extends Component {
             </Label>
           </div>
           <div className="flex-item">
-            <Dropdown pointing='right' text={this.props.loggedUser.username}>
+            <Dropdown pointing text={this.props.loggedUser.username}>
               <Dropdown.Menu>
                 <Dropdown.Item text='My Profile'
                 />
