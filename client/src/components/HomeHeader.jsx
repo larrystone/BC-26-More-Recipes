@@ -14,25 +14,25 @@ import { setDialogType } from '../actions/dialog';
 class Header extends Component {
   renderHomeHeader = () => (
     <header>
-      <div className="nav-item brand-logo">
+      <div className="brand-logo">
         More-Recipes
       </div>
-      <div className="nav-item">
+      <div>
         <Button basic
           onClick={() => {
             this.props.setDialogType('signin')
           }}
         >
-          SignIn
+          Sign In
         </Button>
       </div>
-      <div className="nav-item">
+      <div>
         <Button basic
           onClick={() => {
             this.props.setDialogType('signup');
           }}
         >
-          SignUp
+          Sign Up
         </Button>
       </div>
     </header>

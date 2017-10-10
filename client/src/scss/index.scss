@@ -25,9 +25,9 @@ main {
 }
 
 footer {
-	flex: 0 0 130px;
-	padding: 15px;
-	margin-top: 50px;
+	flex: 0 0 125px;
+	padding: 5px;
+	margin-top: 100px;
 	color: #fff;
 	background-color: $color_green_lighten_2;
 	display: flex;
@@ -37,6 +37,10 @@ footer {
 ul {
   list-style: none;
   padding: 0px;
+}
+
+.flex-item {
+	margin-right: 15px;
 }
 
 header {
