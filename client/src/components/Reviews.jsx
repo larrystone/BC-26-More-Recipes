@@ -7,14 +7,16 @@ import { connect } from 'react-redux';
 
 import generateInitials from '../helpers/initial';
 
-const TOKEN = 'more-recipe-token';
+const TOKEN = read_cookie('more-recipe-token');
 
 class RecipeDetails extends Component {
   constructor(props) {
     super(props);
     this.state = {
       reviews: null,
-      content: ''
+      content: '',
+      error: '',
+      posting: false
     }
   }
 
@@ -63,7 +65,7 @@ class RecipeDetails extends Component {
     axios({
       method: 'GET',
       url: `/api/v1/recipes/${this.props.recipeId}/reviews`,
-      headers: { 'x-access-token': read_cookie(TOKEN) }
+      headers: { 'x-access-token': TOKEN }
     })
       .then((response) => {
         this.setState(
@@ -81,20 +83,30 @@ class RecipeDetails extends Component {
   }
 
   render() {
+    const { posting } = this.state;
     return (
       <Card centered style={{ padding: '20px', width: "450px" }}>
         <Comment.Group>
           <Header as='h3'>Reviews</Header>
           <Form reply>
             <Form.TextArea
+              disabled={posting}
               onChange={(event) => {
                 this.setState(
-                  { content: event.target.value }
+                  {
+                    content: event.target.value,
+                    error: ''
+                  }
                 )
               }}
               value={this.state.content}
             />
-            <Button content='Post review' labelPosition='left' icon='edit' primary
+            <p className='error'>
+              {this.state.error}
+            </p>
+            <Button
+              disabled={posting}
+              content='Post review' labelPosition='left' icon='edit' primary
               onClick={() => this.postReview()}
             />
           </Form>
@@ -102,6 +114,38 @@ class RecipeDetails extends Component {
         </Comment.Group>
       </Card>
     )
+  }
+
+  postReview = () => {
+    const { content } = this.state;
+    this.setState(
+      { posting: true }
+    )
+    axios({
+      method: 'POST',
+      url: `/api/v1/recipes/${this.props.recipeId}/reviews`,
+      headers: { 'x-access-token': TOKEN },
+      data: { content }
+    })
+      .then((response) => {
+        if (response.status === 201) {
+          this.setState(
+            {
+              content: '',
+              posting: false
+            }
+          )
+          this.fetchReviews();
+        }
+      })
+      .catch((error) => {
+        this.setState(
+          {
+            error: error.response.data.message,
+            posting: false
+          }
+        )
+      });
   }
 }
 
