@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, Loader, Icon, Input, Message, Select, Button } from 'semantic-ui-react';
+import { Card, Loader, Icon, Label, Input, Message, Select, Button } from 'semantic-ui-react';
 import axios from 'axios';
 import { read_cookie } from 'sfcookies';
 
@@ -19,7 +19,8 @@ class Main extends Component {
       recipes: null,
       searchCategory: 'recipes',
       searchTerm: '',
-      searching: false
+      searching: false,
+      sought: false
     }
   }
 
@@ -82,7 +83,7 @@ class Main extends Component {
 
   handleSearch = () => {
     this.setState(
-      {searching: true}
+      { searching: true }
     )
     const { searchTerm, searchCategory } = this.state;
     axios({
@@ -94,7 +95,8 @@ class Main extends Component {
         this.setState(
           {
             recipes: response.data.recipe,
-            searching: false
+            searching: false,
+            sought: true
           }
         )
       })
@@ -103,15 +105,42 @@ class Main extends Component {
       });
   }
 
+  showHeading = () => {
+    if (this.state.sought) {
+      return (
+        <div className="brand-logo">
+          <div className="full-title">Search Results &nbsp;&nbsp;
+            <Label as='a' color='teal'
+              className="clickable"
+              onClick={() => {
+                this.setState(
+                  { sought: false }
+                );
+                this.fetchTopRecipes();
+              }}
+            >{this.state.recipes.length} Results
+            <Icon name='close' />
+            </Label>
+          </div>
+          <div className="rounded-line"></div>
+        </div>
+      )
+    } else {
+      return (
+        <div className="brand-logo">
+          <div className="full-title">Top Picks</div>
+          <div className="rounded-line"></div>
+        </div>
+      )
+    }
+  }
+
   render() {
     const { searching } = this.state;
     return (
       <div>
         <div className="flex-row">
-          <div className="brand-logo">
-            <div className="full-title">Top Picks</div>
-            <div className="rounded-line"></div>
-          </div>
+          {this.showHeading()}
           <div>
             <Input type='text' placeholder='Search for recipe...' action
               disabled={searching}
