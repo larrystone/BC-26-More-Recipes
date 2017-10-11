@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import { Card, Loader, Icon, Label, Input, Message, Select, Button } from 'semantic-ui-react';
 import axios from 'axios';
 import { read_cookie } from 'sfcookies';
+import { connect } from 'react-redux';
 
 import RecipeItem from './RecipeItem';
+import RecipeDetails from './RecipeDetails';
 
 const TOKEN = read_cookie('more-recipe-token');
 
@@ -135,12 +137,21 @@ class Main extends Component {
     }
   }
 
+  renderModals = () => {
+    if (this.props.modal === 'recipe_details') {
+      return <RecipeDetails />
+    } else {
+      return <div></div>
+    }
+  }
+
   render() {
     const { searching } = this.state;
     return (
       <div>
         <div className="flex-row">
           {this.showHeading()}
+          {this.renderModals()}
           <div>
             <Input type='text' placeholder='Search for recipe...' action
               disabled={searching}
@@ -177,4 +188,10 @@ class Main extends Component {
   }
 }
 
-export default Main;
+const mapStateToProps = (state) => {
+  return {
+    modal: state.dialog
+  }
+}
+
+export default connect(mapStateToProps, null)(Main);

@@ -4,6 +4,7 @@ import { Card, Image, Grid, Icon } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 
 import { setDialogType } from '../actions/dialog';
+import { setRecipeId } from '../actions/recipe';
 
 class RecipeItem extends Component {
   showRecipeActions = () => {
@@ -46,8 +47,19 @@ class RecipeItem extends Component {
   }
 
   handleViewRecipe = () => {
-    this.props.setDialogType('signup');
+    if (!this.props.username) {
+      this.props.setDialogType('signup');
+    } else {
+      this.props.setRecipeId(this.props.recipe.id);
+      this.props.setDialogType('recipe_details');
+    }
   }
 }
 
-export default connect(null, { setDialogType })(RecipeItem);
+const mapStateToProps = (state) => {
+  return {
+    username: state.user.username
+  }
+}
+
+export default connect(mapStateToProps, { setDialogType, setRecipeId })(RecipeItem);
