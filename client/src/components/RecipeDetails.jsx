@@ -52,10 +52,22 @@ class RecipeDetails extends Component {
   }
 
   componentDidMount() {
-    setTimeout(() => {
-      this.fetchRecipeDetails();
-    }, 3000)
+    this.fetchRecipeDetails();
+  }
 
+  voteRecipe(voteType) {
+    axios({
+      method: 'POST',
+      url: `/api/v1/recipes/${this.props.recipeId}/${voteType}`,
+      headers: { 'x-access-token': TOKEN }
+    })
+      .then((response) => {
+        if (response.status === 201) {
+          this.fetchRecipeDetails();
+        }
+      })
+      .catch((err) => {
+      });
   }
 
   renderRecipeDetails = () => {
@@ -80,7 +92,7 @@ class RecipeDetails extends Component {
       } = this.state.recipe;
 
       return (
-        <Card centered raised color='red' style={{ width: "500px" }}>
+        <Card centered color='green' style={{ width: "500px" }}>
           <Image
             alt='food image'
             src={imageUrl}>
@@ -89,25 +101,29 @@ class RecipeDetails extends Component {
             <Label as='a' corner='right'>
               <Icon name='empty star' size='large' />
             </Label>
+
             <Card.Header>{name}</Card.Header>
             <Card.Description>{description}</Card.Description>
             <Card.Meta>by <b>{User.name}</b> - <em>{moment(new Date(createdAt)).fromNow()}</em></Card.Meta>
-          </Card.Content>
-          <Card.Content>
+
+            <Divider />
+
             <Card.Header>Ingredients</Card.Header>
             <Card.Description>
               <ul>
                 {this.renderIngredients()}
               </ul>
             </Card.Description>
+
             <Divider />
 
             <Card.Header>Direction</Card.Header>
             <Card.Description>
               <p>{direction}</p>
             </Card.Description>
-          </Card.Content>
-          <Card.Content extra>
+
+            <Divider />
+
             <Grid columns={3}>
               <Grid.Row divided>
                 <Grid.Column>
@@ -116,9 +132,6 @@ class RecipeDetails extends Component {
                     icon='eye'
                     label={viewCount}
                     labelPosition='right'
-                    onClick={() => {
-                      this.close()
-                    }}
                   />
                 </Grid.Column>
                 <Grid.Column>
