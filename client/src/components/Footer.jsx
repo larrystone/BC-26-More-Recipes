@@ -6,6 +6,7 @@ export default () => {
       <div>
         <h5>More-Recipes...</h5>
         <p>An Andela Bootcamp LOS/26 project</p>
+        <h6>&copy; 2017 Lanre Lawal E. (Larrystone)</h6>
       </div>
       <div>
         <h5>Project links</h5>

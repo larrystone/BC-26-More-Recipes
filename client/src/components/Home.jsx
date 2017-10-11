@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Card } from 'semantic-ui-react';
+import { connect } from 'react-redux';
+import { createBrowserHistory } from 'history';
 
 import HomeHeader from './HomeHeader';
 import Footer from './Footer';
@@ -9,6 +11,14 @@ import SignUpSignIn from './SignUpSignIn';
 import SampleRecipes from '../SampleRecipes.json';
 
 class Home extends Component {
+  componentWillMount() {
+    const { username } = this.props.loggedUser;
+    if (username) {
+      createBrowserHistory().replace('/dashboard');
+      window.location.reload();
+    }
+  }
+
   renderSampleRecipes = () => {
     const samples = SampleRecipes;
     return (
@@ -68,4 +78,10 @@ class Home extends Component {
   }
 }
 
-export default Home;
+const mapStateToProps = (state) => {
+  return {
+    loggedUser: state.user
+  }
+}
+
+export default connect(mapStateToProps, null)(Home);

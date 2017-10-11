@@ -25,9 +25,9 @@ main {
 }
 
 footer {
-	flex: 0 0 130px;
-	padding: 15px;
-	margin-top: 50px;
+	flex: 0 0 125px;
+	padding: 5px;
+	margin-top: 120px;
 	color: #fff;
 	background-color: $color_green_lighten_2;
 	display: flex;
@@ -39,23 +39,30 @@ ul {
   padding: 0px;
 }
 
+.flex-item {
+	margin-right: 10px;
+}
+
 header {
 	color: #fff;
 	background-color: $color_green_lighten_2;
 	box-shadow: 1px 2px 2px grey;
-	display: flex;
-	align-items: center;
-	padding: 15px;
 	position: fixed;
 	width: 100%;
 	z-index: 9;
 }
 
+.flex-row {
+	padding: 10px 15px 10px 0px;
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+}
+
 .brand-logo {
 	font-size: 22px;
 	font-family: $font_2, $font_3;
-	margin-right: auto;
-	margin-left: auto;
+	margin: 0px auto;
 }
 
 a:hover {
@@ -107,4 +114,10 @@ h5 {
 	color: $color_red;
 	font-style: italic;
 	font-size: 14px;
+}
+
+.push-down {
+	top: 110px;
+	margin: 0px 10px;
+	position: relative;
 }
