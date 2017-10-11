@@ -2,13 +2,14 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { read_cookie } from 'sfcookies';
 import axios from 'axios';
+import moment from 'moment';
 import {
   Divider, Icon, Loader,
   Label, Button, Grid,
   Card, Modal, Image
 } from 'semantic-ui-react';
 
-import moment from 'moment';
+import Reviews from './Reviews';
 
 import { setRecipeId } from '../actions/recipe';
 import { setDialogType } from '../actions/dialog';
@@ -55,7 +56,7 @@ class RecipeDetails extends Component {
     this.fetchRecipeDetails();
   }
 
-  voteRecipe(voteType) {
+  voteRecipe = (voteType) => {
     axios({
       method: 'POST',
       url: `/api/v1/recipes/${this.props.recipeId}/${voteType}`,
@@ -92,70 +93,73 @@ class RecipeDetails extends Component {
       } = this.state.recipe;
 
       return (
-        <Card centered color='green' style={{ width: "500px" }}>
-          <Image
-            alt='food image'
-            src={imageUrl}>
-          </Image>
-          <Card.Content>
-            <Label as='a' corner='right'>
-              <Icon name='empty star' size='large' />
-            </Label>
+        <Card.Group>
+          <Card centered color='green' style={{ width: "500px" }}>
+            <Image
+              alt='food image'
+              src={imageUrl}>
+            </Image>
+            <Card.Content>
+              <Label as='a' corner='right'>
+                <Icon name='empty star' size='large' />
+              </Label>
 
-            <Card.Header>{name}</Card.Header>
-            <Card.Description>{description}</Card.Description>
-            <Card.Meta>by <b>{User.name}</b> - <em>{moment(new Date(createdAt)).fromNow()}</em></Card.Meta>
+              <Card.Header>{name}</Card.Header>
+              <Card.Description>{description}</Card.Description>
+              <Card.Meta>by <b>{User.name}</b> - <em>{moment(new Date(createdAt)).fromNow()}</em></Card.Meta>
 
-            <Divider />
+              <Divider />
 
-            <Card.Header>Ingredients</Card.Header>
-            <Card.Description>
-              <ul>
-                {this.renderIngredients()}
-              </ul>
-            </Card.Description>
+              <Card.Header>Ingredients</Card.Header>
+              <Card.Description>
+                <ul>
+                  {this.renderIngredients()}
+                </ul>
+              </Card.Description>
 
-            <Divider />
+              <Divider />
 
-            <Card.Header>Direction</Card.Header>
-            <Card.Description>
-              <p>{direction}</p>
-            </Card.Description>
+              <Card.Header>Direction</Card.Header>
+              <Card.Description>
+                <p>{direction}</p>
+              </Card.Description>
 
-            <Divider />
+              <Divider />
 
-            <Grid columns={3}>
-              <Grid.Row divided>
-                <Grid.Column>
-                  <Button compact
-                    color='blue'
-                    icon='eye'
-                    label={viewCount}
-                    labelPosition='right'
-                  />
-                </Grid.Column>
-                <Grid.Column>
-                  <Button compact
-                    color='green'
-                    icon='thumbs outline up'
-                    label={upvotes}
-                    labelPosition='right'
-                    onClick={() => this.voteRecipe('upvotes')}
-                  />
-                </Grid.Column>
-                <Grid.Column>
-                  <Button compact
-                    color='red'
-                    icon='thumbs outline down'
-                    label={downvotes}
-                    labelPosition='right'
-                    onClick={() => this.voteRecipe('downvotes')}
-                  />
-                </Grid.Column>
-              </Grid.Row>
-            </Grid>
-          </Card.Content>
-        </Card>
+              <Grid columns={3}>
+                <Grid.Row divided>
+                  <Grid.Column>
+                    <Button compact
+                      color='blue'
+                      icon='eye'
+                      label={viewCount}
+                      labelPosition='right'
+                    />
+                  </Grid.Column>
+                  <Grid.Column>
+                    <Button compact
+                      color='green'
+                      icon='thumbs outline up'
+                      label={upvotes}
+                      labelPosition='right'
+                      onClick={() => this.voteRecipe('upvotes')}
+                    />
+                  </Grid.Column>
+                  <Grid.Column>
+                    <Button compact
+                      color='red'
+                      icon='thumbs outline down'
+                      label={downvotes}
+                      labelPosition='right'
+                      onClick={() => this.voteRecipe('downvotes')}
+                    />
+                  </Grid.Column>
+                </Grid.Row>
+              </Grid>
+            </Card.Content>
+          </Card>
+          <Reviews />
+        </Card.Group>
       )
     }
   }
@@ -167,9 +171,7 @@ class RecipeDetails extends Component {
       <Modal basic open={modal === 'recipe_details'} size='fullscreen'
         onClose={() => this.close()} closeIcon>
         <Modal.Content>
-          <Card.Group>
-            {this.renderRecipeDetails()}
-          </Card.Group>
+          {this.renderRecipeDetails()}
         </Modal.Content>
       </Modal>
     )
@@ -183,4 +185,9 @@ const mapStateToProps = (state) => {
   }
 }
 
-export default connect(mapStateToProps, { setRecipeId, setDialogType })(RecipeDetails);
+const actionCreators = {
+  setRecipeId,
+  setDialogType
+}
+
+export default connect(mapStateToProps, actionCreators)(RecipeDetails);
