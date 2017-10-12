@@ -1,8 +1,12 @@
 import React, { Component } from 'react';
 import { Modal, Form, Button } from 'semantic-ui-react';
 import { connect } from 'react-redux';
+import { read_cookie } from 'sfcookies';
+import axios from 'axios';
 
 import { setDialogType } from '../actions/dialog';
+
+const TOKEN = read_cookie('more-recipe-token');
 
 class CreateEditRecipe extends Component {
   constructor(props) {
@@ -11,7 +15,8 @@ class CreateEditRecipe extends Component {
       name: '',
       description: '',
       ingredients: '',
-      direction: ''
+      direction: '',
+      error: ''
     }
   }
 
@@ -26,6 +31,30 @@ class CreateEditRecipe extends Component {
 
   closeModal = () => {
     this.props.setDialogType('');
+  }
+
+  saveRecipe = () => {
+    const { name, description, ingredients, direction } = this.state;
+    axios({
+      method: 'POST',
+      url: '/api/v1/recipes',
+      headers: { 'x-access-token': TOKEN },
+      data: {
+        name, description, direction,
+        ingredients: ingredients.replace(/,/g, ';;'),
+      }
+    })
+      .then((response) => {
+        const { success } = response.data;
+        if (success === true) {
+          this.closeModal();
+        }
+      })
+      .catch((error) => {
+        this.setState(
+          { error: error.response.data.message }
+        )
+      });
   }
 
   render() {
@@ -66,6 +95,9 @@ class CreateEditRecipe extends Component {
                 this.storeToState('direction', event.target.value)
               }} />
           </Form>
+          <div className='error'>
+            {this.state.error}
+          </div>
         </Modal.Content>
         <Modal.Actions>
           <Button negative icon='close' labelPosition='right' content='Cancel'
