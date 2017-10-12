@@ -243,7 +243,9 @@ class RecipeDetails extends Component {
     const { modal } = this.props;
 
     return (
-      <Modal basic open={modal === 'recipe_details'} size='fullscreen'
+      <Modal dimmer='blurring'
+        basic size='fullscreen'
+        open={modal === 'recipe_details'}
         onClose={() => this.close()} closeIcon>
         <Modal.Content>
           {this.renderRecipeDetails()}

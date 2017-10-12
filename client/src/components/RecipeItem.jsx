@@ -37,7 +37,11 @@ class RecipeItem extends Component {
             <Grid.Column className="clickable">
               <Icon name='edit' color='green' />Edit
             </Grid.Column>
-            <Grid.Column className="clickable">
+            <Grid.Column className="clickable"
+              onClick={() => {
+                this.props.setRecipeId(this.props.recipe.id);
+                this.props.setDialogType('delete_recipe');
+              }}>
               <Icon name='delete' color='red' />Delete
             </Grid.Column>
           </Grid.Row>
@@ -45,7 +49,6 @@ class RecipeItem extends Component {
       )
     }
   }
-
 
   render() {
     const { imageUrl, name, description, User } = this.props.recipe;

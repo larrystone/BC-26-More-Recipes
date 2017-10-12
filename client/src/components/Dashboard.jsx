@@ -7,6 +7,7 @@ import RecipeHome from './RecipeHome';
 import MyRecipes from './MyRecipes';
 import RecipeDetails from './RecipeDetails';
 import CreatEditRecipe from './CreateEditRecipe';
+import DeleteRecipe from './DeleteRecipe';
 
 class Dashboard extends Component {
   showDashboardSection = () => {
@@ -33,6 +34,8 @@ class Dashboard extends Component {
       return <RecipeDetails />
     } else if (this.props.modal === 'create_recipe') {
       return <CreatEditRecipe />
+    } else if (this.props.modal === 'delete_recipe') {
+      return <DeleteRecipe />
     } else {
       return <div></div>
     }
