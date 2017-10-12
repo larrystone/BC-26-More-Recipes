@@ -2,8 +2,11 @@ import React, { Component } from 'react';
 import { Card, Loader, Message, Button } from 'semantic-ui-react';
 import axios from 'axios';
 import { read_cookie } from 'sfcookies';
+import { connect } from 'react-redux';
 
 import RecipeItem from './RecipeItem';
+
+import { setDialogType } from '../actions/dialog';
 
 const TOKEN = 'more-recipe-token';
 
@@ -64,7 +67,7 @@ class Main extends Component {
           <Message.Header content="Nothing found!" />
           <Message.Content className="error">
             Sorry, you have not created any Recipes....
-        </Message.Content>
+          </Message.Content>
         </Message>
       )
     } else {
@@ -96,10 +99,9 @@ class Main extends Component {
             icon='plus'
             color='teal'
             onClick={() => {
-              this.setState(
-                { openModal: true }
-              )
-            }} />
+              this.props.setDialogType('create_recipe')
+            }}
+          />
         </div>
         <Card.Group>
           {this.renderRecipes()}
@@ -109,4 +111,4 @@ class Main extends Component {
   }
 }
 
-export default Main;
+export default connect(null, { setDialogType })(Main);
