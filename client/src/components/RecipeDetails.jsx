@@ -5,7 +5,7 @@ import axios from 'axios';
 import moment from 'moment';
 import {
   Divider, Icon, Loader,
-  Label, Button, Grid,
+  Button, Grid,
   Card, Modal, Image
 } from 'semantic-ui-react';
 
@@ -142,10 +142,10 @@ class RecipeDetails extends Component {
       )
     } else {
       return (
-          <Icon name='empty star' size='large'
-            onClick={() => {
-              this.addToFavs()
-            }} />
+        <Icon name='empty star' size='large'
+          onClick={() => {
+            this.addToFavs()
+          }} />
       )
     }
   }

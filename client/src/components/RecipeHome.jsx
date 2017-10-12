@@ -5,7 +5,6 @@ import { read_cookie } from 'sfcookies';
 import { connect } from 'react-redux';
 
 import RecipeItem from './RecipeItem';
-import RecipeDetails from './RecipeDetails';
 
 const TOKEN = read_cookie('more-recipe-token');
 
@@ -137,21 +136,12 @@ class Main extends Component {
     }
   }
 
-  renderModals = () => {
-    if (this.props.modal === 'recipe_details') {
-      return <RecipeDetails />
-    } else {
-      return <div></div>
-    }
-  }
-
   render() {
     const { searching } = this.state;
     return (
       <div>
         <div className="flex-row">
           {this.showHeading()}
-          {this.renderModals()}
           <div>
             <Input type='text' placeholder='Search for recipe...' action
               disabled={searching}
