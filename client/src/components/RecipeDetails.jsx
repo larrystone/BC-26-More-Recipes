@@ -20,7 +20,8 @@ class RecipeDetails extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      recipe: null
+      recipe: null,
+      isFav: false
     }
   }
 
@@ -33,6 +34,29 @@ class RecipeDetails extends Component {
         return <li key={index}>{ingredient}</li>;
       })
     )
+  }
+
+  fetchFavorites = () => {
+    axios({
+      method: 'GET',
+      url: `/api/v1/users/${this.props.userId}/recipes`,
+      headers: { 'x-access-token': TOKEN }
+    })
+      .then((response) => {
+        const favorites = response.data.recipe;
+
+        const fav = favorites.filter((favorite) => {
+          return this.props.recipeId === favorite.recipeId
+        })
+
+        if (fav.length !== 0) {
+          this.setState(
+            { isFav: true }
+          )
+        }
+      })
+      .catch(() => {
+      });
   }
 
   fetchRecipeDetails = () => {
@@ -54,6 +78,7 @@ class RecipeDetails extends Component {
 
   componentDidMount() {
     this.fetchRecipeDetails();
+    this.fetchFavorites();
   }
 
   voteRecipe = (voteType) => {
@@ -69,6 +94,60 @@ class RecipeDetails extends Component {
       })
       .catch((err) => {
       });
+  }
+
+  addToFavs = () => {
+    axios({
+      method: 'POST',
+      url: `/api/v1/users/${this.props.userId}/recipes/${this.props.recipeId}`,
+      headers: { 'x-access-token': TOKEN }
+    })
+      .then((response) => {
+        if (response.status === 201) {
+          this.setState(
+            { isFav: true }
+          )
+        }
+      })
+      .catch(() => {
+      });
+  }
+
+  removeFromFavs = () => {
+    axios({
+      method: 'DELETE',
+      url: `/api/v1/users/${this.props.userId}/recipes/${this.props.recipeId}`,
+      headers: { 'x-access-token': TOKEN }
+    })
+      .then((response) => {
+        if (response.status === 205) {
+          this.setState(
+            { isFav: false }
+          )
+        }
+      })
+      .catch(() => {
+      });
+  }
+
+  renderIsFavorite = () => {
+    const isFav = this.state.isFav;
+    if (isFav) {
+      return (
+        <Icon name='star' size='large'
+          color='yellow'
+          onClick={() => {
+            this.removeFromFavs()
+          }} />
+      )
+    } else {
+      return (
+          <Icon name='empty star' size='large'
+            onClick={() => {
+              this.addToFavs()
+            }} />
+      )
+    }
   }
 
   renderRecipeDetails = () => {
@@ -100,11 +179,7 @@ class RecipeDetails extends Component {
               src={imageUrl}>
             </Image>
             <Card.Content>
-              <Label as='a' corner='right'>
-                <Icon name='empty star' size='large' />
-              </Label>
-
-              <Card.Header>{name}</Card.Header>
+              <Card.Header>{name} {this.renderIsFavorite()}</Card.Header>
               <Card.Description>{description}</Card.Description>
               <Card.Meta>by <b>{User.name}</b> - <em>{moment(new Date(createdAt)).fromNow()}</em></Card.Meta>
 
@@ -181,7 +256,8 @@ class RecipeDetails extends Component {
 const mapStateToProps = (state) => {
   return {
     recipeId: state.recipe,
-    modal: state.dialog
+    modal: state.dialog,
+    userId: state.user.id
   }
 }
 
