@@ -1,8 +1,8 @@
-import { RECIPES } from '../constants';
+import { RELOAD } from '../constants';
 
 export const setReloadRecipes = (reloadRecipes) => {
   const action = {
-    type: RECIPES,
+    type: RELOAD,
     reloadRecipes
   }
   return action;

@@ -4,7 +4,7 @@ import { Card, Image, Grid, Icon } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 
 import { setDialogType } from '../actions/dialog';
-import { setRecipeId } from '../actions/recipe';
+import { setRecipe } from '../actions/recipe';
 
 class RecipeItem extends Component {
   showRecipeActions = () => {
@@ -39,7 +39,10 @@ class RecipeItem extends Component {
             </Grid.Column>
             <Grid.Column className="clickable"
               onClick={() => {
-                this.props.setRecipeId(this.props.recipe.id);
+                this.props.setRecipe({
+                  id: this.props.recipe.id,
+                  name: this.props.recipe.name
+                });
                 this.props.setDialogType('delete_recipe');
               }}>
               <Icon name='delete' color='red' />Delete
@@ -77,7 +80,10 @@ class RecipeItem extends Component {
     if (!this.props.username) {
       this.props.setDialogType('signup');
     } else {
-      this.props.setRecipeId(this.props.recipe.id);
+      this.props.setRecipe({
+        id: this.props.recipe.id,
+        name: this.props.recipe.name
+      });
       this.props.setDialogType('recipe_details');
     }
   }
@@ -90,4 +96,4 @@ const mapStateToProps = (state) => {
   }
 }
 
-export default connect(mapStateToProps, { setDialogType, setRecipeId })(RecipeItem);
+export default connect(mapStateToProps, { setDialogType, setRecipe })(RecipeItem);

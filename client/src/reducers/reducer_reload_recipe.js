@@ -1,10 +1,10 @@
-import { RECIPES } from '../constants';
+import { RELOAD } from '../constants';
 
 let reload = false;
 
 export default (state = reload, action) => {
   switch (action.type) {
-    case RECIPES:
+    case RELOAD:
       const { reloadRecipes } = action;
       reload = reloadRecipes;
       return reload;

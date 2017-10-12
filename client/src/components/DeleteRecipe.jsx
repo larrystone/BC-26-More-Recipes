@@ -22,11 +22,11 @@ class DeleteRecipe extends Component {
   }
 
   deleteRecipe = () => {
-    const { recipeId } = this.props;
+    const { recipe } = this.props;
 
     axios({
       method: 'DELETE',
-      url: `/api/v1/recipes/${recipeId}`,
+      url: `/api/v1/recipes/${recipe.id}`,
       headers: { 'x-access-token': TOKEN }
     })
       .then((response) => {
@@ -43,6 +43,7 @@ class DeleteRecipe extends Component {
   }
 
   render() {
+    const { name } = this.props.recipe;
     return (
       <Modal dimmer='blurring'
         open={this.props.modal === 'delete_recipe'}
@@ -51,7 +52,7 @@ class DeleteRecipe extends Component {
           this.closeModal()
         }}
       >
-        <Header icon='archive' content='Delete Recipe' />
+        <Header icon='archive' content={`${name}`} />
         <Modal.Content>
           <p>Are you sure you want to delete this recipe?</p>
           <div className='error'>
@@ -77,7 +78,7 @@ class DeleteRecipe extends Component {
 const mapStateToProps = (state) => {
   return {
     modal: state.dialog,
-    recipeId: state.recipe
+    recipe: state.recipe
   }
 }
 

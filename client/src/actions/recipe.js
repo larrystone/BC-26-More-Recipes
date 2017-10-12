@@ -1,9 +1,9 @@
-import { RECIPE_ID } from '../constants';
+import { RECIPE } from '../constants';
 
-export const setRecipeId = (newRecipeId) => {
+export const setRecipe = (newRecipe) => {
   const action = {
-    type: RECIPE_ID,
-    newRecipeId
+    type: RECIPE,
+    newRecipe
   }
   return action;
 }
