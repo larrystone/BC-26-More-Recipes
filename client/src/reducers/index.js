@@ -4,10 +4,12 @@ import dialog from './reducer_dialog';
 import user from './reducer_user';
 import dashboard from './reducer_dashboard';
 import recipe from './reducer_recipe';
+import reloadRecipes from './reducer_reload_recipe';
 
 export default combineReducers({
   dialog,
   user,
   dashboard,
-  recipe
+  recipe,
+  reloadRecipes
 });

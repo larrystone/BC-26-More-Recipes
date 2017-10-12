@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import RecipeItem from './RecipeItem';
 
 import { setDialogType } from '../actions/dialog';
+import { setReloadRecipes } from '../actions/reload_recipe';
 
 const TOKEN = 'more-recipe-token';
 
@@ -42,7 +43,8 @@ class Main extends Component {
           {
             my_recipes: response.data.recipe
           }
-        )
+        );
+        this.props.setReloadRecipes(false);
       })
       .catch(() => {
       });
@@ -85,6 +87,9 @@ class Main extends Component {
   }
 
   render() {
+    if (this.props.reloadRecipes) {
+      this.fetchRecipes();
+    }
     return (
       <div>
         <div className="flex-row">
@@ -111,4 +116,10 @@ class Main extends Component {
   }
 }
 
-export default connect(null, { setDialogType })(Main);
+const mapStateToProps = (state) => {
+  return {
+    reloadRecipes: state.reloadRecipes
+  }
+}
+
+export default connect(mapStateToProps, { setDialogType, setReloadRecipes })(Main);

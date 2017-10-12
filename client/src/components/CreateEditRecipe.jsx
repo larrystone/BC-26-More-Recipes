@@ -5,6 +5,7 @@ import { read_cookie } from 'sfcookies';
 import axios from 'axios';
 
 import { setDialogType } from '../actions/dialog';
+import { setReloadRecipes } from '../actions/reload_recipe';
 
 const TOKEN = read_cookie('more-recipe-token');
 
@@ -47,6 +48,7 @@ class CreateEditRecipe extends Component {
       .then((response) => {
         const { success } = response.data;
         if (success === true) {
+          this.props.setReloadRecipes(true);
           this.closeModal();
         }
       })
@@ -121,4 +123,4 @@ const mapStateToProps = (state) => {
   }
 }
 
-export default connect(mapStateToProps, { setDialogType })(CreateEditRecipe);
+export default connect(mapStateToProps, { setDialogType, setReloadRecipes })(CreateEditRecipe);
