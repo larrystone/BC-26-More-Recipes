@@ -6,7 +6,7 @@ import moment from 'moment';
 import {
   Divider, Icon, Loader,
   Button, Grid,
-  Card, Modal, Image
+  Card, Modal, Image, Popup
 } from 'semantic-ui-react';
 
 import Reviews from './Reviews';
@@ -21,7 +21,9 @@ class RecipeDetails extends Component {
     super(props);
     this.state = {
       recipe: null,
-      isFav: false
+      isFav: false,
+      likedBy: 'None',
+      dislikedBy: 'None'
     }
   }
 
@@ -34,6 +36,48 @@ class RecipeDetails extends Component {
         return <li key={index}>{ingredient}</li>;
       })
     )
+  }
+
+  fetchLikedBys = () => {
+    axios({
+      method: 'GET',
+      url: `/api/v1/recipes/${this.props.recipe.id}/upvotes`,
+      headers: { 'x-access-token': TOKEN }
+    })
+      .then((response) => {
+        const likes = response.data.recipe;
+
+        const userLikes = likes.map((like) => {
+          return like.User.name;
+        });
+
+        this.setState(
+          { likedBy: userLikes.toString() }
+        )
+      })
+      .catch(() => {
+      });
+  }
+
+  fetchDislikedBys = () => {
+    axios({
+      method: 'GET',
+      url: `/api/v1/recipes/${this.props.recipe.id}/downvotes`,
+      headers: { 'x-access-token': TOKEN }
+    })
+      .then((response) => {
+        const dislikes = response.data.recipe;
+
+        const userDislikes = dislikes.map((dislike) => {
+          return dislike.User.name;
+        });
+
+        this.setState(
+          { dislikedBy: userDislikes.toString() }
+        )
+      })
+      .catch(() => {
+      });
   }
 
   fetchFavorites = () => {
@@ -79,6 +123,8 @@ class RecipeDetails extends Component {
   componentDidMount() {
     this.fetchRecipeDetails();
     this.fetchFavorites();
+    this.fetchLikedBys();
+    this.fetchDislikedBys();
   }
 
   voteRecipe = (voteType) => {
@@ -90,6 +136,8 @@ class RecipeDetails extends Component {
       .then((response) => {
         if (response.status === 201) {
           this.fetchRecipeDetails();
+          this.fetchDislikedBys();
+          this.fetchLikedBys();
         }
       })
       .catch((err) => {
@@ -213,21 +261,33 @@ class RecipeDetails extends Component {
                     />
                   </Grid.Column>
                   <Grid.Column>
-                    <Button compact
-                      color='green'
-                      icon='thumbs outline up'
-                      label={upvotes}
-                      labelPosition='right'
-                      onClick={() => this.voteRecipe('upvotes')}
+                    <Popup
+                      inverted
+                      trigger={
+                        <Button compact
+                          color='green'
+                          icon='thumbs outline up'
+                          label={upvotes}
+                          labelPosition='right'
+                          onClick={() => this.voteRecipe('upvotes')}
+                        />
+                      }
+                      content={<div><Icon name='thumbs outline up' size='large' />: &nbsp;&nbsp;{this.state.likedBy}</div>}
                     />
                   </Grid.Column>
                   <Grid.Column>
-                    <Button compact
-                      color='red'
-                      icon='thumbs outline down'
-                      label={downvotes}
-                      labelPosition='right'
-                      onClick={() => this.voteRecipe('downvotes')}
+                    <Popup
+                      inverted
+                      trigger={
+                        <Button compact
+                          color='red'
+                          icon='thumbs outline down'
+                          label={downvotes}
+                          labelPosition='right'
+                          onClick={() => this.voteRecipe('downvotes')}
+                        />
+                      }
+                      content={<div><Icon name='thumbs outline down' size='large' />: &nbsp;&nbsp;{this.state.dislikedBy}</div>}
                     />
                   </Grid.Column>
                 </Grid.Row>
@@ -244,7 +304,7 @@ class RecipeDetails extends Component {
     const { modal } = this.props;
 
     return (
-      <Modal dimmer='blurring'
+      <Modal
         basic size='fullscreen'
         open={modal === 'recipe_details'}
         onClose={() => this.close()} closeIcon>
