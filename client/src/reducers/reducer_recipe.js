@@ -1,13 +1,16 @@
-import { RECIPE_ID } from '../constants';
+import { RECIPE } from '../constants';
 
-let recipeId = null;
+let recipe = {
+  id: null,
+  name: ''
+};
 
-export default (state = recipeId, action) => {
+export default (state = recipe, action) => {
   switch (action.type) {
-    case RECIPE_ID:
-      const { newRecipeId } = action;
-      recipeId = newRecipeId;
-      return recipeId;
+    case RECIPE:
+      const { newRecipe } = action;
+      recipe = newRecipe;
+      return recipe;
     default:
       return state;
   }

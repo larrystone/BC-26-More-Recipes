@@ -64,7 +64,7 @@ class RecipeDetails extends Component {
   fetchReviews() {
     axios({
       method: 'GET',
-      url: `/api/v1/recipes/${this.props.recipeId}/reviews`,
+      url: `/api/v1/recipes/${this.props.recipe.id}/reviews`,
       headers: { 'x-access-token': TOKEN }
     })
       .then((response) => {
@@ -123,7 +123,7 @@ class RecipeDetails extends Component {
     )
     axios({
       method: 'POST',
-      url: `/api/v1/recipes/${this.props.recipeId}/reviews`,
+      url: `/api/v1/recipes/${this.props.recipe.id}/reviews`,
       headers: { 'x-access-token': TOKEN },
       data: { content }
     })
@@ -151,7 +151,7 @@ class RecipeDetails extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    recipeId: state.recipe
+    recipe: state.recipe
   }
 }
 

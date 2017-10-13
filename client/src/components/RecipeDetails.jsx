@@ -5,13 +5,13 @@ import axios from 'axios';
 import moment from 'moment';
 import {
   Divider, Icon, Loader,
-  Label, Button, Grid,
+  Button, Grid,
   Card, Modal, Image
 } from 'semantic-ui-react';
 
 import Reviews from './Reviews';
 
-import { setRecipeId } from '../actions/recipe';
+import { setRecipe } from '../actions/recipe';
 import { setDialogType } from '../actions/dialog';
 
 const TOKEN = read_cookie('more-recipe-token');
@@ -46,7 +46,7 @@ class RecipeDetails extends Component {
         const favorites = response.data.recipe;
 
         const fav = favorites.filter((favorite) => {
-          return this.props.recipeId === favorite.recipeId
+          return this.props.recipe.id === favorite.recipeId
         })
 
         if (fav.length !== 0) {
@@ -62,7 +62,7 @@ class RecipeDetails extends Component {
   fetchRecipeDetails = () => {
     axios({
       method: 'GET',
-      url: `/api/v1/recipes/${this.props.recipeId}`,
+      url: `/api/v1/recipes/${this.props.recipe.id}`,
       headers: { 'x-access-token': TOKEN }
     })
       .then((response) => {
@@ -84,7 +84,7 @@ class RecipeDetails extends Component {
   voteRecipe = (voteType) => {
     axios({
       method: 'POST',
-      url: `/api/v1/recipes/${this.props.recipeId}/${voteType}`,
+      url: `/api/v1/recipes/${this.props.recipe.id}/${voteType}`,
       headers: { 'x-access-token': TOKEN }
     })
       .then((response) => {
@@ -99,7 +99,7 @@ class RecipeDetails extends Component {
   addToFavs = () => {
     axios({
       method: 'POST',
-      url: `/api/v1/users/${this.props.userId}/recipes/${this.props.recipeId}`,
+      url: `/api/v1/users/${this.props.userId}/recipes/${this.props.recipe.id}`,
       headers: { 'x-access-token': TOKEN }
     })
       .then((response) => {
@@ -116,7 +116,7 @@ class RecipeDetails extends Component {
   removeFromFavs = () => {
     axios({
       method: 'DELETE',
-      url: `/api/v1/users/${this.props.userId}/recipes/${this.props.recipeId}`,
+      url: `/api/v1/users/${this.props.userId}/recipes/${this.props.recipe.id}`,
       headers: { 'x-access-token': TOKEN }
     })
       .then((response) => {
@@ -142,10 +142,10 @@ class RecipeDetails extends Component {
       )
     } else {
       return (
-          <Icon name='empty star' size='large'
-            onClick={() => {
-              this.addToFavs()
-            }} />
+        <Icon name='empty star' size='large'
+          onClick={() => {
+            this.addToFavs()
+          }} />
       )
     }
   }
@@ -155,8 +155,9 @@ class RecipeDetails extends Component {
     if (!recipe) {
       return (
         <Loader active
+          size='large'
           inline='centered'
-          content='Fetching Recipe Details...' />
+          content={`Loading  '${this.props.recipe.name}'...`} />
       )
     } else {
       const {
@@ -243,7 +244,9 @@ class RecipeDetails extends Component {
     const { modal } = this.props;
 
     return (
-      <Modal basic open={modal === 'recipe_details'} size='fullscreen'
+      <Modal dimmer='blurring'
+        basic size='fullscreen'
+        open={modal === 'recipe_details'}
         onClose={() => this.close()} closeIcon>
         <Modal.Content>
           {this.renderRecipeDetails()}
@@ -255,14 +258,14 @@ class RecipeDetails extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    recipeId: state.recipe,
+    recipe: state.recipe,
     modal: state.dialog,
     userId: state.user.id
   }
 }
 
 const actionCreators = {
-  setRecipeId,
+  setRecipe,
   setDialogType
 }
 
