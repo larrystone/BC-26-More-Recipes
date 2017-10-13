@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Modal, Icon, Button, Header } from 'semantic-ui-react';
+import { Modal, Button, Header } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { read_cookie } from 'sfcookies';
 import axios from 'axios';

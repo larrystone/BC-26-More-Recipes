@@ -123,7 +123,7 @@ class RecipeDetails extends Component {
     )
     axios({
       method: 'POST',
-      url: `/api/v1/recipes/${this.props.recipeId}/reviews`,
+      url: `/api/v1/recipes/${this.props.recipe.id}/reviews`,
       headers: { 'x-access-token': TOKEN },
       data: { content }
     })

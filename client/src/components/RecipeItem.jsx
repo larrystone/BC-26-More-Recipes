@@ -34,7 +34,14 @@ class RecipeItem extends Component {
               }}>
               <Icon name='eye' color='blue' />View
             </Grid.Column>
-            <Grid.Column className="clickable">
+            <Grid.Column className="clickable"
+              onClick={() => {
+                this.props.setRecipe({
+                  id: this.props.recipe.id,
+                  name: this.props.recipe.name
+                });
+                this.props.setDialogType('create_edit_recipe');
+              }}>
               <Icon name='edit' color='green' />Edit
             </Grid.Column>
             <Grid.Column className="clickable"

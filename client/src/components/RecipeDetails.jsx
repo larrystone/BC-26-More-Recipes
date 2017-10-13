@@ -46,7 +46,7 @@ class RecipeDetails extends Component {
         const favorites = response.data.recipe;
 
         const fav = favorites.filter((favorite) => {
-          return this.props.recipeId === favorite.recipeId
+          return this.props.recipe.id === favorite.recipeId
         })
 
         if (fav.length !== 0) {

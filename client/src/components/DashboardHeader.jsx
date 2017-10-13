@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Icon, Label, Dropdown } from 'semantic-ui-react';
+import { Button, Icon, Label, Menu, Popup } from 'semantic-ui-react';
 import { bake_cookie } from 'sfcookies';
 import { connect } from 'react-redux';
 
@@ -45,14 +45,31 @@ class Header extends Component {
             </Label>
           </div>
           <div className="flex-item">
-            <Dropdown pointing text={this.props.loggedUser.username}>
-              <Dropdown.Menu>
-                <Dropdown.Item text='My Profile'
-                />
-                <Dropdown.Divider />
-                <Dropdown.Item text='Sign Out' onClick={() => { this.handleSignOut() }} />
-              </Dropdown.Menu>
-            </Dropdown>
+
+            <Popup
+              style={{ padding: '0px' }}
+              trigger={
+                <div className='clickable'>
+                  {this.props.loggedUser.username}
+                  <Icon name='caret down' />
+                </div>}
+              on='click'
+            >
+              <Menu vertical
+                style={{ width: '100px' }}>
+                <Menu.Item
+                  onClick={() => {
+                    console.log('clicked')
+                  }}>
+                  My Profile
+                </Menu.Item>
+                <Menu.Item
+                  onClick={() => { this.handleSignOut() }}
+                >
+                  Sign Out
+                </Menu.Item>
+              </Menu>
+            </Popup>
           </div>
         </div>
         <div className="flex-row">
@@ -74,7 +91,7 @@ class Header extends Component {
             >My Favorites</Button>
           </Button.Group>
         </div>
-      </header>
+      </header >
     )
   }
 }

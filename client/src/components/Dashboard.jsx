@@ -32,7 +32,7 @@ class Dashboard extends Component {
   renderModals = () => {
     if (this.props.modal === 'recipe_details') {
       return <RecipeDetails />
-    } else if (this.props.modal === 'create_recipe') {
+    } else if (this.props.modal === 'create_edit_recipe') {
       return <CreatEditRecipe />
     } else if (this.props.modal === 'delete_recipe') {
       return <DeleteRecipe />

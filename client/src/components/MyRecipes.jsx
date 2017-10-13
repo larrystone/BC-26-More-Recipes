@@ -8,6 +8,7 @@ import RecipeItem from './RecipeItem';
 
 import { setDialogType } from '../actions/dialog';
 import { setReloadRecipes } from '../actions/reload_recipe';
+import { setRecipe } from '../actions/recipe';
 
 const TOKEN = 'more-recipe-token';
 
@@ -15,11 +16,7 @@ class Main extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      my_recipes: null,
-      recipe_name: '',
-      recipe_description: '',
-      recipe_ingredients: '',
-      recipe_direction: ''
+      my_recipes: null
     }
   }
 
@@ -104,7 +101,11 @@ class Main extends Component {
             icon='plus'
             color='teal'
             onClick={() => {
-              this.props.setDialogType('create_recipe')
+              this.props.setRecipe({
+                id: null,
+                name: null
+              });
+              this.props.setDialogType('create_edit_recipe');
             }}
           />
         </div>
@@ -118,8 +119,15 @@ class Main extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    reloadRecipes: state.reloadRecipes
+    reloadRecipes: state.reloadRecipes,
+    recipe: state.recipe
   }
 }
 
-export default connect(mapStateToProps, { setDialogType, setReloadRecipes })(Main);
+const actionCreators = {
+  setDialogType,
+  setReloadRecipes,
+  setRecipe
+}
+
+export default connect(mapStateToProps, actionCreators)(Main);
