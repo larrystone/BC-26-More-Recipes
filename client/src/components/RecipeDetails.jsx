@@ -48,11 +48,14 @@ class RecipeDetails extends Component {
         const likes = response.data.recipe;
 
         const userLikes = likes.map((like) => {
-          return like.User.name;
+          if (like.User.id === this.props.userId) {
+            return 'You'
+          } else
+            return like.User.name;
         });
 
         this.setState(
-          { likedBy: userLikes.toString() }
+          { likedBy: userLikes.toString().replace(this.props.username, 'You') }
         )
       })
       .catch(() => {
@@ -69,7 +72,10 @@ class RecipeDetails extends Component {
         const dislikes = response.data.recipe;
 
         const userDislikes = dislikes.map((dislike) => {
-          return dislike.User.name;
+          if (dislike.User.id === this.props.userId) {
+            return 'You'
+          } else
+            return dislike.User.name;
         });
 
         this.setState(
@@ -198,6 +204,70 @@ class RecipeDetails extends Component {
     }
   }
 
+  showUserLiked = () => {
+    const { upvotes } = this.state.recipe;
+    const { likedBy } = this.state;
+    if (likedBy) {
+      return (
+        <Popup
+          inverted
+          trigger={
+            <Button compact
+              color='green'
+              icon='thumbs outline up'
+              label={upvotes}
+              labelPosition='right'
+              onClick={() => this.voteRecipe('upvotes')}
+            />
+          }
+          content={<div><Icon name='thumbs outline up' size='large' />: &nbsp;&nbsp;{this.state.likedBy}</div>}
+        />
+      )
+    } else {
+      return (
+        <Button compact
+          color='green'
+          icon='thumbs outline up'
+          label={upvotes}
+          labelPosition='right'
+          onClick={() => this.voteRecipe('upvotes')}
+        />
+      )
+    }
+  }
+
+  showUserDisliked = () => {
+    const { downvotes } = this.state.recipe;
+    const { dislikedBy } = this.state;
+    if (dislikedBy) {
+      return (
+        <Popup
+          inverted
+          trigger={
+            <Button compact
+              color='red'
+              icon='thumbs outline down'
+              label={downvotes}
+              labelPosition='right'
+              onClick={() => this.voteRecipe('downvotes')}
+            />
+          }
+          content={<div><Icon name='thumbs outline down' size='large' />: &nbsp;&nbsp;{dislikedBy}</div>}
+        />
+      )
+    } else {
+      return (
+        <Button compact
+          color='red'
+          icon='thumbs outline down'
+          label={downvotes}
+          labelPosition='right'
+          onClick={() => this.voteRecipe('downvotes')}
+        />
+      )
+    }
+  }
+
   renderRecipeDetails = () => {
     const recipe = this.state.recipe;
     if (!recipe) {
@@ -214,8 +284,6 @@ class RecipeDetails extends Component {
         imageUrl,
         User,
         direction,
-        upvotes,
-        downvotes,
         viewCount,
         createdAt
       } = this.state.recipe;
@@ -261,34 +329,10 @@ class RecipeDetails extends Component {
                     />
                   </Grid.Column>
                   <Grid.Column>
-                    <Popup
-                      inverted
-                      trigger={
-                        <Button compact
-                          color='green'
-                          icon='thumbs outline up'
-                          label={upvotes}
-                          labelPosition='right'
-                          onClick={() => this.voteRecipe('upvotes')}
-                        />
-                      }
-                      content={<div><Icon name='thumbs outline up' size='large' />: &nbsp;&nbsp;{this.state.likedBy}</div>}
-                    />
+                    {this.showUserLiked()}
                   </Grid.Column>
                   <Grid.Column>
-                    <Popup
-                      inverted
-                      trigger={
-                        <Button compact
-                          color='red'
-                          icon='thumbs outline down'
-                          label={downvotes}
-                          labelPosition='right'
-                          onClick={() => this.voteRecipe('downvotes')}
-                        />
-                      }
-                      content={<div><Icon name='thumbs outline down' size='large' />: &nbsp;&nbsp;{this.state.dislikedBy}</div>}
-                    />
+                    {this.showUserDisliked()}
                   </Grid.Column>
                 </Grid.Row>
               </Grid>
