@@ -15,7 +15,7 @@ class MyFavorites extends Component {
     super(props);
     this.state = {
       my_favs: null,
-      activeIndex: -1
+      activeIndex: 0
     }
   }
 
@@ -59,7 +59,6 @@ class MyFavorites extends Component {
     } else if (recipes.length === 0) {
       return (
         <Message
-          style={{ width: '100%', margin: '10px' }}
           color='green'
           size='large'>
           <Message.Header content="Nothing found!" />

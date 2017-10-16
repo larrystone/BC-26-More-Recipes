@@ -73,7 +73,7 @@ class RecipeItem extends Component {
                   id: this.props.recipe.id,
                   name: this.props.recipe.name
                 });
-                this.props.setDialogType('delete_recipe');
+                this.props.setDialogType('remove_recipe');
               }}>
               <Icon name='close' color='red' />Remove
             </Grid.Column>

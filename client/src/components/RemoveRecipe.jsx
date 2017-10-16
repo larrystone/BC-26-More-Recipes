@@ -9,7 +9,7 @@ import { setReloadRecipes } from '../actions/reload_recipe';
 
 const TOKEN = read_cookie('more-recipe-token');
 
-class DeleteRecipe extends Component {
+class RemoveRecipe extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -21,12 +21,12 @@ class DeleteRecipe extends Component {
     this.props.setDialogType('');
   }
 
-  deleteRecipe = () => {
+  removeRecipe = () => {
     const { recipe } = this.props;
 
     axios({
       method: 'DELETE',
-      url: `/api/v1/recipes/${recipe.id}`,
+      url: `/api/v1/users/${this.props.userId}/recipes/${this.props.recipe.id}`,
       headers: { 'x-access-token': TOKEN }
     })
       .then((response) => {
@@ -35,10 +35,7 @@ class DeleteRecipe extends Component {
           this.closeModal();
         }
       })
-      .catch((error) => {
-        this.setState(
-          { error: error.response.data.message }
-        )
+      .catch(() => {
       });
   }
 
@@ -46,7 +43,7 @@ class DeleteRecipe extends Component {
     const { name } = this.props.recipe;
     return (
       <Modal dimmer='blurring'
-        open={this.props.modal === 'delete_recipe'}
+        open={this.props.modal === 'remove_recipe'}
         basic size='mini'
         onClose={() => {
           this.closeModal()
@@ -54,7 +51,7 @@ class DeleteRecipe extends Component {
       >
         <Header icon='archive' content={name} />
         <Modal.Content>
-          <p>Are you sure you want to delete this recipe?</p>
+          <p>Are you sure you want to remove this recipe from your favorite recipes list?</p>
           <div className='error'>
             {this.state.error}
           </div>
@@ -62,12 +59,12 @@ class DeleteRecipe extends Component {
         <Modal.Actions>
           <Button negative icon='close' labelPosition='right' content='No'
             onClick={() => {
-              this.closeModal()
+              this.closeModal();
             }} />
 
           <Button positive icon='checkmark' labelPosition='right' content='Yes'
             onClick={() => {
-              this.deleteRecipe();
+              this.removeRecipe();
             }} />
         </Modal.Actions>
       </Modal>
@@ -78,8 +75,9 @@ class DeleteRecipe extends Component {
 const mapStateToProps = (state) => {
   return {
     modal: state.dialog,
-    recipe: state.recipe
+    recipe: state.recipe,
+    userId: state.user.id
   }
 }
 
-export default connect(mapStateToProps, { setDialogType, setReloadRecipes })(DeleteRecipe);
+export default connect(mapStateToProps, { setDialogType, setReloadRecipes })(RemoveRecipe);

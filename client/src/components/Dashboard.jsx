@@ -9,6 +9,7 @@ import RecipeDetails from './RecipeDetails';
 import CreatEditRecipe from './CreateEditRecipe';
 import DeleteRecipe from './DeleteRecipe';
 import MyFavorites from './MyFavorites';
+import RemoveRecipe from './RemoveRecipe';
 
 class Dashboard extends Component {
   showDashboardSection = () => {
@@ -37,6 +38,8 @@ class Dashboard extends Component {
       return <CreatEditRecipe />
     } else if (this.props.modal === 'delete_recipe') {
       return <DeleteRecipe />
+    } else if (this.props.modal === 'remove_recipe') {
+      return <RemoveRecipe />
     } else {
       return <div></div>
     }
