@@ -26,12 +26,9 @@ main {
 
 footer {
 	flex: 0 0 125px;
-	padding: 5px;
 	margin-top: 120px;
 	color: #fff;
 	background-color: $color_green_lighten_2;
-	display: flex;
-	justify-content: space-around;
 }
 
 ul {
@@ -55,7 +52,7 @@ header {
 .flex-row {
 	padding: 10px 15px 10px 0px;
 	display: flex;
-	align-items: center;
+	// align-items: center;
 	flex-wrap: wrap;
 }
 
@@ -120,4 +117,8 @@ h5 {
 	top: 110px;
 	margin: 0px 10px;
 	position: relative;
+}
+
+.footer-item {
+	margin: 0px auto;
 }

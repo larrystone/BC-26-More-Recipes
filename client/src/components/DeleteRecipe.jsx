@@ -13,7 +13,7 @@ class DeleteRecipe extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      recipeName: ''
+      error: ''
     }
   }
 
@@ -52,7 +52,7 @@ class DeleteRecipe extends Component {
           this.closeModal()
         }}
       >
-        <Header icon='archive' content={`${name}`} />
+        <Header icon='archive' content={name} />
         <Modal.Content>
           <p>Are you sure you want to delete this recipe?</p>
           <div className='error'>

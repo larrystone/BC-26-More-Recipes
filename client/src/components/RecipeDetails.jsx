@@ -5,8 +5,8 @@ import axios from 'axios';
 import moment from 'moment';
 import {
   Divider, Icon, Loader,
-  Button, Grid,
-  Card, Modal, Image
+  Button, Grid, List,
+  Card, Modal, Image, Popup
 } from 'semantic-ui-react';
 
 import Reviews from './Reviews';
@@ -21,7 +21,10 @@ class RecipeDetails extends Component {
     super(props);
     this.state = {
       recipe: null,
-      isFav: false
+      isFav: false,
+      likedBy: 'None',
+      dislikedBy: 'None',
+      loading: false
     }
   }
 
@@ -30,10 +33,60 @@ class RecipeDetails extends Component {
   renderIngredients = () => {
     const ingredients = this.state.recipe.ingredients.split(';;');
     return (
-      ingredients.map((ingredient, index) => {
-        return <li key={index}>{ingredient}</li>;
-      })
+      <List
+        bulleted
+        animated
+        items={ingredients}
+      />
     )
+  }
+
+  fetchLikedBys = () => {
+    axios({
+      method: 'GET',
+      url: `/api/v1/recipes/${this.props.recipe.id}/upvotes`,
+      headers: { 'x-access-token': TOKEN }
+    })
+      .then((response) => {
+        const likes = response.data.recipe;
+
+        const userLikes = likes.map((like) => {
+          if (like.User.id === this.props.userId) {
+            return 'You'
+          } else
+            return like.User.name;
+        });
+
+        this.setState(
+          { likedBy: userLikes.toString().replace(this.props.username, 'You') }
+        )
+      })
+      .catch(() => {
+      });
+  }
+
+  fetchDislikedBys = () => {
+    axios({
+      method: 'GET',
+      url: `/api/v1/recipes/${this.props.recipe.id}/downvotes`,
+      headers: { 'x-access-token': TOKEN }
+    })
+      .then((response) => {
+        const dislikes = response.data.recipe;
+
+        const userDislikes = dislikes.map((dislike) => {
+          if (dislike.User.id === this.props.userId) {
+            return 'You'
+          } else
+            return dislike.User.name;
+        });
+
+        this.setState(
+          { dislikedBy: userDislikes.toString() }
+        )
+      })
+      .catch(() => {
+      });
   }
 
   fetchFavorites = () => {
@@ -79,6 +132,8 @@ class RecipeDetails extends Component {
   componentDidMount() {
     this.fetchRecipeDetails();
     this.fetchFavorites();
+    this.fetchLikedBys();
+    this.fetchDislikedBys();
   }
 
   voteRecipe = (voteType) => {
@@ -90,6 +145,8 @@ class RecipeDetails extends Component {
       .then((response) => {
         if (response.status === 201) {
           this.fetchRecipeDetails();
+          this.fetchDislikedBys();
+          this.fetchLikedBys();
         }
       })
       .catch((err) => {
@@ -97,6 +154,9 @@ class RecipeDetails extends Component {
   }
 
   addToFavs = () => {
+    this.setState(
+      { loading: true }
+    )
     axios({
       method: 'POST',
       url: `/api/v1/users/${this.props.userId}/recipes/${this.props.recipe.id}`,
@@ -105,15 +165,24 @@ class RecipeDetails extends Component {
       .then((response) => {
         if (response.status === 201) {
           this.setState(
-            { isFav: true }
+            {
+              isFav: true,
+              loading: false
+            }
           )
         }
       })
       .catch(() => {
+        this.setState(
+          { loading: false }
+        )
       });
   }
 
   removeFromFavs = () => {
+    this.setState(
+      { loading: true }
+    )
     axios({
       method: 'DELETE',
       url: `/api/v1/users/${this.props.userId}/recipes/${this.props.recipe.id}`,
@@ -122,7 +191,10 @@ class RecipeDetails extends Component {
       .then((response) => {
         if (response.status === 205) {
           this.setState(
-            { isFav: false }
+            {
+              isFav: false,
+              loading: false
+            }
           )
         }
       })
@@ -132,21 +204,83 @@ class RecipeDetails extends Component {
 
   renderIsFavorite = () => {
     const isFav = this.state.isFav;
+    const { loading } = this.state;
     if (isFav) {
       return (
-        <Icon name='star' size='large'
+        <Icon loading
+          name='star' size='large'
           color='yellow'
           onClick={() => {
-            this.removeFromFavs()
+            if (!loading) {
+              this.removeFromFavs();
+            }
           }} />
       )
     } else {
       return (
         <Icon name='empty star' size='large'
           onClick={() => {
-            this.addToFavs()
+            if (!loading) {
+              this.addToFavs();
+            }
           }} />
       )
+    }
+  }
+
+  likeButton = () => {
+    const { upvotes } = this.state.recipe;
+    return (
+      <Button compact
+        color='green'
+        icon='thumbs outline up'
+        label={upvotes}
+        labelPosition='right'
+        onClick={() => this.voteRecipe('upvotes')}
+      />
+    )
+  }
+
+  dislikeButton = () => {
+    const { downvotes } = this.state.recipe;
+    return (
+      <Button compact
+        color='red'
+        icon='thumbs outline down'
+        label={downvotes}
+        labelPosition='right'
+        onClick={() => this.voteRecipe('downvotes')}
+      />
+    )
+  }
+
+  showUserLiked = () => {
+    const { likedBy } = this.state;
+    if (likedBy) {
+      return (
+        <Popup
+          inverted
+          trigger={this.likeButton()}
+          content={<div><Icon name='thumbs outline up' size='large' />: &nbsp;&nbsp;{this.state.likedBy}</div>}
+        />
+      )
+    } else {
+      return this.likeButton();
+    }
+  }
+
+  showUserDisliked = () => {
+    const { dislikedBy } = this.state;
+    if (dislikedBy) {
+      return (
+        <Popup
+          inverted
+          trigger={this.dislikeButton()}
+          content={<div><Icon name='thumbs outline down' size='large' />: &nbsp;&nbsp;{dislikedBy}</div>}
+        />
+      )
+    } else {
+      return this.dislikeButton();
     }
   }
 
@@ -166,8 +300,6 @@ class RecipeDetails extends Component {
         imageUrl,
         User,
         direction,
-        upvotes,
-        downvotes,
         viewCount,
         createdAt
       } = this.state.recipe;
@@ -182,7 +314,9 @@ class RecipeDetails extends Component {
             <Card.Content>
               <Card.Header>{name} {this.renderIsFavorite()}</Card.Header>
               <Card.Description>{description}</Card.Description>
-              <Card.Meta>by <b>{User.name}</b> - <em>{moment(new Date(createdAt)).fromNow()}</em></Card.Meta>
+              <Card.Meta>by <b>{User.name}</b> - <em>
+                {moment(new Date(createdAt)).fromNow()}
+              </em></Card.Meta>
 
               <Divider />
 
@@ -213,22 +347,10 @@ class RecipeDetails extends Component {
                     />
                   </Grid.Column>
                   <Grid.Column>
-                    <Button compact
-                      color='green'
-                      icon='thumbs outline up'
-                      label={upvotes}
-                      labelPosition='right'
-                      onClick={() => this.voteRecipe('upvotes')}
-                    />
+                    {this.showUserLiked()}
                   </Grid.Column>
                   <Grid.Column>
-                    <Button compact
-                      color='red'
-                      icon='thumbs outline down'
-                      label={downvotes}
-                      labelPosition='right'
-                      onClick={() => this.voteRecipe('downvotes')}
-                    />
+                    {this.showUserDisliked()}
                   </Grid.Column>
                 </Grid.Row>
               </Grid>
@@ -244,7 +366,7 @@ class RecipeDetails extends Component {
     const { modal } = this.props;
 
     return (
-      <Modal dimmer='blurring'
+      <Modal
         basic size='fullscreen'
         open={modal === 'recipe_details'}
         onClose={() => this.close()} closeIcon>

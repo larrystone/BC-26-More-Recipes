@@ -71,16 +71,19 @@ export default class Vote {
             });
           return res.status(201).json({
             success: true,
-            message: `Recipe with id: ${recipeId} Upvoted!` });
+            message: `Recipe with id: ${recipeId} Upvoted!`
+          });
         }
 
         return res.status(409).json({
           success: false,
-          message: `Recipe with id: ${recipeId} Already Upvoted!` });
+          message: `Recipe with id: ${recipeId} Already Upvoted!`
+        });
       })
       .catch(() => res.status(500).json({
         success: false,
-        message: 'Error Upvoting Recipe' }));
+        message: 'Error Upvoting Recipe'
+      }));
 
     return this;
   }
@@ -146,16 +149,19 @@ export default class Vote {
 
           return res.status(201).json({
             success: true,
-            message: `Recipe with id: ${recipeId} Downvoted!` });
+            message: `Recipe with id: ${recipeId} Downvoted!`
+          });
         }
 
         return res.status(409).json({
           success: false,
-          message: `Recipe with id: ${recipeId} Already Downvoted!` });
+          message: `Recipe with id: ${recipeId} Already Downvoted!`
+        });
       })
       .catch(() => res.status(500).json({
         success: true,
-        message: 'Error Downvoting Recipe' }));
+        message: 'Error Downvoting Recipe'
+      }));
 
     return this;
   }
@@ -176,7 +182,7 @@ export default class Vote {
         attributes: ['recipeId'],
         where: { recipeId },
         include: [
-          { model: models.User, attributes: ['name'] }
+          { model: models.User, attributes: ['name', 'id'] }
         ]
       })
       .then((foundVotes) => {
@@ -190,11 +196,13 @@ export default class Vote {
         return res.status(201).json({
           success: true,
           message: 'User upvotes found',
-          recipe: foundVotes });
+          recipe: foundVotes
+        });
       })
       .catch(() => res.status(500).json({
         success: false,
-        message: 'Unable to get user upvotes' }));
+        message: 'Unable to get user upvotes'
+      }));
 
     return this;
   }
@@ -215,7 +223,7 @@ export default class Vote {
         attributes: ['recipeId'],
         where: { recipeId },
         include: [
-          { model: models.User, attributes: ['name'] }
+          { model: models.User, attributes: ['name', 'id'] }
         ]
       })
       .then((foundVotes) => {
@@ -229,11 +237,13 @@ export default class Vote {
         return res.status(201).json({
           success: true,
           message: 'User downvotes found',
-          recipe: foundVotes });
+          recipe: foundVotes
+        });
       })
       .catch(() => res.status(500).json({
         success: false,
-        message: 'Unable to get user downvotes' }));
+        message: 'Unable to get user downvotes'
+      }));
 
     return this;
   }
