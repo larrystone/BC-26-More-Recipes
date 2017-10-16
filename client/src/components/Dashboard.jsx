@@ -8,6 +8,7 @@ import MyRecipes from './MyRecipes';
 import RecipeDetails from './RecipeDetails';
 import CreatEditRecipe from './CreateEditRecipe';
 import DeleteRecipe from './DeleteRecipe';
+import MyFavorites from './MyFavorites';
 
 class Dashboard extends Component {
   showDashboardSection = () => {
@@ -22,7 +23,7 @@ class Dashboard extends Component {
       )
     } else if (dashboardSection === 'my_favs') {
       return (
-        <div>Welcome to My favs</div>
+        <MyFavorites />
       )
     } else {
       return <div></div>

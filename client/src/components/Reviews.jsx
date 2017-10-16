@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { read_cookie } from 'sfcookies';
 import axios from 'axios';
-import { Divider, Button, Card, Comment, Label, Header, Form } from 'semantic-ui-react';
+import { Divider, Button, Card, Comment, Header, Form } from 'semantic-ui-react';
 import moment from 'moment';
 import { connect } from 'react-redux';
 
@@ -47,13 +47,19 @@ class RecipeDetails extends Component {
         return (
           <Comment key={index}>
             <Divider />
+            <Button
+              floated='left'
+              compact
+              style={{ padding: '13px' }}
+            >
+              {generateInitials(User.name)}
+            </Button>
             <Comment.Content>
-              <Label horizontal circular>{generateInitials(User.name)}</Label>
               <Comment.Author as='span'>{User.name}</Comment.Author>
               <Comment.Metadata>
                 - {moment(new Date(updatedAt)).fromNow()}
               </Comment.Metadata>
-              <Comment.Text style={{ marginLeft: '32px' }}>{content}</Comment.Text>
+              <Comment.Text >{content}</Comment.Text>
             </Comment.Content>
           </Comment>
         )

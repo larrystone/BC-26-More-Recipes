@@ -57,6 +57,37 @@ class RecipeItem extends Component {
           </Grid.Row>
         </Grid>
       )
+    } else if (dashboardSection === 'my_favs') {
+      return (
+        <Grid columns={2} divided>
+          <Grid.Row>
+            <Grid.Column className="clickable"
+              onClick={() => {
+                this.handleViewRecipe();
+              }}>
+              <Icon name='eye' color='blue' />View
+            </Grid.Column>
+            <Grid.Column className="clickable"
+              onClick={() => {
+                this.props.setRecipe({
+                  id: this.props.recipe.id,
+                  name: this.props.recipe.name
+                });
+                this.props.setDialogType('delete_recipe');
+              }}>
+              <Icon name='close' color='red' />Remove
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+      )
+    }
+  }
+
+  showAuthor = (User) => {
+    if (User) {
+      return (
+        <Card.Meta>by <em>{User.name}</em></Card.Meta>
+      )
     }
   }
 
@@ -74,7 +105,7 @@ class RecipeItem extends Component {
         <Card.Content>
           <Card.Header>{name}</Card.Header>
           <Card.Description>{description}</Card.Description>
-          <Card.Meta>by <em>{User.name}</em></Card.Meta>
+          {this.showAuthor(User)}
         </Card.Content>
         <Card.Content extra>
           {this.showRecipeActions()}
