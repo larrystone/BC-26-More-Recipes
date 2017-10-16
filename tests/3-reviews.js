@@ -7,6 +7,7 @@ chai.use(chaiHttp);
 
 let token;
 let recipeId;
+let userId;
 
 describe('/POST Create User and Recipe', () => {
   it('should create a user (to get save token)', (done) => {
@@ -21,6 +22,7 @@ describe('/POST Create User and Recipe', () => {
       })
       .end((err, res) => {
         token = res.body.user.token;
+        userId = res.body.user.userId;
         expect(res.statusCode).to.equal(201);
         done();
       });
@@ -157,6 +159,19 @@ describe('/GET all Reviews on a Recipe Test', () => {
   it('should return an array of Reviews', (done) => {
     chai.request(server)
       .get(`/api/v1/recipes/${recipeId}/reviews`)
+      .set('Accept', 'application/json')
+      .set('x-access-token', token)
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(201);
+        done();
+      });
+  });
+});
+
+describe('/GET all Reviews by a User Test', () => {
+  it('should return an array of Reviews', (done) => {
+    chai.request(server)
+      .get(`/api/v1/users/${userId}/reviews`)
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {

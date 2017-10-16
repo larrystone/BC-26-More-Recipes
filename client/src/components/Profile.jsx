@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Form, Card, Label, Button, Segment, Accordion, Icon } from 'semantic-ui-react';
+import { Form, Card, Label, Accordion, Icon } from 'semantic-ui-react';
 import axios from 'axios';
 import { read_cookie } from 'sfcookies';
+import { Chart } from 'react-google-charts';
 
 const TOKEN = read_cookie('more-recipe-token');
-
-import * as validate from '../../../server/middleware/validate';
 
 class Profile extends Component {
   constructor(props) {
@@ -19,11 +18,14 @@ class Profile extends Component {
       password2: '',
       error: '',
       loading: false,
-      activeIndex: -1
+      activeIndex: -1,
+      my_favs: 0,
+      my_recipes: 0,
+      my_reviews: 0
     };
   }
 
-  componentDidMount() {
+  fetchDetails = () => {
     this.setState({
       loading: true
     })
@@ -50,6 +52,64 @@ class Profile extends Component {
       });
   }
 
+  fetchFavs = () => {
+    axios({
+      method: 'GET',
+      url: `/api/v1/users/${this.props.loggedUserId}/recipes`,
+      headers: { 'x-access-token': TOKEN }
+    })
+      .then((response) => {
+        this.setState(
+          {
+            my_favs: response.data.recipe.length
+          }
+        );
+      })
+      .catch(() => {
+      });
+  }
+
+  fetchReviews = () => {
+    axios({
+      method: 'GET',
+      url: `/api/v1/users/${this.props.loggedUserId}/reviews`,
+      headers: { 'x-access-token': TOKEN }
+    })
+      .then((response) => {
+        this.setState(
+          {
+            my_reviews: response.data.recipe.length
+          }
+        );
+      })
+      .catch(() => {
+      });
+  }
+
+  fetchMyRecipes = () => {
+    axios({
+      method: 'GET',
+      url: '/api/v1/users/myRecipes',
+      headers: { 'x-access-token': TOKEN }
+    })
+      .then((response) => {
+        this.setState(
+          {
+            my_recipes: response.data.recipe.length
+          }
+        );
+      })
+      .catch(() => {
+      });
+  }
+
+  componentDidMount() {
+    this.fetchDetails();
+    this.fetchFavs();
+    this.fetchReviews();
+    this.fetchMyRecipes();
+  }
+
   storeToState(key, value) {
     this.setState(
       {
@@ -70,7 +130,7 @@ class Profile extends Component {
   renderProfileDetails = () => {
     const { loading, activeIndex, username, email, name } = this.state;
     return (
-      <Card style={{ width: '550px', margin: '10px' }}>
+      <Card centered style={{ width: '550px' }}>
         <Label attached='top'><h3>Basic Information</h3></Label>
         <Card.Content>
           <Form>
@@ -99,6 +159,9 @@ class Profile extends Component {
 
             <Form.Button positive
               disabled={loading}
+              onClick={() => {
+                console.log(username, email, name);
+              }}
             >
               Update
           </Form.Button>
@@ -155,10 +218,29 @@ class Profile extends Component {
     )
   }
 
+  renderStats = () => {
+    const { my_recipes, my_favs, my_reviews } = this.state;
+    return (
+      <Card centered style={{ width: '550px' }}>
+        <Label attached='top'><h3>My Stats Chart</h3></Label>
+        <Card.Content>
+          <Chart
+            chartType="PieChart"
+            width="100%"
+            data={[["Section", "Count"], ["My Recipes", my_recipes], ["My Reviews", my_reviews], ["My Favorites", my_favs]]}
+            options={{ "title": `@${this.state.username} Summary`, "pieHole": 0.4, "is3D": true }}
+            legend_toggle
+          />
+        </Card.Content>
+      </Card>
+    );
+  }
+
   render() {
     return (
       <Card.Group>
         {this.renderProfileDetails()}
+        {this.renderStats()}
       </Card.Group>
     )
   }
