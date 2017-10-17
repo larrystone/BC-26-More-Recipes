@@ -23,11 +23,7 @@ user.use('*', newAuth.verify);
 user.get('/myRecipes', newRecipe.getUserRecipes);
 
 user.route('/:userId/profile')
-  .get(newUser.getUser)
-
-  // TODO update user details and password routes
-  .patch(newUser.getUser);
-user.patch('/:userId/password', newUser.getUser);
+  .get(newUser.getUser);
 
 user.route('/:userId/recipes/:recipeId')
   .post(newFavorite.addToFavorite)

@@ -22,13 +22,10 @@ class Profile extends Component {
             const selectedItem = selection[0].row;
             if (selectedItem === 0) {
               props.setDashboardSection('my_recipes');
-            } else if (selectedItem === 1) {
-              //TODO take us to my reviews section
             } else if (selectedItem === 2) {
               props.setDashboardSection('my_favs');
             }
           }
-          console.log('Selected ', selection);
         },
       },
     ];
@@ -66,7 +63,7 @@ class Profile extends Component {
             name,
             loading: false
           }
-        )
+        );
       })
       .catch((err) => {
         this.setState(
@@ -179,11 +176,15 @@ class Profile extends Component {
               placeholder='Email Address'
               value={email}
             />
-
+            <div className='error'>
+              {this.state.error}
+            </div>
             <Form.Button positive
               disabled={loading}
               onClick={() => {
-                console.log(username, email, name);
+                this.setState({
+                  error: 'Sorry, this feature is not available yet'
+                });
               }}
             >
               Update
@@ -223,9 +224,6 @@ class Profile extends Component {
                   onChange={(event) => {
                     this.storeToState('password2', event.target.value)
                   }} />
-                <div className='error'>
-                  {this.state.error}
-                </div>
 
                 <Form.Button
                   disabled={loading}
