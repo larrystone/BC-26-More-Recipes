@@ -22,8 +22,8 @@ class RecipeDetails extends Component {
     this.state = {
       recipe: null,
       isFav: false,
-      likedBy: 'None',
-      dislikedBy: 'None',
+      likedBy: [],
+      dislikedBy: [],
       loading: false
     }
   }
@@ -58,7 +58,7 @@ class RecipeDetails extends Component {
         });
 
         this.setState(
-          { likedBy: userLikes.toString().replace(this.props.username, 'You') }
+          { likedBy: userLikes }
         )
       })
       .catch(() => {
@@ -82,7 +82,7 @@ class RecipeDetails extends Component {
         });
 
         this.setState(
-          { dislikedBy: userDislikes.toString() }
+          { dislikedBy: userDislikes }
         )
       })
       .catch(() => {
@@ -256,12 +256,18 @@ class RecipeDetails extends Component {
 
   showUserLiked = () => {
     const { likedBy } = this.state;
-    if (likedBy) {
+    if (likedBy.length !== 0) {
       return (
         <Popup
           inverted
           trigger={this.likeButton()}
-          content={<div><Icon name='thumbs outline up' size='large' />: &nbsp;&nbsp;{this.state.likedBy}</div>}
+          content={
+            <div>
+              <List
+                items={this.state.likedBy}
+              />
+            </div>
+          }
         />
       )
     } else {
@@ -271,12 +277,18 @@ class RecipeDetails extends Component {
 
   showUserDisliked = () => {
     const { dislikedBy } = this.state;
-    if (dislikedBy) {
+    if (dislikedBy.length !== 0) {
       return (
         <Popup
           inverted
           trigger={this.dislikeButton()}
-          content={<div><Icon name='thumbs outline down' size='large' />: &nbsp;&nbsp;{dislikedBy}</div>}
+          content={
+            <div>
+              <List
+                items={this.state.dislikedBy}
+              />
+            </div>
+          }
         />
       )
     } else {

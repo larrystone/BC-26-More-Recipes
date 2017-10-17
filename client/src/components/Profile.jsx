@@ -5,11 +5,34 @@ import axios from 'axios';
 import { read_cookie } from 'sfcookies';
 import { Chart } from 'react-google-charts';
 
+import { setDashboardSection } from '../actions/dashboard';
+
 const TOKEN = read_cookie('more-recipe-token');
 
 class Profile extends Component {
   constructor(props) {
     super(props);
+
+    this.chartClicked = [
+      {
+        eventName: 'select',
+        callback(Chart) {
+          const selection = Chart.chart.getSelection();
+          if (selection.length !== 0) {
+            const selectedItem = selection[0].row;
+            if (selectedItem === 0) {
+              props.setDashboardSection('my_recipes');
+            } else if (selectedItem === 1) {
+              //TODO take us to my reviews section
+            } else if (selectedItem === 2) {
+              props.setDashboardSection('my_favs');
+            }
+          }
+          console.log('Selected ', selection);
+        },
+      },
+    ];
+
     this.state = {
       name: '',
       username: '',
@@ -169,9 +192,11 @@ class Profile extends Component {
 
           <Accordion>
             <Accordion.Title active={activeIndex === 0} index={0} onClick={this.handleAccordionClick}>
-              <Icon name='dropdown' />
-              Change Password
-          </Accordion.Title>
+              <Label style={{ width: '100%' }}>
+                <Icon name='dropdown' />
+                Change Password
+              </Label>
+            </Accordion.Title>
             <Accordion.Content active={activeIndex === 0}>
               <Form>
                 <Form.Input
@@ -229,6 +254,7 @@ class Profile extends Component {
             width="100%"
             data={[["Section", "Count"], ["My Recipes", my_recipes], ["My Reviews", my_reviews], ["My Favorites", my_favs]]}
             options={{ "title": `@${this.state.username} Summary`, "pieHole": 0.4, "is3D": true }}
+            chartEvents={this.chartClicked}
             legend_toggle
           />
         </Card.Content>
@@ -252,4 +278,5 @@ const mapStateToProps = (state) => {
   }
 }
 
-export default connect(mapStateToProps, null)(Profile);
+
+export default connect(mapStateToProps, { setDashboardSection })(Profile);
