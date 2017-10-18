@@ -20,7 +20,16 @@ class RecipeDetails extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      recipe: null,
+      id: null,
+      User: null,
+      createdAt: '',
+      description: '',
+      direction: '',
+      downvotes: 0,
+      ingredients: '',
+      name: '',
+      upvotes: 0,
+      viewCount: 0,
       isFav: false,
       likedBy: [],
       dislikedBy: [],
@@ -31,7 +40,7 @@ class RecipeDetails extends Component {
   close = () => this.props.setDialogType('');
 
   renderIngredients = () => {
-    const ingredients = this.state.recipe.ingredients.split(';;');
+    const ingredients = this.state.ingredients.split(';;');
     return (
       <List
         bulleted
@@ -119,9 +128,31 @@ class RecipeDetails extends Component {
       headers: { 'x-access-token': TOKEN }
     })
       .then((response) => {
+        const {
+          id,
+          User,
+          createdAt,
+          description,
+          direction,
+          downvotes,
+          ingredients,
+          name,
+          upvotes,
+          viewCount
+        } = response.data.recipe
+
         this.setState(
           {
-            recipe: response.data.recipe
+            id,
+            User,
+            createdAt,
+            description,
+            direction,
+            downvotes,
+            ingredients,
+            name,
+            upvotes,
+            viewCount
           }
         )
       })
@@ -144,9 +175,49 @@ class RecipeDetails extends Component {
     })
       .then((response) => {
         if (response.status === 201) {
-          this.fetchRecipeDetails();
-          this.fetchDislikedBys();
-          this.fetchLikedBys();
+          if (voteType === 'upvotes') {
+            const { likedBy, dislikedBy, downvotes, upvotes } = this.state;
+
+            if (dislikedBy.includes('You')) {
+              const newDislikedBy = dislikedBy.filter((by) => {
+                return by !== 'You';
+              });
+              this.setState(
+                {
+                  dislikedBy: newDislikedBy,
+                  downvotes: downvotes - 1
+                }
+              );
+            }
+
+            this.setState(
+              {
+                likedBy: [...likedBy, 'You'],
+                upvotes: upvotes + 1,
+              }
+            );
+          } else {
+            const { likedBy, dislikedBy, upvotes, downvotes } = this.state;
+
+            if (likedBy.includes('You')) {
+              const newlikedBy = likedBy.filter((by) => {
+                return by !== 'You';
+              });
+              this.setState(
+                {
+                  likedBy: newlikedBy,
+                  upvotes: upvotes - 1
+                }
+              );
+            }
+
+            this.setState(
+              {
+                dislikedBy: [...dislikedBy, 'You'],
+                downvotes: downvotes + 1,
+              }
+            );
+          }
         }
       })
       .catch((err) => {
@@ -229,7 +300,7 @@ class RecipeDetails extends Component {
   }
 
   likeButton = () => {
-    const { upvotes } = this.state.recipe;
+    const { upvotes } = this.state;
     return (
       <Button compact
         color='green'
@@ -242,7 +313,7 @@ class RecipeDetails extends Component {
   }
 
   dislikeButton = () => {
-    const { downvotes } = this.state.recipe;
+    const { downvotes } = this.state;
     return (
       <Button compact
         color='red'
@@ -264,6 +335,7 @@ class RecipeDetails extends Component {
           content={
             <div>
               <List
+                size='mini'
                 items={this.state.likedBy}
               />
             </div>
@@ -285,6 +357,7 @@ class RecipeDetails extends Component {
           content={
             <div>
               <List
+                size='mini'
                 items={this.state.dislikedBy}
               />
             </div>
@@ -297,8 +370,8 @@ class RecipeDetails extends Component {
   }
 
   renderRecipeDetails = () => {
-    const recipe = this.state.recipe;
-    if (!recipe) {
+    const { id } = this.state;
+    if (!id) {
       return (
         <Loader active
           size='large'
@@ -314,7 +387,7 @@ class RecipeDetails extends Component {
         direction,
         viewCount,
         createdAt
-      } = this.state.recipe;
+      } = this.state;
 
       return (
         <Card.Group>
