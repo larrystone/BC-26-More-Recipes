@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Form, Message, Modal, Button } from 'semantic-ui-react';
+import { Form, Modal, Button } from 'semantic-ui-react';
 import axios from 'axios';
 import { bake_cookie } from 'sfcookies';
 import { createBrowserHistory } from 'history';
@@ -50,7 +50,7 @@ class SignInSignUp extends Component {
   }
 
   renderSignUp = () => {
-    const { loading } = this.state;
+    const { loading, name, email, username, password1, password2 } = this.state;
     return (
       <Modal open={true}>
         <Modal.Header>
@@ -62,6 +62,7 @@ class SignInSignUp extends Component {
               disabled={loading}
               label='Enter your name'
               placeholder='Enter your name'
+              value={name}
               onChange={(event) => {
                 this.storeToState('name', event.target.value)
               }} />
@@ -69,6 +70,7 @@ class SignInSignUp extends Component {
               disabled={loading}
               label='Username'
               placeholder='Username'
+              value={username}
               onChange={(event) => {
                 this.storeToState('username', event.target.value)
               }} />
@@ -76,6 +78,7 @@ class SignInSignUp extends Component {
               disabled={loading}
               label='Email Address'
               placeholder='Email Address'
+              value={email}
               onChange={(event) => {
                 this.storeToState('email', event.target.value)
               }} />
@@ -84,6 +87,7 @@ class SignInSignUp extends Component {
               label='Password'
               placeholder='Password'
               type='password'
+              value={password1}
               onChange={(event) => {
                 this.storeToState('password1', event.target.value)
               }} />
@@ -92,10 +96,13 @@ class SignInSignUp extends Component {
               label='Re-enter Password'
               placeholder='Re-enter Password'
               type='password'
+              value={password2}
               onChange={(event) => {
                 this.storeToState('password2', event.target.value)
               }} />
-            {this.showError()}
+            <div className='error'>
+              {this.state.error}
+            </div>
             <Form.Button positive
               disabled={loading}
               onClick={(event) => {
@@ -109,9 +116,7 @@ class SignInSignUp extends Component {
           Already have an account?
           <Button disabled={loading}
             onClick={() => {
-              this.setState(
-                { error: '' }
-              );
+              this.resetFormFields();
               this.props.setDialogType('signin');
             }}>
             Sign In
@@ -156,24 +161,17 @@ class SignInSignUp extends Component {
       }
   }
 
-  showError = () => {
-    const { error } = this.state;
-
-    if (error) {
-      return (
-        <Message negative attached floating compact>
-          <Message.Content className="error">
-            {this.state.error}
-          </Message.Content>
-        </Message>
-      )
-    } else {
-      return <div></div>
-    }
+  resetFormFields = () => {
+    this.setState(
+      {
+        error: '',
+        password1: ''
+      }
+    )
   }
 
   renderSignIn = () => {
-    const { loading } = this.state;
+    const { loading, username, password1 } = this.state;
     return (
       <Modal open={true}>
         <Modal.Header>
@@ -187,6 +185,7 @@ class SignInSignUp extends Component {
               iconPosition='left'
               label='Username or Email'
               placeholder='Username or Email'
+              value={username}
               onChange={(event) => {
                 this.storeToState('username', event.target.value)
               }} />
@@ -195,20 +194,16 @@ class SignInSignUp extends Component {
               icon='lock'
               iconPosition='left'
               label='Password'
+              value={password1}
               placeholder='Password'
               type='password'
               onChange={(event) => {
                 this.storeToState('password1', event.target.value)
               }} />
-            <h6 className="clickable"
-              onClick={() => {
-                this.setState(
-                  { error: '' }
-                );
-                this.props.setDialogType('reset-password');
-              }}
-            >Forgot password?</h6>
-            {this.showError()}
+
+            <div className='error'>
+              {this.state.error}
+            </div>
             <Form.Button positive
               disabled={loading}
               onClick={(event) => {
@@ -216,6 +211,12 @@ class SignInSignUp extends Component {
               }}>
               Sign In
           </Form.Button>
+            <a
+              onClick={() => {
+                this.resetFormFields();
+                this.props.setDialogType('reset-password');
+              }}
+            >Forgot password?</a>
           </Form>
         </Modal.Content>
         <Modal.Actions>
@@ -223,9 +224,7 @@ class SignInSignUp extends Component {
         <Button
             disabled={loading}
             onClick={() => {
-              this.setState(
-                { error: '' }
-              );
+              this.resetFormFields();
               this.props.setDialogType('signup');
             }}>
             Sign Up
@@ -264,7 +263,7 @@ class SignInSignUp extends Component {
   }
 
   renderResetPassword = () => {
-    const { loading } = this.state;
+    const { loading, email } = this.state;
     return (
       <Modal open={true}>
         <Modal.Header>
@@ -278,12 +277,18 @@ class SignInSignUp extends Component {
               iconPosition='left'
               label='Email Address'
               placeholder='Enter Email address'
+              value={email}
               onChange={(event) => {
                 this.storeToState('email', event.target.value)
               }} />
             <span className="error">{this.state.error}</span>
             <Form.Button positive
-              disabled={loading}>
+              disabled={loading}
+              onClick={() => {
+                this.setState(
+                  { error: 'Sorry, feature not yet available!' }
+                )
+              }}>
               Submit
           </Form.Button>
           </Form>
