@@ -11,7 +11,6 @@ import {
 
 import Reviews from './Reviews';
 
-import { setRecipe } from '../actions/recipe';
 import { setDialogType } from '../actions/dialog';
 
 const TOKEN = read_cookie('more-recipe-token');
@@ -471,9 +470,4 @@ const mapStateToProps = (state) => {
   }
 }
 
-const actionCreators = {
-  setRecipe,
-  setDialogType
-}
-
-export default connect(mapStateToProps, actionCreators)(RecipeDetails);
+export default connect(mapStateToProps, { setDialogType })(RecipeDetails);
