@@ -16,8 +16,37 @@ class RecipeDetails extends Component {
       reviews: null,
       content: '',
       error: '',
-      posting: false
+      posting: false,
+      currentIndex: 0
     }
+  }
+
+  showReviews = () => {
+    const { reviews, currentIndex } = this.state;
+    const visibleReviews = reviews.slice(currentIndex, currentIndex + 5);
+    return (
+      visibleReviews.map((review, index) => {
+        const { content, User, updatedAt } = review;
+        return (
+          <Comment key={index}>
+            <Button
+              floated='left'
+              compact
+              style={{ padding: '13px' }}
+            >
+              {generateInitials(User.name)}
+            </Button>
+            <Comment.Content>
+              <Comment.Author as='span'>{User.name}</Comment.Author>
+              <Comment.Metadata>
+                - {moment(new Date(updatedAt)).fromNow()}
+              </Comment.Metadata>
+              <Comment.Text >{content}</Comment.Text>
+            </Comment.Content>
+          </Comment>
+        )
+      })
+    )
   }
 
   renderReviews() {
@@ -42,28 +71,9 @@ class RecipeDetails extends Component {
       )
     }
     return (
-      reviews.map((review, index) => {
-        const { content, User, updatedAt } = review;
-        return (
-          <Comment key={index}>
-            <Divider />
-            <Button
-              floated='left'
-              compact
-              style={{ padding: '13px' }}
-            >
-              {generateInitials(User.name)}
-            </Button>
-            <Comment.Content>
-              <Comment.Author as='span'>{User.name}</Comment.Author>
-              <Comment.Metadata>
-                - {moment(new Date(updatedAt)).fromNow()}
-              </Comment.Metadata>
-              <Comment.Text >{content}</Comment.Text>
-            </Comment.Content>
-          </Comment>
-        )
-      })
+      <div>
+        {this.showReviews()}
+      </div>
     )
   }
 
@@ -74,9 +84,11 @@ class RecipeDetails extends Component {
       headers: { 'x-access-token': TOKEN }
     })
       .then((response) => {
+        const reviews = response.data.recipe.reverse();
         this.setState(
           {
-            reviews: response.data.recipe
+            reviews,
+            currentIndex: 0
           }
         )
       })
@@ -88,6 +100,43 @@ class RecipeDetails extends Component {
     this.fetchReviews();
   }
 
+  showLoadNewer = () => {
+    const { currentIndex } = this.state;
+    if (currentIndex > 0) {
+      return (
+        <center><a onClick={() => {
+          this.setState(
+            { currentIndex: currentIndex - 5 }
+          )
+        }}>
+          &lt;&lt; Load Newer
+        </a></center>
+      )
+    } else {
+      return <div></div>
+    }
+  }
+
+  showLoadOlder = () => {
+    const { currentIndex, reviews } = this.state;
+
+    if (reviews) {
+      if (currentIndex < reviews.length - 5) {
+        return (
+          <center><a onClick={() => {
+            this.setState(
+              { currentIndex: currentIndex + 5 }
+            )
+          }}>
+            Load Older >>
+          </a></center>
+        )
+      } else {
+        return <div></div>
+      }
+    }
+  }
+
   render() {
     const { posting } = this.state;
     return (
@@ -96,6 +145,8 @@ class RecipeDetails extends Component {
           <Header as='h3'>Reviews</Header>
           <Form reply>
             <Form.TextArea
+              style={{ maxHeight: '100px' }}
+              placeholder='Write a review'
               disabled={posting}
               onChange={(event) => {
                 this.setState(
@@ -116,7 +167,11 @@ class RecipeDetails extends Component {
               onClick={() => this.postReview()}
             />
           </Form>
+          {this.showLoadNewer()}
+          <Divider />
           {this.renderReviews()}
+          <Divider />
+          {this.showLoadOlder()}
         </Comment.Group>
       </Card>
     )

@@ -41,7 +41,8 @@ class Header extends Component {
           </div>
           <div className="flex-item">
             <Label as='a' color='teal'>
-              <Icon name='alarm outline' /> 0
+              <Icon name='alarm outline' />
+              <Label.Detail>0</Label.Detail>
             </Label>
           </div>
           <div className="flex-item">
