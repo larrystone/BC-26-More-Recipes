@@ -22,8 +22,6 @@ class RemoveRecipe extends Component {
   }
 
   removeRecipe = () => {
-    const { recipe } = this.props;
-
     axios({
       method: 'DELETE',
       url: `/api/v1/users/${this.props.userId}/recipes/${this.props.recipe.id}`,

@@ -25,7 +25,7 @@ user.route('/:recipeId')
 
 user.route('/:recipeId/reviews')
   .post(newReview.postReview)
-  .get(newReview.getReviews);
+  .get(newReview.getRecipeReviews);
 
 user.route('/:recipeId/upvotes')
   .post(newVote.upvoteRecipe)

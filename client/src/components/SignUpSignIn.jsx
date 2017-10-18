@@ -57,7 +57,7 @@ class SignInSignUp extends Component {
           Sign Up for an Account
           </Modal.Header>
         <Modal.Content>
-          <Form>
+          <Form loading={loading}>
             <Form.Input
               disabled={loading}
               label='Enter your name'
@@ -180,7 +180,7 @@ class SignInSignUp extends Component {
           Sign In to Your Account
         </Modal.Header>
         <Modal.Content>
-          <Form>
+          <Form loading={loading}>
             <Form.Input
               disabled={loading}
               icon='user'
@@ -271,7 +271,7 @@ class SignInSignUp extends Component {
           Reset Your Password
         </Modal.Header>
         <Modal.Content>
-          <Form>
+          <Form loading={loading}>
             <Form.Input
               disabled={loading}
               icon='mail'

@@ -54,13 +54,13 @@ class Header extends Component {
                   <Icon name='caret down' />
                 </div>}
               on='click'
+              hideOnScroll
             >
               <Menu vertical
                 style={{ width: '100px' }}>
                 <Menu.Item
-                  onClick={() => {
-                    console.log('clicked')
-                  }}>
+                  onClick={() => { this.setDashboardSection('profile') }}
+                >
                   My Profile
                 </Menu.Item>
                 <Menu.Item
@@ -91,7 +91,7 @@ class Header extends Component {
             >My Favorites</Button>
           </Button.Group>
         </div>
-      </header >
+      </header>
     )
   }
 }

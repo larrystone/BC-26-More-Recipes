@@ -29,7 +29,8 @@ export default class Review {
     if (validateReviewContentError) {
       return res.status(400).json({
         success: false,
-        message: validateReviewContentError });
+        message: validateReviewContentError
+      });
     }
 
     review
@@ -58,12 +59,14 @@ export default class Review {
               success: true,
               message: 'New review created',
               createdReview,
-              recipeOwnerEmail });
+              recipeOwnerEmail
+            });
           });
       })
       .catch(() => res.status(500).json({
         success: false,
-        message: 'Error Posting Review' }));
+        message: 'Error Posting Review'
+      }));
 
     return this;
   }
@@ -76,7 +79,7 @@ export default class Review {
    * @returns {object} Class instance
    * @memberof Review
    */
-  getReviews(req, res) {
+  getRecipeReviews(req, res) {
     const recipeId = req.params.recipeId;
 
     review
@@ -90,11 +93,53 @@ export default class Review {
         res.status(201).json({
           success: true,
           message: 'Reviews found',
-          recipe: reviews });
+          recipe: reviews
+        });
       })
       .catch(() => res.status(500).json({
         success: false,
-        message: 'Error Fetching Reviews' }));
+        message: 'Error Fetching Reviews'
+      }));
+
+    return this;
+  }
+
+  /**
+   * Get a list of reviews by a user
+   * 
+   * @param {object} req - HTTP Request
+   * @param {object} res - HTTP Response
+   * @returns {object} Class instance
+   * @memberof Review
+   */
+  getUserReviews(req, res) {
+    const userId = req.params.userId;
+
+    review
+      .findAll({
+        where: { userId },
+        include: [
+          { model: models.Recipe }
+        ]
+      })
+      .then((foundReviews) => {
+        if (!foundReviews) {
+          return res.status(201).json({
+            success: true,
+            message: 'No Recipes Review by User found',
+          });
+        }
+
+        return res.status(201).json({
+          success: true,
+          message: 'Recipe(s) Review by user found',
+          recipe: foundReviews
+        });
+      })
+      .catch(() => res.status(500).json({
+        success: false,
+        message: 'Unable to fetch recipes reviews'
+      }));
 
     return this;
   }

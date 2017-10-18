@@ -222,42 +222,5 @@ export default class User {
 
     return this;
   }
-
-  /**
-   * Update the user record (e.g from profile page)
-   *
-   * @param {any} req
-   * @param {any} res
-   * @returns {null} Null
-   * @memberof User
-   */
-  updateUser(req, res) {
-    const userId = req.params.userId;
-
-    user
-      .findOne({
-        attributes: ['id', 'name', 'username', 'email'],
-        where: { id: userId }
-      })
-      .then((userFound) => {
-        const loggedUser = {
-          userId: userFound.id,
-          name: userFound.name,
-          username: userFound.username,
-          email: userFound.email,
-        };
-
-        return res.status(201).json({
-          success: true,
-          message: 'User found!',
-          user: loggedUser
-        });
-      })
-      .catch(() => res.status(500).json({
-        success: false,
-        message: 'Error Fetching User'
-      }));
-
-    return this;
-  }
 }
+

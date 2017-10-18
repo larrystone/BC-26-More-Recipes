@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, Loader, Message, Accordion, Icon, Header } from 'semantic-ui-react';
+import { Card, Divider, Loader, Message, Accordion, Icon, Header } from 'semantic-ui-react';
 import axios from 'axios';
 import { read_cookie } from 'sfcookies';
 import { connect } from 'react-redux';
@@ -98,6 +98,7 @@ class MyFavorites extends Component {
           <Accordion.Title active={activeIndex === 0} index={0} onClick={this.handleAccordionClick}>
             <Icon name='dropdown' />
             <Header as={'span'}>General</Header>
+            <Divider />
           </Accordion.Title>
           <Accordion.Content active={activeIndex === 0}>
             <Card.Group>
