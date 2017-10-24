@@ -1,4 +1,5 @@
 import multer from 'multer';
+import fs from 'fs';
 import models from '../models';
 import * as validate from '../middleware/validate';
 import * as Search from './searchRecipe';
@@ -9,6 +10,8 @@ const favorite = models.Favorite;
 
 const trimWhiteSpaces = param => (param || '')
   .replace(/\s+/g, ' ');
+const folder = process.env.NODE_ENV === 'production' ?
+  'build' : 'public';
 
 /**
  * Class Definition for the Recipe Object
@@ -26,9 +29,6 @@ export default class Recipe {
    * @memberof Recipe
    */
   createRecipe(req, res) {
-    const folder = process.env.NODE_ENV === 'production' ?
-      'build' : 'public';
-
     const upload = multer({
       dest: `client/${folder}/recipes`,
       limits: { fileSize: 10000000, files: 1 },
@@ -190,6 +190,7 @@ export default class Recipe {
   deleteRecipe(req, res) {
     const recipeId = req.params.recipeId;
     const userId = req.user.id;
+    let imageUrl;
 
     recipe
       .findById(recipeId)
@@ -200,6 +201,8 @@ export default class Recipe {
             message: `No matching recipe with id: ${recipeId}`
           });
         }
+
+        imageUrl = recipeFound.imageUrl;
 
         if (+recipeFound.userId !== +userId) {
           return res.status(401).json({
@@ -213,10 +216,17 @@ export default class Recipe {
             id: recipeId
           },
         })
-          .then(() => res.status(205).json({
-            success: true,
-            message: 'Recipe Deleted!'
-          }));
+          .then(() => {
+            fs.unlink(`client/${folder}/${imageUrl}`, (err) => {
+              if (err) {
+                console.log(err.message);
+              }
+            });
+            res.status(205).json({
+              success: true,
+              message: 'Recipe Deleted!'
+            });
+          });
       })
       .catch(() => res.status(500).json({
         success: false,

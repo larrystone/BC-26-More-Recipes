@@ -18,7 +18,11 @@ const TOKEN = read_cookie('more-recipe-token');
 const EMPTY = 0,
   ONE = 1,
   STATUS_OK = 201,
-  STATUS_NO_CONTENT = 205;
+  STATUS_NO_CONTENT = 205,
+  dateOptions = {
+    weekday: 'long', year: 'numeric', month: 'long',
+    day: 'numeric', hour: 'numeric', minute: 'numeric'
+  };
 
 class RecipeDetails extends Component {
   constructor(props) {
@@ -420,7 +424,8 @@ class RecipeDetails extends Component {
                   }
                   content={
                     <div>
-                      {new Date(createdAt).toUTCString()}
+                      {new Date(createdAt)
+                        .toLocaleDateString('en-US', dateOptions)}
                     </div>
                   }
                 />

@@ -12,7 +12,13 @@ import PropTypes from 'prop-types';
 import generateInitials from '../helpers/initial';
 
 const TOKEN = read_cookie('more-recipe-token');
-const MAX_COUNT = 5, EMPTY = 0, STATUS_OK = 201;
+const MAX_COUNT = 5,
+  EMPTY = 0,
+  STATUS_OK = 201,
+  dateOptions = {
+    weekday: 'long', year: 'numeric', month: 'long',
+    day: 'numeric', hour: 'numeric', minute: 'numeric'
+  };
 
 class Reviews extends Component {
   constructor(props) {
@@ -54,7 +60,8 @@ class Reviews extends Component {
                     </span>}
                   content={
                     <div>
-                      {new Date(updatedAt).toUTCString()}
+                      {new Date(updatedAt)
+                        .toLocaleDateString('en-US', dateOptions)}
                     </div>
                   }
                 />
