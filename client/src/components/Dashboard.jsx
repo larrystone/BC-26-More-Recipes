@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 import DashboardHeader from './DashboardHeader';
 import Footer from './Footer';
@@ -13,40 +14,40 @@ import RemoveRecipe from './RemoveRecipe';
 import Profile from './Profile';
 
 class Dashboard extends Component {
-  showDashboardSection = () => {
+  showDashboardSection() {
     const { dashboardSection } = this.props;
     if (dashboardSection === 'home') {
       return (
         <RecipeHome />
-      )
+      );
     } else if (dashboardSection === 'my_recipes') {
       return (
         <MyRecipes />
-      )
+      );
     } else if (dashboardSection === 'my_favs') {
       return (
         <MyFavorites />
-      )
+      );
     } else if (dashboardSection === 'profile') {
       return (
         <Profile />
-      )
+      );
     } else {
-      return <div></div>
+      return <div></div>;
     }
   }
 
-  renderModals = () => {
+  renderModals() {
     if (this.props.modal === 'recipe_details') {
-      return <RecipeDetails />
+      return <RecipeDetails />;
     } else if (this.props.modal === 'create_edit_recipe') {
-      return <CreatEditRecipe />
+      return <CreatEditRecipe />;
     } else if (this.props.modal === 'delete_recipe') {
-      return <DeleteRecipe />
+      return <DeleteRecipe />;
     } else if (this.props.modal === 'remove_recipe') {
-      return <RemoveRecipe />
+      return <RemoveRecipe />;
     } else {
-      return <div></div>
+      return <div></div>;
     }
   }
 
@@ -70,7 +71,12 @@ const mapStateToProps = (state) => {
   return {
     dashboardSection: state.dashboard,
     modal: state.dialog
-  }
-}
+  };
+};
+
+Dashboard.propTypes = {
+  modal: PropTypes.string,
+  dashboardSection: PropTypes.string
+};
 
 export default connect(mapStateToProps, null)(Dashboard);

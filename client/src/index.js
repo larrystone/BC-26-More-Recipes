@@ -9,7 +9,7 @@ import { createBrowserHistory } from 'history';
 import './scss/index.scss';
 
 import reducer from './reducers';
-import { logUser } from './actions/user'
+import { logUser } from './actions/user';
 
 import Home from './components/Home.jsx';
 import Dashboard from './components/Dashboard';
@@ -25,14 +25,14 @@ const authenticateUser = () => {
   if (user) {
     store.dispatch(
       logUser(user)
-    )
+    );
     return true;
   }
 
   bake_cookie(TOKEN, null);
 
   return false;
-}
+};
 
 const getRoutes = () => {
   if (authenticateUser()) {
@@ -42,16 +42,16 @@ const getRoutes = () => {
         <Route path="/dashboard" component={Dashboard} />
         <Redirect to='/' />
       </Switch>
-    )
+    );
   } else {
     return (
       <Switch>
         <Route exact path="/" component={Home} />
         <Redirect to='/' />
       </Switch>
-    )
+    );
   }
-}
+};
 
 ReactDOM.render(
   <Provider store={store}>

@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { Card, Image, Grid, Icon } from 'semantic-ui-react';
-
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 import { setDialogType } from '../actions/dialog';
 import { setRecipe } from '../actions/recipe';
 
 class RecipeItem extends Component {
-  showRecipeActions = () => {
+  showRecipeActions() {
     const { dashboardSection } = this.props;
 
     if (dashboardSection === 'home') {
@@ -23,7 +23,7 @@ class RecipeItem extends Component {
             </Grid.Column>
           </Grid.Row>
         </Grid>
-      )
+      );
     } else if (dashboardSection === 'my_recipes') {
       return (
         <Grid columns={3} divided>
@@ -56,7 +56,7 @@ class RecipeItem extends Component {
             </Grid.Column>
           </Grid.Row>
         </Grid>
-      )
+      );
     } else if (dashboardSection === 'my_favs') {
       return (
         <Grid columns={2} divided>
@@ -79,15 +79,15 @@ class RecipeItem extends Component {
             </Grid.Column>
           </Grid.Row>
         </Grid>
-      )
+      );
     }
   }
 
-  showAuthor = (User) => {
+  showAuthor(User) {
     if (User) {
       return (
         <Card.Meta>by <em>{User.name}</em></Card.Meta>
-      )
+      );
     }
   }
 
@@ -111,10 +111,10 @@ class RecipeItem extends Component {
           {this.showRecipeActions()}
         </Card.Content>
       </Card>
-    )
+    );
   }
 
-  handleViewRecipe = () => {
+  handleViewRecipe() {
     if (!this.props.username) {
       this.props.setDialogType('signup');
     } else {
@@ -131,7 +131,19 @@ const mapStateToProps = (state) => {
   return {
     username: state.user.username,
     dashboardSection: state.dashboard
-  }
-}
+  };
+};
 
-export default connect(mapStateToProps, { setDialogType, setRecipe })(RecipeItem);
+const actionCreators = {
+  setDialogType, setRecipe
+};
+
+RecipeItem.propTypes = {
+  setDialogType: PropTypes.func,
+  recipe: PropTypes.object,
+  setRecipe: PropTypes.func,
+  dashboardSection: PropTypes.string,
+  username: PropTypes.string
+};
+
+export default connect(mapStateToProps, actionCreators)(RecipeItem);

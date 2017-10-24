@@ -4,6 +4,7 @@ import { Form, Modal, Button } from 'semantic-ui-react';
 import axios from 'axios';
 import { bake_cookie } from 'sfcookies';
 import { createBrowserHistory } from 'history';
+import PropTypes from 'prop-types';
 
 import { setDialogType } from '../actions/dialog';
 
@@ -31,10 +32,10 @@ class SignInSignUp extends Component {
         [key]: value,
         error: ''
       }
-    )
+    );
   }
 
-  showSignInSignUp = () => {
+  showSignInSignUp() {
     const { dialogType } = this.props;
     if (dialogType === 'signup') {
       return this.renderSignUp();
@@ -45,11 +46,11 @@ class SignInSignUp extends Component {
     } else {
       return (
         <div></div>
-      )
+      );
     }
   }
 
-  renderSignUp = () => {
+  renderSignUp() {
     const { loading, name, email, username, password1, password2 } = this.state;
     return (
       <Modal open={true}>
@@ -64,7 +65,7 @@ class SignInSignUp extends Component {
               placeholder='Enter your name'
               value={name}
               onChange={(event) => {
-                this.storeToState('name', event.target.value)
+                this.storeToState('name', event.target.value);
               }} />
             <Form.Input
               disabled={loading}
@@ -72,7 +73,7 @@ class SignInSignUp extends Component {
               placeholder='Username'
               value={username}
               onChange={(event) => {
-                this.storeToState('username', event.target.value)
+                this.storeToState('username', event.target.value);
               }} />
             <Form.Input
               disabled={loading}
@@ -80,7 +81,7 @@ class SignInSignUp extends Component {
               placeholder='Email Address'
               value={email}
               onChange={(event) => {
-                this.storeToState('email', event.target.value)
+                this.storeToState('email', event.target.value);
               }} />
             <Form.Input
               disabled={loading}
@@ -89,7 +90,7 @@ class SignInSignUp extends Component {
               type='password'
               value={password1}
               onChange={(event) => {
-                this.storeToState('password1', event.target.value)
+                this.storeToState('password1', event.target.value);
               }} />
             <Form.Input
               disabled={loading}
@@ -98,7 +99,7 @@ class SignInSignUp extends Component {
               type='password'
               value={password2}
               onChange={(event) => {
-                this.storeToState('password2', event.target.value)
+                this.storeToState('password2', event.target.value);
               }} />
             <div className='error'>
               {this.state.error}
@@ -123,10 +124,10 @@ class SignInSignUp extends Component {
           </Button>
         </Modal.Actions>
       </Modal>
-    )
+    );
   }
 
-  handleSignUp = (event) => {
+  handleSignUp() {
     const { name, username, email, password1, password2 } = this.state;
 
     const error = validate.validateSignUp(
@@ -161,16 +162,16 @@ class SignInSignUp extends Component {
       }
   }
 
-  resetFormFields = () => {
+  resetFormFields() {
     this.setState(
       {
         error: '',
         password1: ''
       }
-    )
+    );
   }
 
-  renderSignIn = () => {
+  renderSignIn() {
     const { loading, username, password1 } = this.state;
     return (
       <Modal open={true}>
@@ -187,7 +188,7 @@ class SignInSignUp extends Component {
               placeholder='Username or Email'
               value={username}
               onChange={(event) => {
-                this.storeToState('username', event.target.value)
+                this.storeToState('username', event.target.value);
               }} />
             <Form.Input
               disabled={loading}
@@ -198,7 +199,7 @@ class SignInSignUp extends Component {
               placeholder='Password'
               type='password'
               onChange={(event) => {
-                this.storeToState('password1', event.target.value)
+                this.storeToState('password1', event.target.value);
               }} />
 
             <div className='error'>
@@ -231,10 +232,10 @@ class SignInSignUp extends Component {
         </Button>
         </Modal.Actions>
       </Modal>
-    )
+    );
   }
 
-  handleSignIn = (event) => {
+  handleSignIn() {
     this.setState(
       { loading: true }
     );
@@ -253,16 +254,16 @@ class SignInSignUp extends Component {
       });
   }
 
-  storeToken = (token) => {
+  storeToken(token) {
     bake_cookie(TOKEN, token);
   }
 
-  redirectToDashboard = () => {
+  redirectToDashboard() {
     createBrowserHistory().replace('/dashboard');
     window.location.reload();
   }
 
-  renderResetPassword = () => {
+  renderResetPassword() {
     const { loading, email } = this.state;
     return (
       <Modal open={true}>
@@ -279,7 +280,7 @@ class SignInSignUp extends Component {
               placeholder='Enter Email address'
               value={email}
               onChange={(event) => {
-                this.storeToState('email', event.target.value)
+                this.storeToState('email', event.target.value);
               }} />
             <span className="error">{this.state.error}</span>
             <Form.Button positive
@@ -287,7 +288,7 @@ class SignInSignUp extends Component {
               onClick={() => {
                 this.setState(
                   { error: 'Sorry, feature not yet available!' }
-                )
+                );
               }}>
               Submit
           </Form.Button>
@@ -318,7 +319,7 @@ class SignInSignUp extends Component {
           </Button>
         </Modal.Actions>
       </Modal>
-    )
+    );
   }
 
   render() {
@@ -326,14 +327,19 @@ class SignInSignUp extends Component {
       <div>
         {this.showSignInSignUp()}
       </div>
-    )
+    );
   }
 }
 
 const mapStateToProps = (state) => {
   return {
     dialogType: state.dialog
-  }
-}
+  };
+};
+
+SignInSignUp.propTypes = {
+  setDialogType: PropTypes.func,
+  dialogType: PropTypes.string
+};
 
 export default connect(mapStateToProps, { setDialogType })(SignInSignUp);

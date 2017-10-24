@@ -1,34 +1,40 @@
 import React, { Component } from 'react';
-import { Card, Divider, Loader, Message, Accordion, Icon, Header } from 'semantic-ui-react';
+import {
+  Card, Divider, Loader, Message,
+  Accordion, Icon, Header
+} from 'semantic-ui-react';
 import axios from 'axios';
 import { read_cookie } from 'sfcookies';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 import RecipeItem from './RecipeItem';
 
 import { setReloadRecipes } from '../actions/reload_recipe';
 
-const TOKEN = read_cookie('more-recipe-token');
+const TOKEN = read_cookie('more-recipe-token'),
+  ZERO = 0,
+  NULL_INDEX = -1;
 
 class MyFavorites extends Component {
   constructor(props) {
     super(props);
     this.state = {
       my_favs: null,
-      activeIndex: 0
-    }
+      activeIndex: ZERO
+    };
   }
 
   handleAccordionClick = (e, titleProps) => {
-    const { index } = titleProps
-    const { activeIndex } = this.state
-    const newIndex = activeIndex === index ? -1 : index
+    const { index } = titleProps;
+    const { activeIndex } = this.state;
+    const newIndex = activeIndex === index ? NULL_INDEX : index;
 
-    this.setState({ activeIndex: newIndex })
+    this.setState({ activeIndex: newIndex });
   }
 
 
-  fetchRecipes = () => {
+  fetchRecipes() {
     axios({
       method: 'GET',
       url: `/api/v1/users/${this.props.userId}/recipes`,
@@ -55,8 +61,8 @@ class MyFavorites extends Component {
     if (!recipes) {
       return (
         <Loader active inline='centered' content='Fetching My Favorites...' />
-      )
-    } else if (recipes.length === 0) {
+      );
+    } else if (recipes.length === ZERO) {
       return (
         <Message
           color='green'
@@ -66,7 +72,7 @@ class MyFavorites extends Component {
             Sorry, you have not marked any Recipes as favorites....
           </Message.Content>
         </Message>
-      )
+      );
     } else {
       return (
         recipes.map((recipe) => {
@@ -77,12 +83,12 @@ class MyFavorites extends Component {
             />
           );
         })
-      )
+      );
     }
   }
 
   render() {
-    const { activeIndex } = this.state
+    const { activeIndex } = this.state;
 
     if (this.props.reloadRecipes) {
       this.fetchRecipes();
@@ -95,19 +101,22 @@ class MyFavorites extends Component {
           <div className="rounded-line"></div>
         </div>
         <Accordion styled fluid>
-          <Accordion.Title active={activeIndex === 0} index={0} onClick={this.handleAccordionClick}>
+          <Accordion.Title
+            active={activeIndex === ZERO}
+            index={ZERO}
+            onClick={this.handleAccordionClick}>
             <Icon name='dropdown' />
             <Header as={'span'}>General</Header>
             <Divider />
           </Accordion.Title>
-          <Accordion.Content active={activeIndex === 0}>
+          <Accordion.Content active={activeIndex === ZERO}>
             <Card.Group>
               {this.renderRecipes()}
             </Card.Group>
           </Accordion.Content>
         </Accordion>
       </div>
-    )
+    );
   }
 }
 
@@ -115,11 +124,18 @@ const mapStateToProps = (state) => {
   return {
     reloadRecipes: state.reloadRecipes,
     userId: state.user.id
-  }
-}
+  };
+};
 
 const actionCreators = {
   setReloadRecipes
-}
+};
+
+MyFavorites.propTypes = {
+  userId: PropTypes.number,
+  recipe: PropTypes.object,
+  setReloadRecipes: PropTypes.func,
+  reloadRecipes: PropTypes.bool
+};
 
 export default connect(mapStateToProps, actionCreators)(MyFavorites);

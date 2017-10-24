@@ -3,6 +3,7 @@ import { Card, Loader, Message, Button } from 'semantic-ui-react';
 import axios from 'axios';
 import { read_cookie } from 'sfcookies';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 import RecipeItem from './RecipeItem';
 
@@ -10,14 +11,14 @@ import { setDialogType } from '../actions/dialog';
 import { setReloadRecipes } from '../actions/reload_recipe';
 import { setRecipe } from '../actions/recipe';
 
-const TOKEN = 'more-recipe-token';
+const TOKEN = 'more-recipe-token', EMPTY = 0;
 
 class Main extends Component {
   constructor(props) {
     super(props);
     this.state = {
       my_recipes: null
-    }
+    };
   }
 
   storeToState(key, value) {
@@ -26,10 +27,10 @@ class Main extends Component {
         [key]: value,
         error: ''
       }
-    )
+    );
   }
 
-  fetchRecipes = () => {
+  fetchRecipes() {
     axios({
       method: 'GET',
       url: '/api/v1/users/myRecipes',
@@ -56,8 +57,8 @@ class Main extends Component {
     if (!recipes) {
       return (
         <Loader active inline='centered' content='Fetching My Recipes' />
-      )
-    } else if (recipes.length === 0) {
+      );
+    } else if (recipes.length === EMPTY) {
       return (
         <Message
           style={{ width: '100%', margin: '10px' }}
@@ -68,7 +69,7 @@ class Main extends Component {
             Sorry, you have not created any Recipes....
           </Message.Content>
         </Message>
-      )
+      );
     } else {
       return (
         recipes.map((recipe) => {
@@ -79,7 +80,7 @@ class Main extends Component {
             />
           );
         })
-      )
+      );
     }
   }
 
@@ -113,7 +114,7 @@ class Main extends Component {
           {this.renderRecipes()}
         </Card.Group>
       </div>
-    )
+    );
   }
 }
 
@@ -121,13 +122,20 @@ const mapStateToProps = (state) => {
   return {
     reloadRecipes: state.reloadRecipes,
     recipe: state.recipe
-  }
-}
+  };
+};
 
 const actionCreators = {
   setDialogType,
   setReloadRecipes,
   setRecipe
-}
+};
+
+Main.propTypes = {
+  setDialogType: PropTypes.func,
+  setRecipe: PropTypes.func,
+  reloadRecipes: PropTypes.bool,
+  setReloadRecipes: PropTypes.func
+};
 
 export default connect(mapStateToProps, actionCreators)(Main);

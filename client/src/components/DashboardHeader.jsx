@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Button, Icon, Label, Menu, Popup } from 'semantic-ui-react';
 import { bake_cookie } from 'sfcookies';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 import { logUser } from '../actions/user';
 import { setDashboardSection } from '../actions/dashboard';
@@ -11,13 +12,13 @@ const TOKEN = 'more-recipe-token';
 
 /**
  * Dashboard Header component
- * 
+ *
  * @export
  * @class Header
  * @extends {Component}
  */
 class Header extends Component {
-  handleSignOut = () => {
+  handleSignOut() {
     bake_cookie(TOKEN, null);
     window.location.reload();
   }
@@ -60,12 +61,12 @@ class Header extends Component {
               <Menu vertical
                 style={{ width: '100px' }}>
                 <Menu.Item
-                  onClick={() => { this.setDashboardSection('profile') }}
+                  onClick={() => { this.setDashboardSection('profile'); }}
                 >
                   My Profile
                 </Menu.Item>
                 <Menu.Item
-                  onClick={() => { this.handleSignOut() }}
+                  onClick={() => { this.handleSignOut(); }}
                 >
                   Sign Out
                 </Menu.Item>
@@ -76,24 +77,24 @@ class Header extends Component {
         <div className="flex-row">
           <Button.Group>
             <Button basic
-              onClick={() => { this.setDashboardSection('home') }}
+              onClick={() => { this.setDashboardSection('home'); }}
               active={this.isActive('home')}
               disabled={this.isActive('home')}
             >Home</Button>
             <Button basic
-              onClick={() => { this.setDashboardSection('my_recipes') }}
+              onClick={() => { this.setDashboardSection('my_recipes'); }}
               active={this.isActive('my_recipes')}
               disabled={this.isActive('my_recipes')}
             >My Recipes</Button>
             <Button basic
-              onClick={() => { this.setDashboardSection('my_favs') }}
+              onClick={() => { this.setDashboardSection('my_favs'); }}
               active={this.isActive('my_fav')}
               disabled={this.isActive('my_favs')}
             >My Favorites</Button>
           </Button.Group>
         </div>
       </header>
-    )
+    );
   }
 }
 
@@ -101,13 +102,19 @@ const mapStateToProps = (state) => {
   return {
     loggedUser: state.user,
     dashboardSection: state.dashboard
-  }
-}
+  };
+};
 
 const actionCreators = {
   logUser,
   setDashboardSection,
   setDialogType
-}
+};
+
+Header.propTypes = {
+  loggedUser: PropTypes.object,
+  dashboardSection:PropTypes.string,
+  setDashboardSection: PropTypes.func
+};
 
 export default connect(mapStateToProps, actionCreators)(Header);

@@ -16,4 +16,4 @@ export const verifyUser = () => {
     });
   }
   return result;
-}
+};
