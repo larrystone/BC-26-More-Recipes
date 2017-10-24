@@ -1,3 +1,4 @@
+import multer from 'multer';
 import models from '../models';
 import * as validate from '../middleware/validate';
 import * as Search from './searchRecipe';
@@ -25,40 +26,69 @@ export default class Recipe {
    * @memberof Recipe
    */
   createRecipe(req, res) {
-    const name = trimWhiteSpaces(req.body.name);
-    const description = trimWhiteSpaces(req.body.description);
-    const ingredients = trimWhiteSpaces(req.body.ingredients);
-    const direction = trimWhiteSpaces(req.body.direction);
+    const folder = process.env.NODE_ENV === 'production' ?
+      'build' : 'public';
 
-    const validateRecipeError =
-      validate.validateRecipeDetails(name, ingredients, direction);
+    const upload = multer({
+      dest: `client/${folder}/recipes`,
+      limits: { fileSize: 10000000, files: 1 },
+      fileFilter: (req, file, callback) => {
+        if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+          return callback(new Error('Only Images are allowed !'), false);
+        }
 
-    if (validateRecipeError) {
-      return res.status(400).json({
-        success: false,
-        message: validateRecipeError
-      });
-    }
+        callback(null, true);
+      }
+    }).single('image');
 
-    recipe
-      .create({
-        name,
-        description,
-        ingredients,
-        direction,
-        userId: req.user.id
-      })
-      .then((createdRecipe) => {
-        res.status(201).json({
-          success: true,
-          message: 'New Recipe created',
-          recipe: createdRecipe
-        });
-      })
-      .catch(() => res.status(500).json({
-        success: false,
-        message: 'Error Creating Recipe'
-      }));
+    upload(req, res, (err) => {
+      if (err) {
+        res.status(400).json({ message: err.message });
+      } else {
+        let filePath;
+        if (req.file) {
+          filePath = `recipes/${req.file.filename}`;
+        } else {
+          filePath = 'null';
+        }
+
+        const name = trimWhiteSpaces(req.body.name);
+        const description = trimWhiteSpaces(req.body.description);
+        const ingredients = trimWhiteSpaces(req.body.ingredients);
+        const direction = trimWhiteSpaces(req.body.direction);
+
+        const validateRecipeError =
+          validate.validateRecipeDetails(name, ingredients, direction);
+
+        if (validateRecipeError) {
+          return res.status(400).json({
+            success: false,
+            message: validateRecipeError
+          });
+        }
+
+        recipe
+          .create({
+            name,
+            description,
+            ingredients,
+            direction,
+            imageUrl: filePath,
+            userId: req.user.id
+          })
+          .then((createdRecipe) => {
+            res.status(201).json({
+              success: true,
+              message: 'New Recipe created',
+              recipe: createdRecipe
+            });
+          })
+          .catch(() => res.status(500).json({
+            success: false,
+            message: 'Error Creating Recipe'
+          }));
+      }
+    });
 
     return this;
   }
@@ -113,11 +143,11 @@ export default class Recipe {
           ingredients,
           direction
         }, {
-          where: {
-            id: recipeId
-          },
-          returning: true
-        })
+            where: {
+              id: recipeId
+            },
+            returning: true
+          })
           .then((result) => {
             favorite
               .findAll({
