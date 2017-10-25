@@ -48,6 +48,7 @@ class CreateEditRecipe extends Component {
         .then((response) => {
           const {
             name, description,
+            imageUrl,
             ingredients, direction
           } = response.data.recipe;
           this.setState(
@@ -55,6 +56,7 @@ class CreateEditRecipe extends Component {
               name,
               description,
               ingredients,
+              imageUrl,
               direction,
               loading: false
             }
@@ -76,8 +78,17 @@ class CreateEditRecipe extends Component {
   }
 
   updateRecipe() {
+    const data = new FormData();
+
     const { recipeId } = this.props;
-    const { name, description, ingredients, direction } = this.state;
+    const { imageUrl, name, description, ingredients, direction } = this.state;
+
+    data.append('name', name);
+    data.append('description', description);
+    data.append('ingredients', ingredients.replace(/,/g, ';;'));
+    data.append('direction', direction);
+    data.append('image', imageUrl);
+
     this.setState(
       { loading: true }
     );
@@ -85,16 +96,13 @@ class CreateEditRecipe extends Component {
       method: 'PUT',
       url: `/api/v1/recipes/${recipeId}`,
       headers: { 'x-access-token': TOKEN },
-      data: {
-        name, description, direction,
-        ingredients: ingredients.replace(/,/g, ';;')
-      }
+      data
     })
       .then((response) => {
         const { success } = response.data;
         if (success === true) {
-          this.props.setReloadRecipes(true);
           this.closeModal();
+          this.props.setReloadRecipes(true);
         }
       })
       .catch((error) => {
@@ -130,7 +138,7 @@ class CreateEditRecipe extends Component {
       .then((response) => {
         const { success } = response.data;
         if (success === true) {
-          this.props.setReloadRecipes(true);
+          // this.props.setReloadRecipes(true);
           this.closeModal();
         }
       })
@@ -173,10 +181,14 @@ class CreateEditRecipe extends Component {
   }
 
   renderForm() {
-    const { name, description, ingredients, direction, loading } = this.state;
+    const {
+      name, description,
+      ingredients, direction, loading
+    } = this.state;
     return (
       <Form>
         <Form.Input
+          required
           disabled={loading}
           label='Recipe Name'
           placeholder='Enter recipe name'
@@ -184,16 +196,18 @@ class CreateEditRecipe extends Component {
           onChange={(event) => {
             this.storeToState('name', event.target.value);
           }} />
-        <Form.Field>
-          <label>Recipe Image</label>
+        <Form.Field
+          inline>
+          <label>Choose new image</label>
           <input
-            disabled={this.props.recipeId !== null}
+            disabled={loading}
             type='file'
             accept="image/*"
             onChange={(event) => {
               this.storeToState('imageUrl', event.target.files[FIRST_INDEX]);
             }}
           />
+
         </Form.Field>
         <Form.Input
           disabled={loading}
@@ -204,6 +218,7 @@ class CreateEditRecipe extends Component {
             this.storeToState('description', event.target.value);
           }} />
         <Form.Input
+          required
           disabled={loading}
           label='Ingredients'
           placeholder='Enter ingredient list separated by comma'
@@ -212,6 +227,7 @@ class CreateEditRecipe extends Component {
             this.storeToState('ingredients', event.target.value);
           }} />
         <Form.TextArea
+          required
           disabled={loading}
           label='Preparation Procedure'
           placeholder='Enter recipe preparation procedure'
