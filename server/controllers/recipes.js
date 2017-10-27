@@ -13,7 +13,7 @@ const recipe = models.Recipe,
 
 const upload = multer({
   dest: `client/${folder}/recipes`,
-  limits: { fileSize: 10000000, files: 1 },
+  limits: { fileSize: 204800, files: 1 },
   fileFilter: (req, file, callback) => {
     if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
       return callback(new Error('Only Images are allowed !'), false);
@@ -167,11 +167,11 @@ export default class Recipe {
               imageUrl,
               direction
             }, {
-              where: {
-                id: recipeId
-              },
-              returning: true
-            })
+                where: {
+                  id: recipeId
+                },
+                returning: true
+              })
               .then((result) => {
                 favorite
                   .findAll({

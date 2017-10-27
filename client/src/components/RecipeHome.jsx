@@ -86,27 +86,30 @@ class Main extends Component {
   }
 
   handleSearch() {
-    this.setState(
-      { searching: true }
-    );
     const { searchTerm, searchCategory } = this.state;
-    axios({
-      method: 'GET',
-      url: `/api/v1/recipes?${searchCategory}=
-      ${searchTerm.replace(/\s+/g, '+')}`,
-      headers: { 'x-access-token': TOKEN }
-    })
-      .then((response) => {
-        this.setState(
-          {
-            recipes: response.data.recipe,
-            searching: false,
-            sought: true
-          }
-        );
+
+    if (searchTerm) {
+      this.setState(
+        { searching: true }
+      );
+      axios({
+        method: 'GET',
+        url: `/api/v1/recipes?${searchCategory}=
+${searchTerm.replace(/\s+/g, '+')}`,
+        headers: { 'x-access-token': TOKEN }
       })
-      .catch(() => {
-      });
+        .then((response) => {
+          this.setState(
+            {
+              recipes: response.data.recipe,
+              searching: false,
+              sought: true
+            }
+          );
+        })
+        .catch(() => {
+        });
+    }
   }
 
   showHeading() {
@@ -146,7 +149,9 @@ class Main extends Component {
         <div className="flex-row">
           {this.showHeading()}
           <div>
-            <Input type='text' placeholder='Search for recipe...' action
+            <Input
+              loading={searching}
+              type='text' placeholder='Search for recipe...' action
               disabled={searching}
               onChange={(event) => {
                 this.setState(
@@ -163,6 +168,7 @@ class Main extends Component {
                 }}
               />
               <Button animated positive
+                loading={searching}
                 disabled={searching}
                 onClick={() => { this.handleSearch(); }}>
                 <Button.Content hidden>Go</Button.Content>

@@ -138,7 +138,7 @@ class CreateEditRecipe extends Component {
       .then((response) => {
         const { success } = response.data;
         if (success === true) {
-          // this.props.setReloadRecipes(true);
+          this.props.setReloadRecipes(true);
           this.closeModal();
         }
       })
@@ -196,19 +196,14 @@ class CreateEditRecipe extends Component {
           onChange={(event) => {
             this.storeToState('name', event.target.value);
           }} />
-        <Form.Field
-          inline>
-          <label>Choose new image</label>
-          <input
-            disabled={loading}
-            type='file'
-            accept="image/*"
-            onChange={(event) => {
-              this.storeToState('imageUrl', event.target.files[FIRST_INDEX]);
-            }}
-          />
-
-        </Form.Field>
+        <Form.Input
+          disabled={loading}
+          label='Choose new image (Max Size: 200kb)'
+          type='file'
+          accept="image/*"
+          onChange={(event) => {
+            this.storeToState('imageUrl', event.target.files[FIRST_INDEX]);
+          }} />
         <Form.Input
           disabled={loading}
           label='Recipe Description'
