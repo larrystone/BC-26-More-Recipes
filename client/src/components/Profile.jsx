@@ -4,10 +4,12 @@ import { Form, Card, Label, Accordion, Icon } from 'semantic-ui-react';
 import axios from 'axios';
 import { read_cookie } from 'sfcookies';
 import { Chart } from 'react-google-charts';
+import PropTypes from 'prop-types';
 
 import { setDashboardSection } from '../actions/dashboard';
 
 const TOKEN = read_cookie('more-recipe-token');
+const ZERO = 0, TWO = 2, NULL_INDEX = -1;
 
 class Profile extends Component {
   constructor(props) {
@@ -18,16 +20,16 @@ class Profile extends Component {
         eventName: 'select',
         callback(Chart) {
           const selection = Chart.chart.getSelection();
-          if (selection.length !== 0) {
-            const selectedItem = selection[0].row;
-            if (selectedItem === 0) {
+          if (selection.length !== ZERO) {
+            const selectedItem = selection[ZERO].row;
+            if (selectedItem === ZERO) {
               props.setDashboardSection('my_recipes');
-            } else if (selectedItem === 2) {
+            } else if (selectedItem === TWO) {
               props.setDashboardSection('my_favs');
             }
           }
-        },
-      },
+        }
+      }
     ];
 
     this.state = {
@@ -38,17 +40,17 @@ class Profile extends Component {
       password2: '',
       error: '',
       loading: false,
-      activeIndex: -1,
-      my_favs: 0,
-      my_recipes: 0,
-      my_reviews: 0
+      activeIndex: NULL_INDEX,
+      my_favs: ZERO,
+      my_recipes: ZERO,
+      my_reviews: ZERO
     };
   }
 
-  fetchDetails = () => {
+  fetchDetails() {
     this.setState({
       loading: true
-    })
+    });
     axios({
       method: 'GET',
       url: `/api/v1/users/${this.props.loggedUserId}/profile`,
@@ -65,14 +67,14 @@ class Profile extends Component {
           }
         );
       })
-      .catch((err) => {
+      .catch(() => {
         this.setState(
           { loading: false }
-        )
+        );
       });
   }
 
-  fetchFavs = () => {
+  fetchFavs() {
     axios({
       method: 'GET',
       url: `/api/v1/users/${this.props.loggedUserId}/recipes`,
@@ -89,7 +91,7 @@ class Profile extends Component {
       });
   }
 
-  fetchReviews = () => {
+  fetchReviews() {
     axios({
       method: 'GET',
       url: `/api/v1/users/${this.props.loggedUserId}/reviews`,
@@ -106,7 +108,7 @@ class Profile extends Component {
       });
   }
 
-  fetchMyRecipes = () => {
+  fetchMyRecipes() {
     axios({
       method: 'GET',
       url: '/api/v1/users/myRecipes',
@@ -136,18 +138,18 @@ class Profile extends Component {
         [key]: value,
         error: ''
       }
-    )
+    );
   }
 
   handleAccordionClick = (e, titleProps) => {
-    const { index } = titleProps
-    const { activeIndex } = this.state
-    const newIndex = activeIndex === index ? -1 : index
+    const { index } = titleProps;
+    const { activeIndex } = this.state;
+    const newIndex = activeIndex === index ? NULL_INDEX : index;
 
-    this.setState({ activeIndex: newIndex })
+    this.setState({ activeIndex: newIndex });
   }
 
-  renderProfileDetails = () => {
+  renderProfileDetails() {
     const { loading, activeIndex, username, email, name } = this.state;
     return (
       <Card centered style={{ width: '550px' }}>
@@ -160,7 +162,7 @@ class Profile extends Component {
               placeholder='Enter your full name'
               value={name}
               onChange={(event) => {
-                this.storeToState('name', event.target.value)
+                this.storeToState('name', event.target.value);
               }} />
             <Form.Input
               disabled={loading}
@@ -168,10 +170,10 @@ class Profile extends Component {
               placeholder='Username'
               value={username}
               onChange={(event) => {
-                this.storeToState('username', event.target.value)
+                this.storeToState('username', event.target.value);
               }} />
             <Form.Input
-              disabled
+              readOnly
               label='Email Address'
               placeholder='Email Address'
               value={email}
@@ -192,13 +194,16 @@ class Profile extends Component {
           </Form>
 
           <Accordion>
-            <Accordion.Title active={activeIndex === 0} index={0} onClick={this.handleAccordionClick}>
+            <Accordion.Title
+              active={activeIndex === ZERO}
+              index={ZERO}
+              onClick={this.handleAccordionClick}>
               <Label style={{ width: '100%' }}>
                 <Icon name='dropdown' />
                 Change Password
               </Label>
             </Accordion.Title>
-            <Accordion.Content active={activeIndex === 0}>
+            <Accordion.Content active={activeIndex === ZERO}>
               <Form>
                 <Form.Input
                   disabled={loading}
@@ -206,7 +211,7 @@ class Profile extends Component {
                   placeholder='Password'
                   type='password'
                   onChange={(event) => {
-                    this.storeToState('password1', event.target.value)
+                    this.storeToState('password1', event.target.value);
                   }} />
                 <Form.Input
                   disabled={loading}
@@ -214,7 +219,7 @@ class Profile extends Component {
                   placeholder='Password'
                   type='password'
                   onChange={(event) => {
-                    this.storeToState('password1', event.target.value)
+                    this.storeToState('password1', event.target.value);
                   }} />
                 <Form.Input
                   disabled={loading}
@@ -222,7 +227,7 @@ class Profile extends Component {
                   placeholder='Re-enter Password'
                   type='password'
                   onChange={(event) => {
-                    this.storeToState('password2', event.target.value)
+                    this.storeToState('password2', event.target.value);
                   }} />
 
                 <Form.Button
@@ -238,20 +243,30 @@ class Profile extends Component {
           </Accordion>
         </Card.Content>
       </Card>
-    )
+    );
   }
 
-  renderStats = () => {
+  renderStats() {
     const { my_recipes, my_favs, my_reviews } = this.state;
     return (
       <Card centered style={{ width: '550px' }}>
         <Label attached='top'><h3>My Stats Chart</h3></Label>
         <Card.Content>
           <Chart
-            chartType="PieChart"
-            width="100%"
-            data={[["Section", "Count"], ["My Recipes", my_recipes], ["My Reviews", my_reviews], ["My Favorites", my_favs]]}
-            options={{ "title": `@${this.state.username} Summary`, "pieHole": 0.4, "is3D": true }}
+            chartType='PieChart'
+            width='100%'
+            data={[
+              ['Section', 'Count'],
+              ['My Recipes', my_recipes],
+              ['My Reviews', my_reviews],
+              ['My Favorites', my_favs]
+            ]}
+            options={
+              {
+                'title': `@${this.state.username} Summary`,
+                'pieHole': 0.4, 'is3D': true
+              }
+            }
             chartEvents={this.chartClicked}
             legend_toggle
           />
@@ -266,15 +281,19 @@ class Profile extends Component {
         {this.renderProfileDetails()}
         {this.renderStats()}
       </Card.Group>
-    )
+    );
   }
 }
 
 const mapStateToProps = (state) => {
   return {
     loggedUserId: state.user.id
-  }
-}
+  };
+};
 
+Profile.propTypes = {
+  setDashboardSection: PropTypes.func,
+  loggedUserId: PropTypes.number
+};
 
 export default connect(mapStateToProps, { setDashboardSection })(Profile);

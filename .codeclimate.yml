@@ -21,6 +21,6 @@ exclude_paths:
 - "coverage"
 - "**.min.js"
 - "**.min.css"
-- "client/static"
+- "client/build"
 - "client/scripts"
 - "client/config"

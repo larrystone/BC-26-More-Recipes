@@ -1,15 +1,26 @@
 import React, { Component } from 'react';
 import { read_cookie } from 'sfcookies';
 import axios from 'axios';
-import { Divider, Button, Card, Comment, Header, Form } from 'semantic-ui-react';
+import {
+  Divider, Button, Card,
+  Comment, Header, Form, Popup
+} from 'semantic-ui-react';
 import moment from 'moment';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 import generateInitials from '../helpers/initial';
 
 const TOKEN = read_cookie('more-recipe-token');
+const MAX_COUNT = 5,
+  EMPTY = 0,
+  STATUS_OK = 201,
+  dateOptions = {
+    weekday: 'long', year: 'numeric', month: 'long',
+    day: 'numeric', hour: 'numeric', minute: 'numeric'
+  };
 
-class RecipeDetails extends Component {
+class Reviews extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -18,12 +29,13 @@ class RecipeDetails extends Component {
       error: '',
       posting: false,
       currentIndex: 0
-    }
+    };
   }
 
-  showReviews = () => {
+  showReviews() {
     const { reviews, currentIndex } = this.state;
-    const visibleReviews = reviews.slice(currentIndex, currentIndex + 5);
+    const visibleReviews = reviews.slice(currentIndex,
+      currentIndex + MAX_COUNT);
     return (
       visibleReviews.map((review, index) => {
         const { content, User, updatedAt } = review;
@@ -39,14 +51,27 @@ class RecipeDetails extends Component {
             <Comment.Content>
               <Comment.Author as='span'>{User.name}</Comment.Author>
               <Comment.Metadata>
-                - {moment(new Date(updatedAt)).fromNow()}
+                <Popup
+                  inverted
+                  size='mini'
+                  trigger={
+                    <span>
+                      - {moment(new Date(updatedAt)).fromNow()}
+                    </span>}
+                  content={
+                    <div>
+                      {new Date(updatedAt)
+                        .toLocaleDateString('en-US', dateOptions)}
+                    </div>
+                  }
+                />
               </Comment.Metadata>
               <Comment.Text >{content}</Comment.Text>
             </Comment.Content>
           </Comment>
-        )
+        );
       })
-    )
+    );
   }
 
   renderReviews() {
@@ -60,21 +85,21 @@ class RecipeDetails extends Component {
             </Comment.Text>
           </Comment.Content>
         </Comment>
-      )
-    } else if (reviews.length === 0) {
+      );
+    } else if (reviews.length === EMPTY) {
       return (
         <Comment>
           <Comment.Content>
             <Comment.Text>No user posted a review</Comment.Text>
           </Comment.Content>
         </Comment>
-      )
+      );
     }
     return (
       <div>
         {this.showReviews()}
       </div>
-    )
+    );
   }
 
   fetchReviews() {
@@ -90,7 +115,7 @@ class RecipeDetails extends Component {
             reviews,
             currentIndex: 0
           }
-        )
+        );
       })
       .catch(() => {
       });
@@ -100,39 +125,39 @@ class RecipeDetails extends Component {
     this.fetchReviews();
   }
 
-  showLoadNewer = () => {
+  showLoadNewer() {
     const { currentIndex } = this.state;
-    if (currentIndex > 0) {
+    if (currentIndex > EMPTY) {
       return (
         <center><a onClick={() => {
           this.setState(
-            { currentIndex: currentIndex - 5 }
-          )
+            { currentIndex: currentIndex - MAX_COUNT }
+          );
         }}>
           &lt;&lt; Load Newer
         </a></center>
-      )
+      );
     } else {
-      return <div></div>
+      return <div></div>;
     }
   }
 
-  showLoadOlder = () => {
+  showLoadOlder() {
     const { currentIndex, reviews } = this.state;
 
     if (reviews) {
-      if (currentIndex < reviews.length - 5) {
+      if (currentIndex < reviews.length - MAX_COUNT) {
         return (
           <center><a onClick={() => {
             this.setState(
-              { currentIndex: currentIndex + 5 }
-            )
+              { currentIndex: currentIndex + MAX_COUNT }
+            );
           }}>
             Load Older >>
           </a></center>
-        )
+        );
       } else {
-        return <div></div>
+        return <div></div>;
       }
     }
   }
@@ -140,7 +165,7 @@ class RecipeDetails extends Component {
   render() {
     const { posting } = this.state;
     return (
-      <Card centered style={{ padding: '20px', width: "450px" }}>
+      <Card centered style={{ padding: '20px', width: '450px' }}>
         <Comment.Group>
           <Header as='h3'>Reviews</Header>
           <Form reply>
@@ -154,7 +179,7 @@ class RecipeDetails extends Component {
                     content: event.target.value,
                     error: ''
                   }
-                )
+                );
               }}
               value={this.state.content}
             />
@@ -174,14 +199,14 @@ class RecipeDetails extends Component {
           {this.showLoadOlder()}
         </Comment.Group>
       </Card>
-    )
+    );
   }
 
-  postReview = () => {
+  postReview() {
     const { content } = this.state;
     this.setState(
       { posting: true }
-    )
+    );
     axios({
       method: 'POST',
       url: `/api/v1/recipes/${this.props.recipe.id}/reviews`,
@@ -189,13 +214,13 @@ class RecipeDetails extends Component {
       data: { content }
     })
       .then((response) => {
-        if (response.status === 201) {
+        if (response.status === STATUS_OK) {
           this.setState(
             {
               content: '',
               posting: false
             }
-          )
+          );
           this.fetchReviews();
         }
       })
@@ -205,7 +230,7 @@ class RecipeDetails extends Component {
             error: error.response.data.message,
             posting: false
           }
-        )
+        );
       });
   }
 }
@@ -213,7 +238,11 @@ class RecipeDetails extends Component {
 const mapStateToProps = (state) => {
   return {
     recipe: state.recipe
-  }
-}
+  };
+};
 
-export default connect(mapStateToProps, null)(RecipeDetails);
+Reviews.propTypes = {
+  recipe: PropTypes.object
+};
+
+export default connect(mapStateToProps, null)(Reviews);

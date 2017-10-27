@@ -7,12 +7,9 @@ let user = {
 };
 
 export default (state = user, action) => {
-  switch (action.type) {
-    case SIGNED_IN:
-      const { newUser } = action;
-      user = newUser;
-      return user;
-    default:
-      return state;
+  if (action.type === SIGNED_IN) {
+    const { newUser } = action;
+    return Object.assign({}, state, newUser);
   }
-}
+  return state;
+};

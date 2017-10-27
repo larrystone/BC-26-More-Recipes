@@ -1,48 +1,55 @@
 import React, { Component } from 'react';
 import { Button } from 'semantic-ui-react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 import { setDialogType } from '../actions/dialog';
 
 /**
  * Home Header component
- * 
+ *
  * @export
  * @class Header
  * @extends {Component}
  */
 class Header extends Component {
-  renderHomeHeader = () => (
-    <header>
-      <div className="flex-row">
-        <div className="brand-logo">
-          More-Recipes
+  renderHomeHeader() {
+    return (
+      <header>
+        <div className="flex-row">
+          <div className="brand-logo">
+            More-Recipes
       </div>
-        <div>
-          <Button basic
-            onClick={() => {
-              this.props.setDialogType('signin')
-            }}
-          >
-            Sign In
+          <div>
+            <Button basic
+              onClick={() => {
+                this.props.setDialogType('signin');
+              }}
+            >
+              Sign In
         </Button>
-        </div>
-        <div>
-          <Button basic
-            onClick={() => {
-              this.props.setDialogType('signup');
-            }}
-          >
-            Sign Up
+          </div>
+          <div>
+            <Button basic
+              onClick={() => {
+                this.props.setDialogType('signup');
+              }}
+            >
+              Sign Up
         </Button>
+          </div>
         </div>
-      </div>
-    </header>
-  )
+      </header>
+    );
+  }
 
   render() {
     return this.renderHomeHeader();
   }
 }
+
+Header.propTypes = {
+  setDialogType: PropTypes.func
+};
 
 export default connect(null, { setDialogType })(Header);

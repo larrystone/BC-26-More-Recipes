@@ -4,6 +4,6 @@ export const setRecipe = (newRecipe) => {
   const action = {
     type: RECIPE,
     newRecipe
-  }
+  };
   return action;
-}
+};

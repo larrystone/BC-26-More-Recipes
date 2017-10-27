@@ -3,25 +3,27 @@ import { Modal, Button, Header } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { read_cookie } from 'sfcookies';
 import axios from 'axios';
+import PropTypes from 'prop-types';
 
 import { setDialogType } from '../actions/dialog';
 import { setReloadRecipes } from '../actions/reload_recipe';
 
 const TOKEN = read_cookie('more-recipe-token');
+const STATUS_NO_CONTENT = 205;
 
 class DeleteRecipe extends Component {
   constructor(props) {
     super(props);
     this.state = {
       error: ''
-    }
+    };
   }
 
-  closeModal = () => {
+  closeModal() {
     this.props.setDialogType('');
   }
 
-  deleteRecipe = () => {
+  deleteRecipe() {
     const { recipe } = this.props;
 
     axios({
@@ -30,7 +32,7 @@ class DeleteRecipe extends Component {
       headers: { 'x-access-token': TOKEN }
     })
       .then((response) => {
-        if (response.status === 205) {
+        if (response.status === STATUS_NO_CONTENT) {
           this.props.setReloadRecipes(true);
           this.closeModal();
         }
@@ -38,7 +40,7 @@ class DeleteRecipe extends Component {
       .catch((error) => {
         this.setState(
           { error: error.response.data.message }
-        )
+        );
       });
   }
 
@@ -49,7 +51,7 @@ class DeleteRecipe extends Component {
         open={this.props.modal === 'delete_recipe'}
         basic size='mini'
         onClose={() => {
-          this.closeModal()
+          this.closeModal();
         }}
       >
         <Header icon='archive' content={name} />
@@ -62,7 +64,7 @@ class DeleteRecipe extends Component {
         <Modal.Actions>
           <Button negative icon='close' labelPosition='right' content='No'
             onClick={() => {
-              this.closeModal()
+              this.closeModal();
             }} />
 
           <Button positive icon='checkmark' labelPosition='right' content='Yes'
@@ -71,7 +73,7 @@ class DeleteRecipe extends Component {
             }} />
         </Modal.Actions>
       </Modal>
-    )
+    );
   }
 }
 
@@ -79,7 +81,19 @@ const mapStateToProps = (state) => {
   return {
     modal: state.dialog,
     recipe: state.recipe
-  }
-}
+  };
+};
 
-export default connect(mapStateToProps, { setDialogType, setReloadRecipes })(DeleteRecipe);
+const actionCreators = {
+  setDialogType,
+  setReloadRecipes
+};
+
+DeleteRecipe.propTypes = {
+  setDialogType: PropTypes.func,
+  recipe: PropTypes.object,
+  setReloadRecipes: PropTypes.func,
+  modal:PropTypes.string
+};
+
+export default connect(mapStateToProps, actionCreators)(DeleteRecipe);

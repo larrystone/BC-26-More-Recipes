@@ -6,12 +6,9 @@ let recipe = {
 };
 
 export default (state = recipe, action) => {
-  switch (action.type) {
-    case RECIPE:
-      const { newRecipe } = action;
-      recipe = newRecipe;
-      return recipe;
-    default:
-      return state;
+  if (action.type === RECIPE) {
+    const { newRecipe } = action;
+    return Object.assign({}, state, newRecipe);
   }
-}
+  return state;
+};

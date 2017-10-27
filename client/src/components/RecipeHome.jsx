@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
-import { Card, Loader, Icon, Label, Input, Message, Select, Button } from 'semantic-ui-react';
+import {
+  Card, Loader, Icon, Label,
+  Input, Message, Select, Button
+} from 'semantic-ui-react';
 import axios from 'axios';
 import { read_cookie } from 'sfcookies';
 import { connect } from 'react-redux';
@@ -7,11 +10,12 @@ import { connect } from 'react-redux';
 import RecipeItem from './RecipeItem';
 
 const TOKEN = read_cookie('more-recipe-token');
+const EMPTY = 0;
 
 const options = [
   { key: 'recipes', text: 'by Name', value: 'recipes' },
   { key: 'ingredients', text: 'by Ingredient', value: 'ingredients' }
-]
+];
 
 class Main extends Component {
   constructor(props) {
@@ -22,10 +26,10 @@ class Main extends Component {
       searchTerm: '',
       searching: false,
       sought: false
-    }
+    };
   }
 
-  fetchTopRecipes = () => {
+  fetchTopRecipes() {
     axios({
       method: 'GET',
       url: '/api/v1/recipes?sort=upvotes&order=descending',
@@ -36,10 +40,9 @@ class Main extends Component {
           {
             recipes: response.data.recipe
           }
-        )
+        );
       })
-      .catch((err) => {
-        console.log(err);
+      .catch(() => {
       });
   }
 
@@ -52,22 +55,22 @@ class Main extends Component {
     if (!recipes) {
       return (
         <Loader active
-          style={{ marginTop: "40px" }}
+          style={{ marginTop: '40px' }}
           inline='centered'
           content='Fetching Great Recipes ' />
-      )
-    } else if (recipes.length === 0) {
+      );
+    } else if (recipes.length === EMPTY) {
       return (
         <Message
           style={{ width: '100%', margin: '10px' }}
           color='green'
           size='large'>
-          <Message.Header content="Nothing found!" />
+          <Message.Header content='Nothing found!' />
           <Message.Content className="error">
             Sorry, no recipes found!!!
           </Message.Content>
         </Message>
-      )
+      );
     } else {
       return (
         recipes.map((recipe) => {
@@ -78,35 +81,38 @@ class Main extends Component {
             />
           );
         })
-      )
+      );
     }
   }
 
-  handleSearch = () => {
-    this.setState(
-      { searching: true }
-    )
+  handleSearch() {
     const { searchTerm, searchCategory } = this.state;
-    axios({
-      method: 'GET',
-      url: `/api/v1/recipes?${searchCategory}=${searchTerm.replace(/\s+/g, '+')}`,
-      headers: { 'x-access-token': TOKEN }
-    })
-      .then((response) => {
-        this.setState(
-          {
-            recipes: response.data.recipe,
-            searching: false,
-            sought: true
-          }
-        )
+
+    if (searchTerm) {
+      this.setState(
+        { searching: true }
+      );
+      axios({
+        method: 'GET',
+        url: `/api/v1/recipes?${searchCategory}=
+${searchTerm.replace(/\s+/g, '+')}`,
+        headers: { 'x-access-token': TOKEN }
       })
-      .catch((err) => {
-        console.log(err);
-      });
+        .then((response) => {
+          this.setState(
+            {
+              recipes: response.data.recipe,
+              searching: false,
+              sought: true
+            }
+          );
+        })
+        .catch(() => {
+        });
+    }
   }
 
-  showHeading = () => {
+  showHeading() {
     if (this.state.sought) {
       return (
         <div className="brand-logo">
@@ -125,14 +131,14 @@ class Main extends Component {
           </div>
           <div className="rounded-line"></div>
         </div>
-      )
+      );
     } else {
       return (
         <div className="brand-logo">
           <div className="full-title">Top Picks</div>
           <div className="rounded-line"></div>
         </div>
-      )
+      );
     }
   }
 
@@ -143,12 +149,14 @@ class Main extends Component {
         <div className="flex-row">
           {this.showHeading()}
           <div>
-            <Input type='text' placeholder='Search for recipe...' action
+            <Input
+              loading={searching}
+              type='text' placeholder='Search for recipe...' action
               disabled={searching}
               onChange={(event) => {
                 this.setState(
                   { searchTerm: event.target.value }
-                )
+                );
               }}>
               <input />
               <Select compact options={options} defaultValue='recipes'
@@ -156,12 +164,13 @@ class Main extends Component {
                 onChange={(event, data) => {
                   this.setState(
                     { searchCategory: data.value }
-                  )
+                  );
                 }}
               />
               <Button animated positive
+                loading={searching}
                 disabled={searching}
-                onClick={() => { this.handleSearch() }}>
+                onClick={() => { this.handleSearch(); }}>
                 <Button.Content hidden>Go</Button.Content>
                 <Button.Content visible>
                   <Icon name='search' />
@@ -174,14 +183,14 @@ class Main extends Component {
           {this.renderRecipes()}
         </Card.Group>
       </div>
-    )
+    );
   }
 }
 
 const mapStateToProps = (state) => {
   return {
     modal: state.dialog
-  }
-}
+  };
+};
 
 export default connect(mapStateToProps, null)(Main);

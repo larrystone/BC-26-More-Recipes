@@ -4,6 +4,6 @@ export const setReloadRecipes = (reloadRecipes) => {
   const action = {
     type: RELOAD,
     reloadRecipes
-  }
+  };
   return action;
-}
+};

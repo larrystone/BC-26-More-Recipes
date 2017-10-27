@@ -3,32 +3,34 @@ import { Modal, Button, Header } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { read_cookie } from 'sfcookies';
 import axios from 'axios';
+import PropTypes from 'prop-types';
 
 import { setDialogType } from '../actions/dialog';
 import { setReloadRecipes } from '../actions/reload_recipe';
 
 const TOKEN = read_cookie('more-recipe-token');
+const STATUS_NO_CONTENT = 205;
 
 class RemoveRecipe extends Component {
   constructor(props) {
     super(props);
     this.state = {
       error: ''
-    }
+    };
   }
 
-  closeModal = () => {
+  closeModal() {
     this.props.setDialogType('');
   }
 
-  removeRecipe = () => {
+  removeRecipe() {
     axios({
       method: 'DELETE',
       url: `/api/v1/users/${this.props.userId}/recipes/${this.props.recipe.id}`,
       headers: { 'x-access-token': TOKEN }
     })
       .then((response) => {
-        if (response.status === 205) {
+        if (response.status === STATUS_NO_CONTENT) {
           this.props.setReloadRecipes(true);
           this.closeModal();
         }
@@ -44,12 +46,13 @@ class RemoveRecipe extends Component {
         open={this.props.modal === 'remove_recipe'}
         basic size='mini'
         onClose={() => {
-          this.closeModal()
+          this.closeModal();
         }}
       >
         <Header icon='archive' content={name} />
         <Modal.Content>
-          <p>Are you sure you want to remove this recipe from your favorite recipes list?</p>
+          <p>Are you sure you want to remove this
+          recipe from your favorite recipes list?</p>
           <div className='error'>
             {this.state.error}
           </div>
@@ -66,7 +69,7 @@ class RemoveRecipe extends Component {
             }} />
         </Modal.Actions>
       </Modal>
-    )
+    );
   }
 }
 
@@ -75,7 +78,20 @@ const mapStateToProps = (state) => {
     modal: state.dialog,
     recipe: state.recipe,
     userId: state.user.id
-  }
-}
+  };
+};
 
-export default connect(mapStateToProps, { setDialogType, setReloadRecipes })(RemoveRecipe);
+const actionCreators = {
+  setDialogType,
+  setReloadRecipes
+};
+
+RemoveRecipe.propTypes = {
+  setDialogType: PropTypes.func,
+  userId: PropTypes.number,
+  recipe: PropTypes.object,
+  modal: PropTypes.string,
+  setReloadRecipes: PropTypes.func
+};
+
+export default connect(mapStateToProps, actionCreators)(RemoveRecipe);
