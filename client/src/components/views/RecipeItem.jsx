@@ -1,17 +1,11 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Card, Image, Grid, Icon } from 'semantic-ui-react';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { setDialogType } from '../actions/dialog';
-import { setRecipe } from '../actions/recipe';
-
-class RecipeItem extends Component {
-  showRecipeActions() {
-    const { dashboardSection } = this.props;
-
+const RecipeItem = ({ dashboardSection, recipe, actions, username }) => {
+  const showRecipeActions = () => {
     if (dashboardSection === 'home') {
-      const { upvotes, downvotes } = this.props.recipe;
+      const { upvotes, downvotes } = recipe;
       return (
         <Grid columns={2} divided>
           <Grid.Row>
@@ -36,21 +30,21 @@ class RecipeItem extends Component {
             </Grid.Column>
             <Grid.Column className="clickable"
               onClick={() => {
-                this.props.setRecipe({
-                  id: this.props.recipe.id,
-                  name: this.props.recipe.name
+                actions.setRecipe({
+                  id: recipe.id,
+                  name: recipe.name
                 });
-                this.props.setDialogType('create_edit_recipe');
+                actions.setDialogType('create_edit_recipe');
               }}>
               <Icon name='edit' color='green' />Edit
             </Grid.Column>
             <Grid.Column className="clickable"
               onClick={() => {
-                this.props.setRecipe({
+                actions.setRecipe({
                   id: this.props.recipe.id,
                   name: this.props.recipe.name
                 });
-                this.props.setDialogType('delete_recipe');
+                actions.setDialogType('delete_recipe');
               }}>
               <Icon name='delete' color='red' />Delete
             </Grid.Column>
@@ -69,11 +63,11 @@ class RecipeItem extends Component {
             </Grid.Column>
             <Grid.Column className="clickable"
               onClick={() => {
-                this.props.setRecipe({
+                actions.setRecipe({
                   id: this.props.recipe.id,
                   name: this.props.recipe.name
                 });
-                this.props.setDialogType('remove_recipe');
+                actions.setDialogType('remove_recipe');
               }}>
               <Icon name='close' color='red' />Remove
             </Grid.Column>
@@ -81,64 +75,59 @@ class RecipeItem extends Component {
         </Grid>
       );
     }
-  }
+  };
 
-  showAuthor(User) {
+  const showAuthor = (User) => {
     if (User) {
       return (
         <Card.Meta>by <em>{User.name}</em></Card.Meta>
       );
     }
-  }
+  };
 
-  render() {
-    const { imageUrl, name, description, User } = this.props.recipe;
-    return (
-      <Card centered color='green'>
-        <Image
-          alt='food image'
-          src={imageUrl} className="clickable" height="180px"
-          onClick={() => {
-            this.handleViewRecipe();
-          }}
-        />
-        <Card.Content>
-          <Card.Header>{name}</Card.Header>
-          <Card.Description>{description}</Card.Description>
-          {this.showAuthor(User)}
-        </Card.Content>
-        <Card.Content extra>
-          {this.showRecipeActions()}
-        </Card.Content>
-      </Card>
-    );
-  }
-
-  handleViewRecipe() {
-    if (!this.props.username) {
-      this.props.setDialogType('signup');
+  const handleViewRecipe = () => {
+    if (!username) {
+      actions.setDialogType('signup');
     } else {
-      this.props.setRecipe({
+      actions.setRecipe({
         id: this.props.recipe.id,
         name: this.props.recipe.name
       });
-      this.props.setDialogType('recipe_details');
+      actions.setDialogType('recipe_details');
     }
-  }
-}
-
-const mapStateToProps = (state) => {
-  return {
-    username: state.user.username,
-    dashboardSection: state.dashboard
   };
+
+  const { imageUrl, name, description, User } = recipe;
+  return (
+    <Card centered color='green' >
+      <Image
+        alt='food image'
+        src={imageUrl} className="clickable" height="180px"
+        onClick={() => {
+          handleViewRecipe();
+        }}
+      />
+      <Card.Content>
+        <Card.Header>{name}</Card.Header>
+        <Card.Description>{description}</Card.Description>
+        {showAuthor(User)}
+      </Card.Content>
+      <Card.Content extra>
+        {showRecipeActions()}
+      </Card.Content>
+    </Card>
+  );
 };
 
-const actionCreators = {
-  setDialogType, setRecipe
-};
+// const mapStateToProps = (state) => {
+//   return {
+//     username: state.user.username,
+//     dashboardSection: state.dashboard
+//   };
+// };
 
 RecipeItem.propTypes = {
+  actions: PropTypes.object,
   setDialogType: PropTypes.func,
   recipe: PropTypes.object,
   setRecipe: PropTypes.func,
@@ -146,4 +135,4 @@ RecipeItem.propTypes = {
   username: PropTypes.string
 };
 
-export default connect(mapStateToProps, actionCreators)(RecipeItem);
+export default RecipeItem;

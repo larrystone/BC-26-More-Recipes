@@ -11,7 +11,7 @@ import './scss/index.scss';
 import reducer from './reducers';
 import { logUser } from './actions/user';
 
-import Home from './components/Home.jsx';
+import HomeContainer from './components/containers/HomeContainer.jsx';
 import Dashboard from './components/Dashboard';
 
 import { verifyUser } from './helpers/jwt';
@@ -38,7 +38,7 @@ const getRoutes = () => {
   if (authenticateUser()) {
     return (
       <Switch>
-        <Route exact path="/" component={Home} />
+        <Route exact path="/" component={HomeContainer} />
         <Route path="/dashboard" component={Dashboard} />
         <Redirect to='/' />
       </Switch>
@@ -46,7 +46,7 @@ const getRoutes = () => {
   } else {
     return (
       <Switch>
-        <Route exact path="/" component={Home} />
+        <Route exact path="/" component={HomeContainer} />
         <Redirect to='/' />
       </Switch>
     );

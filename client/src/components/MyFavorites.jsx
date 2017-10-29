@@ -8,7 +8,7 @@ import { read_cookie } from 'sfcookies';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import RecipeItem from './RecipeItem';
+import RecipeItem from './views/RecipeItem';
 
 import { setReloadRecipes } from '../actions/reload_recipe';
 

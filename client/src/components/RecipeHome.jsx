@@ -7,7 +7,7 @@ import axios from 'axios';
 import { read_cookie } from 'sfcookies';
 import { connect } from 'react-redux';
 
-import RecipeItem from './RecipeItem';
+import RecipeItem from './views/RecipeItem';
 
 const TOKEN = read_cookie('more-recipe-token');
 const EMPTY = 0;
