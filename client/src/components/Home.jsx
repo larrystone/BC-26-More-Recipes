@@ -5,7 +5,7 @@ import { createBrowserHistory } from 'history';
 import PropTypes from 'prop-types';
 
 import HomeHeader from './HomeHeader';
-import Footer from './Footer';
+import Footer from './views/Footer';
 import RecipeItem from './RecipeItem';
 import SignUpSignIn from './SignUpSignIn';
 

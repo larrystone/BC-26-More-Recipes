@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import DashboardHeader from './DashboardHeader';
-import Footer from './Footer';
+import Footer from './views/Footer';
 import RecipeHome from './RecipeHome';
 import MyRecipes from './MyRecipes';
 import RecipeDetails from './RecipeDetails';
