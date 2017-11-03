@@ -12,7 +12,7 @@ import reducer from './reducers';
 import { logUser } from './actions/user';
 
 import HomeContainer from './components/containers/HomeContainer.jsx';
-import Dashboard from './components/Dashboard';
+import DashboardContainer from './components/containers/DashboardContainer';
 
 import { verifyUser } from './helpers/jwt';
 
@@ -39,7 +39,7 @@ const getRoutes = () => {
     return (
       <Switch>
         <Route exact path="/" component={HomeContainer} />
-        <Route path="/dashboard" component={Dashboard} />
+        <Route path="/dashboard" component={DashboardContainer} />
         <Redirect to='/' />
       </Switch>
     );

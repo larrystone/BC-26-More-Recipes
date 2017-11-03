@@ -10,15 +10,12 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import generateInitials from '../helpers/initial';
+import { dateOptions } from '../constants';
 
 const TOKEN = read_cookie('more-recipe-token');
 const MAX_COUNT = 5,
   EMPTY = 0,
-  STATUS_OK = 201,
-  dateOptions = {
-    weekday: 'long', year: 'numeric', month: 'long',
-    day: 'numeric', hour: 'numeric', minute: 'numeric'
-  };
+  STATUS_OK = 201;
 
 class Reviews extends Component {
   constructor(props) {

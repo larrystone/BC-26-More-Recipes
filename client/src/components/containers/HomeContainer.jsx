@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { createBrowserHistory } from 'history';
 import PropTypes from 'prop-types';
@@ -9,7 +9,7 @@ import Recipes from '../../SampleRecipes.json';
 import { setDialogType } from '../../actions/dialog';
 import { setRecipe } from '../../actions/recipe';
 
-class HomeContainer extends Component {
+class HomeContainer extends PureComponent {
   componentWillMount() {
     const { username } = this.props.loggedUser;
     if (username) {
