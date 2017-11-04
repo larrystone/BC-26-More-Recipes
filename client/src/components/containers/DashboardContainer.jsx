@@ -7,6 +7,7 @@ import Footer from '../views/Footer';
 import RecipeHomeContainer from './RecipeHomeContainer';
 import MyRecipesContainer from './MyRecipesContainer';
 import MyFavoritesContainer from './MyFavoritesContainer';
+import ProfileContainer from './ProfileContainer';
 
 import { logUser } from '../../actions/user';
 import { setDashboardSection } from '../../actions/dashboard';
@@ -18,8 +19,6 @@ import RecipeDetailsContainer from './RecipeDetailsContainer';
 import CreatEditRecipeContainer from './CreateEditRecipeContainer';
 import DeleteRecipeContainer from './DeleteRecipeContainer';
 import RemoveRecipeContainer from './RemoveRecipeContainer';
-
-// import Profile from './Profile';
 
 class Dashboard extends Component {
   showDashboardSection() {
@@ -66,12 +65,17 @@ class Dashboard extends Component {
           }
         />
       );
+    } else if (dashboardSection === 'profile') {
+      return (
+        <ProfileContainer
+          actions={
+            {
+              setDashboardSection: this.props.setDashboardSection
+            }
+          }
+          loggedUser={this.props.loggedUser} />
+      );
     }
-    // else if (dashboardSection === 'profile') {
-    //   return (
-    //     <Profile />
-    //   );
-    // }
   }
 
   renderModals() {
