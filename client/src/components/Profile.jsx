@@ -200,7 +200,7 @@ class Profile extends Component {
               onClick={this.handleAccordionClick}>
               <Label style={{ width: '100%' }}>
                 <Icon name='dropdown' />
-                Change Password
+                {'Change Password'}
               </Label>
             </Accordion.Title>
             <Accordion.Content active={activeIndex === ZERO}>
@@ -229,15 +229,14 @@ class Profile extends Component {
                   onChange={(event) => {
                     this.storeToState('password2', event.target.value);
                   }} />
-
                 <Form.Button
                   disabled={loading}
                   color='red'
                   onClick={(event) => {
                     this.updatePassword(event);
                   }}>
-                  Change Password
-              </Form.Button>
+                  {'Change Password'}
+                </Form.Button>
               </Form>
             </Accordion.Content>
           </Accordion>

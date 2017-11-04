@@ -5,18 +5,18 @@ import PropTypes from 'prop-types';
 import DashboardHeaderView from '../views/DashboardHeaderView';
 import Footer from '../views/Footer';
 import RecipeHomeContainer from './RecipeHomeContainer';
+import MyRecipesContainer from './MyRecipesContainer';
 
-import RecipeDetailsContainer from './RecipeDetailsContainer';
 
 import { logUser } from '../../actions/user';
 import { setDashboardSection } from '../../actions/dashboard';
 import { setDialogType } from '../../actions/dialog';
 import { setRecipe } from '../../actions/recipe';
+import { setReloadRecipes } from '../../actions/reload_recipe';
 
-// import MyRecipes from '../MyRecipes';
-// import RecipeDetails from '../RecipeDetails';
-import CreatEditRecipe from '../CreateEditRecipe';
-import DeleteRecipe from '../DeleteRecipe';
+import RecipeDetailsContainer from './RecipeDetailsContainer';
+import CreatEditRecipeContainer from './CreateEditRecipeContainer';
+import DeleteRecipeContainer from './DeleteRecipeContainer';
 // import MyFavorites from '../MyFavorites';
 import RemoveRecipe from '../RemoveRecipe';
 // import Profile from './Profile';
@@ -37,12 +37,20 @@ class Dashboard extends Component {
           }
         />
       );
+    } else if (dashboardSection === 'my_recipes') {
+      return (
+        <MyRecipesContainer
+          dashboardSection={this.props.dashboardSection}
+          loggedUser={this.props.loggedUser}
+          actions={
+            {
+              setDialogType: this.props.setDialogType,
+              setRecipe: this.props.setRecipe
+            }
+          } />
+      );
     }
-    // else if (dashboardSection === 'my_recipes') {
-    //   return (
-    //     <MyRecipes />
-    //   );
-    // } else if (dashboardSection === 'my_favs') {
+    // else if (dashboardSection === 'my_favs') {
     //   return (
     //     <MyFavorites />
     //   );
@@ -64,9 +72,32 @@ class Dashboard extends Component {
         />
       );
     } else if (this.props.modal === 'create_edit_recipe') {
-      return <CreatEditRecipe />;
+      return (
+        <CreatEditRecipeContainer
+          actions={
+            {
+              setDialogType: this.props.setDialogType,
+              setRecipe: this.props.setRecipe,
+              setReloadRecipes: this.props.setReloadRecipes
+            }
+          }
+          recipe={this.props.recipe}
+          modal={this.props.modal}
+        />
+      );
     } else if (this.props.modal === 'delete_recipe') {
-      return <DeleteRecipe />;
+      return (
+        <DeleteRecipeContainer
+          actions={
+            {
+              setDialogType: this.props.setDialogType,
+              setReloadRecipes: this.props.setReloadRecipes
+            }
+          }
+          recipe={this.props.recipe}
+          modal={this.props.modal}
+        />
+      );
     } else if (this.props.modal === 'remove_recipe') {
       return <RemoveRecipe />;
     }
@@ -97,7 +128,8 @@ Dashboard.propTypes = {
   setDashboardSection: PropTypes.func,
   setDialogType: PropTypes.func,
   setRecipe: PropTypes.func,
-  recipe: PropTypes.object
+  recipe: PropTypes.object,
+  setReloadRecipes: PropTypes.func
 };
 
 const mapStateToProps = (state) => {
@@ -113,7 +145,8 @@ const actionCreators = {
   logUser,
   setDashboardSection,
   setDialogType,
-  setRecipe
+  setRecipe,
+  setReloadRecipes
 };
 
 export default connect(mapStateToProps, actionCreators)(Dashboard);

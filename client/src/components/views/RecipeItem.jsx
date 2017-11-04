@@ -54,8 +54,8 @@ const RecipeItem = ({ dashboardSection, recipe, actions, username }) => {
           <Grid.Column className="clickable"
             onClick={() => {
               actions.setRecipe({
-                id: this.props.recipe.id,
-                name: this.props.recipe.name
+                id: recipe.id,
+                name: recipe.name
               });
               actions.setDialogType('delete_recipe');
             }}>
