@@ -12,7 +12,7 @@ import { dateOptions } from '../../constants';
 const MAX_COUNT = 5,
   EMPTY = 0;
 
-const ReviewsView = ({ reviewActions, reviews,
+const ReviewsView = ({ reviewActions, reviews, newReview,
   currentIndex, posting, error }) => {
   const showReviews = () => {
     const visibleReviews = reviews.slice(currentIndex,
@@ -122,6 +122,7 @@ const ReviewsView = ({ reviewActions, reviews,
           <Form.TextArea
             style={{ maxHeight: '100px' }}
             placeholder='Write a review'
+            value={newReview}
             disabled={posting}
             onChange={(event) => {
               reviewActions.storeToState('content', event.target.value);
@@ -152,6 +153,7 @@ ReviewsView.propTypes = {
   reviews: PropTypes.array,
   currentIndex: PropTypes.number,
   error: PropTypes.string,
+  newReview: PropTypes.string,
   posting: PropTypes.bool
 };
 

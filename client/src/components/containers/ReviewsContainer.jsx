@@ -93,6 +93,7 @@ class Reviews extends PureComponent {
             postReview: this.postReview
           }
         }
+        newReview={this.state.content}
         reviews={this.state.reviews}
         currentIndex={this.state.currentIndex}
         posting={this.state.posting}
