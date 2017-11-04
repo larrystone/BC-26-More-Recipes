@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { read_cookie } from 'sfcookies';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import MyRecipesView from '../views/MyRecipesView';
-
-import { setReloadRecipes } from '../../actions/reload_recipe';
 
 const TOKEN = 'more-recipe-token';
 
@@ -39,7 +36,7 @@ class MyRecipesContainer extends Component {
             my_recipes: response.data.recipe
           }
         );
-        this.props.setReloadRecipes(false);
+        this.props.actions.setReloadRecipes(false);
       })
       .catch(() => {
       });
@@ -63,17 +60,6 @@ class MyRecipesContainer extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    reloadRecipes: state.reloadRecipes,
-    recipe: state.recipe
-  };
-};
-
-const actionCreators = {
-  setReloadRecipes
-};
-
 MyRecipesContainer.propTypes = {
   dashboardSection: PropTypes.string,
   reloadRecipes: PropTypes.bool,
@@ -82,4 +68,4 @@ MyRecipesContainer.propTypes = {
   loggedUser: PropTypes.object
 };
 
-export default connect(mapStateToProps, actionCreators)(MyRecipesContainer);
+export default MyRecipesContainer;

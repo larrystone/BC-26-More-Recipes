@@ -6,7 +6,7 @@ import DashboardHeaderView from '../views/DashboardHeaderView';
 import Footer from '../views/Footer';
 import RecipeHomeContainer from './RecipeHomeContainer';
 import MyRecipesContainer from './MyRecipesContainer';
-
+import MyFavoritesContainer from './MyFavoritesContainer';
 
 import { logUser } from '../../actions/user';
 import { setDashboardSection } from '../../actions/dashboard';
@@ -17,8 +17,8 @@ import { setReloadRecipes } from '../../actions/reload_recipe';
 import RecipeDetailsContainer from './RecipeDetailsContainer';
 import CreatEditRecipeContainer from './CreateEditRecipeContainer';
 import DeleteRecipeContainer from './DeleteRecipeContainer';
-// import MyFavorites from '../MyFavorites';
-import RemoveRecipe from '../RemoveRecipe';
+import RemoveRecipeContainer from './RemoveRecipeContainer';
+
 // import Profile from './Profile';
 
 class Dashboard extends Component {
@@ -42,19 +42,32 @@ class Dashboard extends Component {
         <MyRecipesContainer
           dashboardSection={this.props.dashboardSection}
           loggedUser={this.props.loggedUser}
+          reloadRecipes={this.props.reloadRecipes}
           actions={
             {
               setDialogType: this.props.setDialogType,
-              setRecipe: this.props.setRecipe
+              setRecipe: this.props.setRecipe,
+              setReloadRecipes: this.props.setReloadRecipes
             }
           } />
       );
+    } else if (dashboardSection === 'my_favs') {
+      return (
+        <MyFavoritesContainer
+          dashboardSection={this.props.dashboardSection}
+          loggedUser={this.props.loggedUser}
+          reloadRecipes={this.props.reloadRecipes}
+          actions={
+            {
+              setDialogType: this.props.setDialogType,
+              setRecipe: this.props.setRecipe,
+              setReloadRecipes: this.props.setReloadRecipes
+            }
+          }
+        />
+      );
     }
-    // else if (dashboardSection === 'my_favs') {
-    //   return (
-    //     <MyFavorites />
-    //   );
-    // } else if (dashboardSection === 'profile') {
+    // else if (dashboardSection === 'profile') {
     //   return (
     //     <Profile />
     //   );
@@ -99,7 +112,19 @@ class Dashboard extends Component {
         />
       );
     } else if (this.props.modal === 'remove_recipe') {
-      return <RemoveRecipe />;
+      return (
+        <RemoveRecipeContainer
+          actions={
+            {
+              setDialogType: this.props.setDialogType,
+              setReloadRecipes: this.props.setReloadRecipes
+            }
+          }
+          recipe={this.props.recipe}
+          modal={this.props.modal}
+          userId={this.props.loggedUser.id}
+        />
+      );
     }
   }
 
@@ -129,15 +154,18 @@ Dashboard.propTypes = {
   setDialogType: PropTypes.func,
   setRecipe: PropTypes.func,
   recipe: PropTypes.object,
-  setReloadRecipes: PropTypes.func
+  setReloadRecipes: PropTypes.func,
+  reloadRecipes: PropTypes.bool
 };
 
 const mapStateToProps = (state) => {
   return {
     loggedUser: state.user,
     dashboardSection: state.dashboard,
+    reloadRecipes: state.reloadRecipes,
     modal: state.dialog,
-    recipe: state.recipe
+    recipe: state.recipe,
+    userId: state.user.id
   };
 };
 

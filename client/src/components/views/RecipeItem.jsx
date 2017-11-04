@@ -72,15 +72,15 @@ const RecipeItem = ({ dashboardSection, recipe, actions, username }) => {
         <Grid.Row>
           <Grid.Column className="clickable"
             onClick={() => {
-              this.handleViewRecipe();
+              handleViewRecipe();
             }}>
             <Icon name='eye' color='blue' />View
           </Grid.Column>
           <Grid.Column className="clickable"
             onClick={() => {
               actions.setRecipe({
-                id: this.props.recipe.id,
-                name: this.props.recipe.name
+                id: recipe.id,
+                name: recipe.name
               });
               actions.setDialogType('remove_recipe');
             }}>
@@ -131,13 +131,6 @@ const RecipeItem = ({ dashboardSection, recipe, actions, username }) => {
     </Card>
   );
 };
-
-// const mapStateToProps = (state) => {
-//   return {
-//     username: state.user.username,
-//     dashboardSection: state.dashboard
-//   };
-// };
 
 RecipeItem.propTypes = {
   actions: PropTypes.object,
