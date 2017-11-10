@@ -13,7 +13,7 @@ app.use(bodyParser.json());
 
 app.use('/api-docs', express.static('docs'));
 
-app.use('/api/v1', routes);
+app.use('/api/v1/', routes);
 
 if (process.env.NODE_ENV === 'production') {
   app.use('/', express.static('client/build'));
