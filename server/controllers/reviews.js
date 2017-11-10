@@ -1,9 +1,6 @@
-import models from '../models';
-import * as validate from '../middleware/validate';
-import * as notify from './../services/notify';
-
-const review = models.Review;
-const recipe = models.Recipe;
+import { Review, Recipe, User } from '../models';
+import { validateReviewContent } from '../middleware/validate';
+import notify from './../services/notify';
 
 /**
  * Class Definition for the Review Object
@@ -11,7 +8,7 @@ const recipe = models.Recipe;
  * @export
  * @class Review
  */
-export default class Review {
+export default class Reviews {
   /**
    * Post a review on a recipe
    *
@@ -22,10 +19,10 @@ export default class Review {
    */
   postReview(req, res) {
     const userId = req.user.id;
-    const recipeId = req.params.recipeId;
+    const { recipeId } = req.params;
     const content = (req.body.content || '').replace(/\s+/g, ' ');
 
-    const validateReviewContentError = validate.validateReviewContent(content);
+    const validateReviewContentError = validateReviewContent(content);
     if (validateReviewContentError) {
       return res.status(400).json({
         success: false,
@@ -33,24 +30,24 @@ export default class Review {
       });
     }
 
-    review
+    Review
       .create({
         content,
         userId,
         recipeId
       })
       .then((createdReview) => {
-        recipe
+        Recipe
           .findOne({
             attributes: ['userId'],
             where: { id: recipeId },
             include: [
-              { model: models.User, attributes: ['email'] }
+              { model: User, attributes: ['email'] }
             ]
           })
           .then((recipeOwner) => {
             const recipeOwnerEmail = recipeOwner.User.email;
-            notify.default(recipeOwnerEmail,
+            notify(recipeOwnerEmail,
               'New Review on Recipe',
               'Someone recently posted a review on one of your Recipes'
             );
@@ -82,11 +79,11 @@ export default class Review {
   getRecipeReviews(req, res) {
     const recipeId = req.params.recipeId;
 
-    review
+    Review
       .findAll({
         where: { recipeId },
         include: [
-          { model: models.User, attributes: ['name', 'updatedAt'] }
+          { model: User, attributes: ['name', 'updatedAt'] }
         ]
       })
       .then((reviews) => {
@@ -115,11 +112,11 @@ export default class Review {
   getUserReviews(req, res) {
     const userId = req.params.userId;
 
-    review
+    Review
       .findAll({
         where: { userId },
         include: [
-          { model: models.Recipe }
+          { model: Recipe }
         ]
       })
       .then((foundReviews) => {

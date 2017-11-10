@@ -1,59 +1,24 @@
-import models from '../models';
-import * as Encryption from '../middleware/encryption';
-import * as Auth from '../middleware/auth';
-import * as validate from '../middleware/validate';
+import { User } from '../models';
+import Encryption from '../middleware/encryption';
+import Auth from '../middleware/auth';
+import { validateSignUp } from '../middleware/validate';
+import trimWhiteSpaces from '../services/trimWhiteSpace';
 
-const user = models.User;
+const newAuth = new Auth();
+const newEncryption = new Encryption();
 
-const newAuth = new Auth.default();
-const newEncryption = new Encryption.default();
-
-const trimWhiteSpaces = (param, value) => (param || '')
-  .replace(/\s+/g, value || '');
-
-/**
- * Class Definition for the User Object
- *
- * @export
- * @class User
- */
-export default class User {
-  /**
-   * Sign Up user (Create new user)
-   *
-   * @param {object} req - HTTP Request
-   * @param {object} res - HTTP Response
-   * @returns {object} Class instance
-   * @memberof User
-   */
-  signUp(req, res) {
-    const name = trimWhiteSpaces(req.body.name, ' ');
-    const username = trimWhiteSpaces(req.body.username);
-    const email = trimWhiteSpaces(req.body.email);
-    const password = (req.body.password || '');
-
-    const validateSignUpError =
-      validate.validateSignUp(name,
-        username, email, password);
-
-    if (validateSignUpError) {
-      return res.status(400).json({
-        success: false,
-        message: validateSignUpError
-      });
-    }
-
-    user
+const verifyUserNameAndEmail = (username, email) => {
+  const promise = new Promise((resolve, reject) => {
+    User
       .findOne({
-        attributes: ['id', 'email', 'username'],
+        attributes: ['email', 'username'],
         where: {
           $or: [
             {
               username: {
                 $iLike: username
               }
-            },
-            {
+            }, {
               email: {
                 $iLike: email
               }
@@ -70,44 +35,87 @@ export default class User {
             field = 'Email';
           }
 
-          return res.status(409).json({
-            success: false,
-            message: `${field} already taken!`
-          });
+          reject(`${field} already taken!`);
         }
 
-        user
-          .create({
-            name,
-            username,
-            email,
-            password: newEncryption.generateHash(password),
-          })
-          .then((result) => {
-            const token = newAuth.sign({
-              id: result.id,
-              email: result.email,
-              username: result.username,
-            });
-
-            const createdUser = {
-              userId: result.id,
-              name: result.name,
-              username: result.username,
-              email: result.email,
-              token
-            };
-
-            return res.status(201).json({
-              success: true,
-              message: 'New user created/token generated!',
-              user: createdUser
-            });
-          });
+        resolve();
       })
-      .catch(() => res.status(500).json({
+      .catch(() => {
+        reject('An error occured!');
+      });
+  });
+  return promise;
+};
+
+/**
+ * Class Definition for the User Object
+ *
+ * @export
+ * @class User
+ */
+export default class Users {
+  /**
+   * Sign Up user (Create new user)
+   *
+   * @param {object} req - HTTP Request
+   * @param {object} res - HTTP Response
+   * @returns {object} Class instance
+   * @memberof User
+   */
+  signUp(req, res) {
+    const name = trimWhiteSpaces(req.body.name, ' ');
+    const username = trimWhiteSpaces(req.body.username);
+    const email = trimWhiteSpaces(req.body.email);
+    const password = (req.body.password || '');
+
+    const validateSignUpError =
+      validateSignUp(name,
+        username, email, password);
+
+    if (validateSignUpError) {
+      return res.status(400).json({
         success: false,
-        message: 'Error Creating user'
+        message: validateSignUpError
+      });
+    }
+
+    verifyUserNameAndEmail(username, email).then(() => {
+      User
+        .create({
+          name,
+          username,
+          email,
+          password: newEncryption.generateHash(password),
+        })
+        .then((result) => {
+          const token = newAuth.sign({
+            id: result.id,
+            email: result.email,
+            username: result.username,
+          });
+
+          const createdUser = {
+            token,
+            userId: result.id,
+            name: result.name,
+            username: result.username,
+            email: result.email
+          };
+
+          return res.status(201).json({
+            success: true,
+            message: 'New user created/token generated!',
+            user: createdUser
+          });
+        })
+        .catch(() => res.status(500).json({
+          success: false,
+          message: 'Error Creating user'
+        }));
+    }).catch(error =>
+      res.status(409).json({
+        success: false,
+        message: error
       }));
 
     return this;
@@ -125,7 +133,7 @@ export default class User {
     const usernameOrEmail =
       trimWhiteSpaces(req.body.email || req.body.username);
 
-    user
+    User
       .findOne({
         attributes: ['id', 'name', 'username', 'email', 'password'],
         where: {
@@ -134,8 +142,7 @@ export default class User {
               username: {
                 $iLike: usernameOrEmail
               }
-            },
-            {
+            }, {
               email: {
                 $iLike: usernameOrEmail
               }
@@ -152,18 +159,17 @@ export default class User {
         }
 
         if (newEncryption.verifyHash(req.body.password, userFound.password)) {
+          const { id, name, email, username } = userFound;
           const token = newAuth.sign({
-            id: userFound.id,
-            email: userFound.email,
-            username: userFound.username
+            id, email, username
           });
 
           const loggedUser = {
-            userId: userFound.id,
-            name: userFound.name,
-            username: userFound.username,
-            email: userFound.email,
-            token
+            token,
+            name,
+            username,
+            email,
+            userId: id
           };
 
           return res.status(201).json({
@@ -194,9 +200,8 @@ export default class User {
    * @memberof User
    */
   getUser(req, res) {
-    const userId = req.params.userId;
-
-    user
+    const { userId } = req.params;
+    User
       .findOne({
         attributes: ['id', 'name', 'username', 'email'],
         where: { id: userId }

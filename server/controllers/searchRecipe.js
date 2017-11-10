@@ -1,7 +1,4 @@
-import models from '../models';
-
-const recipe = models.Recipe;
-const user = models.User;
+import { Recipe, User } from '../models';
 
 /**
  * Class Definition for the Search Recipe Object
@@ -19,10 +16,10 @@ export default class Search {
    * @memberof Search
    */
   sortMostUpvotes(req, res) {
-    recipe
+    Recipe
       .findAll({
         include: [
-          { model: models.User, attributes: ['name', 'updatedAt'] }
+          { model: User, attributes: ['name', 'updatedAt'] }
         ],
         order: [
           ['upvotes', 'DESC']
@@ -60,56 +57,56 @@ export default class Search {
    */
   searchAll(req, res) {
     let results;
-    const searchTerm = req.query.search;
+    const { search } = req.query;
 
-    recipe
+    Recipe
       .findAll({
         where: {
           $or: [
             {
               name: {
-                $iLike: `%${searchTerm}%`
+                $iLike: `%${search}%`
               }
             },
             {
               ingredients: {
-                $iLike: `%${searchTerm}%`
+                $iLike: `%${search}%`
               }
             }
           ]
         },
         include: [
-          { model: models.User, attributes: ['name', 'updatedAt'] }
+          { model: User, attributes: ['name', 'updatedAt'] }
         ]
       })
       .then((foundRecipes) => {
         results = foundRecipes.slice(0);
       })
       .then(() => {
-        user
+        User
           .findAll({
             attributes: ['name'],
             where: {
               $or: [
                 {
                   name: {
-                    $iLike: `%${searchTerm}%`
+                    $iLike: `%${search}%`
                   }
                 },
                 {
                   username: {
-                    $iLike: searchTerm
+                    $iLike: search
                   }
                 },
                 {
                   email: {
-                    $iLike: searchTerm
+                    $iLike: search
                   }
                 },
               ]
             },
             include: [
-              { model: models.Recipe }
+              { model: Recipe }
             ]
           })
           .then(recipes => res.status(201).json({
@@ -141,13 +138,13 @@ export default class Search {
       ingredients: { $iLike: `%${item}%` }
     }));
 
-    recipe
+    Recipe
       .findAll({
         where: {
           $or: queryClause
         },
         include: [
-          { model: models.User, attributes: ['name', 'updatedAt'] }
+          { model: User, attributes: ['name', 'updatedAt'] }
         ]
       })
       .then((foundRecipes) => {
@@ -181,15 +178,15 @@ export default class Search {
    * @memberof Search
    */
   searchByName(req, res) {
-    const recipes = req.query.recipes;
+    const { recipes } = req.query;
 
-    recipe
+    Recipe
       .findAll({
         where: {
           name: { $iLike: `%${recipes}%` }
         },
         include: [
-          { model: models.User, attributes: ['name', 'updatedAt'] }
+          { model: User, attributes: ['name', 'updatedAt'] }
         ]
       })
       .then((foundRecipes) => {

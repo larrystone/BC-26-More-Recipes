@@ -34,7 +34,8 @@ const CreateEditRecipe = ({ actions, recipeId, name, description,
 
   const renderForm = () => {
     return (
-      <Form>
+      <Form
+        loading={loading}>
         <Form.Input
           required
           disabled={loading}
