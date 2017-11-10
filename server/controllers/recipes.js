@@ -6,7 +6,7 @@ import { validateRecipeDetails } from '../middleware/validate';
 import Search from './searchRecipe';
 import notify from './../services/notify';
 import trimWhiteSpaces from '../services/trimWhiteSpace';
-import validateRights from '../services/validateRights';
+import validateUserRights from '../services/validateRights';
 
 cloudinary.config({
   cloud_name: 'larrystone',
@@ -14,21 +14,19 @@ cloudinary.config({
   api_secret: process.env.API_SECRET
 });
 
-const upload = multer({
-  storage: multer.memoryStorage(),
-  limits: { fileSize: 200 * 1024 * 1024, files: 1 },
-  fileFilter: (req, file, callback) => {
-    if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
-      return callback(new Error('Only Images are allowed !'), false);
-    }
-
-    callback(null, true);
-  }
-}).single('image');
-
-const uploadImage = (req, res) => {
+const uploadWithMulter = (req, res) => {
   const promise = new Promise((resolve, reject) => {
-    upload(req, res, (err) => {
+    multer({
+      storage: multer.memoryStorage(),
+      limits: { fileSize: 200 * 1024 * 1024, files: 1 },
+      fileFilter: (req, file, callback) => {
+        if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+          return callback(new Error('Only Images are allowed !'), false);
+        }
+
+        callback(null, true);
+      }
+    }).single('image')(req, res, (err) => {
       if (err) {
         reject(err);
       }
@@ -78,7 +76,7 @@ export default class Recipes {
         }));
     };
 
-    uploadImage(req, res).then((req) => {
+    uploadWithMulter(req, res).then((req) => {
       let imageUrl = '';
       const name = trimWhiteSpaces(req.body.name, ' ');
       const description = trimWhiteSpaces(req.body.description, ' ');
@@ -178,7 +176,7 @@ export default class Recipes {
     };
 
     let imageUrl = '';
-    uploadImage(req, res).then((req) => {
+    uploadWithMulter(req, res).then((req) => {
       const userId = req.user.id;
       const recipeId = req.params.recipeId || 0;
       const name = trimWhiteSpaces(req.body.name, '  ');
@@ -198,7 +196,7 @@ export default class Recipes {
         });
       }
 
-      validateRights(Recipe, recipeId, userId).then(() => {
+      validateUserRights(Recipe, recipeId, userId).then(() => {
         if (file) {
           cloudinary.uploader.upload_stream((result) => {
             if (!result.error) {
@@ -243,7 +241,7 @@ export default class Recipes {
     const recipeId = req.params.recipeId;
     const userId = req.user.id;
 
-    validateRights(Recipe, recipeId, userId).then(() => {
+    validateUserRights(Recipe, recipeId, userId).then(() => {
       Recipe.destroy({
         where: {
           id: recipeId
