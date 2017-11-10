@@ -111,7 +111,7 @@ const RecipeItem = ({ dashboardSection, recipe, actions, username }) => {
       centered>
       <Image
         alt='food image'
-        src={imageUrl === 'null' ? '' : imageUrl}
+        src={imageUrl === '' ? 'images/default_image.jpg' : imageUrl}
         className="clickable" height="180px"
         onClick={() => {
           handleViewRecipe();

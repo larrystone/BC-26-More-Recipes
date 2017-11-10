@@ -1,10 +1,9 @@
 import multer from 'multer';
 import cloudinary from 'cloudinary';
 
-import { Recipe, Favorite, User } from '../models';
+import { Recipe, User } from '../models';
 import { validateRecipeDetails } from '../middleware/validate';
 import Search from './searchRecipe';
-import notify from './../services/notify';
 import trimWhiteSpaces from '../services/trimWhiteSpace';
 import validateUserRights from '../services/validateRights';
 
@@ -148,34 +147,18 @@ export default class Recipes {
           returning: true
         })
         .then((result) => {
-          Favorite
-            .findAll({
-              attributes: ['userId'],
-              where: { recipeId },
-              include: [
-                { model: User, attributes: ['email'] }
-              ]
-            })
-            .then((foundUsers) => {
-              const userEmails = foundUsers.map(user => user.User.email);
-              notify(userEmails,
-                'Favorite Recipe Modified',
-                'One of your favorite recipes has been modified');
-
-              res.status(201).json({
-                success: true,
-                message: 'Recipe record updated',
-                recipe: result[1],
-              });
-            });
+          res.status(201).json({
+            success: true,
+            message: 'Recipe record updated',
+            recipe: result[1],
+          });
         })
-        .catch(error => res.status(500).json({
+        .catch(() => res.status(500).json({
           success: false,
-          message: error.message
+          message: 'Unable to modify recipe'
         }));
     };
 
-    let imageUrl = '';
     uploadWithMulter(req, res).then((req) => {
       const userId = req.user.id;
       const recipeId = req.params.recipeId || 0;
@@ -196,11 +179,12 @@ export default class Recipes {
         });
       }
 
-      validateUserRights(Recipe, recipeId, userId).then(() => {
+      validateUserRights(Recipe, recipeId, userId).then((result) => {
+        let imageUrl = result.imageUrl;
         if (file) {
-          cloudinary.uploader.upload_stream((result) => {
-            if (!result.error) {
-              imageUrl = result.url;
+          cloudinary.uploader.upload_stream((success) => {
+            if (!success.error) {
+              imageUrl = success.url;
               updateDatabase({
                 name, description, ingredients, direction, imageUrl, recipeId, res
               });

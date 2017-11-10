@@ -15,7 +15,7 @@ export default (Recipe, recipeId, userId) => {
             message: 'You cannot modify a recipe not created by You!'
           });
         }
-        resolve();
+        resolve({ imageUrl: recipeFound.imageUrl });
       })
       .catch(() => {
         reject({
