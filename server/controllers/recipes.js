@@ -6,6 +6,7 @@ import { validateRecipeDetails } from '../middleware/validate';
 import Search from './searchRecipe';
 import notify from './../services/notify';
 import trimWhiteSpaces from '../services/trimWhiteSpace';
+import validateRights from '../services/validateRights';
 
 cloudinary.config({
   cloud_name: 'larrystone',
@@ -29,7 +30,7 @@ const uploadImage = (req, res) => {
   const promise = new Promise((resolve, reject) => {
     upload(req, res, (err) => {
       if (err) {
-        reject('Error uploading recipe');
+        reject(err);
       }
       resolve(req);
     });
@@ -99,9 +100,6 @@ export default class Recipes {
       if (file) {
         cloudinary.uploader.upload_stream((result) => {
           if (!result.error) {
-            // cloudinary.uploader.destroy('id', (deleted) => {
-
-            // });
             imageUrl = result.url;
             writeToDatabase({
               name, description, ingredients, direction, imageUrl, userId, res
@@ -136,20 +134,58 @@ export default class Recipes {
    * @memberof Recipe
    */
   modifyRecipe(req, res) {
-    let imageUrl;
-    uploadImage(req, res).then((req) => {
-      if (req.file) {
-        imageUrl = `recipes/${req.file.filename}`;
-      } else {
-        imageUrl = null;
-      }
+    const updateDatabase = ({
+      name, description, ingredients, direction, imageUrl, recipeId, res
+    }) => {
+      Recipe.update({
+        name,
+        description,
+        ingredients,
+        imageUrl,
+        direction
+      }, {
+          where: {
+            id: recipeId
+          },
+          returning: true
+        })
+        .then((result) => {
+          Favorite
+            .findAll({
+              attributes: ['userId'],
+              where: { recipeId },
+              include: [
+                { model: User, attributes: ['email'] }
+              ]
+            })
+            .then((foundUsers) => {
+              const userEmails = foundUsers.map(user => user.User.email);
+              notify(userEmails,
+                'Favorite Recipe Modified',
+                'One of your favorite recipes has been modified');
 
+              res.status(201).json({
+                success: true,
+                message: 'Recipe record updated',
+                recipe: result[1],
+              });
+            });
+        })
+        .catch(error => res.status(500).json({
+          success: false,
+          message: error.message
+        }));
+    };
+
+    let imageUrl = '';
+    uploadImage(req, res).then((req) => {
       const userId = req.user.id;
       const recipeId = req.params.recipeId || 0;
-      const name = trimWhiteSpaces(req.body.name);
-      const description = trimWhiteSpaces(req.body.description);
-      const ingredients = trimWhiteSpaces(req.body.ingredients);
+      const name = trimWhiteSpaces(req.body.name, '  ');
+      const description = trimWhiteSpaces(req.body.description, '  ');
+      const ingredients = trimWhiteSpaces(req.body.ingredients, '  ');
       const direction = (req.body.direction);
+      const { file } = req;
 
       const validateRecipeError =
         validateRecipeDetails(name, ingredients,
@@ -161,72 +197,36 @@ export default class Recipes {
           message: validateRecipeError
         });
       }
-      Recipe
-        .findById(recipeId)
-        .then((recipeFound) => {
-          if (!recipeFound) {
-            return res.status(404).json({
-              success: false,
-              message: `No matching recipe with id: ${recipeId}`
-            });
-          }
 
-          if (+recipeFound.userId !== +userId) {
-            return res.status(401).json({
-              success: false,
-              message: 'You cannot modify a recipe not created by You!'
-            });
-          }
-
-          if (!imageUrl) {
-            imageUrl = recipeFound.imageUrl;
-          }
-
-          Recipe.update({
-            name,
-            description,
-            ingredients,
-            imageUrl,
-            direction
-          },
-          {
-            where: {
-              id: recipeId
-            },
-            returning: true
-          })
-            .then((result) => {
-              Favorite
-                .findAll({
-                  attributes: ['userId'],
-                  where: { recipeId },
-                  include: [
-                    { model: User, attributes: ['email'] }
-                  ]
-                })
-                .then((foundUsers) => {
-                  const userEmails = foundUsers.map(user => user.User.email);
-                  notify(userEmails,
-                    'Favorite Recipe Modified',
-                    'One of your favorite recipes has been modified');
-
-                  res.status(201).json({
-                    success: true,
-                    message: 'Recipe record updated',
-                    recipe: result[1],
-                  });
-                });
-            });
-        })
-        .catch(() => res.status(500).json({
-          success: false,
-          message: 'Error Modifying Recipe'
-        }));
+      validateRights(Recipe, recipeId, userId).then(() => {
+        if (file) {
+          cloudinary.uploader.upload_stream((result) => {
+            if (!result.error) {
+              imageUrl = result.url;
+              updateDatabase({
+                name, description, ingredients, direction, imageUrl, recipeId, res
+              });
+            } else {
+              res.status(503).json({
+                success: false,
+                message: 'Error uploading image, check your network connection'
+              });
+            }
+          }).end(file.buffer);
+        } else {
+          updateDatabase({
+            name, description, ingredients, direction, imageUrl, recipeId, res
+          });
+        }
+      })
+        .catch((error) => {
+          res.status(error.status).json({
+            success: false,
+            message: error.message
+          });
+        });
     }).catch((err) => {
-      res.status(400).json({
-        success: false,
-        message: err.message
-      });
+      res.status(400).json(err);
     });
     return this;
   }
@@ -242,46 +242,32 @@ export default class Recipes {
   deleteRecipe(req, res) {
     const recipeId = req.params.recipeId;
     const userId = req.user.id;
-    let imageUrl;
 
-    Recipe
-      .findById(recipeId)
-      .then((recipeFound) => {
-        if (!recipeFound) {
-          return res.status(404).json({
-            success: false,
-            message: `No matching recipe with id: ${recipeId}`
-          });
-        }
-
-        imageUrl = recipeFound.imageUrl;
-
-        if (+recipeFound.userId !== +userId) {
-          return res.status(401).json({
-            success: false,
-            message: 'You cannot delete this recipe'
-          });
-        }
-
-        Recipe.destroy({
-          where: {
-            id: recipeId
-          },
-        })
-          .then(() => {
-            // fs.unlink(`client/${folder}/${imageUrl}`, () => {
-            // });
+    validateRights(Recipe, recipeId, userId).then(() => {
+      Recipe.destroy({
+        where: {
+          id: recipeId
+        },
+      })
+        .then(() => {
+          // TODO delete image in cloudinary
+          cloudinary.uploader.destroy('id', () => {
             res.status(205).json({
               success: true,
               message: 'Recipe Deleted!'
             });
           });
-      })
-      .catch(() => res.status(500).json({
+        })
+        .catch(() => res.status(500).json({
+          success: false,
+          message: 'Error Deleting Recipe'
+        }));
+    }).catch((error) => {
+      res.status(error.status).json({
         success: false,
-        message: 'Error Deleting Recipe'
-      }));
-
+        message: error.message
+      });
+    });
     return this;
   }
 
