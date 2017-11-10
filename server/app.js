@@ -20,9 +20,9 @@ if (process.env.NODE_ENV === 'production') {
   app.use('/dashboard', express.static('client/build'));
 }
 
-if (process.env.NODE_ENV === 'production') {
-  app.use('*', express.static('client/build'));
-}
+// if (process.env.NODE_ENV === 'production') {
+//   app.use('*', express.static('client/build'));
+// }
 
 app.get('/', (req, res) => {
   res.status(201).json({
