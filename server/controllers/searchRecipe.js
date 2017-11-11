@@ -16,17 +16,28 @@ export default class Search {
    * @memberof Search
    */
   sortMostUpvotes(req, res) {
+    const limit = req.query.limit || 5,
+      currentPage = (req.query.page || 1),
+      offset = (currentPage - 1) * limit;
+
     Recipe
-      .findAll({
+      .findAndCountAll({
         include: [
           { model: User, attributes: ['name', 'updatedAt'] }
         ],
         order: [
           ['upvotes', 'DESC']
-        ]
+        ],
+        limit,
+        offset
       })
       .then((foundRecipes) => {
-        if (!foundRecipes) {
+        const totalRecords = foundRecipes.count;
+        const totalPages = Math.ceil(totalRecords / limit);
+        const newRecipes = Object.assign({},
+          { currentPage, totalPages, totalRecords, recipe: foundRecipes.rows }
+        );
+        if (!totalRecords) {
           return res.status(404).json({
             success: true,
             message: 'No Stored Recipes found',
@@ -36,7 +47,7 @@ export default class Search {
         return res.status(201).json({
           success: true,
           message: 'Recipe(s) found',
-          recipe: foundRecipes
+          recipes: newRecipes
         });
       })
       .catch(() => res.status(500).json({
@@ -138,6 +149,7 @@ export default class Search {
       ingredients: { $iLike: `%${item}%` }
     }));
 
+    // TODO implement pagination
     Recipe
       .findAll({
         where: {
@@ -180,6 +192,7 @@ export default class Search {
   searchByName(req, res) {
     const { recipes } = req.query;
 
+    // TODO implement pagination
     Recipe
       .findAll({
         where: {
