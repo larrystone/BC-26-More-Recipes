@@ -152,7 +152,7 @@ describe('/GET Search recipe by ingredient', () => {
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
         expect(res.body.success).to.equal(true);
-        expect(res.body.recipe.length).to.equal(3);
+        expect(res.body.recipes.recipe.length).to.equal(3);
         done();
       });
   });
@@ -165,7 +165,7 @@ describe('/GET Search recipe by ingredient', () => {
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
         expect(res.body.success).to.equal(true);
-        expect(res.body.recipe.length).to.equal(3);
+        expect(res.body.recipes.recipe.length).to.equal(3);
         done();
       });
   });
@@ -178,7 +178,7 @@ describe('/GET Search recipe by ingredient', () => {
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
         expect(res.body.success).to.equal(true);
-        expect(res.body.recipe.length).to.equal(1);
+        expect(res.body.recipes.recipe.length).to.equal(1);
         done();
       });
   });
@@ -189,9 +189,8 @@ describe('/GET Search recipe by ingredient', () => {
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
-        expect(res.statusCode).to.equal(201);
+        expect(res.statusCode).to.equal(404);
         expect(res.body.success).to.equal(true);
-        expect(res.body.recipe.length).to.equal(0);
         done();
       });
   });
@@ -204,7 +203,7 @@ describe('/GET Search recipe by ingredient', () => {
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
         expect(res.body.success).to.equal(true);
-        expect(res.body.recipe.length).to.equal(1);
+        expect(res.body.recipes.recipe.length).to.equal(1);
         done();
       });
   });
@@ -217,7 +216,7 @@ describe('/GET Search recipe by ingredient', () => {
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
         expect(res.body.success).to.equal(true);
-        expect(res.body.recipe.length).to.equal(1);
+        expect(res.body.recipes.recipe.length).to.equal(1);
         done();
       });
   });
@@ -310,52 +309,51 @@ describe('/GET Search recipe by valid anything (Generic search)', () => {
 describe('/GET Search recipe by recipe name', () => {
   it('should return 1 recipe when search by \'ewedu+soup\'', (done) => {
     chai.request(server)
-      .get('/api/v1/recipes?recipes=ewedu+soup')
+      .get('/api/v1/recipes?name=ewedu+soup')
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
         expect(res.body.success).to.equal(true);
-        expect(res.body.recipe.length).to.equal(1);
+        expect(res.body.recipes.recipe.length).to.equal(1);
         done();
       });
   });
 
   it('should return 2 recipes when search by \'rice\'', (done) => {
     chai.request(server)
-      .get('/api/v1/recipes?recipes=rice')
+      .get('/api/v1/recipes?name=rice')
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
         expect(res.body.success).to.equal(true);
-        expect(res.body.recipe.length).to.equal(2);
+        expect(res.body.recipes.recipe.length).to.equal(2);
         done();
       });
   });
 
   it('should return 1 recipes when search by \'Fried+rice\'', (done) => {
     chai.request(server)
-      .get('/api/v1/recipes?recipes=fried+rice')
+      .get('/api/v1/recipes?name=fried+rice')
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
         expect(res.body.success).to.equal(true);
-        expect(res.body.recipe.length).to.equal(1);
+        expect(res.body.recipes.recipe.length).to.equal(1);
         done();
       });
   });
 
   it('should return 0 recipe when search by \'garri\'', (done) => {
     chai.request(server)
-      .get('/api/v1/recipes?recipes=garri')
+      .get('/api/v1/recipes?name=garri')
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
-        expect(res.statusCode).to.equal(201);
+        expect(res.statusCode).to.equal(404);
         expect(res.body.success).to.equal(true);
-        expect(res.body.recipe.length).to.equal(0);
         done();
       });
   });

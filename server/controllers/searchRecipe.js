@@ -48,7 +48,7 @@ export default class Search {
       })
       .then((foundRecipes) => {
         const newRecipes = populateRecipe(foundRecipes, currentPage, limit);
-        if (!newRecipes.totalRecords) {
+        if (newRecipes.totalRecords === 0) {
           return res.status(404).json({
             success: true,
             message: 'No Stored Recipes found',
@@ -179,7 +179,7 @@ export default class Search {
       })
       .then((foundRecipes) => {
         const newRecipes = populateRecipe(foundRecipes, currentPage, limit);
-        if (!newRecipes.totalRecords) {
+        if (newRecipes.totalRecords === 0) {
           return res.status(404).json({
             success: true,
             message: 'Nothing found',
@@ -231,7 +231,7 @@ export default class Search {
       })
       .then((foundRecipes) => {
         const newRecipes = populateRecipe(foundRecipes, currentPage, limit);
-        if (!newRecipes.totalRecords) {
+        if (newRecipes.totalRecords === 0) {
           return res.status(404).json({
             success: true,
             message: 'Nothing found',
@@ -241,7 +241,7 @@ export default class Search {
         return res.status(201).json({
           success: true,
           message: 'Recipe(s) found',
-          recipes: populateRecipe(foundRecipes, currentPage)
+          recipes: newRecipes
         });
       })
       .catch(() => res.status(500).json({

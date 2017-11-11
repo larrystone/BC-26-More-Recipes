@@ -350,7 +350,7 @@ export default class Recipes {
       newSearch.sortMostUpvotes(req, res);
     } else if (req.query.ingredients) {
       newSearch.searchByIngredients(req, res);
-    } else if (req.query.recipes) {
+    } else if (req.query.name) {
       newSearch.searchByName(req, res);
     } else if (req.query.search) {
       newSearch.searchAll(req, res);
