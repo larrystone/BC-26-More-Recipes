@@ -12,23 +12,23 @@
       "url": "https://github.com/swagger-api/swagger-ui/blob/master/LICENSE"
     }
   },
-  "host": "more-recipe.herokuapp.com",
-  "basePath": "/api",
+  "basePath": "/api/v1",
   "tags": [
     {
       "name": "users",
       "description": "Operations available to clients"
     },
     {
-      "name": "recipes",
+      "name": "/recipes",
       "description": "Clients operation for recipes"
     }
   ],
   "schemes": [
-    "https"
+    "https",
+    "http"
   ],
   "paths": {
-    "/v1/users/signup": {
+    "/users/signup": {
       "post": {
         "tags": [
           "users"
@@ -73,12 +73,12 @@
             }
           },
           "default": {
-            "description": "Unexpected Error"
+            "description": "An Error Occured/ Error Creating user"
           }
         }
       }
     },
-    "users/signin": {
+    "/users/signin": {
       "post": {
         "tags": [
           "users"
@@ -99,7 +99,7 @@
             "description": "Login credentials",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/Login"
+              "$ref": "#/definitions/Signin"
             }
           }
         ],
@@ -107,22 +107,28 @@
           "200": {
             "description": "Login successful",
             "schema": {
-              "$ref": "#/definitions/Signin"
+              "$ref": "#/definitions/SignInSuccess"
             }
           },
           "401": {
-            "description": "Invalid username or password",
+            "description": "Incorrect password!",
             "schema": {
               "$ref": "#/definitions/SigninError"
             }
           },
+          "404": {
+            "description": "Username or email does not exist!",
+            "schema": {
+              "$ref": "#/definitions/UserNotFound"
+            }
+          },
           "default": {
-            "description": "Unexpected Error"
+            "description": "Error Signing In User"
           }
         }
       }
     },
-    "users/changepassword": {
+    "/users/changepassword": {
       "put": {
         "tags": [
           "users"
@@ -174,18 +180,18 @@
             }
           },
           "default": {
-            "description": "Unexpected Error"
+            "description": "An Error occured"
           }
         }
       }
     },
-    "users/{recipeId}/favorites": {
+    "/users/{recipeId}/favorites": {
       "post": {
         "tags": [
           "users"
         ],
         "summary": "Add a recipe to a user favorite list",
-        "description": "This method is called to add a recipe as a users favorite",
+        "description": "This method is called to add a recipe as a user's favorite",
         "operationId": "addFavorite",
         "consumes": [
           "application/json"
@@ -207,25 +213,22 @@
             "description": "ID of recipe to be added as favorite",
             "required": true,
             "type": "integer"
-          },
-          {
-            "in": "body",
-            "name": "category",
-            "description": "category favorited recipe should be categorized under",
-            "required": false,
-            "schema": {
-              "$ref": "#/definitions/Category"
-            }
           }
         ],
         "responses": {
+          "401": {
+            "description": "User not authorised",
+            "schema": {
+              "$ref": "#/definitions/UserNotAuth"
+            }
+          },
           "201": {
             "description": "Recipe successfully added to favorites",
             "schema": {
               "$ref": "#/definitions/FavoriteResponse"
             }
           },
-          "404": {
+          "403": {
             "description": "Recipe not found",
             "schema": {
               "$ref": "#/definitions/RecipeNotFound"
@@ -237,82 +240,8 @@
               "$ref": "#/definitions/FavoriteExists"
             }
           },
-          "422": {
-            "description": "Invalid recipeId parameter",
-            "schema": {
-              "$ref": "#/definitions/InvalidParameter"
-            }
-          },
           "default": {
-            "description": "Unexpected Error"
-          }
-        }
-      },
-      "put": {
-        "tags": [
-          "users"
-        ],
-        "summary": "Modify or assign category to a favorite recipe on a user's favorite recipe list",
-        "description": "This method allows logged in user to modify or assign a cetgory to recipes on his/her favorite list",
-        "operationId": "addRecipeCategory",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "x-access-token",
-            "in": "header",
-            "description": "Authentication Token",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "recipeId",
-            "in": "path",
-            "description": "ID of favorite recipe to be modified",
-            "required": true,
-            "type": "integer"
-          },
-          {
-            "in": "body",
-            "name": "category",
-            "description": "category favorited recipe should be categorized under",
-            "required": false,
-            "schema": {
-              "$ref": "#/definitions/Category"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Recipe added to category",
-            "schema": {
-              "$ref": "#/definitions/CategoryResponse"
-            }
-          },
-          "404": {
-            "description": "Recipe not found",
-            "schema": {
-              "$ref": "#/definitions/RecipeNotFound"
-            }
-          },
-          "409": {
-            "description": "Recipe has not been added to favorite",
-            "schema": {
-              "$ref": "#/definitions/FavoriteException"
-            }
-          },
-          "422": {
-            "description": "Invalid recipeId parameter",
-            "schema": {
-              "$ref": "#/definitions/InvalidParameter"
-            }
-          },
-          "default": {
-            "description": "Unexpected Error"
+            "description": "Error Adding Recipe to Favorites"
           }
         }
       },
@@ -346,43 +275,37 @@
           }
         ],
         "responses": {
-          "200": {
+          "401": {
+            "description": "User not authorised",
+            "schema": {
+              "$ref": "#/definitions/UserNotAuth"
+            }
+          },
+          "205": {
             "description": "Operation successful",
             "schema": {
               "$ref": "#/definitions/DeleteResponse"
             }
           },
-          "404": {
+          "403": {
             "description": "Recipe not found",
             "schema": {
               "$ref": "#/definitions/RecipeNotFound"
             }
           },
-          "409": {
-            "description": "Recipe not yet favorited",
-            "schema": {
-              "$ref": "#/definitions/FavoriteException"
-            }
-          },
-          "422": {
-            "description": "Invalid recipeId parameter",
-            "schema": {
-              "$ref": "#/definitions/InvalidParameter"
-            }
-          },
           "default": {
-            "description": "Unexpected Error"
+            "description": "Error Removing Recipe from Favorites"
           }
         }
       }
     },
-    "users/recipes/favorites": {
+    "/users/recipes/favorites": {
       "get": {
         "tags": [
           "users"
         ],
-        "summary": "Fetch at most 10 recipes in user's favorite list",
-        "description": "Method allows logged in user to view at most 10 recipes from his/her favorite list",
+        "summary": "Fetch all recipes in user's favorite list",
+        "description": "Method allows logged in user to view all recipes in his/her favorite list",
         "operationId": "getUserFavorites",
         "consumes": [
           "application/json"
@@ -400,7 +323,7 @@
           }
         ],
         "responses": {
-          "200": {
+          "201": {
             "description": "OK",
             "schema": {
               "type": "array",
@@ -410,18 +333,18 @@
             }
           },
           "default": {
-            "description": "Unexpected error"
+            "description": "Error fetching recipes"
           }
         }
       }
     },
-    "recipes": {
+    "/recipes": {
       "get": {
         "tags": [
-          "recipes"
+          "/recipes"
         ],
-        "summary": "Fetch at most 10 recipes in the application",
-        "description": "This method is called to fetch recipe posts in the system",
+        "summary": "Fetch all recipes in the application",
+        "description": "This method is called to fetch recipes in the system",
         "operationId": "getRecipes",
         "consumes": [
           "application/json"
@@ -444,18 +367,24 @@
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/GetRecipe"
+                "$ref": "#/definitions/GetRecipes"
               }
             }
           },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "type": "array"
+            }
+          },
           "default": {
-            "description": "Unexpected Error"
+            "description": "Unable to fetch recipes"
           }
         }
       },
       "post": {
         "tags": [
-          "recipes"
+          "/recipes"
         ],
         "summary": "Create and post a recipe",
         "description": "This method is called to create and post a recipe",
@@ -497,133 +426,22 @@
               "$ref": "#/definitions/RecipeValidation"
             }
           },
-          "default": {
-            "description": "Unexpected error"
-          }
-        }
-      }
-    },
-    "recipes?sort=upvote&order=descending": {
-      "get": {
-        "tags": [
-          "recipes"
-        ],
-        "summary": "Fetch at most 5 recipes with the highest upvotes",
-        "description": "This method is called to fetch top recipe posts",
-        "operationId": "getTopRecipes",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "x-access-token",
-            "in": "header",
-            "description": "Authentication Token",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
+          "503": {
+            "description": "Image Upload Error",
             "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/GenericRecipe"
-              }
+              "$ref": "#/definitions/ImageUploadError"
             }
           },
           "default": {
-            "description": "Unexpected error"
+            "description": "An error occured"
           }
         }
       }
     },
-    "recipes?category=pastries": {
+    "/recipes/{recipeId}": {
       "get": {
         "tags": [
-          "recipes"
-        ],
-        "summary": "Search for recipes that match category query string",
-        "description": "This method is called to search recipe posts by category",
-        "operationId": "searchRecipesByCategory",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "x-access-token",
-            "in": "header",
-            "description": "Authentication Token",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/GenericRecipe"
-              }
-            }
-          },
-          "default": {
-            "description": "Unexpected error"
-          }
-        }
-      }
-    },
-    "recipes?ingredients=flour": {
-      "get": {
-        "tags": [
-          "recipes"
-        ],
-        "summary": "Search for recipes that match ingredients query string",
-        "description": "This method is called to search recipe posts that match ingredients value",
-        "operationId": "searchRecipesByIngredients",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "x-access-token",
-            "in": "header",
-            "description": "Authentication Token",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/GenericRecipe"
-              }
-            }
-          },
-          "default": {
-            "description": "Unexpected error"
-          }
-        }
-      }
-    },
-    "recipes/{recipeId}": {
-      "get": {
-        "tags": [
-          "recipes"
+          "/recipes"
         ],
         "summary": "View a recipe details",
         "description": "Retrieve a single recipe post",
@@ -657,10 +475,16 @@
               "$ref": "#/definitions/ViewRecipe"
             }
           },
-          "422": {
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/RecipeNotFound"
+            }
+          },
+          "403": {
             "description": "Invalid recipeId parameter",
             "schema": {
-              "$ref": "#/definitions/InvalidParameter"
+              "$ref": "#/definitions/RecipeNotFound"
             }
           },
           "default": {
@@ -670,7 +494,7 @@
       },
       "put": {
         "tags": [
-          "recipes"
+          "/recipes"
         ],
         "summary": "Modify a recipe",
         "description": "Edit contents of a posted recipe",
@@ -699,34 +523,46 @@
           {
             "in": "body",
             "name": "body",
-            "description": "Recipe form model",
+            "description": "Recipe form data",
             "required": false,
             "schema": {
-              "$ref": "#/definitions/ModifyRecipe"
+              "$ref": "#/definitions/Recipe"
             }
           }
         ],
         "responses": {
-          "200": {
-            "description": "Modification successful",
+          "201": {
+            "description": "Recipe record updated",
             "schema": {
               "$ref": "#/definitions/ModifiedRecipe"
             }
           },
-          "422": {
+          "400": {
+            "description": "Validation exception",
+            "schema": {
+              "$ref": "#/definitions/RecipeValidation"
+            }
+          },
+          "503": {
+            "description": "Image Upload Error",
+            "schema": {
+              "$ref": "#/definitions/ImageUploadError"
+            }
+          },
+          "403": {
             "description": "Invalid recipeId parameter",
             "schema": {
-              "$ref": "#/definitions/InvalidParameter"
+              "$ref": "#/definitions/RecipeNotFound"
             }
           },
           "default": {
-            "description": "Unexpected error"
+            "description": "Unable to modify recipe"
           }
         }
       },
       "delete": {
         "tags": [
-          "recipes"
+          "/recipes"
         ],
         "summary": "Delete Recipe",
         "description": "Deletes a user's recipe post, action cannot be undone",
@@ -754,7 +590,7 @@
           }
         ],
         "responses": {
-          "200": {
+          "205": {
             "description": "Operation successful",
             "schema": {
               "$ref": "#/definitions/DeleteRecipe"
@@ -766,26 +602,26 @@
               "$ref": "#/definitions/RecipeNotFound"
             }
           },
-          "422": {
+          "403": {
             "description": "Invalid recipeId",
             "schema": {
-              "$ref": "#/definitions/InvalidParameter"
+              "$ref": "#/definitions/RecipeNotFound"
             }
           },
           "default": {
-            "description": "Unexpected error"
+            "description": "Error Deleting Recipe"
           }
         }
       }
     },
-    "recipes/user": {
+    "/recipes?sort=upvote&order=descending": {
       "get": {
         "tags": [
-          "recipes"
+          "/recipes"
         ],
-        "summary": "View recipes posted by user",
-        "description": "Fetch at most ten recipes posted by user on the system",
-        "operationId": "getUserRecipes",
+        "summary": "Fetch at most 10 recipes with the highest upvotes",
+        "description": "This method is called to fetch top recipe posts",
+        "operationId": "getTopRecipes",
         "consumes": [
           "application/json"
         ],
@@ -807,20 +643,98 @@
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/GenericRecipe"
+                "$ref": "#/definitions/GetRecipes"
               }
             }
           },
           "default": {
-            "description": "Unexpected Error"
+            "description": "Unable to fetch recipes"
           }
         }
       }
     },
-    "recipes/{recipeId}/reviews": {
+    "/recipes?ingredients=flour+salt": {
+      "get": {
+        "tags": [
+          "/recipes"
+        ],
+        "summary": "Search for recipes that match ingredients query string",
+        "description": "This method is called to search recipe posts that match ingredients value",
+        "operationId": "searchRecipesByIngredients",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "x-access-token",
+            "in": "header",
+            "description": "Authentication Token",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "OK - Resource Created",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/GetRecipes"
+              }
+            }
+          },
+          "default": {
+            "description": "Unable to fetch recipes"
+          }
+        }
+      }
+    },
+    "/users/userId/recipes": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "View recipes posted by user",
+        "description": "Fetch all recipes posted by a user on the system",
+        "operationId": "getUserRecipes",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "x-access-token",
+            "in": "header",
+            "description": "Authentication Token",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/GetRecipes"
+              }
+            }
+          },
+          "default": {
+            "description": "Unable to get user recipes"
+          }
+        }
+      }
+    },
+    "/recipes/{recipeId}/reviews": {
       "post": {
         "tags": [
-          "recipes"
+          "/recipes"
         ],
         "summary": "Comment on a recipe post",
         "description": "Users review a post by commenting on it",
@@ -869,22 +783,22 @@
               "$ref": "#/definitions/RecipeNotFound"
             }
           },
-          "422": {
+          "403": {
             "description": "Invalid recipeId",
             "schema": {
-              "$ref": "#/definitions/InvalidParameter"
+              "$ref": "#/definitions/RecipeNotFound"
             }
           },
           "default": {
-            "description": "Unexpected error"
+            "description": "Error Posting Review"
           }
         }
       }
     },
-    "recipes/{recipeId}/upvote": {
-      "put": {
+    "/recipes/{recipeId}/upvote": {
+      "post": {
         "tags": [
-          "recipes"
+          "/recipes"
         ],
         "summary": "Upvote recipe post",
         "description": "A user can upvote a recipe he/she likes",
@@ -912,7 +826,7 @@
           }
         ],
         "responses": {
-          "200": {
+          "201": {
             "description": "OK",
             "schema": {
               "$ref": "#/definitions/UpvoteResponse"
@@ -924,22 +838,28 @@
               "$ref": "#/definitions/RecipeNotFound"
             }
           },
+          "409": {
+            "description": "Recipe Already Voted",
+            "schema": {
+              "$ref": "#/definitions/VoteError"
+            }
+          },
           "422": {
             "description": "Bad input parameter",
             "schema": {
-              "$ref": "#/definitions/InvalidParameter"
+              "$ref": "#/definitions/RecipeNotFound"
             }
           },
           "default": {
-            "description": "Unexpected error"
+            "description": "Error Upvoting Recipe"
           }
         }
       }
     },
-    "recipes/{recipeId}/downvote": {
-      "put": {
+    "/recipes/{recipeId}/downvote": {
+      "post": {
         "tags": [
-          "recipes"
+          "/recipes"
         ],
         "summary": "Downvote recipe post",
         "description": "A user can downvote a recipe",
@@ -967,7 +887,7 @@
           }
         ],
         "responses": {
-          "200": {
+          "201": {
             "description": "OK",
             "schema": {
               "$ref": "#/definitions/DownvoteResponse"
@@ -979,46 +899,26 @@
               "$ref": "#/definitions/RecipeNotFound"
             }
           },
+          "409": {
+            "description": "Recipe Already Voted",
+            "schema": {
+              "$ref": "#/definitions/VoteError"
+            }
+          },
           "422": {
             "description": "Bad input parameter",
             "schema": {
-              "$ref": "#/definitions/InvalidParameter"
+              "$ref": "#/definitions/RecipeNotFound"
             }
           },
           "default": {
-            "description": "Unexpected error"
+            "description": "Error Upvoting Recipe"
           }
         }
       }
     }
   },
   "definitions": {
-    "Recipe": {
-      "type": "object",
-      "required": [
-        "ingredients",
-        "instructions",
-        "recipeName"
-      ],
-      "properties": {
-        "recipeName": {
-          "type": "string",
-          "example": "cake"
-        },
-        "category": {
-          "type": "string",
-          "example": "pastries"
-        },
-        "ingredients": {
-          "type": "string",
-          "example": "baking powder, flour, margarine"
-        },
-        "instructions": {
-          "type": "string",
-          "example": "pour and frisk egg with margarine"
-        }
-      }
-    },
     "User": {
       "type": "object",
       "required": [
@@ -1046,14 +946,14 @@
         }
       }
     },
-    "Login": {
+    "Signin": {
       "type": "object",
       "required": [
         "password",
-        "username"
+        "usernameOrEmail"
       ],
       "properties": {
-        "username": {
+        "usernameOrEmail": {
           "type": "string",
           "example": "johndoe"
         },
@@ -1093,38 +993,38 @@
     "SignupError": {
       "type": "object",
       "required": [
-        "message",
-        "status"
+        "success",
+        "message"
       ],
       "properties": {
-        "status": {
-          "type": "string",
-          "example": "fail"
+        "success": {
+          "type": "boolean",
+          "example": false
         },
         "message": {
           "type": "string",
-          "example": "Invalid Email, please enter a valid email"
+          "example": "Enter a valid full name!"
         }
       }
     },
     "SignupValidation": {
       "type": "object",
       "required": [
-        "message",
-        "status"
+        "success",
+        "message"
       ],
       "properties": {
-        "status": {
-          "type": "string",
-          "example": "fail"
+        "success": {
+          "type": "boolean",
+          "example": false
         },
         "message": {
           "type": "string",
-          "example": "Username already exists"
+          "example": "Username already taken!"
         }
       }
     },
-    "Signin": {
+    "SignInSuccess": {
       "type": "object",
       "required": [
         "Token",
@@ -1149,17 +1049,34 @@
     "SigninError": {
       "type": "object",
       "required": [
-        "message",
-        "status"
+        "success",
+        "message"
       ],
       "properties": {
-        "status": {
-          "type": "string",
-          "example": "fail"
+        "success": {
+          "type": "boolean",
+          "example": false
         },
         "message": {
           "type": "string",
-          "example": "Invalid Authentication Details"
+          "example": "Incorrect Password"
+        }
+      }
+    },
+    "UserNotFound": {
+      "type": "object",
+      "required": [
+        "success",
+        "message"
+      ],
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "example": false
+        },
+        "message": {
+          "type": "string",
+          "example": "Username or email does not exist!"
         }
       }
     },
@@ -1209,126 +1126,37 @@
         }
       }
     },
-    "Category": {
-      "type": "object",
-      "properties": {
-        "category": {
-          "type": "string",
-          "example": "dessert"
-        }
-      }
-    },
-    "FavoriteRecipes": {
+    "FavoriteResponse": {
       "type": "object",
       "required": [
-        "id",
-        "recipeId",
-        "userId"
+        "success",
+        "message"
       ],
       "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64",
-          "example": 2
-        },
-        "userId": {
-          "type": "integer",
-          "format": "int64",
-          "example": 4
-        },
-        "recipeId": {
-          "type": "integer",
-          "format": "int64",
-          "example": 6
-        },
-        "category": {
-          "type": "string",
-          "example": "african dish"
-        }
-      }
-    },
-    "DeleteResponse": {
-      "type": "object",
-      "required": [
-        "message",
-        "status"
-      ],
-      "properties": {
-        "status": {
-          "type": "string",
-          "example": "success"
+        "success": {
+          "type": "boolean",
+          "example": true
         },
         "message": {
           "type": "string",
-          "example": "Recipe successfully removed from favorites"
+          "example": "Recipe with id: 2 added to favorites!"
         }
       }
     },
     "RecipeNotFound": {
       "type": "object",
       "required": [
-        "message",
-        "status"
+        "success",
+        "message"
       ],
       "properties": {
         "status": {
-          "type": "string",
-          "example": "fail"
+          "type": "boolean",
+          "example": false
         },
         "message": {
           "type": "string",
-          "example": "Recipe not found"
-        }
-      }
-    },
-    "FavoriteException": {
-      "type": "object",
-      "required": [
-        "message",
-        "status"
-      ],
-      "properties": {
-        "status": {
-          "type": "string",
-          "example": "fail"
-        },
-        "message": {
-          "type": "string",
-          "example": "Recipe has not been added to favorite"
-        }
-      }
-    },
-    "InvalidParameter": {
-      "type": "object",
-      "required": [
-        "message",
-        "status"
-      ],
-      "properties": {
-        "status": {
-          "type": "string",
-          "example": "fail"
-        },
-        "message": {
-          "type": "string",
-          "example": "You have entered an invalid parameter"
-        }
-      }
-    },
-    "FavoriteResponse": {
-      "type": "object",
-      "required": [
-        "message",
-        "status"
-      ],
-      "properties": {
-        "status": {
-          "type": "string",
-          "example": "success"
-        },
-        "message": {
-          "type": "string",
-          "example": "Recipe successfully added to favorites"
+          "example": "Invalid Recipe ID!/Recipe not found"
         }
       }
     },
@@ -1339,101 +1167,324 @@
         "status"
       ],
       "properties": {
-        "status": {
-          "type": "string",
-          "example": "fail"
+        "success": {
+          "type": "boolean",
+          "example": false
         },
         "message": {
           "type": "string",
-          "example": "Recipe has already been favorited"
+          "example": "Recipe with id: 2 Already added!"
         }
       }
     },
-    "CategoryResponse": {
+    "UserNotAuth": {
       "type": "object",
       "required": [
         "message",
         "status"
       ],
       "properties": {
-        "status": {
-          "type": "string",
-          "example": "success"
+        "success": {
+          "type": "boolean",
+          "example": false
         },
         "message": {
           "type": "string",
-          "example": "Recipe added to dessert"
+          "example": "You are not authorised to perform this action"
+        }
+      }
+    },
+    "DeleteResponse": {
+      "type": "object",
+      "required": [
+        "success",
+        "message"
+      ],
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "example": true
+        },
+        "message": {
+          "type": "string",
+          "example": "Recipe Removed from Favorites"
+        }
+      }
+    },
+    "FavoriteRecipes": {
+      "type": "object",
+      "required": [
+        "success",
+        "message",
+        "recipe"
+      ],
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "example": true
+        },
+        "message": {
+          "type": "string",
+          "example": "Favorite Recipe(s) found"
+        },
+        "recipe": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Recipe"
+          }
+        }
+      }
+    },
+    "GetRecipes": {
+      "type": "object",
+      "required": [
+        "success",
+        "message",
+        "recipe"
+      ],
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "example": true
+        },
+        "message": {
+          "type": "string",
+          "example": "/recipes found"
+        },
+        "recipe": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Recipe"
+          }
+        }
+      }
+    },
+    "Recipe": {
+      "type": "object",
+      "required": [
+        "name",
+        "description",
+        "ingredients",
+        "direction"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "cake"
+        },
+        "description": {
+          "type": "string",
+          "example": "cake"
+        },
+        "ingredients": {
+          "type": "string",
+          "example": "baking powder;;flour;;margarine"
+        },
+        "direction": {
+          "type": "string",
+          "example": "Pour and frisk egg with margarine"
+        },
+        "image": {
+          "type": "object",
+          "example": "Image chosen parameters"
         }
       }
     },
     "CreatedRecipe": {
       "type": "object",
       "required": [
-        "downvote",
-        "ingredients",
-        "instructions",
+        "success",
         "message",
-        "recipeName",
-        "status",
-        "upvote",
-        "views"
+        "recipe"
       ],
       "properties": {
-        "status": {
-          "type": "string",
-          "example": "success"
+        "success": {
+          "type": "boolean",
+          "example": true
         },
         "message": {
           "type": "string",
-          "example": "Successfully created new recipe"
+          "example": "New Recipe created"
         },
-        "views": {
-          "type": "integer",
-          "format": "int64",
-          "example": 1
-        },
-        "upvote": {
-          "type": "integer",
-          "format": "int64",
-          "example": 0
-        },
-        "downvote": {
-          "type": "integer",
-          "format": "int64",
-          "example": 0
-        },
-        "recipeName": {
-          "type": "string",
-          "example": "cake"
-        },
-        "category": {
-          "type": "string",
-          "example": "pastries"
-        },
-        "ingredients": {
-          "type": "string",
-          "example": "baking powder, flour, margarine"
-        },
-        "instructions": {
-          "type": "string",
-          "example": "pour and frisk egg with margarine"
+        "recipe": {
+          "$ref": "#/definitions/Recipe"
         }
       }
     },
     "RecipeValidation": {
       "type": "object",
       "required": [
-        "message",
-        "status"
+        "success",
+        "message"
       ],
       "properties": {
-        "status": {
-          "type": "string",
-          "example": "fail"
+        "success": {
+          "type": "boolean",
+          "example": false
         },
         "message": {
           "type": "string",
-          "example": "Please enter a recipe name"
+          "example": "Please enter a valid recipe name"
+        }
+      }
+    },
+    "ImageUploadError": {
+      "type": "object",
+      "required": [
+        "success",
+        "message"
+      ],
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "example": false
+        },
+        "message": {
+          "type": "string",
+          "example": "Error uploading image, check your network connection"
+        }
+      }
+    },
+    "ViewRecipe": {
+      "type": "object",
+      "required": [
+        "success",
+        "message",
+        "recipe"
+      ],
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "example": true
+        },
+        "message": {
+          "type": "string",
+          "example": "Recipe found"
+        },
+        "recipe": {
+          "$ref": "#/definitions/Recipe"
+        }
+      }
+    },
+    "ModifiedRecipe": {
+      "type": "object",
+      "required": [
+        "success",
+        "message",
+        "recipe"
+      ],
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "example": true
+        },
+        "message": {
+          "type": "string",
+          "example": "Recipe record updated"
+        },
+        "recipe": {
+          "$ref": "#/definitions/Recipe"
+        }
+      }
+    },
+    "DeleteRecipe": {
+      "type": "object",
+      "required": [
+        "success",
+        "message"
+      ],
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "example": true
+        },
+        "message": {
+          "type": "string",
+          "example": "Recipe Deleted!"
+        }
+      }
+    },
+    "PostedReview": {
+      "type": "object",
+      "required": [
+        "content"
+      ],
+      "properties": {
+        "content": {
+          "type": "string",
+          "example": "I love this post"
+        }
+      }
+    },
+    "ReviewResponse": {
+      "type": "object",
+      "required": [
+        "success",
+        "message",
+        "createdReview"
+      ],
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "example": true
+        },
+        "message": {
+          "type": "string",
+          "example": "New review created"
+        },
+        "createdReview": {
+          "$ref": "#/definitions/PostedReview"
+        }
+      }
+    },
+    "UpvoteResponse": {
+      "type": "object",
+      "required": [
+        "success",
+        "message"
+      ],
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "example": true
+        },
+        "message": {
+          "type": "string",
+          "example": "Recipe with id: 2 Upvoted!"
+        }
+      }
+    },
+    "DownvoteResponse": {
+      "type": "object",
+      "required": [
+        "success",
+        "message"
+      ],
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "example": true
+        },
+        "message": {
+          "type": "string",
+          "example": "Recipe with id: 2 Downvoted!"
+        }
+      }
+    },
+    "VoteError": {
+      "type": "object",
+      "required": [
+        "success",
+        "message"
+      ],
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "example": false
+        },
+        "message": {
+          "type": "string",
+          "example": "Recipe with id: 2 Already Upvoted!/Downvoted"
         }
       }
     },
@@ -1449,364 +1500,6 @@
         },
         "User": {
           "$ref": "#/definitions/Comment_User"
-        }
-      }
-    },
-    "GetRecipe": {
-      "type": "object",
-      "required": [
-        "category",
-        "downvote",
-        "id",
-        "ingredients",
-        "instructions",
-        "recipeName",
-        "reviews",
-        "upvote",
-        "views"
-      ],
-      "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64",
-          "example": 1
-        },
-        "views": {
-          "type": "integer",
-          "format": "int64",
-          "example": 15
-        },
-        "upvote": {
-          "type": "integer",
-          "format": "int64",
-          "example": 8
-        },
-        "downvote": {
-          "type": "integer",
-          "format": "int64",
-          "example": 2
-        },
-        "recipeName": {
-          "type": "string",
-          "example": "cake"
-        },
-        "category": {
-          "type": "string",
-          "example": "pastries"
-        },
-        "ingredients": {
-          "type": "string",
-          "example": "baking powder, flour, margarine"
-        },
-        "instructions": {
-          "type": "string",
-          "example": "pour and frisk egg with margarine"
-        },
-        "reviews": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Comment"
-          }
-        }
-      }
-    },
-    "ModifiedRecipe": {
-      "type": "object",
-      "required": [
-        "downvote",
-        "ingredients",
-        "instructions",
-        "message",
-        "recipeName",
-        "status",
-        "upvote",
-        "views"
-      ],
-      "properties": {
-        "status": {
-          "type": "string",
-          "example": "success"
-        },
-        "message": {
-          "type": "string",
-          "example": "Recipe successfully updated"
-        },
-        "views": {
-          "type": "integer",
-          "format": "int64",
-          "example": 1
-        },
-        "upvote": {
-          "type": "integer",
-          "format": "int64",
-          "example": 0
-        },
-        "downvote": {
-          "type": "integer",
-          "format": "int64",
-          "example": 0
-        },
-        "recipeName": {
-          "type": "string",
-          "example": "cake"
-        },
-        "category": {
-          "type": "string",
-          "example": "pastries"
-        },
-        "ingredients": {
-          "type": "string",
-          "example": "baking powder, flour, margarine"
-        },
-        "instructions": {
-          "type": "string",
-          "example": "pour and frisk egg with margarine"
-        }
-      }
-    },
-    "ModifyRecipe": {
-      "type": "object",
-      "properties": {
-        "recipeName": {
-          "type": "string",
-          "example": "cake"
-        },
-        "category": {
-          "type": "string",
-          "example": "pastries"
-        },
-        "ingredients": {
-          "type": "string",
-          "example": "baking powder, flour, margarine"
-        },
-        "instructions": {
-          "type": "string",
-          "example": "pour and frisk egg with margarine"
-        }
-      }
-    },
-    "ViewRecipe": {
-      "type": "object",
-      "required": [
-        "createdAt",
-        "downvote",
-        "id",
-        "ingredients",
-        "instructions",
-        "recipeName",
-        "updatedAt",
-        "upvote",
-        "userId",
-        "views"
-      ],
-      "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64",
-          "example": 1
-        },
-        "recipeName": {
-          "type": "string",
-          "example": "cake"
-        },
-        "category": {
-          "type": "string",
-          "example": "pastries"
-        },
-        "ingredients": {
-          "type": "string",
-          "example": "baking powder, flour, margarine"
-        },
-        "instructions": {
-          "type": "string",
-          "example": "pour and frisk egg with margarine"
-        },
-        "views": {
-          "type": "integer",
-          "format": "int64",
-          "example": 2
-        },
-        "upvote": {
-          "type": "integer",
-          "format": "int64",
-          "example": 0
-        },
-        "downvote": {
-          "type": "integer",
-          "format": "int64",
-          "example": 0
-        },
-        "createdAt": {
-          "type": "string",
-          "example": "2017-09-19T14:04:22.814Z"
-        },
-        "updatedAt": {
-          "type": "string",
-          "example": "2017-09-19T14:04:22.814Z"
-        },
-        "userId": {
-          "type": "integer",
-          "format": "int64",
-          "example": 1
-        }
-      }
-    },
-    "GenericRecipe": {
-      "type": "object",
-      "required": [
-        "downvote",
-        "id",
-        "ingredients",
-        "instructions",
-        "recipeName",
-        "upvote",
-        "views"
-      ],
-      "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64",
-          "example": 1
-        },
-        "views": {
-          "type": "integer",
-          "format": "int64",
-          "example": 2
-        },
-        "upvote": {
-          "type": "integer",
-          "format": "int64",
-          "example": 12
-        },
-        "downvote": {
-          "type": "integer",
-          "format": "int64",
-          "example": 0
-        },
-        "recipeName": {
-          "type": "string",
-          "example": "cake"
-        },
-        "category": {
-          "type": "string",
-          "example": "pastries"
-        },
-        "ingredients": {
-          "type": "string",
-          "example": "baking powder, flour, margarine"
-        },
-        "instructions": {
-          "type": "string",
-          "example": "pour and frisk egg with margarine"
-        }
-      }
-    },
-    "DeleteRecipe": {
-      "type": "object",
-      "required": [
-        "message",
-        "status"
-      ],
-      "properties": {
-        "status": {
-          "type": "string",
-          "example": "success"
-        },
-        "message": {
-          "type": "string",
-          "example": "Recipe successfully deleted"
-        }
-      }
-    },
-    "PostedReview": {
-      "type": "object",
-      "required": [
-        "comment"
-      ],
-      "properties": {
-        "comment": {
-          "type": "string",
-          "example": "I love this post"
-        }
-      }
-    },
-    "ReviewResponse": {
-      "type": "object",
-      "required": [
-        "comment",
-        "message",
-        "status"
-      ],
-      "properties": {
-        "status": {
-          "type": "string",
-          "example": "success"
-        },
-        "message": {
-          "type": "string",
-          "example": "Review successfully posted"
-        },
-        "comment": {
-          "type": "string",
-          "example": "I love this post"
-        }
-      }
-    },
-    "DownvoteResponse": {
-      "type": "object",
-      "required": [
-        "downvote",
-        "message",
-        "status",
-        "upvote"
-      ],
-      "properties": {
-        "status": {
-          "type": "string",
-          "example": "success"
-        },
-        "message": {
-          "type": "string",
-          "example": "Your vote has been recorded"
-        },
-        "upvote": {
-          "type": "integer",
-          "format": "int64",
-          "example": 2
-        },
-        "downvote": {
-          "type": "integer",
-          "format": "int64",
-          "example": 0
-        }
-      }
-    },
-    "UpvoteResponse": {
-      "type": "object",
-      "required": [
-        "downvote",
-        "message",
-        "status",
-        "upvote"
-      ],
-      "properties": {
-        "status": {
-          "type": "string",
-          "example": "success"
-        },
-        "message": {
-          "type": "string",
-          "example": "Your vote has been recorded"
-        },
-        "upvote": {
-          "type": "integer",
-          "format": "int64",
-          "example": 1
-        },
-        "downvote": {
-          "type": "integer",
-          "format": "int64",
-          "example": 1
         }
       }
     },

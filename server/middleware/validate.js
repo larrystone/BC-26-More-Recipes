@@ -83,7 +83,7 @@ export const validateRecipeId = (req, res, next) => {
   const recipeId = req.params.recipeId;
 
   if (isNaN(+recipeId)) {
-    return res.status(403).json({
+    return res.status(422).json({
       success: false,
       message: 'Invalid Recipe ID!' });
   }

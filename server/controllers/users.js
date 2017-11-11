@@ -131,7 +131,7 @@ export default class Users {
    */
   signIn(req, res) {
     const usernameOrEmail =
-      trimWhiteSpaces(req.body.email || req.body.username);
+      trimWhiteSpaces(req.body.usernameOrEmail);
 
     User
       .findOne({

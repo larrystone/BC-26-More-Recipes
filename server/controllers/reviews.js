@@ -55,8 +55,7 @@ export default class Reviews {
             return res.status(201).json({
               success: true,
               message: 'New review created',
-              createdReview,
-              recipeOwnerEmail
+              createdReview
             });
           });
       })

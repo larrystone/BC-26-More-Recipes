@@ -269,7 +269,7 @@ describe('/POST User Sign In Test', () => {
       .post('/api/v1/users/signin')
       .set('Accept', 'application/json')
       .send({
-        username: 'LaRRystonE',
+        usernameOrEmail: 'LaRRystonE',
         password: 'Hacknets'
       })
       .end((err, res) => {
@@ -287,7 +287,7 @@ describe('/POST User Sign In Test', () => {
         .post('/api/v1/users/signin')
         .set('Accept', 'application/json')
         .send({
-          email: 'temitope@yahoo.com',
+          usernameOrEmail: 'temitope@yahoo.com',
           password: 'westerdae',
         })
         .end((err, res) => {
@@ -304,7 +304,7 @@ describe('/POST User Sign In Test', () => {
         .post('/api/v1/users/signin')
         .set('Accept', 'application/json')
         .send({
-          email: 'gbengene@yahoo.com'.toUpperCase(),
+          usernameOrEmail: 'gbengene@yahoo.com'.toUpperCase(),
           password: 'westsddae',
         })
         .end((err, res) => {
@@ -321,7 +321,7 @@ describe('/POST User Sign In Test', () => {
         .post('/api/v1/users/signin')
         .set('Accept', 'application/json')
         .send({
-          username: 'gbengE',
+          usernameOrEmail: 'gbengE',
           password: 'westsddae',
         })
         .end((err, res) => {
@@ -340,7 +340,7 @@ describe('/POST User Sign In Test', () => {
         .post('/api/v1/users/signin')
         .set('Accept', 'application/json')
         .send({
-          email: 'gbengene@ymail.com',
+          usernameOrEmail: 'gbengene@ymail.com',
           password: 'westsddaes',
         })
         .end((err, res) => {
@@ -358,7 +358,7 @@ describe('/POST User Sign In Test', () => {
         .post('/api/v1/users/signin')
         .set('Accept', 'application/json')
         .send({
-          email: 'gbengene@yahoo.com',
+          usernameOrEmail: 'gbengene@yahoo.com',
           password: 'westsddaes',
         })
         .end((err, res) => {

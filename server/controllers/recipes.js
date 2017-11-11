@@ -141,11 +141,11 @@ export default class Recipes {
         imageUrl,
         direction
       }, {
-          where: {
-            id: recipeId
-          },
-          returning: true
-        })
+        where: {
+          id: recipeId
+        },
+        returning: true
+      })
         .then((result) => {
           res.status(201).json({
             success: true,
