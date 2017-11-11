@@ -1,7 +1,19 @@
-import models from '../models';
+import { Recipe, User } from '../models';
 
-const recipe = models.Recipe;
-const user = models.User;
+const populateRecipe = (foundRecipes, currentPage, limit) => {
+  const totalRecords = foundRecipes.count;
+  const totalPages = Math.ceil(totalRecords / limit);
+  const newRecipes = Object.assign({},
+    {
+      currentPage,
+      currentPageSize: foundRecipes.rows.length,
+      totalPages,
+      totalRecords,
+      recipe: foundRecipes.rows
+    }
+  );
+  return newRecipes;
+};
 
 /**
  * Class Definition for the Search Recipe Object
@@ -19,17 +31,24 @@ export default class Search {
    * @memberof Search
    */
   sortMostUpvotes(req, res) {
-    recipe
-      .findAll({
+    const limit = req.query.limit || 5,
+      currentPage = (req.query.page || 1),
+      offset = (currentPage - 1) * limit;
+
+    Recipe
+      .findAndCountAll({
         include: [
-          { model: models.User, attributes: ['name', 'updatedAt'] }
+          { model: User, attributes: ['name', 'updatedAt'] }
         ],
         order: [
           ['upvotes', 'DESC']
-        ]
+        ],
+        limit,
+        offset
       })
       .then((foundRecipes) => {
-        if (!foundRecipes) {
+        const newRecipes = populateRecipe(foundRecipes, currentPage, limit);
+        if (newRecipes.totalRecords === 0) {
           return res.status(404).json({
             success: true,
             message: 'No Stored Recipes found',
@@ -39,7 +58,7 @@ export default class Search {
         return res.status(201).json({
           success: true,
           message: 'Recipe(s) found',
-          recipe: foundRecipes
+          recipes: newRecipes
         });
       })
       .catch(() => res.status(500).json({
@@ -60,56 +79,56 @@ export default class Search {
    */
   searchAll(req, res) {
     let results;
-    const searchTerm = req.query.search;
+    const { search } = req.query;
 
-    recipe
+    Recipe
       .findAll({
         where: {
           $or: [
             {
               name: {
-                $iLike: `%${searchTerm}%`
+                $iLike: `%${search}%`
               }
             },
             {
               ingredients: {
-                $iLike: `%${searchTerm}%`
+                $iLike: `%${search}%`
               }
             }
           ]
         },
         include: [
-          { model: models.User, attributes: ['name', 'updatedAt'] }
+          { model: User, attributes: ['name', 'updatedAt'] }
         ]
       })
       .then((foundRecipes) => {
         results = foundRecipes.slice(0);
       })
       .then(() => {
-        user
+        User
           .findAll({
             attributes: ['name'],
             where: {
               $or: [
                 {
                   name: {
-                    $iLike: `%${searchTerm}%`
+                    $iLike: `%${search}%`
                   }
                 },
                 {
                   username: {
-                    $iLike: searchTerm
+                    $iLike: search
                   }
                 },
                 {
                   email: {
-                    $iLike: searchTerm
+                    $iLike: search
                   }
                 },
               ]
             },
             include: [
-              { model: models.Recipe }
+              { model: Recipe }
             ]
           })
           .then(recipes => res.status(201).json({
@@ -136,22 +155,31 @@ export default class Search {
    */
   searchByIngredients(req, res) {
     const ingredients = req.query.ingredients.split(' ');
-
     const queryClause = ingredients.map(item => ({
       ingredients: { $iLike: `%${item}%` }
     }));
 
-    recipe
-      .findAll({
+    const limit = req.query.limit || 10,
+      currentPage = (req.query.page || 1),
+      offset = (currentPage - 1) * limit;
+
+    Recipe
+      .findAndCountAll({
         where: {
           $or: queryClause
         },
         include: [
-          { model: models.User, attributes: ['name', 'updatedAt'] }
-        ]
+          { model: User, attributes: ['name', 'updatedAt'] }
+        ],
+        order: [
+          ['upvotes', 'DESC']
+        ],
+        limit,
+        offset
       })
       .then((foundRecipes) => {
-        if (!foundRecipes) {
+        const newRecipes = populateRecipe(foundRecipes, currentPage, limit);
+        if (newRecipes.totalRecords === 0) {
           return res.status(404).json({
             success: true,
             message: 'Nothing found',
@@ -161,7 +189,7 @@ export default class Search {
         return res.status(201).json({
           success: true,
           message: 'Recipe(s) found',
-          recipe: foundRecipes,
+          recipes: newRecipes
         });
       })
       .catch(() => res.status(500).json({
@@ -181,19 +209,29 @@ export default class Search {
    * @memberof Search
    */
   searchByName(req, res) {
-    const recipes = req.query.recipes;
+    const { name } = req.query;
 
-    recipe
-      .findAll({
+    const limit = req.query.limit || 10,
+      currentPage = (req.query.page || 1),
+      offset = (currentPage - 1) * limit;
+
+    Recipe
+      .findAndCountAll({
         where: {
-          name: { $iLike: `%${recipes}%` }
+          name: { $iLike: `%${name}%` }
         },
         include: [
-          { model: models.User, attributes: ['name', 'updatedAt'] }
-        ]
+          { model: User, attributes: ['name', 'updatedAt'] }
+        ],
+        order: [
+          ['upvotes', 'DESC']
+        ],
+        limit,
+        offset
       })
       .then((foundRecipes) => {
-        if (!foundRecipes) {
+        const newRecipes = populateRecipe(foundRecipes, currentPage, limit);
+        if (newRecipes.totalRecords === 0) {
           return res.status(404).json({
             success: true,
             message: 'Nothing found',
@@ -203,7 +241,7 @@ export default class Search {
         return res.status(201).json({
           success: true,
           message: 'Recipe(s) found',
-          recipe: foundRecipes,
+          recipes: newRecipes
         });
       })
       .catch(() => res.status(500).json({

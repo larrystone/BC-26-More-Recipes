@@ -159,6 +159,7 @@ class CreateEditRecipe extends Component {
             updateRecipe: this.updateRecipe
           }
         }
+        loading={this.state.loading}
         modal={this.props.modal}
         name={this.state.name}
         description={this.state.description}
@@ -176,7 +177,8 @@ CreateEditRecipe.propTypes = {
   setReloadRecipes: PropTypes.func,
   setDialogType: PropTypes.func,
   actions: PropTypes.object,
-  recipe: PropTypes.object
+  recipe: PropTypes.object,
+  loading: PropTypes.bool
 };
 
 export default CreateEditRecipe;

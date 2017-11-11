@@ -1,8 +1,4 @@
-import models from '../models';
-
-const upvote = models.Upvote;
-const downvote = models.Downvote;
-const recipe = models.Recipe;
+import { Upvote, Downvote, Recipe, User } from '../models';
 
 /**
  * Class Definition for the Vote Object
@@ -21,9 +17,9 @@ export default class Vote {
    */
   upvoteRecipe(req, res) {
     const userId = req.user.id;
-    const recipeId = req.params.recipeId;
+    const { recipeId } = req.params;
 
-    downvote
+    Downvote
       .findOne({
         attributes: ['id'],
         where: {
@@ -35,7 +31,7 @@ export default class Vote {
       })
       .then((voteFound) => {
         if (voteFound) {
-          downvote
+          Downvote
             .destroy({
               where: {
                 $and: [
@@ -45,7 +41,7 @@ export default class Vote {
               }
             })
             .then(() => {
-              recipe
+              Recipe
                 .findOne({
                   where: {
                     id: recipeId
@@ -57,11 +53,11 @@ export default class Vote {
         }
       });
 
-    upvote
+    Upvote
       .findOrCreate({ where: { userId, recipeId } })
       .spread((createdVote, created) => {
         if (created) {
-          recipe
+          Recipe
             .findOne({
               where: {
                 id: recipeId
@@ -98,9 +94,9 @@ export default class Vote {
    */
   downvoteRecipe(req, res) {
     const userId = req.user.id;
-    const recipeId = req.params.recipeId;
+    const { recipeId } = req.params;
 
-    upvote
+    Upvote
       .findOne({
         attributes: ['id'],
         where: {
@@ -112,7 +108,7 @@ export default class Vote {
       })
       .then((voteFound) => {
         if (voteFound) {
-          upvote
+          Upvote
             .destroy({
               where: {
                 $and: [
@@ -122,7 +118,7 @@ export default class Vote {
               }
             })
             .then(() => {
-              recipe
+              Recipe
                 .findOne({
                   where: {
                     id: recipeId
@@ -134,11 +130,11 @@ export default class Vote {
         }
       });
 
-    downvote
+    Downvote
       .findOrCreate({ where: { userId, recipeId } })
       .spread((createdVote, created) => {
         if (created) {
-          recipe
+          Recipe
             .findOne({
               where: {
                 id: recipeId
@@ -175,14 +171,14 @@ export default class Vote {
    * @memberof Vote
    */
   getUserUpvotes(req, res) {
-    const recipeId = req.params.recipeId;
+    const { recipeId } = req.params;
 
-    upvote
+    Upvote
       .findAll({
         attributes: ['recipeId'],
         where: { recipeId },
         include: [
-          { model: models.User, attributes: ['name', 'id'] }
+          { model: User, attributes: ['name', 'id'] }
         ]
       })
       .then((foundVotes) => {
@@ -216,14 +212,14 @@ export default class Vote {
    * @memberof Vote
    */
   getUserDownvotes(req, res) {
-    const recipeId = req.params.recipeId;
+    const { recipeId } = req.params;
 
-    downvote
+    Downvote
       .findAll({
         attributes: ['recipeId'],
         where: { recipeId },
         include: [
-          { model: models.User, attributes: ['name', 'id'] }
+          { model: User, attributes: ['name', 'id'] }
         ]
       })
       .then((foundVotes) => {

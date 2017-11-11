@@ -126,7 +126,7 @@ const RecipeDetailsView = ({ actions,
           <Image
             alt='food image'
             height='220px'
-            src={imageUrl === 'null' ? '' : imageUrl}
+            src={imageUrl === '' ? 'images/default_image.jpg' : imageUrl}
             className='clickable'
           />
           <Card.Content>

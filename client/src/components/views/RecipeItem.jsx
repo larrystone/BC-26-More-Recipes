@@ -3,14 +3,18 @@ import { Card, Image, Grid, Icon } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 
 const RecipeItem = ({ dashboardSection, recipe, actions, username }) => {
+  const setRecipe = () => {
+    actions.setRecipe({
+      id: recipe.id,
+      name: recipe.name
+    });
+  };
+
   const handleViewRecipe = () => {
     if (!username) {
       actions.setDialogType('signup');
     } else {
-      actions.setRecipe({
-        id: recipe.id,
-        name: recipe.name
-      });
+      setRecipe();
       actions.setDialogType('recipe_details');
     }
   };
@@ -43,20 +47,14 @@ const RecipeItem = ({ dashboardSection, recipe, actions, username }) => {
           </Grid.Column>
           <Grid.Column className="clickable"
             onClick={() => {
-              actions.setRecipe({
-                id: recipe.id,
-                name: recipe.name
-              });
+              setRecipe();
               actions.setDialogType('create_edit_recipe');
             }}>
             <Icon name='edit' color='green' />Edit
           </Grid.Column>
           <Grid.Column className="clickable"
             onClick={() => {
-              actions.setRecipe({
-                id: recipe.id,
-                name: recipe.name
-              });
+              setRecipe();
               actions.setDialogType('delete_recipe');
             }}>
             <Icon name='delete' color='red' />Delete
@@ -78,10 +76,7 @@ const RecipeItem = ({ dashboardSection, recipe, actions, username }) => {
           </Grid.Column>
           <Grid.Column className="clickable"
             onClick={() => {
-              actions.setRecipe({
-                id: recipe.id,
-                name: recipe.name
-              });
+              setRecipe();
               actions.setDialogType('remove_recipe');
             }}>
             <Icon name='close' color='red' />Remove
@@ -111,10 +106,12 @@ const RecipeItem = ({ dashboardSection, recipe, actions, username }) => {
 
   const { imageUrl, name, description, User } = recipe;
   return (
-    <Card centered color='green' >
+    <Card color='green'
+      style={{ padding: '5px' }}
+      centered>
       <Image
         alt='food image'
-        src={imageUrl === 'null' ? '' : imageUrl}
+        src={imageUrl === '' ? 'images/default_image.jpg' : imageUrl}
         className="clickable" height="180px"
         onClick={() => {
           handleViewRecipe();

@@ -11,15 +11,13 @@ app.use(logger('dev'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+app.use('/api-docs', express.static('server/docs'));
+
+app.use('/api/v1/', routes);
+
 if (process.env.NODE_ENV === 'production') {
   app.use('/', express.static('client/build'));
   app.use('/dashboard', express.static('client/build'));
-}
-
-app.use('/api/v1', routes);
-
-if (process.env.NODE_ENV === 'production') {
-  app.use('*', express.static('client/build'));
 }
 
 app.get('/', (req, res) => {
