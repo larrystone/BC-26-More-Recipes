@@ -27,17 +27,17 @@ export const validateSignUp = (name, username, email, password) => {
   return false;
 };
 
-/** Validate user ID on protected routes
- * @exports validateUserId
- * @param  {string} userId - User ID
+/** Validate an ID to be sure its a valid  number
+ * @exports validateId
+ * @param  {string} id - ID
  * @return {string} The status
  */
-export const validateUserId = (userId) => {
-  if (isNaN(+userId)) {
-    return 'Invalid User ID!';
+export const validateId = (id) => {
+  if (isNaN(+id)) {
+    return 'Invalid';
   }
 
-  return false;
+  return 'Valid';
 };
 
 /** Validate user input for recipe
@@ -80,14 +80,23 @@ export const validateReviewContent = (message) => {
  * @return {object} The status/next()
  */
 export const validateRecipeId = (req, res, next) => {
-  const recipeId = req.params.recipeId;
-
-  if (isNaN(+recipeId)) {
+  const isValid = validateId(req.params.recipeId);
+  if (isValid === 'Invalid') {
     return res.status(422).json({
       success: false,
-      message: 'Invalid Recipe ID!' });
+      message: `${isValid} Recipe ID`
+    });
   }
-
   next();
 };
 
+export const validateUserId = (req, res, next) => {
+  const isValid = validateId(req.params.userId);
+  if (isValid === 'Invalid') {
+    return res.status(401).json({
+      success: false,
+      message: `${isValid} User ID!`
+    });
+  }
+  next();
+};

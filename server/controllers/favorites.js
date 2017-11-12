@@ -1,5 +1,4 @@
 import { Favorite, Recipe } from '../models';
-import { validateUserId } from '../middleware/validate';
 
 /**
  * Class Definition for the Favorite Object
@@ -19,14 +18,6 @@ export default class Favorites {
   addToFavorite(req, res) {
     const userId = req.user.id;
     const { recipeId } = req.params;
-
-    const validateUserIdError = validateUserId(userId);
-    if (validateUserIdError) {
-      return res.status(401).json({
-        success: false,
-        message: validateUserIdError
-      });
-    }
 
     Favorite
       .findOrCreate({ where: { userId, recipeId } })
@@ -62,16 +53,7 @@ export default class Favorites {
   removeFromFavorites(req, res) {
     const userId = req.params.userId;
 
-    const validateUserIdError = validateUserId(userId);
-    if (validateUserIdError) {
-      return res.status(401).json({
-        success: false,
-        message: validateUserIdError
-      });
-    }
-
     const recipeId = req.params.recipeId;
-
     Favorite
       .destroy({
         where: {
