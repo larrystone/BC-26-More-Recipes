@@ -232,7 +232,7 @@ describe('/GET Search recipe by valid anything (Generic search)', () => {
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
         expect(res.body.success).to.equal(true);
-        expect(res.body.recipe.length).to.equal(1);
+        expect(res.body.recipes.length).to.equal(1);
         done();
       });
   });
@@ -245,7 +245,7 @@ describe('/GET Search recipe by valid anything (Generic search)', () => {
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
         expect(res.body.success).to.equal(true);
-        expect(res.body.recipe.length).to.equal(3);
+        expect(res.body.recipes.length).to.equal(3);
         done();
       });
   });
@@ -258,12 +258,12 @@ describe('/GET Search recipe by valid anything (Generic search)', () => {
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
         expect(res.body.success).to.equal(true);
-        expect(res.body.recipe.length).to.equal(2);
+        expect(res.body.recipes.length).to.equal(2);
         done();
       });
   });
 
-  it('should return 1 recipes when search by ' +
+  it('should return 0 recipes when search by ' +
     '\'createrecipetester@test.com\'', (done) => {
     chai.request(server)
       .get('/api/v1/recipes?search=createrecipetester@test.com')
@@ -272,12 +272,12 @@ describe('/GET Search recipe by valid anything (Generic search)', () => {
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
         expect(res.body.success).to.equal(true);
-        expect(res.body.recipe.length).to.equal(1);
+        expect(res.body.recipes.length).to.equal(0);
         done();
       });
   });
 
-  it('should return 1 recipes when search by ' +
+  it('should return 0 recipes when search by ' +
     '\'createREcipetester\'', (done) => {
     chai.request(server)
       .get('/api/v1/recipes?search=createREcipetester')
@@ -286,7 +286,7 @@ describe('/GET Search recipe by valid anything (Generic search)', () => {
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
         expect(res.body.success).to.equal(true);
-        expect(res.body.recipe.length).to.equal(1);
+        expect(res.body.recipes.length).to.equal(0);
         done();
       });
   });
@@ -300,7 +300,7 @@ describe('/GET Search recipe by valid anything (Generic search)', () => {
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
         expect(res.body.success).to.equal(true);
-        expect(res.body.recipe.length).to.equal(0);
+        expect(res.body.recipes.length).to.equal(0);
         done();
       });
   });
