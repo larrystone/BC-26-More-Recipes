@@ -54,7 +54,7 @@ describe('/POST Add recipe to favorites Test', () => {
       .post(`/api/v1/users/${userId}/recipes/${recipeId}`)
       .set('Accept', 'application/json')
       .send({
-        token: 'eyJhbGciOiJIUzI1NiJ9.c2Rz.H9g9SB2U50q3fbZQk' +
+        token: 'eyJNiJ9.c2Rz.H9g9SB2Uvbhj.hl50q3fbZQk' +
         '4yJfLBEJRzrcfeX2nqKl-8yIuI',
         name: 'Ewedu soup',
         ingredients: 'Water;;Ewedu leaves;;Salt',
@@ -64,7 +64,7 @@ describe('/POST Add recipe to favorites Test', () => {
         expect(res.statusCode).to.equal(401);
         expect(res.body).deep.equal({
           success: false,
-          message: 'Invalid User ID!'
+          message: 'Failed to authenticate token.'
         });
         done();
       });

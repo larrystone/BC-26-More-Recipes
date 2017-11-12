@@ -62,7 +62,7 @@ export default class Recipes {
           imageUrl,
           userId
         })
-        .then(({ recipe }) => {
+        .then((recipe) => {
           res.status(201).json({
             success: true,
             message: 'New Recipe created',
@@ -140,11 +140,11 @@ export default class Recipes {
         imageUrl,
         direction
       }, {
-          where: {
-            id: recipeId
-          },
-          returning: true
-        })
+        where: {
+          id: recipeId
+        },
+        returning: true
+      })
         .then((result) => {
           res.status(201).json({
             success: true,
@@ -230,10 +230,10 @@ export default class Recipes {
         .then(() => {
           // TODO delete image in cloudinary
           // cloudinary.uploader.destroy('id', () => {
-          //   res.status(205).json({
-          //     success: true,
-          //     message: 'Recipe Deleted!'
-          //   });
+          res.status(205).json({
+            success: true,
+            message: 'Recipe Deleted!'
+          });
           // });
         })
         .catch(() => res.status(500).json({
@@ -269,7 +269,7 @@ export default class Recipes {
       })
       .then(recipeFound => recipeFound.increment('viewCount'))
       .then(recipesFound => recipesFound.reload())
-      .then(({ recipe }) => res.status(201).json({
+      .then(recipe => res.status(201).json({
         success: true,
         message: 'Recipe found',
         recipe
