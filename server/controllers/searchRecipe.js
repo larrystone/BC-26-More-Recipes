@@ -1,6 +1,6 @@
 import { Recipe, User } from '../models';
 
-const populateRecipes = ({ count, rows }, currentPage, limit) => {
+const populatePaging = ({ count, rows }, currentPage, limit) => {
   const totalRecords = count;
   const totalPages = Math.ceil(totalRecords / limit);
   const newRecipes = Object.assign({},
@@ -8,8 +8,7 @@ const populateRecipes = ({ count, rows }, currentPage, limit) => {
       currentPage,
       currentPageSize: rows.length,
       totalPages,
-      totalRecords,
-      recipe: rows
+      totalRecords
     }
   );
   return newRecipes;
@@ -31,7 +30,7 @@ export default class Search {
    * @memberof Search
    */
   sortMostUpvotes({ query }, res) {
-    const limit = query.limit || 5,
+    const limit = query.limit || 10,
       currentPage = (query.page || 1),
       offset = (currentPage - 1) * limit;
 
@@ -54,11 +53,12 @@ export default class Search {
           });
         }
 
-        const recipes = populateRecipes(foundRecipes, currentPage, limit);
+        const pagination = populatePaging(foundRecipes, currentPage, limit);
         return res.status(201).json({
           success: true,
           message: 'Operation Successful',
-          recipes
+          pagination,
+          recipes: foundRecipes.rows
         });
       })
       .catch(() => res.status(500).json({
@@ -185,11 +185,12 @@ export default class Search {
           });
         }
 
-        const newRecipes = populateRecipes(foundRecipes, currentPage, limit);
+        const pagination = populatePaging(foundRecipes, currentPage, limit);
         return res.status(201).json({
           success: true,
           message: 'Operation Successful',
-          recipes: newRecipes
+          pagination,
+          recipes: foundRecipes.rows
         });
       })
       .catch(() => res.status(500).json({
@@ -237,11 +238,12 @@ export default class Search {
           });
         }
 
-        const recipes = populateRecipes(foundRecipes, currentPage, limit);
+        const pagination = populatePaging(foundRecipes, currentPage, limit);
         return res.status(201).json({
           success: true,
           message: 'Operation Successful',
-          recipes
+          pagination,
+          recipes: foundRecipes.rows
         });
       })
       .catch(() => res.status(500).json({
