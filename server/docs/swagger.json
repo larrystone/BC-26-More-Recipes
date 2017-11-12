@@ -16,11 +16,11 @@
   "tags": [
     {
       "name": "users",
-      "description": "Operations available to clients"
+      "description": "User related routes"
     },
     {
       "name": "/recipes",
-      "description": "Clients operation for recipes"
+      "description": "Recipe related routes"
     }
   ],
   "schemes": [
@@ -185,7 +185,7 @@
         }
       }
     },
-    "/users/{recipeId}/favorites": {
+    "/users/{userId}/recipes/{recipeId}": {
       "post": {
         "tags": [
           "users"
@@ -211,6 +211,13 @@
             "name": "recipeId",
             "in": "path",
             "description": "ID of recipe to be added as favorite",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "ID of user adding the recipe as favorite",
             "required": true,
             "type": "integer"
           }
@@ -272,6 +279,13 @@
             "description": "ID of recipe to be removed from favorite",
             "required": true,
             "type": "integer"
+          },
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "ID of user adding the recipe as favorite",
+            "required": true,
+            "type": "integer"
           }
         ],
         "responses": {
@@ -299,7 +313,7 @@
         }
       }
     },
-    "/users/recipes/favorites": {
+    "/users/{userId}/recipes": {
       "get": {
         "tags": [
           "users"
@@ -320,6 +334,13 @@
             "description": "Authentication Token",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "ID of user adding the recipe as favorite",
+            "required": true,
+            "type": "integer"
           }
         ],
         "responses": {
@@ -692,7 +713,7 @@
         }
       }
     },
-    "/users/userId/recipes": {
+    "/users/myRecipes": {
       "get": {
         "tags": [
           "users"
@@ -795,7 +816,7 @@
         }
       }
     },
-    "/recipes/{recipeId}/upvote": {
+    "/recipes/{recipeId}/upvotes": {
       "post": {
         "tags": [
           "/recipes"
@@ -856,7 +877,7 @@
         }
       }
     },
-    "/recipes/{recipeId}/downvote": {
+    "/recipes/{recipeId}/downvotes": {
       "post": {
         "tags": [
           "/recipes"
