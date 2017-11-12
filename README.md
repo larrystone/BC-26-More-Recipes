@@ -16,13 +16,13 @@ A Recipe management and sharing app with great features!
 - View User profile
 
 #### Templates
-For this version, all html files and stylesheets, images, bootstrap are stored into the template directory
+All html files and stylesheets, images, bootstrap templates for the Client Side implementation are modelled in this folder. However, this is not final as it is subject to minor changes in the actual client side implementation
 
 #### Client
 This folder hosts the Client Side implementation (using React/Redux) powered by the Server Side backend
 
 #### Server
-This directory holds all routes, controllers, middleware, migrations
+This directory holds all routes, controllers, middleware, migrations that serves the backend for the app
 
 # Testing
 - install POSTMAN app
@@ -45,7 +45,7 @@ This directory holds all routes, controllers, middleware, migrations
 
 ## API Documentation
 
-Navigate to `localhost:3001/api-docs` on your browser and select HTTP protocol to test Swagger API documentation
+Navigate to `localhost:3001/api-docs` on your browser and select HTTP protocol to view/test Swagger API documentation
 
 
 ## API Routes
@@ -70,9 +70,6 @@ Navigate to `localhost:3001/api-docs` on your browser and select HTTP protocol t
 * [Get Upvote Recipe User List] - GET http://localhost:3000/api/v1/recipes/:recipeId/upvotes
 * [Get Downvote Recipe User List] - GET http://localhost:3000/api/v1/recipes/:recipeId/downvotes
 
-## Versioning
-
-I used [Git](https://git-scm.com/) for versioning. For the versions available, see the [tags on this repository](https://github.com/larrystone/BC-26-More-Recipes.git).
 
 ## Getting Started
 
@@ -91,10 +88,6 @@ In the project directory, you can run:
 
 Runs the app in the development mode.<br>
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-### `npm start:dev`
-
-Starts app with nodemon watcher. Restarts app when changes are made to the source code
 
 ### `npm test`
 
@@ -120,3 +113,5 @@ This project is licensed under the Apache License - see the [LICENSE](LICENSE) f
 * Google Graph API
 * ReactJS
 * ReduxJS
+* Semantic UI React Library
+* React Google Charts Library
