@@ -19,14 +19,16 @@ A Recipe management and sharing app with great features!
 For this version, all html files and stylesheets, images, bootstrap are stored into the template directory
 
 #### Client
-
+This folder hosts the Client Side implementation (using React/Redux) powered by the Server Side backend
 
 #### Server
 This directory holds all routes, controllers, middleware, migrations
 
 # Testing
 - install POSTMAN app
-- run `npm start` then navigate to `localhost:3000` on POSTMAN
+- run `npm start` 
+- Navigate to `localhost:3001` on POSTMAN to test the backend API routes OR
+- Open up your browser and navigate to `localhost:3000` to test the Client Side
 
 ## Deployment
 
@@ -37,6 +39,14 @@ This directory holds all routes, controllers, middleware, migrations
 * [Sequelize](http://docs.sequelizejs.com/) - The ORM used
 * [Postgres](https://www.postgresql.org/) - Database Used
 * [NPM](https://www.npmjs.com/) - Dependency Management
+* [Semantic-ui-react]() - React npm library
+* [React]() - ReactJS
+* [Redux]() - ReduxJS
+
+## API Documentation
+
+Navigate to `localhost:3001/api-docs` on your browser and select HTTP protocol to test Swagger API documentation
+
 
 ## API Routes
 
@@ -70,7 +80,8 @@ I used [Git](https://git-scm.com/) for versioning. For the versions available, s
 * Run `npm install` to install all packages
 * Run `sequelize db:migrate` to run pending migrations
 * Run `npm start` to start application
-* type localhost:3000 in browser to access application
+* Use localhost:3001 to access backend on POSTMAN
+* Type localhost:3000 in browser to access client side
 
 ## Available Scripts
 
@@ -95,7 +106,7 @@ Launches the interactive test runner and display test coverage reports
 
 
 ## Author
-* **Lawal Lanre E. (Larrystone)** -Aspiring Software Dev.
+* **Lawal Lanre E. (Larrystone)** - Aspiring Software Dev.
 
 ## License
 
@@ -107,3 +118,5 @@ This project is licensed under the Apache License - see the [LICENSE](LICENSE) f
 * Materialise CSS
 * Jquery
 * Google Graph API
+* ReactJS
+* ReduxJS
