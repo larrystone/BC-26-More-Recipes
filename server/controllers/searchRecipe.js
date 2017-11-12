@@ -77,65 +77,45 @@ export default class Search {
    * @returns {object} Class instance
    * @memberof Search
    */
-  searchAll(req, res) {
-    let results;
-    const { search } = req.query;
+  searchAll({ query }, res) {
+    const limit = query.limit || 10,
+      currentPage = (query.page || 1),
+      offset = (currentPage - 1) * limit;
+
+    const { search } = query;
+    const ingredClause = search.split(' ').map(item => ({
+      ingredients: { $iLike: `%${item}%` }
+    }));
+    const nameClause = search.split(' ').map(item => ({
+      name: { $iLike: `%${item}%` }
+    }));
 
     Recipe
-      .findAll({
+      .findAndCountAll({
         where: {
-          $or: [
-            {
-              name: {
-                $iLike: `%${search}%`
-              }
-            },
-            {
-              ingredients: {
-                $iLike: `%${search}%`
-              }
-            }
-          ]
+          $or: ingredClause.concat(nameClause)
         },
         include: [
           { model: User, attributes: ['name', 'updatedAt'] }
-        ]
+        ],
+        limit,
+        offset
       })
       .then((foundRecipes) => {
-        results = foundRecipes.slice(0);
-      })
-      .then(() => {
-        User
-          .findAll({
-            attributes: ['name'],
-            where: {
-              $or: [
-                {
-                  name: {
-                    $iLike: `%${search}%`
-                  }
-                },
-                {
-                  username: {
-                    $iLike: search
-                  }
-                },
-                {
-                  email: {
-                    $iLike: search
-                  }
-                },
-              ]
-            },
-            include: [
-              { model: Recipe }
-            ]
-          })
-          .then(recipes => res.status(201).json({
+        if (!foundRecipes) {
+          return res.status(404).json({
             success: true,
-            message: 'Recipe(s) found',
-            recipe: results.concat(recipes)
-          }));
+            message: 'No Stored Recipes found',
+          });
+        }
+
+        const pagination = populatePaging(foundRecipes, currentPage, limit);
+        return res.status(201).json({
+          success: true,
+          message: 'Operation Successful',
+          pagination,
+          recipes: foundRecipes.rows
+        });
       })
       .catch(() => res.status(500).json({
         success: false,
