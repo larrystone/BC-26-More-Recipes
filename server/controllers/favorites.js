@@ -15,13 +15,13 @@ export default class Favorites {
    * @returns {object} Class instance
    * @memberof Favorite
    */
-  addToFavorite(req, res) {
-    const userId = req.user.id;
-    const { recipeId } = req.params;
+  addToFavorite({ user, params }, res) {
+    const userId = user.id;
+    const { recipeId } = params;
 
     Favorite
       .findOrCreate({ where: { userId, recipeId } })
-      .spread((addedReceipe, created) => {
+      .spread((addedRecipe, created) => {
         if (created) {
           return res.status(201).json({
             success: true,
@@ -50,10 +50,8 @@ export default class Favorites {
    * @returns {object} Class instance
    * @memberof Favorite
    */
-  removeFromFavorites(req, res) {
-    const userId = req.params.userId;
-
-    const recipeId = req.params.recipeId;
+  removeFromFavorites({ params }, res) {
+    const { recipeId, userId } = params;
     Favorite
       .destroy({
         where: {
@@ -66,7 +64,7 @@ export default class Favorites {
       .then(() => {
         res.status(205).json({
           success: true,
-          message: 'Recipe Removed from Favorites'
+          message: `Recipe with ID: ${recipeId} Removed from Favorites`
         });
       })
       .catch(() => res.status(500).json({
@@ -85,8 +83,8 @@ export default class Favorites {
    * @returns {object} Class instance
    * @memberof Favorite
    */
-  getFavRecipes(req, res) {
-    const userId = req.params.userId;
+  getFavRecipes({ params }, res) {
+    const { userId } = params;
 
     Favorite
       .findAll({
@@ -95,8 +93,8 @@ export default class Favorites {
           { model: Recipe }
         ]
       })
-      .then((foundRecipes) => {
-        if (!foundRecipes) {
+      .then((recipe) => {
+        if (!recipe) {
           return res.status(201).json({
             success: true,
             message: 'No Stored Favorite Recipes found',
@@ -105,8 +103,8 @@ export default class Favorites {
 
         return res.status(201).json({
           success: true,
-          message: 'Favorite Recipe(s) found',
-          recipe: foundRecipes
+          message: 'Operation Successful',
+          recipe
         });
       })
       .catch(() => res.status(500).json({

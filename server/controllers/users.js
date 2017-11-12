@@ -62,11 +62,11 @@ export default class Users {
    * @returns {object} Class instance
    * @memberof User
    */
-  signUp(req, res) {
-    const name = trimWhiteSpaces(req.body.name, ' ');
-    const username = trimWhiteSpaces(req.body.username);
-    const email = trimWhiteSpaces(req.body.email);
-    const password = (req.body.password || '');
+  signUp({ body }, res) {
+    const name = trimWhiteSpaces(body.name, ' ');
+    const username = trimWhiteSpaces(body.username);
+    const email = trimWhiteSpaces(body.email);
+    const password = (body.password || '');
 
     const validateSignUpError =
       validateSignUp(name,
@@ -199,8 +199,8 @@ export default class Users {
    * @returns {null} Null
    * @memberof User
    */
-  getUser(req, res) {
-    const { userId } = req.params;
+  getUser({ params }, res) {
+    const { userId } = params;
     User
       .findOne({
         attributes: ['id', 'name', 'username', 'email'],

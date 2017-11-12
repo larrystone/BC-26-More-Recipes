@@ -15,9 +15,9 @@ export default class Vote {
    * @returns {object} Class instance
    * @memberof Vote
    */
-  upvoteRecipe(req, res) {
-    const userId = req.user.id;
-    const { recipeId } = req.params;
+  upvoteRecipe({ user, params }, res) {
+    const userId = user.id;
+    const { recipeId } = params;
 
     Downvote
       .findOne({
@@ -92,9 +92,9 @@ export default class Vote {
    * @returns {object} Class instance
    * @memberof Vote
    */
-  downvoteRecipe(req, res) {
-    const userId = req.user.id;
-    const { recipeId } = req.params;
+  downvoteRecipe({ user, params }, res) {
+    const userId = user.id;
+    const { recipeId } = params;
 
     Upvote
       .findOne({
@@ -170,8 +170,8 @@ export default class Vote {
    * @returns {obejct} Class instance
    * @memberof Vote
    */
-  getUserUpvotes(req, res) {
-    const { recipeId } = req.params;
+  getUserUpvotes({ params }, res) {
+    const { recipeId } = params;
 
     Upvote
       .findAll({
@@ -181,8 +181,8 @@ export default class Vote {
           { model: User, attributes: ['name', 'id'] }
         ]
       })
-      .then((foundVotes) => {
-        if (!foundVotes) {
+      .then((recipe) => {
+        if (!recipe) {
           return res.status(201).json({
             success: true,
             message: 'No User Upvoted this Recipe!'
@@ -191,8 +191,8 @@ export default class Vote {
 
         return res.status(201).json({
           success: true,
-          message: 'User upvotes found',
-          recipe: foundVotes
+          message: 'Operation Successful',
+          recipe
         });
       })
       .catch(() => res.status(500).json({
@@ -211,8 +211,8 @@ export default class Vote {
    * @returns {object} Class instance
    * @memberof Vote
    */
-  getUserDownvotes(req, res) {
-    const { recipeId } = req.params;
+  getUserDownvotes({ params }, res) {
+    const { recipeId } = params;
 
     Downvote
       .findAll({
@@ -222,8 +222,8 @@ export default class Vote {
           { model: User, attributes: ['name', 'id'] }
         ]
       })
-      .then((foundVotes) => {
-        if (!foundVotes) {
+      .then((recipe) => {
+        if (!recipe) {
           return res.status(201).json({
             success: true,
             message: 'No User Downvoted this Recipe!'
@@ -232,8 +232,8 @@ export default class Vote {
 
         return res.status(201).json({
           success: true,
-          message: 'User downvotes found',
-          recipe: foundVotes
+          message: 'Operation Successful',
+          recipe
         });
       })
       .catch(() => res.status(500).json({

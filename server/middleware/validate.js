@@ -79,8 +79,8 @@ export const validateReviewContent = (message) => {
  * @param  {function} next - Next controller
  * @return {object} The status/next()
  */
-export const validateRecipeId = (req, res, next) => {
-  const isValid = validateId(req.params.recipeId);
+export const validateRecipeId = ({ params }, res, next) => {
+  const isValid = validateId(params.recipeId);
   if (isValid === 'Invalid') {
     return res.status(422).json({
       success: false,
@@ -90,8 +90,8 @@ export const validateRecipeId = (req, res, next) => {
   next();
 };
 
-export const validateUserId = (req, res, next) => {
-  const isValid = validateId(req.params.userId);
+export const validateUserId = ({ params }, res, next) => {
+  const isValid = validateId(params.userId);
   if (isValid === 'Invalid') {
     return res.status(401).json({
       success: false,

@@ -1,7 +1,7 @@
 import { Recipe } from '../models';
 
-export default (req, res, next) => {
-  const recipeId = req.params.recipeId;
+export default ({ params }, res, next) => {
+  const recipeId = params.recipeId;
 
   Recipe
     .findById(recipeId)

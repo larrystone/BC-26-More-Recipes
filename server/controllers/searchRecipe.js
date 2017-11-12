@@ -1,15 +1,15 @@
 import { Recipe, User } from '../models';
 
-const populateRecipe = (foundRecipes, currentPage, limit) => {
-  const totalRecords = foundRecipes.count;
+const populateRecipes = ({ count, rows }, currentPage, limit) => {
+  const totalRecords = count;
   const totalPages = Math.ceil(totalRecords / limit);
   const newRecipes = Object.assign({},
     {
       currentPage,
-      currentPageSize: foundRecipes.rows.length,
+      currentPageSize: rows.length,
       totalPages,
       totalRecords,
-      recipe: foundRecipes.rows
+      recipe: rows
     }
   );
   return newRecipes;
@@ -30,9 +30,9 @@ export default class Search {
    * @returns {object} Class instance
    * @memberof Search
    */
-  sortMostUpvotes(req, res) {
-    const limit = req.query.limit || 5,
-      currentPage = (req.query.page || 1),
+  sortMostUpvotes({ query }, res) {
+    const limit = query.limit || 5,
+      currentPage = (query.page || 1),
       offset = (currentPage - 1) * limit;
 
     Recipe
@@ -47,18 +47,18 @@ export default class Search {
         offset
       })
       .then((foundRecipes) => {
-        const newRecipes = populateRecipe(foundRecipes, currentPage, limit);
-        if (newRecipes.totalRecords === 0) {
+        if (!foundRecipes) {
           return res.status(404).json({
             success: true,
             message: 'No Stored Recipes found',
           });
         }
 
+        const recipes = populateRecipes(foundRecipes, currentPage, limit);
         return res.status(201).json({
           success: true,
-          message: 'Recipe(s) found',
-          recipes: newRecipes
+          message: 'Operation Successful',
+          recipes
         });
       })
       .catch(() => res.status(500).json({
@@ -153,14 +153,14 @@ export default class Search {
    * @returns {object} Class instance
    * @memberof Search
    */
-  searchByIngredients(req, res) {
-    const ingredients = req.query.ingredients.split(' ');
+  searchByIngredients({ query }, res) {
+    const ingredients = query.ingredients.split(' ');
     const queryClause = ingredients.map(item => ({
       ingredients: { $iLike: `%${item}%` }
     }));
 
-    const limit = req.query.limit || 10,
-      currentPage = (req.query.page || 1),
+    const limit = query.limit || 10,
+      currentPage = (query.page || 1),
       offset = (currentPage - 1) * limit;
 
     Recipe
@@ -178,17 +178,17 @@ export default class Search {
         offset
       })
       .then((foundRecipes) => {
-        const newRecipes = populateRecipe(foundRecipes, currentPage, limit);
-        if (newRecipes.totalRecords === 0) {
+        if (!foundRecipes) {
           return res.status(404).json({
             success: true,
-            message: 'Nothing found',
+            message: 'No Stored Recipes found',
           });
         }
 
+        const newRecipes = populateRecipes(foundRecipes, currentPage, limit);
         return res.status(201).json({
           success: true,
-          message: 'Recipe(s) found',
+          message: 'Operation Successful',
           recipes: newRecipes
         });
       })
@@ -208,11 +208,11 @@ export default class Search {
    * @returns {object} Classs instance
    * @memberof Search
    */
-  searchByName(req, res) {
-    const { name } = req.query;
+  searchByName({ query }, res) {
+    const { name } = query;
 
-    const limit = req.query.limit || 10,
-      currentPage = (req.query.page || 1),
+    const limit = query.limit || 10,
+      currentPage = (query.page || 1),
       offset = (currentPage - 1) * limit;
 
     Recipe
@@ -230,18 +230,18 @@ export default class Search {
         offset
       })
       .then((foundRecipes) => {
-        const newRecipes = populateRecipe(foundRecipes, currentPage, limit);
-        if (newRecipes.totalRecords === 0) {
+        if (!foundRecipes) {
           return res.status(404).json({
             success: true,
-            message: 'Nothing found',
+            message: 'No Stored Recipes found',
           });
         }
 
+        const recipes = populateRecipes(foundRecipes, currentPage, limit);
         return res.status(201).json({
           success: true,
-          message: 'Recipe(s) found',
-          recipes: newRecipes
+          message: 'Operation Successful',
+          recipes
         });
       })
       .catch(() => res.status(500).json({

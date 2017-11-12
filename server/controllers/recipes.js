@@ -62,27 +62,26 @@ export default class Recipes {
           imageUrl,
           userId
         })
-        .then((createdRecipe) => {
+        .then(({ recipe }) => {
           res.status(201).json({
             success: true,
             message: 'New Recipe created',
-            recipe: createdRecipe
+            recipe
           });
         })
-        .catch(error => res.status(500).json({
+        .catch(({ message }) => res.status(500).json({
           success: false,
-          message: error.message
+          message
         }));
     };
 
-    uploadWithMulter(req, res).then((req) => {
+    uploadWithMulter(req, res).then(({ file, body, user }) => {
       let imageUrl = '';
-      const name = trimWhiteSpaces(req.body.name, ' ');
-      const description = trimWhiteSpaces(req.body.description, ' ');
-      const ingredients = trimWhiteSpaces(req.body.ingredients, ' ');
-      const direction = trimWhiteSpaces(req.body.direction, ' ');
-      const { file } = req;
-      const userId = req.user.id;
+      const name = trimWhiteSpaces(body.name, ' ');
+      const description = trimWhiteSpaces(body.description, ' ');
+      const ingredients = trimWhiteSpaces(body.ingredients, ' ');
+      const direction = trimWhiteSpaces(body.direction, ' ');
+      const userId = user.id;
 
       const validateRecipeError =
         validateRecipeDetails(name, ingredients, direction);
@@ -95,9 +94,9 @@ export default class Recipes {
       }
 
       if (file) {
-        cloudinary.uploader.upload_stream((result) => {
-          if (!result.error) {
-            imageUrl = result.url;
+        cloudinary.uploader.upload_stream(({ error, url }) => {
+          if (!error) {
+            imageUrl = url;
             writeToDatabase({
               name, description, ingredients, direction, imageUrl, userId, res
             });
@@ -113,10 +112,10 @@ export default class Recipes {
           name, description, ingredients, direction, imageUrl, userId, res
         });
       }
-    }).catch((err) => {
+    }).catch(({ message }) => {
       res.status(400).json({
         success: false,
-        message: err.message
+        message
       });
     });
     return this;
@@ -141,11 +140,11 @@ export default class Recipes {
         imageUrl,
         direction
       }, {
-        where: {
-          id: recipeId
-        },
-        returning: true
-      })
+          where: {
+            id: recipeId
+          },
+          returning: true
+        })
         .then((result) => {
           res.status(201).json({
             success: true,
@@ -159,14 +158,13 @@ export default class Recipes {
         }));
     };
 
-    uploadWithMulter(req, res).then((req) => {
-      const userId = req.user.id;
-      const recipeId = req.params.recipeId || 0;
-      const name = trimWhiteSpaces(req.body.name, '  ');
-      const description = trimWhiteSpaces(req.body.description, '  ');
-      const ingredients = trimWhiteSpaces(req.body.ingredients, '  ');
-      const direction = (req.body.direction);
-      const { file } = req;
+    uploadWithMulter(req, res).then(({ file, user, body, params }) => {
+      const userId = user.id;
+      const { recipeId } = params || 0;
+      const name = trimWhiteSpaces(body.name, '  ');
+      const description = trimWhiteSpaces(body.description, '  ');
+      const ingredients = trimWhiteSpaces(body.ingredients, '  ');
+      const direction = trimWhiteSpaces(body.direction, '  ');
 
       const validateRecipeError =
         validateRecipeDetails(name, ingredients,
@@ -179,12 +177,11 @@ export default class Recipes {
         });
       }
 
-      validateUserRights(Recipe, recipeId, userId).then((result) => {
-        let imageUrl = result.imageUrl;
+      validateUserRights(Recipe, recipeId, userId).then(({ imageUrl }) => {
         if (file) {
-          cloudinary.uploader.upload_stream((success) => {
-            if (!success.error) {
-              imageUrl = success.url;
+          cloudinary.uploader.upload_stream(({ error, url }) => {
+            if (!error) {
+              imageUrl = url;
               updateDatabase({
                 name, description, ingredients, direction, imageUrl, recipeId, res
               });
@@ -201,10 +198,10 @@ export default class Recipes {
           });
         }
       })
-        .catch((error) => {
-          res.status(error.status).json({
+        .catch(({ status, message }) => {
+          res.status(status).json({
             success: false,
-            message: error.message
+            message
           });
         });
     }).catch((err) => {
@@ -221,11 +218,10 @@ export default class Recipes {
    * @returns {object} Class instance
    * @memberof Recipe
    */
-  deleteRecipe(req, res) {
-    const recipeId = req.params.recipeId;
-    const userId = req.user.id;
+  deleteRecipe({ params, user }, res) {
+    const { recipeId } = params;
 
-    validateUserRights(Recipe, recipeId, userId).then(() => {
+    validateUserRights(Recipe, recipeId, user.id).then(() => {
       Recipe.destroy({
         where: {
           id: recipeId
@@ -233,21 +229,21 @@ export default class Recipes {
       })
         .then(() => {
           // TODO delete image in cloudinary
-          cloudinary.uploader.destroy('id', () => {
-            res.status(205).json({
-              success: true,
-              message: 'Recipe Deleted!'
-            });
-          });
+          // cloudinary.uploader.destroy('id', () => {
+          //   res.status(205).json({
+          //     success: true,
+          //     message: 'Recipe Deleted!'
+          //   });
+          // });
         })
         .catch(() => res.status(500).json({
           success: false,
           message: 'Error Deleting Recipe'
         }));
-    }).catch((error) => {
-      res.status(error.status).json({
+    }).catch(({ status, message }) => {
+      res.status(status).json({
         success: false,
-        message: error.message
+        message
       });
     });
     return this;
@@ -261,8 +257,8 @@ export default class Recipes {
    * @returns {object} Class instance
    * @memberof Recipe
    */
-  getRecipe(req, res) {
-    const recipeId = req.params.recipeId;
+  getRecipe({ params }, res) {
+    const { recipeId } = params;
 
     Recipe
       .findOne({
@@ -271,21 +267,12 @@ export default class Recipes {
           { model: User, attributes: ['name', 'updatedAt'] }
         ]
       })
-      .then((recipeFound) => {
-        if (!recipeFound) {
-          return res.status(404).json({
-            success: false,
-            message: `No matching recipe with id: ${recipeId}`
-          });
-        }
-
-        return recipeFound.increment('viewCount');
-      })
+      .then(recipeFound => recipeFound.increment('viewCount'))
       .then(recipesFound => recipesFound.reload())
-      .then(recipeLoaded => res.status(201).json({
+      .then(({ recipe }) => res.status(201).json({
         success: true,
         message: 'Recipe found',
-        recipe: recipeLoaded
+        recipe
       }))
       .catch(() => res.status(500).json({
         success: false,
@@ -303,8 +290,8 @@ export default class Recipes {
    * @returns {object} Class instance
    * @memberof Recipe
    */
-  getUserRecipes(req, res) {
-    const userId = req.user.id;
+  getUserRecipes({ user }, res) {
+    const userId = user.id;
 
     Recipe
       .findAll({
@@ -313,8 +300,8 @@ export default class Recipes {
           { model: User, attributes: ['name', 'updatedAt'] }
         ]
       })
-      .then((foundRecipes) => {
-        if (!foundRecipes) {
+      .then((recipe) => {
+        if (!recipe) {
           return res.status(404).json({
             success: true,
             message: 'No User Stored Recipes found',
@@ -323,8 +310,8 @@ export default class Recipes {
 
         return res.status(201).json({
           success: true,
-          message: 'User Recipes found',
-          recipe: foundRecipes
+          message: 'Operation Successful',
+          recipe
         });
       })
       .catch(() => res.status(500).json({
@@ -361,8 +348,8 @@ export default class Recipes {
             { model: User, attributes: ['name', 'updatedAt'] }
           ]
         })
-        .then((foundRecipes) => {
-          if (!foundRecipes) {
+        .then((recipe) => {
+          if (!recipe) {
             return res.status(404).json({
               success: true,
               message: 'No Stored Recipes found'
@@ -371,8 +358,8 @@ export default class Recipes {
 
           return res.status(201).json({
             success: true,
-            message: 'Recipes found',
-            recipe: foundRecipes
+            message: 'Operation Successful',
+            recipe
           });
         })
         .catch(() => res.status(500).json({

@@ -17,10 +17,10 @@ export default class Reviews {
    * @returns {object} Class instance
    * @memberof Review
    */
-  postReview(req, res) {
-    const userId = req.user.id;
-    const { recipeId } = req.params;
-    const content = (req.body.content || '').replace(/\s+/g, ' ');
+  postReview({ user, params, body }, res) {
+    const userId = user.id;
+    const { recipeId } = params;
+    const content = (body.content || '').replace(/\s+/g, ' ');
 
     const validateReviewContentError = validateReviewContent(content);
     if (validateReviewContentError) {
@@ -75,8 +75,8 @@ export default class Reviews {
    * @returns {object} Class instance
    * @memberof Review
    */
-  getRecipeReviews(req, res) {
-    const recipeId = req.params.recipeId;
+  getRecipeReviews({ params }, res) {
+    const recipeId = params.recipeId;
 
     Review
       .findAll({
@@ -89,7 +89,7 @@ export default class Reviews {
         res.status(201).json({
           success: true,
           message: 'Reviews found',
-          recipe: reviews
+          reviews
         });
       })
       .catch(() => res.status(500).json({
@@ -108,8 +108,8 @@ export default class Reviews {
    * @returns {object} Class instance
    * @memberof Review
    */
-  getUserReviews(req, res) {
-    const userId = req.params.userId;
+  getUserReviews({ params }, res) {
+    const { userId } = params;
 
     Review
       .findAll({
@@ -118,8 +118,8 @@ export default class Reviews {
           { model: Recipe }
         ]
       })
-      .then((foundReviews) => {
-        if (!foundReviews) {
+      .then((reviews) => {
+        if (!reviews) {
           return res.status(201).json({
             success: true,
             message: 'No Recipes Review by User found',
@@ -129,7 +129,7 @@ export default class Reviews {
         return res.status(201).json({
           success: true,
           message: 'Recipe(s) Review by user found',
-          recipe: foundReviews
+          reviews
         });
       })
       .catch(() => res.status(500).json({
