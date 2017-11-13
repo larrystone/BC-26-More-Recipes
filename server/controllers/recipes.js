@@ -271,7 +271,7 @@ export default class Recipes {
       .then(recipesFound => recipesFound.reload())
       .then(recipe => res.status(201).json({
         success: true,
-        message: 'Recipe found',
+        message: 'Operation Successful',
         recipe
       }))
       .catch(() => res.status(500).json({

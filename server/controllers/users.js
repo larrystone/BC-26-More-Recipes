@@ -227,5 +227,64 @@ export default class Users {
 
     return this;
   }
-}
 
+  /**
+   * Get the user record (e.g for profile page)
+   *
+   * @param {any} req
+   * @param {any} res
+   * @returns {null} Null
+   * @memberof User
+   */
+  changePassword({ body, user }, res) {
+    const { id } = user;
+    const oldPassword = (body.oldPassword || '');
+    const newPassword = (body.newPassword || '');
+
+    if (newPassword.trim().length === 0 || newPassword.length < 6) {
+      return res.status(400).json({
+        success: false,
+        message: 'Password must be at least 6 characters!'
+      });
+    }
+
+    const password = newEncryption.generateHash(newPassword);
+    User
+      .findOne({
+        attributes: ['id', 'password'],
+        where: { id }
+      })
+      .then((userFound) => {
+        if (!userFound) {
+          return res.status(400).json({
+            success: false,
+            message: 'User does not exist!'
+          });
+        }
+
+        if (!newEncryption.verifyHash(oldPassword, userFound.password)) {
+          return res.status(401).json({
+            success: false,
+            message: 'Incorrect Password'
+          });
+        }
+
+        userFound.updateAttributes({
+          password
+        }).then(() => res.status(200).json({
+          success: true,
+          message: 'Password Changed Successfully'
+        }))
+          .catch(error => res.status(500).json({
+            success: false,
+            message: `Error Changing password ${error}`
+          }));
+      })
+      .catch(error => res.status(500).json({
+        success: false,
+        message: `Error Changing password ${error}`
+      }));
+
+    return this;
+  }
+}

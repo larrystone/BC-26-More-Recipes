@@ -152,8 +152,8 @@
           },
           {
             "in": "body",
-            "name": "password",
-            "description": "New password to be changed to",
+            "name": "body",
+            "description": "The oldPassword and newPassword details",
             "required": true,
             "schema": {
               "$ref": "#/definitions/ChangePassword"
@@ -162,7 +162,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Password successfully changed",
+            "description": "Password Changed Successfully",
             "schema": {
               "$ref": "#/definitions/ChangePasswordResponse"
             }
@@ -174,13 +174,13 @@
             }
           },
           "401": {
-            "description": "Request could not be authorized",
+            "description": "Incorrect Password",
             "schema": {
-              "$ref": "#/definitions/ChangePasswordError"
+              "$ref": "#/definitions/SigninError"
             }
           },
           "default": {
-            "description": "An Error occured"
+            "description": "Error Changing password"
           }
         }
       }
@@ -1104,10 +1104,15 @@
     "ChangePassword": {
       "type": "object",
       "required": [
-        "password"
+        "oldPassword",
+        "newPassword"
       ],
       "properties": {
-        "password": {
+        "oldPassword": {
+          "type": "string",
+          "example": "oldpassword"
+        },
+        "newPassword": {
           "type": "string",
           "example": "newpassword"
         }
@@ -1143,7 +1148,7 @@
         },
         "message": {
           "type": "string",
-          "example": "Password should be at least six characters long"
+          "example": "Password must be at least 6 characters!"
         }
       }
     },

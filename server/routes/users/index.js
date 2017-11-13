@@ -19,12 +19,13 @@ const newReview = new Review();
 user.post('/signup', newUser.signUp);
 user.post('/signin', newUser.signIn);
 
-
 user.use('*', newAuth.verify);
 user.get('/myRecipes', newRecipe.getUserRecipes);
 
 user.route('/:userId/profile')
   .get(validateUserId, newUser.getUser);
+
+user.put('/changePassword', newUser.changePassword);
 
 user.route('/:userId/recipes/:recipeId')
   .all(validateRecipeId, validateUserId, validateRecipeExist)
