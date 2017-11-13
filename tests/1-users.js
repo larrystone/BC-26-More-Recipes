@@ -389,3 +389,69 @@ describe('/GET User profile Test', () => {
       });
   });
 });
+
+describe('/PUT Change password test', () => {
+  it('should return \'Password must be at least 6 characters!\' for \'ab\'', (done) => {
+    chai.request(server)
+      .put('/api/v1/users/changePassword')
+      .set('Accept', 'application/json')
+      .set('x-access-token', token)
+      .send({
+        oldPassword: 'westsddae',
+        newPassword: 'ab',
+      })
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(400);
+        expect(res.body.message).to.equal('Password must be at least 6 characters!');
+        done();
+      });
+  });
+
+  it('should return \'Password must be at least 6 characters!\' for \'ab\'', (done) => {
+    chai.request(server)
+      .put('/api/v1/users/changePassword')
+      .set('Accept', 'application/json')
+      .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NDY4LCJlbWFpbCI6ImpvaG5kb2VAY29tcGFueS5jb20iLCJ1c2VybmFtZSI6ImpvaG5kb2UiLCJpYXQiOjE1MTA1OTI3Nzd9.Oa9wuSqolP2oM5-uKWN0ZukagWx2ZC1kN2tPXGZoM-s')
+      .send({
+        oldPassword: 'westsddae',
+        newPassword: 'ywhahdbidvsdv',
+      })
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(404);
+        expect(res.body.message).to.equal('User does not exist!');
+        done();
+      });
+  });
+
+  it('should return \'Incorrect Password\' for \'westshguuvyli.v\'', (done) => {
+    chai.request(server)
+      .put('/api/v1/users/changePassword')
+      .set('Accept', 'application/json')
+      .set('x-access-token', token)
+      .send({
+        oldPassword: 'westshguuvyli.v',
+        newPassword: 'sdsdsdsdsds',
+      })
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(401);
+        expect(res.body.message).to.equal('Incorrect Password');
+        done();
+      });
+  });
+
+  it('should return \'Password Changed Successfully\' for \'westsddae\'', (done) => {
+    chai.request(server)
+      .put('/api/v1/users/changePassword')
+      .set('Accept', 'application/json')
+      .set('x-access-token', token)
+      .send({
+        oldPassword: 'westsddae',
+        newPassword: 'sdsdsdsdsds',
+      })
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(200);
+        expect(res.body.message).to.equal('Password Changed Successfully');
+        done();
+      });
+  });
+});

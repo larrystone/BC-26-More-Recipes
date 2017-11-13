@@ -256,7 +256,7 @@ export default class Users {
       })
       .then((userFound) => {
         if (!userFound) {
-          return res.status(400).json({
+          return res.status(404).json({
             success: false,
             message: 'User does not exist!'
           });
