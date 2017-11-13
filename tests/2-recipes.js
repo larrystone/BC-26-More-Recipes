@@ -152,7 +152,7 @@ describe('/GET Search recipe by ingredient', () => {
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
         expect(res.body.success).to.equal(true);
-        expect(res.body.recipes.recipe.length).to.equal(3);
+        expect(res.body.recipes.length).to.equal(3);
         done();
       });
   });
@@ -165,7 +165,7 @@ describe('/GET Search recipe by ingredient', () => {
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
         expect(res.body.success).to.equal(true);
-        expect(res.body.recipes.recipe.length).to.equal(3);
+        expect(res.body.recipes.length).to.equal(3);
         done();
       });
   });
@@ -178,7 +178,7 @@ describe('/GET Search recipe by ingredient', () => {
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
         expect(res.body.success).to.equal(true);
-        expect(res.body.recipes.recipe.length).to.equal(1);
+        expect(res.body.recipes.length).to.equal(1);
         done();
       });
   });
@@ -189,7 +189,7 @@ describe('/GET Search recipe by ingredient', () => {
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
-        expect(res.statusCode).to.equal(404);
+        expect(res.statusCode).to.equal(201);
         expect(res.body.success).to.equal(true);
         done();
       });
@@ -203,7 +203,7 @@ describe('/GET Search recipe by ingredient', () => {
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
         expect(res.body.success).to.equal(true);
-        expect(res.body.recipes.recipe.length).to.equal(1);
+        expect(res.body.recipes.length).to.equal(1);
         done();
       });
   });
@@ -216,7 +216,7 @@ describe('/GET Search recipe by ingredient', () => {
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
         expect(res.body.success).to.equal(true);
-        expect(res.body.recipes.recipe.length).to.equal(1);
+        expect(res.body.recipes.length).to.equal(1);
         done();
       });
   });
@@ -232,7 +232,7 @@ describe('/GET Search recipe by valid anything (Generic search)', () => {
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
         expect(res.body.success).to.equal(true);
-        expect(res.body.recipe.length).to.equal(1);
+        expect(res.body.recipes.length).to.equal(1);
         done();
       });
   });
@@ -245,7 +245,7 @@ describe('/GET Search recipe by valid anything (Generic search)', () => {
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
         expect(res.body.success).to.equal(true);
-        expect(res.body.recipe.length).to.equal(3);
+        expect(res.body.recipes.length).to.equal(3);
         done();
       });
   });
@@ -258,12 +258,12 @@ describe('/GET Search recipe by valid anything (Generic search)', () => {
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
         expect(res.body.success).to.equal(true);
-        expect(res.body.recipe.length).to.equal(2);
+        expect(res.body.recipes.length).to.equal(2);
         done();
       });
   });
 
-  it('should return 1 recipes when search by ' +
+  it('should return 0 recipes when search by ' +
     '\'createrecipetester@test.com\'', (done) => {
     chai.request(server)
       .get('/api/v1/recipes?search=createrecipetester@test.com')
@@ -272,12 +272,12 @@ describe('/GET Search recipe by valid anything (Generic search)', () => {
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
         expect(res.body.success).to.equal(true);
-        expect(res.body.recipe.length).to.equal(1);
+        expect(res.body.recipes.length).to.equal(0);
         done();
       });
   });
 
-  it('should return 1 recipes when search by ' +
+  it('should return 0 recipes when search by ' +
     '\'createREcipetester\'', (done) => {
     chai.request(server)
       .get('/api/v1/recipes?search=createREcipetester')
@@ -286,7 +286,7 @@ describe('/GET Search recipe by valid anything (Generic search)', () => {
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
         expect(res.body.success).to.equal(true);
-        expect(res.body.recipe.length).to.equal(1);
+        expect(res.body.recipes.length).to.equal(0);
         done();
       });
   });
@@ -300,7 +300,7 @@ describe('/GET Search recipe by valid anything (Generic search)', () => {
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
         expect(res.body.success).to.equal(true);
-        expect(res.body.recipe.length).to.equal(0);
+        expect(res.body.recipes.length).to.equal(0);
         done();
       });
   });
@@ -315,7 +315,7 @@ describe('/GET Search recipe by recipe name', () => {
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
         expect(res.body.success).to.equal(true);
-        expect(res.body.recipes.recipe.length).to.equal(1);
+        expect(res.body.recipes.length).to.equal(1);
         done();
       });
   });
@@ -328,7 +328,7 @@ describe('/GET Search recipe by recipe name', () => {
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
         expect(res.body.success).to.equal(true);
-        expect(res.body.recipes.recipe.length).to.equal(2);
+        expect(res.body.recipes.length).to.equal(2);
         done();
       });
   });
@@ -341,7 +341,7 @@ describe('/GET Search recipe by recipe name', () => {
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
         expect(res.body.success).to.equal(true);
-        expect(res.body.recipes.recipe.length).to.equal(1);
+        expect(res.body.recipes.length).to.equal(1);
         done();
       });
   });
@@ -352,7 +352,7 @@ describe('/GET Search recipe by recipe name', () => {
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
-        expect(res.statusCode).to.equal(404);
+        expect(res.statusCode).to.equal(201);
         expect(res.body.success).to.equal(true);
         done();
       });
@@ -438,7 +438,7 @@ describe('/GET Recipe and log View count', () => {
       });
   });
 
-  it('should return \'No matching recipe with id: 100\'', (done) => {
+  it('should return \'Recipe does not exist!\' for id: 100', (done) => {
     chai.request(server)
       .get('/api/v1/recipes/100')
       .set('Accept', 'application/json')
@@ -447,7 +447,7 @@ describe('/GET Recipe and log View count', () => {
         expect(res.statusCode).to.equal(404);
         expect(res.body).deep.equal({
           success: false,
-          message: 'No matching recipe with id: 100'
+          message: 'Recipe does not exist!'
         });
         done();
       });
@@ -490,26 +490,27 @@ describe('/PUT User Recipes Test', () => {
       });
   });
 
-  it(`should return 'No matching recipe with id: ${+recipeId * 4}'`, (done) => {
-    chai.request(server)
-      .put(`/api/v1/recipes/${recipeId * 4}`)
-      .set('Accept', 'application/json')
-      .set('x-access-token', token)
-      .send({
-        token,
-        name: 'Amala Soup',
-        ingredients: 'Water;;Ewedu leaves;;Salt',
-        direction: 'I wil tel you later'
-      })
-      .end((err, res) => {
-        expect(res.statusCode).to.equal(404);
-        expect(res.body).deep.equal({
-          success: false,
-          message: `No matching recipe with id: ${recipeId * 4}`
+  it(`should return 'Recipe does not exist!' for id: ${+recipeId * 4}`,
+    (done) => {
+      chai.request(server)
+        .put(`/api/v1/recipes/${recipeId * 4}`)
+        .set('Accept', 'application/json')
+        .set('x-access-token', token)
+        .send({
+          token,
+          name: 'Amala Soup',
+          ingredients: 'Water;;Ewedu leaves;;Salt',
+          direction: 'I wil tel you later'
+        })
+        .end((err, res) => {
+          expect(res.statusCode).to.equal(404);
+          expect(res.body).deep.equal({
+            success: false,
+            message: 'Recipe does not exist!'
+          });
+          done();
         });
-        done();
-      });
-  });
+    });
 });
 
 describe('/DELETE User Recipes Test', () => {
@@ -546,7 +547,7 @@ describe('/DELETE User Recipes Test', () => {
       });
   });
 
-  it('should return \'No matching recipe with id: 100\'', (done) => {
+  it('should return \'Recipe does not exist!\' for id: 100', (done) => {
     chai.request(server)
       .delete('/api/v1/recipes/100')
       .set('Accept', 'application/json')
@@ -561,13 +562,13 @@ describe('/DELETE User Recipes Test', () => {
         expect(res.statusCode).to.equal(404);
         expect(res.body).deep.equal({
           success: false,
-          message: 'No matching recipe with id: 100'
+          message: 'Recipe does not exist!'
         });
         done();
       });
   });
 
-  it('should return \'No matching recipe with id: -1\'', (done) => {
+  it('should return \'Recipe does not exist!\' for id: -1', (done) => {
     chai.request(server)
       .delete('/api/v1/recipes/-1')
       .set('Accept', 'application/json')
@@ -582,7 +583,7 @@ describe('/DELETE User Recipes Test', () => {
         expect(res.statusCode).to.equal(404);
         expect(res.body).deep.equal({
           success: false,
-          message: 'No matching recipe with id: -1'
+          message: 'Recipe does not exist!'
         });
         done();
       });

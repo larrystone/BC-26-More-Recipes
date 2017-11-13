@@ -185,7 +185,7 @@ describe('Protected routes (auth middleware)', () => {
         name: 'Ewedu Soup'
       })
       .end((err, res) => {
-        expect(res.statusCode).to.equal(200);
+        expect(res.statusCode).to.equal(401);
         expect(res.body).deep.equal({
           success: false,
           message: 'Failed to authenticate token.' });
@@ -202,7 +202,7 @@ describe('Protected routes (auth middleware)', () => {
         name: 'Ewedu Soup'
       })
       .end((err, res) => {
-        expect(res.statusCode).to.equal(200);
+        expect(res.statusCode).to.equal(401);
         expect(res.body).deep.equal({
           success: false,
           message: 'Failed to authenticate token.' });

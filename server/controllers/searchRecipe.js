@@ -1,15 +1,14 @@
 import { Recipe, User } from '../models';
 
-const populateRecipe = (foundRecipes, currentPage, limit) => {
-  const totalRecords = foundRecipes.count;
+const populatePaging = ({ count, rows }, currentPage, limit) => {
+  const totalRecords = count;
   const totalPages = Math.ceil(totalRecords / limit);
   const newRecipes = Object.assign({},
     {
       currentPage,
-      currentPageSize: foundRecipes.rows.length,
+      currentPageSize: rows.length,
       totalPages,
-      totalRecords,
-      recipe: foundRecipes.rows
+      totalRecords
     }
   );
   return newRecipes;
@@ -30,9 +29,9 @@ export default class Search {
    * @returns {object} Class instance
    * @memberof Search
    */
-  sortMostUpvotes(req, res) {
-    const limit = req.query.limit || 5,
-      currentPage = (req.query.page || 1),
+  sortMostUpvotes({ query }, res) {
+    const limit = query.limit || 10,
+      currentPage = (query.page || 1),
       offset = (currentPage - 1) * limit;
 
     Recipe
@@ -47,18 +46,19 @@ export default class Search {
         offset
       })
       .then((foundRecipes) => {
-        const newRecipes = populateRecipe(foundRecipes, currentPage, limit);
-        if (newRecipes.totalRecords === 0) {
+        if (!foundRecipes) {
           return res.status(404).json({
             success: true,
             message: 'No Stored Recipes found',
           });
         }
 
+        const pagination = populatePaging(foundRecipes, currentPage, limit);
         return res.status(201).json({
           success: true,
-          message: 'Recipe(s) found',
-          recipes: newRecipes
+          message: 'Operation Successful',
+          pagination,
+          recipes: foundRecipes.rows
         });
       })
       .catch(() => res.status(500).json({
@@ -77,65 +77,45 @@ export default class Search {
    * @returns {object} Class instance
    * @memberof Search
    */
-  searchAll(req, res) {
-    let results;
-    const { search } = req.query;
+  searchAll({ query }, res) {
+    const limit = query.limit || 10,
+      currentPage = (query.page || 1),
+      offset = (currentPage - 1) * limit;
+
+    const { search } = query;
+    const ingredClause = search.split(' ').map(item => ({
+      ingredients: { $iLike: `%${item}%` }
+    }));
+    const nameClause = search.split(' ').map(item => ({
+      name: { $iLike: `%${item}%` }
+    }));
 
     Recipe
-      .findAll({
+      .findAndCountAll({
         where: {
-          $or: [
-            {
-              name: {
-                $iLike: `%${search}%`
-              }
-            },
-            {
-              ingredients: {
-                $iLike: `%${search}%`
-              }
-            }
-          ]
+          $or: ingredClause.concat(nameClause)
         },
         include: [
           { model: User, attributes: ['name', 'updatedAt'] }
-        ]
+        ],
+        limit,
+        offset
       })
       .then((foundRecipes) => {
-        results = foundRecipes.slice(0);
-      })
-      .then(() => {
-        User
-          .findAll({
-            attributes: ['name'],
-            where: {
-              $or: [
-                {
-                  name: {
-                    $iLike: `%${search}%`
-                  }
-                },
-                {
-                  username: {
-                    $iLike: search
-                  }
-                },
-                {
-                  email: {
-                    $iLike: search
-                  }
-                },
-              ]
-            },
-            include: [
-              { model: Recipe }
-            ]
-          })
-          .then(recipes => res.status(201).json({
+        if (!foundRecipes) {
+          return res.status(404).json({
             success: true,
-            message: 'Recipe(s) found',
-            recipe: results.concat(recipes)
-          }));
+            message: 'No Stored Recipes found',
+          });
+        }
+
+        const pagination = populatePaging(foundRecipes, currentPage, limit);
+        return res.status(201).json({
+          success: true,
+          message: 'Operation Successful',
+          pagination,
+          recipes: foundRecipes.rows
+        });
       })
       .catch(() => res.status(500).json({
         success: false,
@@ -153,14 +133,14 @@ export default class Search {
    * @returns {object} Class instance
    * @memberof Search
    */
-  searchByIngredients(req, res) {
-    const ingredients = req.query.ingredients.split(' ');
+  searchByIngredients({ query }, res) {
+    const ingredients = query.ingredients.split(' ');
     const queryClause = ingredients.map(item => ({
       ingredients: { $iLike: `%${item}%` }
     }));
 
-    const limit = req.query.limit || 10,
-      currentPage = (req.query.page || 1),
+    const limit = query.limit || 10,
+      currentPage = (query.page || 1),
       offset = (currentPage - 1) * limit;
 
     Recipe
@@ -178,18 +158,19 @@ export default class Search {
         offset
       })
       .then((foundRecipes) => {
-        const newRecipes = populateRecipe(foundRecipes, currentPage, limit);
-        if (newRecipes.totalRecords === 0) {
+        if (!foundRecipes) {
           return res.status(404).json({
             success: true,
-            message: 'Nothing found',
+            message: 'No Stored Recipes found',
           });
         }
 
+        const pagination = populatePaging(foundRecipes, currentPage, limit);
         return res.status(201).json({
           success: true,
-          message: 'Recipe(s) found',
-          recipes: newRecipes
+          message: 'Operation Successful',
+          pagination,
+          recipes: foundRecipes.rows
         });
       })
       .catch(() => res.status(500).json({
@@ -208,11 +189,11 @@ export default class Search {
    * @returns {object} Classs instance
    * @memberof Search
    */
-  searchByName(req, res) {
-    const { name } = req.query;
+  searchByName({ query }, res) {
+    const { name } = query;
 
-    const limit = req.query.limit || 10,
-      currentPage = (req.query.page || 1),
+    const limit = query.limit || 10,
+      currentPage = (query.page || 1),
       offset = (currentPage - 1) * limit;
 
     Recipe
@@ -230,18 +211,19 @@ export default class Search {
         offset
       })
       .then((foundRecipes) => {
-        const newRecipes = populateRecipe(foundRecipes, currentPage, limit);
-        if (newRecipes.totalRecords === 0) {
+        if (!foundRecipes) {
           return res.status(404).json({
             success: true,
-            message: 'Nothing found',
+            message: 'No Stored Recipes found',
           });
         }
 
+        const pagination = populatePaging(foundRecipes, currentPage, limit);
         return res.status(201).json({
           success: true,
-          message: 'Recipe(s) found',
-          recipes: newRecipes
+          message: 'Operation Successful',
+          pagination,
+          recipes: foundRecipes.rows
         });
       })
       .catch(() => res.status(500).json({

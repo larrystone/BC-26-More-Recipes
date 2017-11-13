@@ -1,15 +1,16 @@
 import express from 'express';
-import * as validate from '../../middleware/validate';
-import * as Recipe from '../../controllers/recipes';
-import * as Review from '../../controllers/reviews';
-import * as Vote from '../../controllers/votes';
-import * as Auth from '../../middleware/auth';
+import { validateRecipeId } from '../../middleware/validate';
+import validateRecipeExist from '../../middleware/validateRecipeExist';
+import Recipe from '../../controllers/recipes';
+import Review from '../../controllers/reviews';
+import Vote from '../../controllers/votes';
+import Auth from '../../middleware/auth';
 
 const user = express.Router();
-const newRecipe = new Recipe.default();
-const newReview = new Review.default();
-const newVote = new Vote.default();
-const newAuth = new Auth.default();
+const newRecipe = new Recipe();
+const newReview = new Review();
+const newVote = new Vote();
+const newAuth = new Auth();
 
 user.use('*', newAuth.verify);
 
@@ -18,20 +19,23 @@ user.route('/')
   .get(newRecipe.getAllRecipes);
 
 user.route('/:recipeId')
-  .all(validate.validateRecipeId)
+  .all(validateRecipeId, validateRecipeExist)
   .get(newRecipe.getRecipe)
   .put(newRecipe.modifyRecipe)
   .delete(newRecipe.deleteRecipe);
 
 user.route('/:recipeId/reviews')
+  .all(validateRecipeId, validateRecipeExist)
   .post(newReview.postReview)
   .get(newReview.getRecipeReviews);
 
 user.route('/:recipeId/upvotes')
+  .all(validateRecipeId, validateRecipeExist)
   .post(newVote.upvoteRecipe)
   .get(newVote.getUserUpvotes);
 
 user.route('/:recipeId/downvotes')
+  .all(validateRecipeId, validateRecipeExist)
   .post(newVote.downvoteRecipe)
   .get(newVote.getUserDownvotes);
 
