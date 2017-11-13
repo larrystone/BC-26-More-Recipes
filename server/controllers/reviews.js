@@ -128,7 +128,7 @@ export default class Reviews {
 
         return res.status(201).json({
           success: true,
-          message: 'Recipe(s) Review by user found',
+          message: 'Operation Successful',
           reviews
         });
       })
