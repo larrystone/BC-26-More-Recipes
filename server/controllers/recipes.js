@@ -52,13 +52,13 @@ export default class Recipes {
    */
   createRecipe(req, res) {
     const writeToDatabase = ({
-      name, description, ingredients, direction, imageUrl, userId, res }) => {
+      name, description, ingredients, procedure, imageUrl, userId, res }) => {
       Recipe
         .create({
           name,
           description,
           ingredients,
-          direction,
+          procedure,
           imageUrl,
           userId
         })
@@ -80,11 +80,11 @@ export default class Recipes {
       const name = trimWhiteSpaces(body.name, ' ');
       const description = trimWhiteSpaces(body.description, ' ');
       const ingredients = trimWhiteSpaces(body.ingredients, ' ');
-      const direction = trimWhiteSpaces(body.direction, ' ');
+      const procedure = trimWhiteSpaces(body.procedure, ' ');
       const userId = user.id;
 
       const validateRecipeError =
-        validateRecipeDetails(name, ingredients, direction);
+        validateRecipeDetails(name, ingredients, procedure);
 
       if (validateRecipeError) {
         return res.status(400).json({
@@ -98,7 +98,7 @@ export default class Recipes {
           if (!error) {
             imageUrl = url;
             writeToDatabase({
-              name, description, ingredients, direction, imageUrl, userId, res
+              name, description, ingredients, procedure, imageUrl, userId, res
             });
           } else {
             res.status(503).json({
@@ -109,7 +109,7 @@ export default class Recipes {
         }).end(file.buffer);
       } else {
         writeToDatabase({
-          name, description, ingredients, direction, imageUrl, userId, res
+          name, description, ingredients, procedure, imageUrl, userId, res
         });
       }
     }).catch(({ message }) => {
@@ -131,14 +131,14 @@ export default class Recipes {
    */
   modifyRecipe(req, res) {
     const updateDatabase = ({
-      name, description, ingredients, direction, imageUrl, recipeId, res
+      name, description, ingredients, procedure, imageUrl, recipeId, res
     }) => {
       Recipe.update({
         name,
         description,
         ingredients,
         imageUrl,
-        direction
+        procedure
       }, {
         where: {
           id: recipeId
@@ -164,11 +164,11 @@ export default class Recipes {
       const name = trimWhiteSpaces(body.name, '  ');
       const description = trimWhiteSpaces(body.description, '  ');
       const ingredients = trimWhiteSpaces(body.ingredients, '  ');
-      const direction = trimWhiteSpaces(body.direction, '  ');
+      const procedure = trimWhiteSpaces(body.procedure, '  ');
 
       const validateRecipeError =
         validateRecipeDetails(name, ingredients,
-          direction, recipeId);
+          procedure, recipeId);
 
       if (validateRecipeError) {
         return res.status(400).json({
@@ -183,7 +183,7 @@ export default class Recipes {
             if (!error) {
               imageUrl = url;
               updateDatabase({
-                name, description, ingredients, direction, imageUrl, recipeId, res
+                name, description, ingredients, procedure, imageUrl, recipeId, res
               });
             } else {
               res.status(503).json({
@@ -194,7 +194,7 @@ export default class Recipes {
           }).end(file.buffer);
         } else {
           updateDatabase({
-            name, description, ingredients, direction, imageUrl, recipeId, res
+            name, description, ingredients, procedure, imageUrl, recipeId, res
           });
         }
       })

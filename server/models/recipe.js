@@ -1,7 +1,7 @@
 /** Define the Recipe database model/association
  * @exports Recipe
  * @param  {object} sequelize - sequelize
- * @param  {object} DataTypes - sequelize Datatypes 
+ * @param  {object} DataTypes - sequelize Datatypes
  * @return {object} The Recipe model
  */
 export default (sequelize, DataTypes) => {
@@ -13,7 +13,7 @@ export default (sequelize, DataTypes) => {
     description: DataTypes.STRING,
     ingredients: DataTypes.STRING,
     imageUrl: DataTypes.STRING,
-    direction: DataTypes.STRING,
+    procedure: DataTypes.STRING,
     viewCount: {
       type: DataTypes.INTEGER,
       defaultValue: 0,
