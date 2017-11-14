@@ -7,7 +7,7 @@ import trimWhiteSpaces from '../services/trimWhiteSpace';
 const newAuth = new Auth();
 const newEncryption = new Encryption();
 
-const verifyUserNameAndEmail = (username, email) => {
+const verifyAuthName = (username, email) => {
   const promise = new Promise((resolve, reject) => {
     User
       .findOne({
@@ -79,7 +79,7 @@ export default class Users {
       });
     }
 
-    verifyUserNameAndEmail(username, email).then(() => {
+    verifyAuthName(username, email).then(() => {
       User
         .create({
           name,
@@ -130,8 +130,8 @@ export default class Users {
    * @memberof User
    */
   signIn(req, res) {
-    const usernameOrEmail =
-      trimWhiteSpaces(req.body.usernameOrEmail);
+    const authName =
+      trimWhiteSpaces(req.body.authName);
 
     User
       .findOne({
@@ -140,11 +140,11 @@ export default class Users {
           $or: [
             {
               username: {
-                $iLike: usernameOrEmail
+                $iLike: authName
               }
             }, {
               email: {
-                $iLike: usernameOrEmail
+                $iLike: authName
               }
             }
           ]
@@ -152,9 +152,9 @@ export default class Users {
       })
       .then((userFound) => {
         if (!userFound) {
-          return res.status(404).json({
+          return res.status(401).json({
             success: false,
-            message: 'Username or email does not exist!'
+            message: 'Invalid Login Credentials!'
           });
         }
 
@@ -180,7 +180,7 @@ export default class Users {
         }
         res.status(401).json({
           success: false,
-          message: 'Incorrect Password!'
+          message: 'Invalid Login Credentials!'
         });
       })
       .catch(() => res.status(500).json({
