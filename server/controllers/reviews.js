@@ -86,9 +86,15 @@ export default class Reviews {
         ]
       })
       .then((reviews) => {
-        res.status(201).json({
+        if (reviews.length === 0) {
+          return res.status(200).json({
+            success: true,
+            message: 'Nothing found'
+          });
+        }
+        return res.status(201).json({
           success: true,
-          message: 'Reviews found',
+          message: 'Review(s) found',
           reviews
         });
       })
@@ -119,16 +125,16 @@ export default class Reviews {
         ]
       })
       .then((reviews) => {
-        if (!reviews) {
-          return res.status(201).json({
+        if (reviews.length === 0) {
+          return res.status(200).json({
             success: true,
-            message: 'No Recipes Review by User found',
+            message: 'Nothing found!',
           });
         }
 
         return res.status(201).json({
           success: true,
-          message: 'Operation Successful',
+          message: 'User review(s) found',
           reviews
         });
       })

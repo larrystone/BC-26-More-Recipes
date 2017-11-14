@@ -131,25 +131,21 @@ export default class Recipes {
    */
   modifyRecipe(req, res) {
     const updateDatabase = ({
-      name, description, ingredients, procedure, imageUrl, recipeId, res
+      name, description, ingredients, procedure, imageUrl, res, recipe
     }) => {
-      Recipe.update({
+      recipe.updateAttributes({
         name,
         description,
         ingredients,
         imageUrl,
         procedure
-      }, {
-          where: {
-            id: recipeId
-          },
-          returning: true
-        })
+      })
+        .then(recipeUpdate => recipeUpdate.reload())
         .then((result) => {
           res.status(201).json({
             success: true,
             message: 'Recipe record updated',
-            recipe: result[1],
+            recipe: result
           });
         })
         .catch(() => res.status(500).json({
@@ -177,13 +173,13 @@ export default class Recipes {
         });
       }
 
-      validateUserRights(Recipe, recipeId, userId).then(({ imageUrl }) => {
+      validateUserRights(Recipe, recipeId, userId).then((recipe) => {
         if (file) {
-          cloudinary.uploader.upload_stream(({ error, url }) => {
+          cloudinary.uploader.upload_stream(({ error, imageUrl }) => {
             if (!error) {
-              imageUrl = url;
+              // imageUrl = url;
               updateDatabase({
-                name, description, ingredients, procedure, imageUrl, recipeId, res
+                name, description, ingredients, procedure, imageUrl, res, recipe
               });
             } else {
               res.status(503).json({
@@ -193,8 +189,9 @@ export default class Recipes {
             }
           }).end(file.buffer);
         } else {
+          const { imageUrl } = recipe;
           updateDatabase({
-            name, description, ingredients, procedure, imageUrl, recipeId, res
+            name, description, ingredients, procedure, imageUrl, res, recipe
           });
         }
       })
@@ -271,12 +268,12 @@ export default class Recipes {
       .then(recipesFound => recipesFound.reload())
       .then(recipe => res.status(201).json({
         success: true,
-        message: 'Operation Successful',
+        message: 'Recipe found',
         recipe
       }))
       .catch(() => res.status(500).json({
         success: false,
-        message: 'Unable to fetch recipes'
+        message: 'Unable to fetch recipe'
       }));
 
     return this;
@@ -304,13 +301,13 @@ export default class Recipes {
         if (!recipe) {
           return res.status(404).json({
             success: true,
-            message: 'No User Stored Recipes found',
+            message: 'Nothing found!',
           });
         }
 
         return res.status(201).json({
           success: true,
-          message: 'Operation Successful',
+          message: 'Recipe(s) found',
           recipe
         });
       })
@@ -349,16 +346,16 @@ export default class Recipes {
           ]
         })
         .then((recipe) => {
-          if (!recipe) {
-            return res.status(404).json({
+          if (recipe.length === 0) {
+            return res.status(200).json({
               success: true,
-              message: 'No Stored Recipes found'
+              message: 'Nothing found!'
             });
           }
 
           return res.status(201).json({
             success: true,
-            message: 'Operation Successful',
+            message: 'Recipe(s) found!',
             recipe
           });
         })

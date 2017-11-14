@@ -46,17 +46,17 @@ export default class Search {
         offset
       })
       .then((foundRecipes) => {
-        if (!foundRecipes) {
-          return res.status(404).json({
+        if (foundRecipes.rows.length === 0) {
+          return res.status(200).json({
             success: true,
-            message: 'No Stored Recipes found',
+            message: 'Nothing found!',
           });
         }
 
         const pagination = populatePaging(foundRecipes, currentPage, limit);
         return res.status(201).json({
           success: true,
-          message: 'Operation Successful',
+          message: 'Recipe(s) found',
           pagination,
           recipes: foundRecipes.rows
         });
@@ -102,17 +102,17 @@ export default class Search {
         offset
       })
       .then((foundRecipes) => {
-        if (!foundRecipes) {
-          return res.status(404).json({
+        if (foundRecipes.rows.length === 0) {
+          return res.status(200).json({
             success: true,
-            message: 'No Stored Recipes found',
+            message: 'Nothing found!',
           });
         }
 
         const pagination = populatePaging(foundRecipes, currentPage, limit);
         return res.status(201).json({
           success: true,
-          message: 'Operation Successful',
+          message: 'Recipe(s) found',
           pagination,
           recipes: foundRecipes.rows
         });
@@ -158,17 +158,17 @@ export default class Search {
         offset
       })
       .then((foundRecipes) => {
-        if (!foundRecipes) {
-          return res.status(404).json({
+        if (foundRecipes.rows.length === 0) {
+          return res.status(200).json({
             success: true,
-            message: 'No Stored Recipes found',
+            message: 'Nothing found!',
           });
         }
 
         const pagination = populatePaging(foundRecipes, currentPage, limit);
         return res.status(201).json({
           success: true,
-          message: 'Operation Successful',
+          message: 'Recipe(s) found',
           pagination,
           recipes: foundRecipes.rows
         });
@@ -211,17 +211,17 @@ export default class Search {
         offset
       })
       .then((foundRecipes) => {
-        if (!foundRecipes) {
-          return res.status(404).json({
+        if (foundRecipes.rows.length === 0) {
+          return res.status(200).json({
             success: true,
-            message: 'No Stored Recipes found',
+            message: 'Nothing found!',
           });
         }
 
         const pagination = populatePaging(foundRecipes, currentPage, limit);
         return res.status(201).json({
           success: true,
-          message: 'Operation Successful',
+          message: 'Recipe(s) found',
           pagination,
           recipes: foundRecipes.rows
         });

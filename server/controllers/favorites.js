@@ -94,16 +94,16 @@ export default class Favorites {
         ]
       })
       .then((recipe) => {
-        if (!recipe) {
-          return res.status(201).json({
+        if (recipe.length === 0) {
+          return res.status(200).json({
             success: true,
-            message: 'No Stored Favorite Recipes found',
+            message: 'Nothing found!',
           });
         }
 
         return res.status(201).json({
           success: true,
-          message: 'Operation Successful',
+          message: 'Favorite Recipes found',
           recipe
         });
       })

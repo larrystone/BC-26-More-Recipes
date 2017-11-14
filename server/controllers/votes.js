@@ -182,16 +182,16 @@ export default class Vote {
         ]
       })
       .then((recipe) => {
-        if (!recipe) {
-          return res.status(201).json({
+        if (recipe.length === 0) {
+          return res.status(200).json({
             success: true,
-            message: 'No User Upvoted this Recipe!'
+            message: 'Nothing found!'
           });
         }
 
         return res.status(201).json({
           success: true,
-          message: 'Operation Successful',
+          message: 'User upvotes found',
           recipe
         });
       })
@@ -223,16 +223,16 @@ export default class Vote {
         ]
       })
       .then((recipe) => {
-        if (!recipe) {
-          return res.status(201).json({
+        if (recipe.length === 0) {
+          return res.status(200).json({
             success: true,
-            message: 'No User Downvoted this Recipe!'
+            message: 'Nothing found!'
           });
         }
 
         return res.status(201).json({
           success: true,
-          message: 'Operation Successful',
+          message: 'User donwvotes found',
           recipe
         });
       })
