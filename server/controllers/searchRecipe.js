@@ -37,7 +37,7 @@ export default class Search {
     Recipe
       .findAndCountAll({
         include: [
-          { model: User, attributes: ['name', 'updatedAt'] }
+          { model: User, attributes: ['name'] }
         ],
         order: [
           ['upvotes', 'DESC']
@@ -96,7 +96,7 @@ export default class Search {
           $or: ingredClause.concat(nameClause)
         },
         include: [
-          { model: User, attributes: ['name', 'updatedAt'] }
+          { model: User, attributes: ['name'] }
         ],
         limit,
         offset
@@ -149,7 +149,7 @@ export default class Search {
           $or: queryClause
         },
         include: [
-          { model: User, attributes: ['name', 'updatedAt'] }
+          { model: User, attributes: ['name'] }
         ],
         order: [
           ['upvotes', 'DESC']
@@ -202,7 +202,7 @@ export default class Search {
           name: { $iLike: `%${name}%` }
         },
         include: [
-          { model: User, attributes: ['name', 'updatedAt'] }
+          { model: User, attributes: ['name'] }
         ],
         order: [
           ['upvotes', 'DESC']

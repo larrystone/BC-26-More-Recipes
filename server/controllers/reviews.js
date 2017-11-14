@@ -82,7 +82,7 @@ export default class Reviews {
       .findAll({
         where: { recipeId },
         include: [
-          { model: User, attributes: ['name', 'updatedAt'] }
+          { model: User, attributes: ['name'] }
         ]
       })
       .then((reviews) => {
@@ -102,7 +102,7 @@ export default class Reviews {
 
   /**
    * Get a list of reviews by a user
-   * 
+   *
    * @param {object} req - HTTP Request
    * @param {object} res - HTTP Response
    * @returns {object} Class instance

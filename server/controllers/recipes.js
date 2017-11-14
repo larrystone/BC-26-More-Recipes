@@ -140,11 +140,11 @@ export default class Recipes {
         imageUrl,
         procedure
       }, {
-        where: {
-          id: recipeId
-        },
-        returning: true
-      })
+          where: {
+            id: recipeId
+          },
+          returning: true
+        })
         .then((result) => {
           res.status(201).json({
             success: true,
@@ -264,7 +264,7 @@ export default class Recipes {
       .findOne({
         where: { id: recipeId },
         include: [
-          { model: User, attributes: ['name', 'updatedAt'] }
+          { model: User, attributes: ['name'] }
         ]
       })
       .then(recipeFound => recipeFound.increment('viewCount'))
@@ -297,7 +297,7 @@ export default class Recipes {
       .findAll({
         where: { userId },
         include: [
-          { model: User, attributes: ['name', 'updatedAt'] }
+          { model: User, attributes: ['name'] }
         ]
       })
       .then((recipe) => {
@@ -345,7 +345,7 @@ export default class Recipes {
       Recipe
         .findAll({
           include: [
-            { model: User, attributes: ['name', 'updatedAt'] }
+            { model: User, attributes: ['name'] }
           ]
         })
         .then((recipe) => {
