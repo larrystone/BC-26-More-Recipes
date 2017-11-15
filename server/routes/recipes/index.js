@@ -1,6 +1,6 @@
 import express from 'express';
 import { validateRecipeId } from '../../middleware/validate';
-import validateRecipeExist from '../../middleware/validateRecipeExist';
+import { doExist } from '../../middleware/validateRecipeExist';
 import Recipe from '../../controllers/recipes';
 import Review from '../../controllers/reviews';
 import Vote from '../../controllers/votes';
@@ -19,23 +19,23 @@ user.route('/')
   .get(newRecipe.getAllRecipes);
 
 user.route('/:recipeId')
-  .all(validateRecipeId, validateRecipeExist)
+  .all(validateRecipeId, doExist)
   .get(newRecipe.getRecipe)
   .put(newRecipe.modifyRecipe)
   .delete(newRecipe.deleteRecipe);
 
 user.route('/:recipeId/reviews')
-  .all(validateRecipeId, validateRecipeExist)
+  .all(validateRecipeId, doExist)
   .post(newReview.postReview)
   .get(newReview.getRecipeReviews);
 
 user.route('/:recipeId/upvotes')
-  .all(validateRecipeId, validateRecipeExist)
+  .all(validateRecipeId, doExist)
   .post(newVote.upvoteRecipe)
   .get(newVote.getUserUpvotes);
 
 user.route('/:recipeId/downvotes')
-  .all(validateRecipeId, validateRecipeExist)
+  .all(validateRecipeId, doExist)
   .post(newVote.downvoteRecipe)
   .get(newVote.getUserDownvotes);
 

@@ -35,6 +35,22 @@ const uploadWithMulter = (req, res) => {
   return promise;
 };
 
+const isNamePicked = (userId, name) => {
+  const promise = new Promise((resolve, reject) => {
+    Recipe
+      .findOne({ where: { userId, name } })
+      .then((recipe) => {
+        if (recipe) {
+          resolve(true);
+        } else {
+          resolve(false);
+        }
+      })
+      .catch(() => (reject()));
+  });
+  return promise;
+};
+
 /**
  * Class Definition for the Recipe Object
  *
@@ -53,25 +69,38 @@ export default class Recipes {
   createRecipe(req, res) {
     const writeToDatabase = ({
       name, description, ingredients, procedure, imageUrl, userId, res }) => {
-      Recipe
-        .create({
-          name,
-          description,
-          ingredients,
-          procedure,
-          imageUrl,
-          userId
-        })
-        .then((recipe) => {
-          res.status(201).json({
-            success: true,
-            message: 'New Recipe created',
-            recipe
-          });
-        })
-        .catch(({ message }) => res.status(500).json({
+      isNamePicked(userId, name)
+        .then((isPicked) => {
+          if (isPicked) {
+            return res.status(409).json({
+              success: false,
+              message: 'Recipe name already picked!'
+            });
+          }
+
+          Recipe
+            .create({
+              name,
+              description,
+              ingredients,
+              procedure,
+              imageUrl,
+              userId
+            })
+            .then((recipe) => {
+              res.status(201).json({
+                success: true,
+                message: 'New Recipe created',
+                recipe
+              });
+            })
+            .catch(({ message }) => res.status(500).json({
+              success: false,
+              message
+            }));
+        }).catch(() => res.status(500).json({
           success: false,
-          message
+          message: 'An error occcured'
         }));
     };
 

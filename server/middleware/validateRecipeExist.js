@@ -1,6 +1,6 @@
 import { Recipe } from '../models';
 
-export default ({ params }, res, next) => {
+export const doExist = ({ params }, res, next) => {
   const recipeId = params.recipeId;
 
   Recipe
