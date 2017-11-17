@@ -98,6 +98,7 @@ export default class Favorites {
           return res.status(200).json({
             success: true,
             message: 'Nothing found!',
+            recipe: []
           });
         }
 

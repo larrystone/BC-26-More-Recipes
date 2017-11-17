@@ -5,7 +5,7 @@ import bodyParser from 'body-parser';
 import routes from './routes';
 
 const app = express();
-const port = process.env.PORT || 3001;
+const port = process.env.PORT || 3000;
 
 app.use(logger('dev'));
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -16,9 +16,11 @@ app.use('/api-docs', express.static('server/docs'));
 app.use('/api/v1/', routes);
 
 if (process.env.NODE_ENV === 'production') {
-  app.use('/', express.static('client/build'));
-  app.use('/dashboard', express.static('client/build'));
+  app.use('*', express.static('build'));
 }
+
+app.use('/', express.static('build'));
+app.use('*', express.static('build'));
 
 app.get('/', (req, res) => {
   res.status(201).json({

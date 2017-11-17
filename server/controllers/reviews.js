@@ -89,7 +89,8 @@ export default class Reviews {
         if (reviews.length === 0) {
           return res.status(200).json({
             success: true,
-            message: 'Nothing found'
+            message: 'Nothing found',
+            reviews: []
           });
         }
         return res.status(201).json({
@@ -129,6 +130,7 @@ export default class Reviews {
           return res.status(200).json({
             success: true,
             message: 'Nothing found!',
+            reviews: []
           });
         }
 

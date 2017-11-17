@@ -1,6 +1,6 @@
 import { Recipe, User } from '../models';
 
-const populatePaging = ({ count, rows }, currentPage, limit) => {
+const populatePaging = ({ count = 0, rows = [] }, currentPage, limit) => {
   const totalRecords = count;
   const totalPages = Math.ceil(totalRecords / limit);
   const newRecipes = Object.assign({},
@@ -46,14 +46,15 @@ export default class Search {
         offset
       })
       .then((foundRecipes) => {
+        const pagination = populatePaging(foundRecipes, currentPage, limit);
         if (foundRecipes.rows.length === 0) {
           return res.status(200).json({
             success: true,
+            pagination,
             message: 'Nothing found!',
           });
         }
 
-        const pagination = populatePaging(foundRecipes, currentPage, limit);
         return res.status(201).json({
           success: true,
           message: 'Recipe(s) found',
@@ -102,14 +103,15 @@ export default class Search {
         offset
       })
       .then((foundRecipes) => {
+        const pagination = populatePaging(foundRecipes, currentPage, limit);
         if (foundRecipes.rows.length === 0) {
           return res.status(200).json({
             success: true,
+            pagination,
             message: 'Nothing found!',
           });
         }
 
-        const pagination = populatePaging(foundRecipes, currentPage, limit);
         return res.status(201).json({
           success: true,
           message: 'Recipe(s) found',
@@ -158,14 +160,15 @@ export default class Search {
         offset
       })
       .then((foundRecipes) => {
+        const pagination = populatePaging(foundRecipes, currentPage, limit);
         if (foundRecipes.rows.length === 0) {
           return res.status(200).json({
             success: true,
+            pagination,
             message: 'Nothing found!',
           });
         }
 
-        const pagination = populatePaging(foundRecipes, currentPage, limit);
         return res.status(201).json({
           success: true,
           message: 'Recipe(s) found',
@@ -211,14 +214,16 @@ export default class Search {
         offset
       })
       .then((foundRecipes) => {
+        const pagination = populatePaging(foundRecipes, currentPage, limit);
         if (foundRecipes.rows.length === 0) {
           return res.status(200).json({
             success: true,
             message: 'Nothing found!',
+            pagination,
+            recipes: []
           });
         }
 
-        const pagination = populatePaging(foundRecipes, currentPage, limit);
         return res.status(201).json({
           success: true,
           message: 'Recipe(s) found',

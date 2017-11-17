@@ -185,7 +185,8 @@ export default class Vote {
         if (recipe.length === 0) {
           return res.status(200).json({
             success: true,
-            message: 'Nothing found!'
+            message: 'Nothing found!',
+            recipe: []
           });
         }
 
@@ -226,7 +227,8 @@ export default class Vote {
         if (recipe.length === 0) {
           return res.status(200).json({
             success: true,
-            message: 'Nothing found!'
+            message: 'Nothing found!',
+            recipe: []
           });
         }
 
