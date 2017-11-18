@@ -52,6 +52,7 @@ export default class Search {
             success: true,
             pagination,
             message: 'Nothing found!',
+            recipes: []
           });
         }
 
@@ -109,6 +110,7 @@ export default class Search {
             success: true,
             pagination,
             message: 'Nothing found!',
+            recipes: []
           });
         }
 
@@ -166,6 +168,7 @@ export default class Search {
             success: true,
             pagination,
             message: 'Nothing found!',
+            recipes: []
           });
         }
 
