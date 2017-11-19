@@ -36,7 +36,7 @@ describe('/POST Create User and Recipe', () => {
         token,
         name: 'Test Recipe',
         ingredients: 'Item1;;Item2;;Item3',
-        direction: 'direction and direction and directions'
+        procedure: 'procedure and procedure and procedures'
       })
       .end((err, res) => {
         recipeId = res.body.recipe.id;
@@ -55,10 +55,10 @@ describe('/POST Add recipe to favorites Test', () => {
       .set('Accept', 'application/json')
       .send({
         token: 'eyJNiJ9.c2Rz.H9g9SB2Uvbhj.hl50q3fbZQk' +
-        '4yJfLBEJRzrcfeX2nqKl-8yIuI',
+          '4yJfLBEJRzrcfeX2nqKl-8yIuI',
         name: 'Ewedu soup',
         ingredients: 'Water;;Ewedu leaves;;Salt',
-        direction: 'Light stove and just start cooking'
+        procedure: 'Light stove and just start cooking'
       })
       .end((err, res) => {
         expect(res.statusCode).to.equal(401);
@@ -79,6 +79,43 @@ describe('/POST Add recipe to favorites Test', () => {
       })
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
+        done();
+      });
+  });
+
+  it(`should return 'Recipe with id: ${recipeId} Already added!'`, (done) => {
+    chai.request(server)
+      .post(`/api/v1/users/${userId}/recipes/${recipeId}`)
+      .set('Accept', 'application/json')
+      .send({
+        token
+      })
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(409);
+        done();
+      });
+  });
+});
+
+describe('/GET user Favorite\'s Recipes Test', () => {
+  it(`should return an array of Recipes for user id: ${userId}`, (done) => {
+    chai.request(server)
+      .get(`/api/v1/users/${userId}/recipes`)
+      .set('Accept', 'application/json')
+      .set('x-access-token', token)
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(201);
+        done();
+      });
+  });
+
+  it('should return \'Invalid User ID for user id: \'abc\'', (done) => {
+    chai.request(server)
+      .get('/api/v1/users/abc/recipes')
+      .set('Accept', 'application/json')
+      .set('x-access-token', token)
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(401);
         done();
       });
   });
@@ -105,7 +142,7 @@ describe('/GET user Favorite\'s Recipes Test', () => {
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
-        expect(res.statusCode).to.equal(201);
+        expect(res.statusCode).to.equal(200);
         done();
       });
   });
