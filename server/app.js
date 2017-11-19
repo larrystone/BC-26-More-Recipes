@@ -15,34 +15,8 @@ app.use('/api-docs', express.static('server/docs'));
 
 app.use('/api/v1/', routes);
 
-if (process.env.NODE_ENV === 'production') {
-  app.use('*', express.static('build'));
-}
-
 app.use('/', express.static('build'));
 app.use('*', express.static('build'));
-
-app.get('/', (req, res) => {
-  res.status(201).json({
-    title: 'More-Recipes',
-    message: 'Please navigate this API via \'/api/v1/\' url prefix'
-  });
-});
-
-app.get('*', (req, res) => {
-  res.status(404).send({
-    success: false,
-    message: 'invalid link'
-  });
-});
-
-app.post('*', (req, res) => {
-  res.status(404).send({
-    success: false,
-    message: 'invalid link'
-  });
-});
-
 
 app.listen(port, () => {
 });

@@ -29,9 +29,9 @@ const verifyAuthName = (username, email) => {
       .then((userFound) => {
         if (userFound) {
           let field;
-          if (userFound.username.toUpperCase === username.toUpperCase) {
+          if (userFound.username.toUpperCase() === username.toUpperCase()) {
             field = 'Username';
-          } else if (userFound.email === email) {
+          } else {
             field = 'Email';
           }
 
@@ -39,9 +39,6 @@ const verifyAuthName = (username, email) => {
         }
 
         resolve();
-      })
-      .catch(() => {
-        reject('An error occured!');
       });
   });
   return promise;
@@ -107,11 +104,7 @@ export default class Users {
             message: 'New user created/token generated!',
             user: createdUser
           });
-        })
-        .catch(() => res.status(500).json({
-          success: false,
-          message: 'Error Creating user'
-        }));
+        });
     }).catch(error =>
       res.status(409).json({
         success: false,
@@ -182,11 +175,7 @@ export default class Users {
           success: false,
           message: 'Invalid Login Credentials!'
         });
-      })
-      .catch(() => res.status(500).json({
-        success: false,
-        message: 'Error Signing In User'
-      }));
+      });
 
     return this;
   }
@@ -219,11 +208,7 @@ export default class Users {
           message: 'User found!',
           user: loggedUser
         });
-      })
-      .catch(() => res.status(500).json({
-        success: false,
-        message: 'Error Fetching User'
-      }));
+      });
 
     return this;
   }
@@ -274,16 +259,8 @@ export default class Users {
         }).then(() => res.status(200).json({
           success: true,
           message: 'Password Changed Successfully'
-        }))
-          .catch(error => res.status(500).json({
-            success: false,
-            message: `Error Changing password ${error}`
-          }));
-      })
-      .catch(error => res.status(500).json({
-        success: false,
-        message: `Error Changing password ${error}`
-      }));
+        }));
+      });
 
     return this;
   }

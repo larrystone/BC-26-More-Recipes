@@ -36,7 +36,7 @@ const uploadWithMulter = (req, res) => {
 };
 
 const isNamePicked = (userId, name) => {
-  const promise = new Promise((resolve, reject) => {
+  const promise = new Promise((resolve) => {
     Recipe
       .findOne({ where: { userId, name } })
       .then((recipe) => {
@@ -45,8 +45,7 @@ const isNamePicked = (userId, name) => {
         } else {
           resolve(false);
         }
-      })
-      .catch(() => (reject()));
+      });
   });
   return promise;
 };
@@ -93,15 +92,8 @@ export default class Recipes {
                 message: 'New Recipe created',
                 recipe
               });
-            })
-            .catch(({ message }) => res.status(500).json({
-              success: false,
-              message
-            }));
-        }).catch(() => res.status(500).json({
-          success: false,
-          message: 'An error occcured'
-        }));
+            });
+        });
     };
 
     uploadWithMulter(req, res).then(({ file, body, user }) => {
@@ -176,11 +168,7 @@ export default class Recipes {
             message: 'Recipe record updated',
             recipe: result
           });
-        })
-        .catch(() => res.status(500).json({
-          success: false,
-          message: 'Unable to modify recipe'
-        }));
+        });
     };
 
     uploadWithMulter(req, res).then(({ file, user, body, params }) => {
@@ -230,9 +218,13 @@ export default class Recipes {
             message
           });
         });
-    }).catch((err) => {
-      res.status(400).json(err);
-    });
+    })
+      .catch(({ message }) => {
+        res.status(400).json({
+          success: false,
+          message
+        });
+      });
     return this;
   }
 
@@ -261,11 +253,7 @@ export default class Recipes {
             message: 'Recipe Deleted!'
           });
           // });
-        })
-        .catch(() => res.status(500).json({
-          success: false,
-          message: 'Error Deleting Recipe'
-        }));
+        });
     }).catch(({ status, message }) => {
       res.status(status).json({
         success: false,
@@ -299,10 +287,6 @@ export default class Recipes {
         success: true,
         message: 'Recipe found',
         recipe
-      }))
-      .catch(() => res.status(500).json({
-        success: false,
-        message: 'Unable to fetch recipe'
       }));
 
     return this;
@@ -327,8 +311,8 @@ export default class Recipes {
         ]
       })
       .then((recipe) => {
-        if (!recipe) {
-          return res.status(404).json({
+        if (recipe.length === 0) {
+          return res.status(200).json({
             success: true,
             message: 'Nothing found!',
             recipe: []
@@ -340,11 +324,7 @@ export default class Recipes {
           message: 'Recipe(s) found',
           recipe
         });
-      })
-      .catch(() => res.status(500).json({
-        success: false,
-        message: 'Unable to get user recipes'
-      }));
+      });
 
     return this;
   }
@@ -389,11 +369,7 @@ export default class Recipes {
             message: 'Recipe(s) found!',
             recipe
           });
-        })
-        .catch(() => res.status(500).json({
-          success: false,
-          message: 'Unable to fetch recipes'
-        }));
+        });
 
       return this;
     }

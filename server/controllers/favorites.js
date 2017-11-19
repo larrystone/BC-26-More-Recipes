@@ -33,11 +33,7 @@ export default class Favorites {
           success: false,
           message: `Recipe with id: ${recipeId} Already added!`
         });
-      })
-      .catch(() => res.status(500).json({
-        success: false,
-        message: 'Error Adding Recipe to Favorites'
-      }));
+      });
 
     return this;
   }
@@ -66,11 +62,7 @@ export default class Favorites {
           success: true,
           message: `Recipe with ID: ${recipeId} Removed from Favorites`
         });
-      })
-      .catch(() => res.status(500).json({
-        success: false,
-        message: 'Error Removing Recipe from Favorites'
-      }));
+      });
 
     return this;
   }
@@ -107,11 +99,7 @@ export default class Favorites {
           message: 'Favorite Recipes found',
           recipe
         });
-      })
-      .catch(() => res.status(500).json({
-        success: false,
-        message: 'Unable to fetch favorite recipes'
-      }));
+      });
 
     return this;
   }

@@ -4,24 +4,13 @@ export default (Recipe, recipeId, userId) => {
     Recipe
       .findById(recipeId)
       .then((recipeFound) => {
-        if (!recipeFound) {
-          reject({
-            status: 404,
-            message: `No matching recipe with id: ${recipeId}`
-          });
-        } else if (+recipeFound.userId !== +userId) {
+        if (+recipeFound.userId !== +userId) {
           reject({
             status: 401,
             message: 'You cannot modify a recipe not created by You!'
           });
         }
         resolve(recipeFound);
-      })
-      .catch(() => {
-        reject({
-          status: 500,
-          message: 'Error Modifying Recipe'
-        });
       });
   });
   return promise;

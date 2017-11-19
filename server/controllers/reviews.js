@@ -58,11 +58,7 @@ export default class Reviews {
               createdReview
             });
           });
-      })
-      .catch(() => res.status(500).json({
-        success: false,
-        message: 'Error Posting Review'
-      }));
+      });
 
     return this;
   }
@@ -98,11 +94,7 @@ export default class Reviews {
           message: 'Review(s) found',
           reviews
         });
-      })
-      .catch(() => res.status(500).json({
-        success: false,
-        message: 'Error Fetching Reviews'
-      }));
+      });
 
     return this;
   }
@@ -139,11 +131,7 @@ export default class Reviews {
           message: 'User review(s) found',
           reviews
         });
-      })
-      .catch(() => res.status(500).json({
-        success: false,
-        message: 'Unable to fetch recipes reviews'
-      }));
+      });
 
     return this;
   }

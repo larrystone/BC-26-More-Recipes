@@ -62,11 +62,7 @@ export default class Search {
           pagination,
           recipes: foundRecipes.rows
         });
-      })
-      .catch(() => res.status(500).json({
-        success: false,
-        message: 'Unable to fetch recipes'
-      }));
+      });
 
     return this;
   }
@@ -120,11 +116,7 @@ export default class Search {
           pagination,
           recipes: foundRecipes.rows
         });
-      })
-      .catch(() => res.status(500).json({
-        success: false,
-        message: 'Unable to search recipes'
-      }));
+      });
 
     return this;
   }
@@ -178,11 +170,7 @@ export default class Search {
           pagination,
           recipes: foundRecipes.rows
         });
-      })
-      .catch(() => res.status(500).json({
-        success: false,
-        message: 'Unable to search recipes'
-      }));
+      });
 
     return this;
   }
@@ -233,11 +221,7 @@ export default class Search {
           pagination,
           recipes: foundRecipes.rows
         });
-      })
-      .catch(() => res.status(500).json({
-        success: false,
-        message: 'Unable to search recipes'
-      }));
+      });
 
     return this;
   }

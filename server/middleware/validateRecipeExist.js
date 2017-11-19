@@ -1,6 +1,6 @@
 import { Recipe } from '../models';
 
-export const doExist = ({ params }, res, next) => {
+export default ({ params }, res, next) => {
   const recipeId = params.recipeId;
 
   Recipe
@@ -14,9 +14,5 @@ export const doExist = ({ params }, res, next) => {
           message: 'Recipe does not exist!'
         });
       }
-    })
-    .catch(() => res.status(404).json({
-      success: false,
-      message: 'Recipe does not exist!'
-    }));
+    });
 };

@@ -5,7 +5,7 @@ import Recipe from '../../controllers/recipes';
 import Favorite from '../../controllers/favorites';
 import Review from '../../controllers/reviews';
 import { validateRecipeId, validateUserId } from '../../middleware/validate';
-import { doExist } from '../../middleware/validateRecipeExist';
+import validateRecipeExist from '../../middleware/validateRecipeExist';
 import Auth from '../../middleware/auth';
 
 const user = express.Router();
@@ -28,7 +28,7 @@ user.route('/:userId/profile')
 user.put('/changePassword', newUser.changePassword);
 
 user.route('/:userId/recipes/:recipeId')
-  .all(validateRecipeId, validateUserId, doExist)
+  .all(validateRecipeId, validateUserId, validateRecipeExist)
   .post(newFavorite.addToFavorite)
   .delete(newFavorite.removeFromFavorites);
 
