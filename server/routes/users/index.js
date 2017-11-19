@@ -35,4 +35,6 @@ user.route('/:userId/recipes/:recipeId')
 user.get('/:userId/recipes', validateUserId, newFavorite.getFavRecipes);
 user.get('/:userId/reviews', validateUserId, newReview.getUserReviews);
 
+user.get('/verifyUser', newUser.verifyUser);
+
 export default user;

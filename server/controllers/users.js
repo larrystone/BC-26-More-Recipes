@@ -223,7 +223,7 @@ export default class Users {
    */
   changePassword({ body, user }, res) {
     const { id } = user;
-    const oldPassword = (body.oldPassword || '');
+    const { oldPassword } = body;
     const newPassword = (body.newPassword || '');
 
     if (newPassword.trim().length === 0 || newPassword.length < 6) {
@@ -260,6 +260,40 @@ export default class Users {
           success: true,
           message: 'Password Changed Successfully'
         }));
+      });
+
+    return this;
+  }
+
+  /**
+ * Verifies if a user exits in tha database
+ * based off the user id decoded from the token
+ * this can be used by the backend to verify and dispatch user object
+ *
+ * @param {number} user - request
+ * @param {any} res
+ * @returns {obj} status
+ * @memberof Users
+ */
+  verifyUser({ user }, res) {
+    const { id } = user;
+    User
+      .findOne({
+        where: { id },
+        attributes: ['id', 'name', 'username', 'email']
+      })
+      .then((userFound) => {
+        if (userFound) {
+          return res.status(200).json({
+            success: true,
+            message: 'User is found',
+            userFound
+          });
+        }
+        return res.status(404).json({
+          success: false,
+          message: 'User not found'
+        });
       });
 
     return this;
