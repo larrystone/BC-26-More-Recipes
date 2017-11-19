@@ -15,7 +15,7 @@ export default class Favorites {
    * @returns {object} Class instance
    * @memberof Favorite
    */
-  addToFavorite({ user, params }, res) {
+  addToFavorites({ user, params }, res) {
     const userId = user.id;
     const { recipeId } = params;
 
@@ -57,11 +57,13 @@ export default class Favorites {
           ]
         },
       })
-      .then(() => {
-        res.status(205).json({
-          success: true,
-          message: `Recipe with ID: ${recipeId} Removed from Favorites`
-        });
+      .then((status) => {
+        if (status === 1) {
+          res.status(205).json({
+            success: true,
+            message: `Recipe with ID: ${recipeId} Removed from Favorites`
+          });
+        }
       });
 
     return this;
@@ -85,19 +87,19 @@ export default class Favorites {
           { model: Recipe }
         ]
       })
-      .then((recipe) => {
-        if (recipe.length === 0) {
+      .then((recipes) => {
+        if (recipes.length === 0) {
           return res.status(200).json({
             success: true,
             message: 'Nothing found!',
-            recipe: []
+            recipes: []
           });
         }
 
         return res.status(201).json({
           success: true,
           message: 'Favorite Recipes found',
-          recipe
+          recipes
         });
       });
 

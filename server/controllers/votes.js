@@ -149,19 +149,19 @@ export default class Vote {
           { model: User, attributes: ['name', 'id'] }
         ]
       })
-      .then((recipe) => {
-        if (recipe.length === 0) {
+      .then((votes) => {
+        if (votes.length === 0) {
           return res.status(200).json({
             success: true,
             message: 'Nothing found!',
-            recipe: []
+            votes: []
           });
         }
 
         return res.status(201).json({
           success: true,
           message: 'User upvotes found',
-          recipe
+          votes
         });
       });
 
@@ -187,19 +187,19 @@ export default class Vote {
           { model: User, attributes: ['name', 'id'] }
         ]
       })
-      .then((recipe) => {
-        if (recipe.length === 0) {
+      .then((votes) => {
+        if (votes.length === 0) {
           return res.status(200).json({
             success: true,
             message: 'Nothing found!',
-            recipe: []
+            votes: []
           });
         }
 
         return res.status(201).json({
           success: true,
           message: 'User donwvotes found',
-          recipe
+          votes
         });
       });
 

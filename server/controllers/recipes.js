@@ -5,7 +5,7 @@ import { Recipe, User } from '../models';
 import { validateRecipeDetails } from '../middleware/validate';
 import Search from './searchRecipe';
 import trimWhiteSpaces from '../services/trimWhiteSpace';
-import validateUserRights from '../services/validateRights';
+import validateUserRight from '../services/validateUserRight';
 
 cloudinary.config({
   cloud_name: 'larrystone',
@@ -25,9 +25,9 @@ const uploadWithMulter = (req, res) => {
 
         callback(null, true);
       }
-    }).single('image')(req, res, (err) => {
-      if (err) {
-        reject(err);
+    }).single('image')(req, res, (error) => {
+      if (error) {
+        reject(error);
       }
       resolve(req);
     });
@@ -104,13 +104,13 @@ export default class Recipes {
       const procedure = trimWhiteSpaces(body.procedure, ' ');
       const userId = user.id;
 
-      const validateRecipeError =
+      const isRecipeInvalid =
         validateRecipeDetails(name, ingredients, procedure);
 
-      if (validateRecipeError) {
+      if (isRecipeInvalid) {
         return res.status(400).json({
           success: false,
-          message: validateRecipeError
+          message: isRecipeInvalid
         });
       }
 
@@ -152,21 +152,21 @@ export default class Recipes {
    */
   modifyRecipe(req, res) {
     const updateDatabase = ({
-      name, description, ingredients, procedure, imageUrl, res, recipe
+      name, description, ingredients, procedure, imageUrl, res, foundRecipe
     }) => {
-      recipe.updateAttributes({
+      foundRecipe.updateAttributes({
         name,
         description,
         ingredients,
         imageUrl,
         procedure
       })
-        .then(recipeUpdate => recipeUpdate.reload())
-        .then((result) => {
+        .then(recipeUpdated => recipeUpdated.reload())
+        .then((recipe) => {
           res.status(201).json({
             success: true,
             message: 'Recipe record updated',
-            recipe: result
+            recipe
           });
         });
     };
@@ -179,24 +179,29 @@ export default class Recipes {
       const ingredients = trimWhiteSpaces(body.ingredients, '  ');
       const procedure = trimWhiteSpaces(body.procedure, '  ');
 
-      const validateRecipeError =
+      const isRecipeInvalid =
         validateRecipeDetails(name, ingredients,
           procedure, recipeId);
 
-      if (validateRecipeError) {
+      if (isRecipeInvalid) {
         return res.status(400).json({
           success: false,
-          message: validateRecipeError
+          message: isRecipeInvalid
         });
       }
 
-      validateUserRights(Recipe, recipeId, userId).then((recipe) => {
+      validateUserRight(Recipe, recipeId, userId).then((foundRecipe) => {
         if (file) {
           cloudinary.uploader.upload_stream(({ error, imageUrl }) => {
             if (!error) {
-              // imageUrl = url;
               updateDatabase({
-                name, description, ingredients, procedure, imageUrl, res, recipe
+                name,
+                description,
+                ingredients,
+                procedure,
+                imageUrl,
+                res,
+                foundRecipe
               });
             } else {
               res.status(503).json({
@@ -206,9 +211,15 @@ export default class Recipes {
             }
           }).end(file.buffer);
         } else {
-          const { imageUrl } = recipe;
+          const { imageUrl } = foundRecipe;
           updateDatabase({
-            name, description, ingredients, procedure, imageUrl, res, recipe
+            name,
+            description,
+            ingredients,
+            procedure,
+            imageUrl,
+            res,
+            foundRecipe
           });
         }
       })
@@ -239,7 +250,7 @@ export default class Recipes {
   deleteRecipe({ params, user }, res) {
     const { recipeId } = params;
 
-    validateUserRights(Recipe, recipeId, user.id).then(() => {
+    validateUserRight(Recipe, recipeId, user.id).then(() => {
       Recipe.destroy({
         where: {
           id: recipeId
@@ -310,19 +321,19 @@ export default class Recipes {
           { model: User, attributes: ['name'] }
         ]
       })
-      .then((recipe) => {
-        if (recipe.length === 0) {
+      .then((recipes) => {
+        if (recipes.length === 0) {
           return res.status(200).json({
             success: true,
             message: 'Nothing found!',
-            recipe: []
+            recipes: []
           });
         }
 
         return res.status(201).json({
           success: true,
           message: 'Recipe(s) found',
-          recipe
+          recipes
         });
       });
 
@@ -355,19 +366,19 @@ export default class Recipes {
             { model: User, attributes: ['name'] }
           ]
         })
-        .then((recipe) => {
-          if (recipe.length === 0) {
+        .then((recipes) => {
+          if (recipes.length === 0) {
             return res.status(200).json({
               success: true,
               message: 'Nothing found!',
-              recipe: []
+              recipes: []
             });
           }
 
           return res.status(201).json({
             success: true,
             message: 'Recipe(s) found!',
-            recipe
+            recipes
           });
         });
 
