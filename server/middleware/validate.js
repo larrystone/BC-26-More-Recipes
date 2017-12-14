@@ -57,7 +57,7 @@ export const validateRecipeDetails = (name, ingredients, direction) => {
   }
 
   if (direction.length < 15) {
-    return 'Explain the directions clearly please!';
+    return 'Explain the procedures clearly please!';
   }
 };
 

@@ -20,8 +20,7 @@ export default class Vote {
     const { recipeId } = params;
 
     Downvote
-      .findOne({
-        attributes: ['id'],
+      .destroy({
         where: {
           $and: [
             { userId },
@@ -29,26 +28,15 @@ export default class Vote {
           ]
         }
       })
-      .then((voteFound) => {
-        if (voteFound) {
-          Downvote
-            .destroy({
+      .then((response) => {
+        if (response === 1) {
+          Recipe
+            .findOne({
               where: {
-                $and: [
-                  { userId },
-                  { recipeId }
-                ]
+                id: recipeId
               }
-            })
-            .then(() => {
-              Recipe
-                .findOne({
-                  where: {
-                    id: recipeId
-                  }
-                }).then((option) => {
-                  option.decrement('downvotes');
-                });
+            }).then((option) => {
+              option.decrement('downvotes');
             });
         }
       });
@@ -75,11 +63,7 @@ export default class Vote {
           success: false,
           message: `Recipe with id: ${recipeId} Already Upvoted!`
         });
-      })
-      .catch(() => res.status(500).json({
-        success: false,
-        message: 'Error Upvoting Recipe'
-      }));
+      });
 
     return this;
   }
@@ -97,8 +81,7 @@ export default class Vote {
     const { recipeId } = params;
 
     Upvote
-      .findOne({
-        attributes: ['id'],
+      .destroy({
         where: {
           $and: [
             { userId },
@@ -106,26 +89,15 @@ export default class Vote {
           ]
         }
       })
-      .then((voteFound) => {
-        if (voteFound) {
-          Upvote
-            .destroy({
+      .then((response) => {
+        if (response === 1) {
+          Recipe
+            .findOne({
               where: {
-                $and: [
-                  { userId },
-                  { recipeId }
-                ]
+                id: recipeId
               }
-            })
-            .then(() => {
-              Recipe
-                .findOne({
-                  where: {
-                    id: recipeId
-                  }
-                }).then((option) => {
-                  option.decrement('upvotes');
-                });
+            }).then((option) => {
+              option.decrement('upvotes');
             });
         }
       });
@@ -153,11 +125,7 @@ export default class Vote {
           success: false,
           message: `Recipe with id: ${recipeId} Already Downvoted!`
         });
-      })
-      .catch(() => res.status(500).json({
-        success: true,
-        message: 'Error Downvoting Recipe'
-      }));
+      });
 
     return this;
   }
@@ -181,24 +149,21 @@ export default class Vote {
           { model: User, attributes: ['name', 'id'] }
         ]
       })
-      .then((recipe) => {
-        if (!recipe) {
-          return res.status(201).json({
+      .then((votes) => {
+        if (votes.length === 0) {
+          return res.status(200).json({
             success: true,
-            message: 'No User Upvoted this Recipe!'
+            message: 'Nothing found!',
+            votes: []
           });
         }
 
         return res.status(201).json({
           success: true,
-          message: 'Operation Successful',
-          recipe
+          message: 'User upvotes found',
+          votes
         });
-      })
-      .catch(() => res.status(500).json({
-        success: false,
-        message: 'Unable to get user upvotes'
-      }));
+      });
 
     return this;
   }
@@ -222,24 +187,21 @@ export default class Vote {
           { model: User, attributes: ['name', 'id'] }
         ]
       })
-      .then((recipe) => {
-        if (!recipe) {
-          return res.status(201).json({
+      .then((votes) => {
+        if (votes.length === 0) {
+          return res.status(200).json({
             success: true,
-            message: 'No User Downvoted this Recipe!'
+            message: 'Nothing found!',
+            votes: []
           });
         }
 
         return res.status(201).json({
           success: true,
-          message: 'Operation Successful',
-          recipe
+          message: 'User donwvotes found',
+          votes
         });
-      })
-      .catch(() => res.status(500).json({
-        success: false,
-        message: 'Unable to get user downvotes'
-      }));
+      });
 
     return this;
   }

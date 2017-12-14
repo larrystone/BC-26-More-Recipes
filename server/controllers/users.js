@@ -7,7 +7,7 @@ import trimWhiteSpaces from '../services/trimWhiteSpace';
 const newAuth = new Auth();
 const newEncryption = new Encryption();
 
-const verifyUserNameAndEmail = (username, email) => {
+const verifyAuthName = (username, email) => {
   const promise = new Promise((resolve, reject) => {
     User
       .findOne({
@@ -29,9 +29,9 @@ const verifyUserNameAndEmail = (username, email) => {
       .then((userFound) => {
         if (userFound) {
           let field;
-          if (userFound.username.toUpperCase === username.toUpperCase) {
+          if (userFound.username.toUpperCase() === username.toUpperCase()) {
             field = 'Username';
-          } else if (userFound.email === email) {
+          } else {
             field = 'Email';
           }
 
@@ -39,9 +39,6 @@ const verifyUserNameAndEmail = (username, email) => {
         }
 
         resolve();
-      })
-      .catch(() => {
-        reject('An error occured!');
       });
   });
   return promise;
@@ -79,7 +76,7 @@ export default class Users {
       });
     }
 
-    verifyUserNameAndEmail(username, email).then(() => {
+    verifyAuthName(username, email).then(() => {
       User
         .create({
           name,
@@ -107,11 +104,7 @@ export default class Users {
             message: 'New user created/token generated!',
             user: createdUser
           });
-        })
-        .catch(() => res.status(500).json({
-          success: false,
-          message: 'Error Creating user'
-        }));
+        });
     }).catch(error =>
       res.status(409).json({
         success: false,
@@ -130,8 +123,8 @@ export default class Users {
    * @memberof User
    */
   signIn(req, res) {
-    const usernameOrEmail =
-      trimWhiteSpaces(req.body.usernameOrEmail);
+    const authName =
+      trimWhiteSpaces(req.body.authName);
 
     User
       .findOne({
@@ -140,11 +133,11 @@ export default class Users {
           $or: [
             {
               username: {
-                $iLike: usernameOrEmail
+                $iLike: authName
               }
             }, {
               email: {
-                $iLike: usernameOrEmail
+                $iLike: authName
               }
             }
           ]
@@ -152,9 +145,9 @@ export default class Users {
       })
       .then((userFound) => {
         if (!userFound) {
-          return res.status(404).json({
+          return res.status(401).json({
             success: false,
-            message: 'Username or email does not exist!'
+            message: 'Invalid Login Credentials!'
           });
         }
 
@@ -180,13 +173,9 @@ export default class Users {
         }
         res.status(401).json({
           success: false,
-          message: 'Incorrect Password!'
+          message: 'Invalid Login Credentials!'
         });
-      })
-      .catch(() => res.status(500).json({
-        success: false,
-        message: 'Error Signing In User'
-      }));
+      });
 
     return this;
   }
@@ -219,11 +208,7 @@ export default class Users {
           message: 'User found!',
           user: loggedUser
         });
-      })
-      .catch(() => res.status(500).json({
-        success: false,
-        message: 'Error Fetching User'
-      }));
+      });
 
     return this;
   }
@@ -238,7 +223,7 @@ export default class Users {
    */
   changePassword({ body, user }, res) {
     const { id } = user;
-    const oldPassword = (body.oldPassword || '');
+    const { oldPassword } = body;
     const newPassword = (body.newPassword || '');
 
     if (newPassword.trim().length === 0 || newPassword.length < 6) {
@@ -274,16 +259,42 @@ export default class Users {
         }).then(() => res.status(200).json({
           success: true,
           message: 'Password Changed Successfully'
-        }))
-          .catch(error => res.status(500).json({
-            success: false,
-            message: `Error Changing password ${error}`
-          }));
+        }));
+      });
+
+    return this;
+  }
+
+  /**
+ * Verifies if a user exits in tha database
+ * based off the user id decoded from the token
+ * this can be used by the backend to verify and dispatch user object
+ *
+ * @param {number} user - request
+ * @param {any} res
+ * @returns {obj} status
+ * @memberof Users
+ */
+  verifyUser({ user }, res) {
+    const { id } = user;
+    User
+      .findOne({
+        where: { id },
+        attributes: ['id', 'name', 'username', 'email']
       })
-      .catch(error => res.status(500).json({
-        success: false,
-        message: `Error Changing password ${error}`
-      }));
+      .then((userFound) => {
+        if (userFound) {
+          return res.status(200).json({
+            success: true,
+            message: 'User is found',
+            userFound
+          });
+        }
+        return res.status(404).json({
+          success: false,
+          message: 'User not found'
+        });
+      });
 
     return this;
   }

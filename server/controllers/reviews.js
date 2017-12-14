@@ -58,11 +58,7 @@ export default class Reviews {
               createdReview
             });
           });
-      })
-      .catch(() => res.status(500).json({
-        success: false,
-        message: 'Error Posting Review'
-      }));
+      });
 
     return this;
   }
@@ -82,27 +78,30 @@ export default class Reviews {
       .findAll({
         where: { recipeId },
         include: [
-          { model: User, attributes: ['name', 'updatedAt'] }
+          { model: User, attributes: ['name'] }
         ]
       })
       .then((reviews) => {
-        res.status(201).json({
+        if (reviews.length === 0) {
+          return res.status(200).json({
+            success: true,
+            message: 'Nothing found',
+            reviews: []
+          });
+        }
+        return res.status(201).json({
           success: true,
-          message: 'Reviews found',
+          message: 'Review(s) found',
           reviews
         });
-      })
-      .catch(() => res.status(500).json({
-        success: false,
-        message: 'Error Fetching Reviews'
-      }));
+      });
 
     return this;
   }
 
   /**
    * Get a list of reviews by a user
-   * 
+   *
    * @param {object} req - HTTP Request
    * @param {object} res - HTTP Response
    * @returns {object} Class instance
@@ -119,23 +118,20 @@ export default class Reviews {
         ]
       })
       .then((reviews) => {
-        if (!reviews) {
-          return res.status(201).json({
+        if (reviews.length === 0) {
+          return res.status(200).json({
             success: true,
-            message: 'No Recipes Review by User found',
+            message: 'Nothing found!',
+            reviews: []
           });
         }
 
         return res.status(201).json({
           success: true,
-          message: 'Operation Successful',
+          message: 'User review(s) found',
           reviews
         });
-      })
-      .catch(() => res.status(500).json({
-        success: false,
-        message: 'Unable to fetch recipes reviews'
-      }));
+      });
 
     return this;
   }

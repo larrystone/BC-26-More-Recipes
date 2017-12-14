@@ -19,7 +19,7 @@ module.exports = {
       ingredients: {
         type: Sequelize.STRING
       },
-      direction: {
+      procedure: {
         type: Sequelize.STRING
       },
       viewCount: {

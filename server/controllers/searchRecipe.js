@@ -1,6 +1,6 @@
 import { Recipe, User } from '../models';
 
-const populatePaging = ({ count, rows }, currentPage, limit) => {
+const populatePaging = ({ count = 0, rows = [] }, currentPage, limit) => {
   const totalRecords = count;
   const totalPages = Math.ceil(totalRecords / limit);
   const newRecipes = Object.assign({},
@@ -37,7 +37,7 @@ export default class Search {
     Recipe
       .findAndCountAll({
         include: [
-          { model: User, attributes: ['name', 'updatedAt'] }
+          { model: User, attributes: ['name'] }
         ],
         order: [
           ['upvotes', 'DESC']
@@ -46,25 +46,23 @@ export default class Search {
         offset
       })
       .then((foundRecipes) => {
-        if (!foundRecipes) {
-          return res.status(404).json({
+        const pagination = populatePaging(foundRecipes, currentPage, limit);
+        if (foundRecipes.rows.length === 0) {
+          return res.status(200).json({
             success: true,
-            message: 'No Stored Recipes found',
+            pagination,
+            message: 'Nothing found!',
+            recipes: []
           });
         }
 
-        const pagination = populatePaging(foundRecipes, currentPage, limit);
         return res.status(201).json({
           success: true,
-          message: 'Operation Successful',
+          message: 'Recipe(s) found',
           pagination,
           recipes: foundRecipes.rows
         });
-      })
-      .catch(() => res.status(500).json({
-        success: false,
-        message: 'Unable to fetch recipes'
-      }));
+      });
 
     return this;
   }
@@ -96,31 +94,29 @@ export default class Search {
           $or: ingredClause.concat(nameClause)
         },
         include: [
-          { model: User, attributes: ['name', 'updatedAt'] }
+          { model: User, attributes: ['name'] }
         ],
         limit,
         offset
       })
       .then((foundRecipes) => {
-        if (!foundRecipes) {
-          return res.status(404).json({
+        const pagination = populatePaging(foundRecipes, currentPage, limit);
+        if (foundRecipes.rows.length === 0) {
+          return res.status(200).json({
             success: true,
-            message: 'No Stored Recipes found',
+            pagination,
+            message: 'Nothing found!',
+            recipes: []
           });
         }
 
-        const pagination = populatePaging(foundRecipes, currentPage, limit);
         return res.status(201).json({
           success: true,
-          message: 'Operation Successful',
+          message: 'Recipe(s) found',
           pagination,
           recipes: foundRecipes.rows
         });
-      })
-      .catch(() => res.status(500).json({
-        success: false,
-        message: 'Unable to search recipes'
-      }));
+      });
 
     return this;
   }
@@ -149,7 +145,7 @@ export default class Search {
           $or: queryClause
         },
         include: [
-          { model: User, attributes: ['name', 'updatedAt'] }
+          { model: User, attributes: ['name'] }
         ],
         order: [
           ['upvotes', 'DESC']
@@ -158,25 +154,23 @@ export default class Search {
         offset
       })
       .then((foundRecipes) => {
-        if (!foundRecipes) {
-          return res.status(404).json({
+        const pagination = populatePaging(foundRecipes, currentPage, limit);
+        if (foundRecipes.rows.length === 0) {
+          return res.status(200).json({
             success: true,
-            message: 'No Stored Recipes found',
+            pagination,
+            message: 'Nothing found!',
+            recipes: []
           });
         }
 
-        const pagination = populatePaging(foundRecipes, currentPage, limit);
         return res.status(201).json({
           success: true,
-          message: 'Operation Successful',
+          message: 'Recipe(s) found',
           pagination,
           recipes: foundRecipes.rows
         });
-      })
-      .catch(() => res.status(500).json({
-        success: false,
-        message: 'Unable to search recipes'
-      }));
+      });
 
     return this;
   }
@@ -202,7 +196,7 @@ export default class Search {
           name: { $iLike: `%${name}%` }
         },
         include: [
-          { model: User, attributes: ['name', 'updatedAt'] }
+          { model: User, attributes: ['name'] }
         ],
         order: [
           ['upvotes', 'DESC']
@@ -211,25 +205,23 @@ export default class Search {
         offset
       })
       .then((foundRecipes) => {
-        if (!foundRecipes) {
-          return res.status(404).json({
+        const pagination = populatePaging(foundRecipes, currentPage, limit);
+        if (foundRecipes.rows.length === 0) {
+          return res.status(200).json({
             success: true,
-            message: 'No Stored Recipes found',
+            message: 'Nothing found!',
+            pagination,
+            recipes: []
           });
         }
 
-        const pagination = populatePaging(foundRecipes, currentPage, limit);
         return res.status(201).json({
           success: true,
-          message: 'Operation Successful',
+          message: 'Recipe(s) found',
           pagination,
           recipes: foundRecipes.rows
         });
-      })
-      .catch(() => res.status(500).json({
-        success: false,
-        message: 'Unable to search recipes'
-      }));
+      });
 
     return this;
   }

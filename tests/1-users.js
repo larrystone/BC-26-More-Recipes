@@ -242,13 +242,13 @@ describe('/POST User Sign Up Test', () => {
       });
   });
 
-  it('should return \'Username already taken\' error', (done) => {
+  it('should return \'Email already taken\' error', (done) => {
     chai.request(server)
       .post('/api/v1/users/signup')
       .set('Accept', 'application/json')
       .send({
         name: 'Gbenga Micheal',
-        username: 'gbenges',
+        username: 'cyberstone',
         email: 'gbengene@yahoo.com',
         password: 'westsddae',
       })
@@ -256,7 +256,7 @@ describe('/POST User Sign Up Test', () => {
         expect(res.statusCode).to.equal(409);
         expect(res.body).deep.equal({
           success: false,
-          message: 'Username already taken!'
+          message: 'Email already taken!'
         });
         done();
       });
@@ -269,7 +269,7 @@ describe('/POST User Sign In Test', () => {
       .post('/api/v1/users/signin')
       .set('Accept', 'application/json')
       .send({
-        usernameOrEmail: 'LaRRystonE',
+        authName: 'LaRRystonE',
         password: 'Hacknets'
       })
       .end((err, res) => {
@@ -287,7 +287,7 @@ describe('/POST User Sign In Test', () => {
         .post('/api/v1/users/signin')
         .set('Accept', 'application/json')
         .send({
-          usernameOrEmail: 'temitope@yahoo.com',
+          authName: 'temitope@yahoo.com',
           password: 'westerdae',
         })
         .end((err, res) => {
@@ -299,12 +299,12 @@ describe('/POST User Sign In Test', () => {
         });
     });
 
-    it(`should sign in user- ${'gbengene@yahoo.com'.toUpperCase()}`, (done) => {
+    it(`should sign in user ${'gbengene@yahoo.com'.toUpperCase()}`, (done) => {
       chai.request(server)
         .post('/api/v1/users/signin')
         .set('Accept', 'application/json')
         .send({
-          usernameOrEmail: 'gbengene@yahoo.com'.toUpperCase(),
+          authName: 'gbengene@yahoo.com'.toUpperCase(),
           password: 'westsddae',
         })
         .end((err, res) => {
@@ -321,7 +321,7 @@ describe('/POST User Sign In Test', () => {
         .post('/api/v1/users/signin')
         .set('Accept', 'application/json')
         .send({
-          usernameOrEmail: 'gbengE',
+          authName: 'gbengE',
           password: 'westsddae',
         })
         .end((err, res) => {
@@ -335,37 +335,37 @@ describe('/POST User Sign In Test', () => {
         });
     });
 
-    it('should return \'Username or email does not exist!\' error', (done) => {
+    it('should return \'Invalid Login Credentials!\' error', (done) => {
       chai.request(server)
         .post('/api/v1/users/signin')
         .set('Accept', 'application/json')
         .send({
-          usernameOrEmail: 'gbengene@ymail.com',
-          password: 'westsddaes',
-        })
-        .end((err, res) => {
-          expect(res.statusCode).to.equal(404);
-          expect(res.body).deep.equal({
-            success: false,
-            message: 'Username or email does not exist!'
-          });
-          done();
-        });
-    });
-
-    it('should return \'Incorrect Password!\' error', (done) => {
-      chai.request(server)
-        .post('/api/v1/users/signin')
-        .set('Accept', 'application/json')
-        .send({
-          usernameOrEmail: 'gbengene@yahoo.com',
+          authName: 'gbengene@ymail.com',
           password: 'westsddaes',
         })
         .end((err, res) => {
           expect(res.statusCode).to.equal(401);
           expect(res.body).deep.equal({
             success: false,
-            message: 'Incorrect Password!'
+            message: 'Invalid Login Credentials!'
+          });
+          done();
+        });
+    });
+
+    it('should return \'Invalid Login Credentials!\' error', (done) => {
+      chai.request(server)
+        .post('/api/v1/users/signin')
+        .set('Accept', 'application/json')
+        .send({
+          authName: 'gbengene@yahoo.com',
+          password: 'westsddaes',
+        })
+        .end((err, res) => {
+          expect(res.statusCode).to.equal(401);
+          expect(res.body).deep.equal({
+            success: false,
+            message: 'Invalid Login Credentials!'
           });
           done();
         });
@@ -391,37 +391,43 @@ describe('/GET User profile Test', () => {
 });
 
 describe('/PUT Change password test', () => {
-  it('should return \'Password must be at least 6 characters!\' for \'ab\'', (done) => {
-    chai.request(server)
-      .put('/api/v1/users/changePassword')
-      .set('Accept', 'application/json')
-      .set('x-access-token', token)
-      .send({
-        oldPassword: 'westsddae',
-        newPassword: 'ab',
-      })
-      .end((err, res) => {
-        expect(res.statusCode).to.equal(400);
-        expect(res.body.message).to.equal('Password must be at least 6 characters!');
-        done();
-      });
-  });
+  it('should return \'Password must be at least 6 characters!\' for \'ab\'',
+    (done) => {
+      chai.request(server)
+        .put('/api/v1/users/changePassword')
+        .set('Accept', 'application/json')
+        .set('x-access-token', token)
+        .send({
+          oldPassword: 'westsddae',
+          newPassword: 'ab',
+        })
+        .end((err, res) => {
+          expect(res.statusCode).to.equal(400);
+          expect(res.body.message)
+            .to.equal('Password must be at least 6 characters!');
+          done();
+        });
+    });
 
-  it('should return \'Password must be at least 6 characters!\' for \'ab\'', (done) => {
-    chai.request(server)
-      .put('/api/v1/users/changePassword')
-      .set('Accept', 'application/json')
-      .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NDY4LCJlbWFpbCI6ImpvaG5kb2VAY29tcGFueS5jb20iLCJ1c2VybmFtZSI6ImpvaG5kb2UiLCJpYXQiOjE1MTA1OTI3Nzd9.Oa9wuSqolP2oM5-uKWN0ZukagWx2ZC1kN2tPXGZoM-s')
-      .send({
-        oldPassword: 'westsddae',
-        newPassword: 'ywhahdbidvsdv',
-      })
-      .end((err, res) => {
-        expect(res.statusCode).to.equal(404);
-        expect(res.body.message).to.equal('User does not exist!');
-        done();
-      });
-  });
+  it('should return \'User does not exit\' for \'ab\'',
+    (done) => {
+      chai.request(server)
+        .put('/api/v1/users/changePassword')
+        .set('Accept', 'application/json')
+        .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI' +
+        '6NDY4LCJlbWFpbCI6ImpvaG5kb2VAY29tcGFueS5jb20iLCJ1c2VybmFtZSI6ImpvaG' +
+        '5kb2UiLCJpYXQiOjE1MTA1OTI3Nzd9.Oa9wuSqolP2oM5-uKWN0ZukagWx2ZC1kN2tP' +
+        'XGZoM-s')
+        .send({
+          oldPassword: 'westsddae',
+          newPassword: 'ywhahdbidvsdv',
+        })
+        .end((err, res) => {
+          expect(res.statusCode).to.equal(404);
+          expect(res.body.message).to.equal('User does not exist!');
+          done();
+        });
+    });
 
   it('should return \'Incorrect Password\' for \'westshguuvyli.v\'', (done) => {
     chai.request(server)
@@ -439,19 +445,20 @@ describe('/PUT Change password test', () => {
       });
   });
 
-  it('should return \'Password Changed Successfully\' for \'westsddae\'', (done) => {
-    chai.request(server)
-      .put('/api/v1/users/changePassword')
-      .set('Accept', 'application/json')
-      .set('x-access-token', token)
-      .send({
-        oldPassword: 'westsddae',
-        newPassword: 'sdsdsdsdsds',
-      })
-      .end((err, res) => {
-        expect(res.statusCode).to.equal(200);
-        expect(res.body.message).to.equal('Password Changed Successfully');
-        done();
-      });
-  });
+  it('should return \'Password Changed Successfully\' for \'westsddae\'',
+    (done) => {
+      chai.request(server)
+        .put('/api/v1/users/changePassword')
+        .set('Accept', 'application/json')
+        .set('x-access-token', token)
+        .send({
+          oldPassword: 'westsddae',
+          newPassword: 'sdsdsdsdsds',
+        })
+        .end((err, res) => {
+          expect(res.statusCode).to.equal(200);
+          expect(res.body.message).to.equal('Password Changed Successfully');
+          done();
+        });
+    });
 });

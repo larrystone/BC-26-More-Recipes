@@ -15,7 +15,7 @@ export default class Favorites {
    * @returns {object} Class instance
    * @memberof Favorite
    */
-  addToFavorite({ user, params }, res) {
+  addToFavorites({ user, params }, res) {
     const userId = user.id;
     const { recipeId } = params;
 
@@ -33,11 +33,7 @@ export default class Favorites {
           success: false,
           message: `Recipe with id: ${recipeId} Already added!`
         });
-      })
-      .catch(() => res.status(500).json({
-        success: false,
-        message: 'Error Adding Recipe to Favorites'
-      }));
+      });
 
     return this;
   }
@@ -61,16 +57,14 @@ export default class Favorites {
           ]
         },
       })
-      .then(() => {
-        res.status(205).json({
-          success: true,
-          message: `Recipe with ID: ${recipeId} Removed from Favorites`
-        });
-      })
-      .catch(() => res.status(500).json({
-        success: false,
-        message: 'Error Removing Recipe from Favorites'
-      }));
+      .then((status) => {
+        if (status === 1) {
+          res.status(205).json({
+            success: true,
+            message: `Recipe with ID: ${recipeId} Removed from Favorites`
+          });
+        }
+      });
 
     return this;
   }
@@ -93,24 +87,21 @@ export default class Favorites {
           { model: Recipe }
         ]
       })
-      .then((recipe) => {
-        if (!recipe) {
-          return res.status(201).json({
+      .then((recipes) => {
+        if (recipes.length === 0) {
+          return res.status(200).json({
             success: true,
-            message: 'No Stored Favorite Recipes found',
+            message: 'Nothing found!',
+            recipes: []
           });
         }
 
         return res.status(201).json({
           success: true,
-          message: 'Operation Successful',
-          recipe
+          message: 'Favorite Recipes found',
+          recipes
         });
-      })
-      .catch(() => res.status(500).json({
-        success: false,
-        message: 'Unable to fetch favorite recipes'
-      }));
+      });
 
     return this;
   }
