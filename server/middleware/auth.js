@@ -25,7 +25,7 @@ export default class Auth {
       const secret = process.env.secret || '!^sl1@#=5';
       jwt.verify(token, secret, (err, decoded) => {
         if (err) {
-          return res.json({ success: false,
+          return res.status(401).json({ success: false,
             message: 'Failed to authenticate token.' });
         }
         req.user = decoded;
