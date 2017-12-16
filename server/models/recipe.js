@@ -13,7 +13,7 @@ export default (sequelize, DataTypes) => {
     description: DataTypes.STRING,
     ingredients: DataTypes.STRING,
     imageUrl: DataTypes.STRING,
-    direction: DataTypes.STRING,
+    procedure: DataTypes.STRING,
     viewCount: {
       type: DataTypes.INTEGER,
       defaultValue: 0,

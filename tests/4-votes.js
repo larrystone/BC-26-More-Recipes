@@ -34,7 +34,7 @@ describe('/POST Create User and Recipe', () => {
         token,
         name: 'Test Recipe',
         ingredients: 'Item1;;Item2;;Item3',
-        direction: 'direction and direction and directions'
+        procedure: 'procedure and procedure and procedures'
       })
       .end((err, res) => {
         recipeId = res.body.recipe.id;
@@ -43,8 +43,48 @@ describe('/POST Create User and Recipe', () => {
         done();
       });
   });
+
+  it('should create a recipe (to get recipeId)', (done) => {
+    chai.request(server)
+      .post('/api/v1/recipes')
+      .set('Accept', 'application/json')
+      .send({
+        token,
+        name: 'Test Recipe A',
+        ingredients: 'Item1;;Item2;;Item3',
+        procedure: 'procedure and procedure and procedures'
+      })
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(201);
+        expect(res.body.success).to.equal(true);
+        done();
+      });
+  });
 });
 
+describe('/GET Upvotes/Downvotes on Recipe Test', () => {
+  it('should return an empty array of upvotes', (done) => {
+    chai.request(server)
+      .get(`/api/v1/recipes/${recipeId}/upvotes`)
+      .set('Accept', 'application/json')
+      .set('x-access-token', token)
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(200);
+        done();
+      });
+  });
+
+  it('should return an empty array of downvotes', (done) => {
+    chai.request(server)
+      .get(`/api/v1/recipes/${recipeId}/downvotes`)
+      .set('Accept', 'application/json')
+      .set('x-access-token', token)
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(200);
+        done();
+      });
+  });
+});
 
 describe('/POST upvote Review Test', () => {
   it('should return \'Review upvoted\'', (done) => {
@@ -82,6 +122,29 @@ describe('/POST upvote Review Test', () => {
   });
 });
 
+describe('/GET Upvotes/Downvotes on Recipe Test', () => {
+  it('should return an array of upvotes', (done) => {
+    chai.request(server)
+      .get(`/api/v1/recipes/${recipeId}/upvotes`)
+      .set('Accept', 'application/json')
+      .set('x-access-token', token)
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(201);
+        done();
+      });
+  });
+
+  it('should return an empty array of downvotes', (done) => {
+    chai.request(server)
+      .get(`/api/v1/recipes/${recipeId}/downvotes`)
+      .set('Accept', 'application/json')
+      .set('x-access-token', token)
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(200);
+        done();
+      });
+  });
+});
 
 describe('/POST downvote Review Test', () => {
   it('should return \'Review downvoted\'', (done) => {
@@ -117,11 +180,59 @@ describe('/POST downvote Review Test', () => {
         done();
       });
   });
+
+  it('should return \'Review downvoted\'', (done) => {
+    chai.request(server)
+      .post(`/api/v1/recipes/${recipeId + 1}/downvotes`)
+      .set('Accept', 'application/json')
+      .send({
+        token
+      })
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(201);
+        expect(res.body).deep.equal({
+          success: true,
+          message: `Recipe with id: ${recipeId + 1} Downvoted!`
+        });
+        done();
+      });
+  });
 });
 
+describe('/GET Downvotes on Recipe Test', () => {
+  it('should return am array of downvotes', (done) => {
+    chai.request(server)
+      .get(`/api/v1/recipes/${recipeId}/downvotes`)
+      .set('Accept', 'application/json')
+      .set('x-access-token', token)
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(201);
+        done();
+      });
+  });
+});
+
+describe('/POST upvote Review Test', () => {
+  it('should return \'Review upvoted\'', (done) => {
+    chai.request(server)
+      .post(`/api/v1/recipes/${recipeId}/upvotes`)
+      .set('Accept', 'application/json')
+      .send({
+        token
+      })
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(201);
+        expect(res.body).deep.equal({
+          success: true,
+          message: `Recipe with id: ${recipeId} Upvoted!`
+        });
+        done();
+      });
+  });
+});
 
 describe('/GET Upvotes/Downvotes on Recipe Test', () => {
-  it('should return array of upvotes', (done) => {
+  it('should return an array of upvotes', (done) => {
     chai.request(server)
       .get(`/api/v1/recipes/${recipeId}/upvotes`)
       .set('Accept', 'application/json')
@@ -132,13 +243,13 @@ describe('/GET Upvotes/Downvotes on Recipe Test', () => {
       });
   });
 
-  it('should return array of downvotes', (done) => {
+  it('should return am empty array of downvotes', (done) => {
     chai.request(server)
       .get(`/api/v1/recipes/${recipeId}/downvotes`)
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
-        expect(res.statusCode).to.equal(201);
+        expect(res.statusCode).to.equal(200);
         done();
       });
   });

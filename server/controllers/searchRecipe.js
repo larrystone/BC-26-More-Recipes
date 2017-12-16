@@ -1,7 +1,18 @@
-import models from '../models';
+import { Recipe, User } from '../models';
 
-const recipe = models.Recipe;
-const user = models.User;
+const populatePaging = ({ count = 0, rows = [] }, currentPage, limit) => {
+  const totalRecords = count;
+  const totalPages = Math.ceil(totalRecords / limit);
+  const newRecipes = Object.assign({},
+    {
+      currentPage,
+      currentPageSize: rows.length,
+      totalPages,
+      totalRecords
+    }
+  );
+  return newRecipes;
+};
 
 /**
  * Class Definition for the Search Recipe Object
@@ -18,34 +29,40 @@ export default class Search {
    * @returns {object} Class instance
    * @memberof Search
    */
-  sortMostUpvotes(req, res) {
-    recipe
-      .findAll({
+  sortMostUpvotes({ query }, res) {
+    const limit = query.limit || 10,
+      currentPage = (query.page || 1),
+      offset = (currentPage - 1) * limit;
+
+    Recipe
+      .findAndCountAll({
         include: [
-          { model: models.User, attributes: ['name', 'updatedAt'] }
+          { model: User, attributes: ['name'] }
         ],
         order: [
           ['upvotes', 'DESC']
-        ]
+        ],
+        limit,
+        offset
       })
       .then((foundRecipes) => {
-        if (!foundRecipes) {
-          return res.status(404).json({
+        const pagination = populatePaging(foundRecipes, currentPage, limit);
+        if (foundRecipes.rows.length === 0) {
+          return res.status(200).json({
             success: true,
-            message: 'No Stored Recipes found',
+            pagination,
+            message: 'Nothing found!',
+            recipes: []
           });
         }
 
         return res.status(201).json({
           success: true,
           message: 'Recipe(s) found',
-          recipe: foundRecipes
+          pagination,
+          recipes: foundRecipes.rows
         });
-      })
-      .catch(() => res.status(500).json({
-        success: false,
-        message: 'Unable to fetch recipes'
-      }));
+      });
 
     return this;
   }
@@ -58,70 +75,48 @@ export default class Search {
    * @returns {object} Class instance
    * @memberof Search
    */
-  searchAll(req, res) {
-    let results;
-    const searchTerm = req.query.search;
+  searchAll({ query }, res) {
+    const limit = query.limit || 10,
+      currentPage = (query.page || 1),
+      offset = (currentPage - 1) * limit;
 
-    recipe
-      .findAll({
+    const { search } = query;
+    const ingredClause = search.split(' ').map(item => ({
+      ingredients: { $iLike: `%${item}%` }
+    }));
+    const nameClause = search.split(' ').map(item => ({
+      name: { $iLike: `%${item}%` }
+    }));
+
+    Recipe
+      .findAndCountAll({
         where: {
-          $or: [
-            {
-              name: {
-                $iLike: `%${searchTerm}%`
-              }
-            },
-            {
-              ingredients: {
-                $iLike: `%${searchTerm}%`
-              }
-            }
-          ]
+          $or: ingredClause.concat(nameClause)
         },
         include: [
-          { model: models.User, attributes: ['name', 'updatedAt'] }
-        ]
+          { model: User, attributes: ['name'] }
+        ],
+        limit,
+        offset
       })
       .then((foundRecipes) => {
-        results = foundRecipes.slice(0);
-      })
-      .then(() => {
-        user
-          .findAll({
-            attributes: ['name'],
-            where: {
-              $or: [
-                {
-                  name: {
-                    $iLike: `%${searchTerm}%`
-                  }
-                },
-                {
-                  username: {
-                    $iLike: searchTerm
-                  }
-                },
-                {
-                  email: {
-                    $iLike: searchTerm
-                  }
-                },
-              ]
-            },
-            include: [
-              { model: models.Recipe }
-            ]
-          })
-          .then(recipes => res.status(201).json({
+        const pagination = populatePaging(foundRecipes, currentPage, limit);
+        if (foundRecipes.rows.length === 0) {
+          return res.status(200).json({
             success: true,
-            message: 'Recipe(s) found',
-            recipe: results.concat(recipes)
-          }));
-      })
-      .catch(() => res.status(500).json({
-        success: false,
-        message: 'Unable to search recipes'
-      }));
+            pagination,
+            message: 'Nothing found!',
+            recipes: []
+          });
+        }
+
+        return res.status(201).json({
+          success: true,
+          message: 'Recipe(s) found',
+          pagination,
+          recipes: foundRecipes.rows
+        });
+      });
 
     return this;
   }
@@ -134,40 +129,48 @@ export default class Search {
    * @returns {object} Class instance
    * @memberof Search
    */
-  searchByIngredients(req, res) {
-    const ingredients = req.query.ingredients.split(' ');
-
+  searchByIngredients({ query }, res) {
+    const ingredients = query.ingredients.split(' ');
     const queryClause = ingredients.map(item => ({
       ingredients: { $iLike: `%${item}%` }
     }));
 
-    recipe
-      .findAll({
+    const limit = query.limit || 10,
+      currentPage = (query.page || 1),
+      offset = (currentPage - 1) * limit;
+
+    Recipe
+      .findAndCountAll({
         where: {
           $or: queryClause
         },
         include: [
-          { model: models.User, attributes: ['name', 'updatedAt'] }
-        ]
+          { model: User, attributes: ['name'] }
+        ],
+        order: [
+          ['upvotes', 'DESC']
+        ],
+        limit,
+        offset
       })
       .then((foundRecipes) => {
-        if (!foundRecipes) {
-          return res.status(404).json({
+        const pagination = populatePaging(foundRecipes, currentPage, limit);
+        if (foundRecipes.rows.length === 0) {
+          return res.status(200).json({
             success: true,
-            message: 'Nothing found',
+            pagination,
+            message: 'Nothing found!',
+            recipes: []
           });
         }
 
         return res.status(201).json({
           success: true,
           message: 'Recipe(s) found',
-          recipe: foundRecipes,
+          pagination,
+          recipes: foundRecipes.rows
         });
-      })
-      .catch(() => res.status(500).json({
-        success: false,
-        message: 'Unable to search recipes'
-      }));
+      });
 
     return this;
   }
@@ -180,36 +183,45 @@ export default class Search {
    * @returns {object} Classs instance
    * @memberof Search
    */
-  searchByName(req, res) {
-    const recipes = req.query.recipes;
+  searchByName({ query }, res) {
+    const { name } = query;
 
-    recipe
-      .findAll({
+    const limit = query.limit || 10,
+      currentPage = (query.page || 1),
+      offset = (currentPage - 1) * limit;
+
+    Recipe
+      .findAndCountAll({
         where: {
-          name: { $iLike: `%${recipes}%` }
+          name: { $iLike: `%${name}%` }
         },
         include: [
-          { model: models.User, attributes: ['name', 'updatedAt'] }
-        ]
+          { model: User, attributes: ['name'] }
+        ],
+        order: [
+          ['upvotes', 'DESC']
+        ],
+        limit,
+        offset
       })
       .then((foundRecipes) => {
-        if (!foundRecipes) {
-          return res.status(404).json({
+        const pagination = populatePaging(foundRecipes, currentPage, limit);
+        if (foundRecipes.rows.length === 0) {
+          return res.status(200).json({
             success: true,
-            message: 'Nothing found',
+            message: 'Nothing found!',
+            pagination,
+            recipes: []
           });
         }
 
         return res.status(201).json({
           success: true,
           message: 'Recipe(s) found',
-          recipe: foundRecipes,
+          pagination,
+          recipes: foundRecipes.rows
         });
-      })
-      .catch(() => res.status(500).json({
-        success: false,
-        message: 'Unable to search recipes'
-      }));
+      });
 
     return this;
   }

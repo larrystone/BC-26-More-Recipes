@@ -1,9 +1,6 @@
-import models from '../models';
-import * as validate from '../middleware/validate';
-import * as notify from './../services/notify';
-
-const review = models.Review;
-const recipe = models.Recipe;
+import { Review, Recipe, User } from '../models';
+import { validateReviewContent } from '../middleware/validate';
+import notify from './../services/notify';
 
 /**
  * Class Definition for the Review Object
@@ -11,7 +8,7 @@ const recipe = models.Recipe;
  * @export
  * @class Review
  */
-export default class Review {
+export default class Reviews {
   /**
    * Post a review on a recipe
    *
@@ -20,12 +17,12 @@ export default class Review {
    * @returns {object} Class instance
    * @memberof Review
    */
-  postReview(req, res) {
-    const userId = req.user.id;
-    const recipeId = req.params.recipeId;
-    const content = (req.body.content || '').replace(/\s+/g, ' ');
+  postReview({ user, params, body }, res) {
+    const userId = user.id;
+    const { recipeId } = params;
+    const content = (body.content || '').replace(/\s+/g, ' ');
 
-    const validateReviewContentError = validate.validateReviewContent(content);
+    const validateReviewContentError = validateReviewContent(content);
     if (validateReviewContentError) {
       return res.status(400).json({
         success: false,
@@ -33,24 +30,24 @@ export default class Review {
       });
     }
 
-    review
+    Review
       .create({
         content,
         userId,
         recipeId
       })
       .then((createdReview) => {
-        recipe
+        Recipe
           .findOne({
             attributes: ['userId'],
             where: { id: recipeId },
             include: [
-              { model: models.User, attributes: ['email'] }
+              { model: User, attributes: ['email'] }
             ]
           })
           .then((recipeOwner) => {
             const recipeOwnerEmail = recipeOwner.User.email;
-            notify.default(recipeOwnerEmail,
+            notify(recipeOwnerEmail,
               'New Review on Recipe',
               'Someone recently posted a review on one of your Recipes'
             );
@@ -58,15 +55,10 @@ export default class Review {
             return res.status(201).json({
               success: true,
               message: 'New review created',
-              createdReview,
-              recipeOwnerEmail
+              createdReview
             });
           });
-      })
-      .catch(() => res.status(500).json({
-        success: false,
-        message: 'Error Posting Review'
-      }));
+      });
 
     return this;
   }
@@ -79,67 +71,67 @@ export default class Review {
    * @returns {object} Class instance
    * @memberof Review
    */
-  getRecipeReviews(req, res) {
-    const recipeId = req.params.recipeId;
+  getRecipeReviews({ params }, res) {
+    const recipeId = params.recipeId;
 
-    review
+    Review
       .findAll({
         where: { recipeId },
         include: [
-          { model: models.User, attributes: ['name', 'updatedAt'] }
+          { model: User, attributes: ['name'] }
         ]
       })
       .then((reviews) => {
-        res.status(201).json({
+        if (reviews.length === 0) {
+          return res.status(200).json({
+            success: true,
+            message: 'Nothing found',
+            reviews: []
+          });
+        }
+        return res.status(201).json({
           success: true,
-          message: 'Reviews found',
-          recipe: reviews
+          message: 'Review(s) found',
+          reviews
         });
-      })
-      .catch(() => res.status(500).json({
-        success: false,
-        message: 'Error Fetching Reviews'
-      }));
+      });
 
     return this;
   }
 
   /**
    * Get a list of reviews by a user
-   * 
+   *
    * @param {object} req - HTTP Request
    * @param {object} res - HTTP Response
    * @returns {object} Class instance
    * @memberof Review
    */
-  getUserReviews(req, res) {
-    const userId = req.params.userId;
+  getUserReviews({ params }, res) {
+    const { userId } = params;
 
-    review
+    Review
       .findAll({
         where: { userId },
         include: [
-          { model: models.Recipe }
+          { model: Recipe }
         ]
       })
-      .then((foundReviews) => {
-        if (!foundReviews) {
-          return res.status(201).json({
+      .then((reviews) => {
+        if (reviews.length === 0) {
+          return res.status(200).json({
             success: true,
-            message: 'No Recipes Review by User found',
+            message: 'Nothing found!',
+            reviews: []
           });
         }
 
         return res.status(201).json({
           success: true,
-          message: 'Recipe(s) Review by user found',
-          recipe: foundReviews
+          message: 'User review(s) found',
+          reviews
         });
-      })
-      .catch(() => res.status(500).json({
-        success: false,
-        message: 'Unable to fetch recipes reviews'
-      }));
+      });
 
     return this;
   }

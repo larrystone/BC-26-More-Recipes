@@ -24,8 +24,8 @@ export default class Encryption {
 
   /** Verify Decrypt password
  * @exports verifyHash
- * @param  {string} password -User  Password
- * @param  {string} hash -User  Password
+ * @param  {string} password -User Password
+ * @param  {string} hash -User Password
  * @return {boolean} The status of decryption
  */
   verifyHash(password, hash) {

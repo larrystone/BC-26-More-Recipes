@@ -36,12 +36,38 @@ describe('/POST Create User and Recipe', () => {
         token,
         name: 'Test Recipe',
         ingredients: 'Item1;;Item2;;Item3',
-        direction: 'direction and direction and directions'
+        procedure: 'procedure and procedure and procedures'
       })
       .end((err, res) => {
         recipeId = res.body.recipe.id;
         expect(res.statusCode).to.equal(201);
         expect(res.body.success).to.equal(true);
+        done();
+      });
+  });
+});
+
+describe('/GET all Reviews on a Recipe Test', () => {
+  it('should return an empty array of Reviews', (done) => {
+    chai.request(server)
+      .get(`/api/v1/recipes/${recipeId}/reviews`)
+      .set('Accept', 'application/json')
+      .set('x-access-token', token)
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(200);
+        done();
+      });
+  });
+});
+
+describe('/GET all Reviews by a User Test', () => {
+  it('should return an empty array of Reviews', (done) => {
+    chai.request(server)
+      .get(`/api/v1/users/${userId}/reviews`)
+      .set('Accept', 'application/json')
+      .set('x-access-token', token)
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(200);
         done();
       });
   });

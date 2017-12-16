@@ -1,27 +1,54 @@
 import multer from 'multer';
-import fs from 'fs';
+import cloudinary from 'cloudinary';
 
-import models from '../models';
-import * as validate from '../middleware/validate';
-import * as Search from './searchRecipe';
-import * as notify from './../services/notify';
+import { Recipe, User } from '../models';
+import { validateRecipeDetails } from '../middleware/validate';
+import Search from './searchRecipe';
+import trimWhiteSpaces from '../services/trimWhiteSpace';
+import validateUserRight from '../services/validateUserRight';
 
-const recipe = models.Recipe,
-  favorite = models.Favorite,
-  folder = process.env.NODE_ENV === 'production' ? 'build' : 'public',
-  trimWhiteSpaces = param => (param || '').replace(/\s+/g, ' ');
+cloudinary.config({
+  cloud_name: 'larrystone',
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECRET
+});
 
-const upload = multer({
-  dest: `client/${folder}/recipes`,
-  limits: { fileSize: 204800, files: 1 },
-  fileFilter: (req, file, callback) => {
-    if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
-      return callback(new Error('Only Images are allowed !'), false);
-    }
+const uploadWithMulter = (req, res) => {
+  const promise = new Promise((resolve, reject) => {
+    multer({
+      storage: multer.memoryStorage(),
+      limits: { fileSize: 200 * 1024 * 1024, files: 1 },
+      fileFilter: (req, file, callback) => {
+        if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+          return callback(new Error('Only Images are allowed !'), false);
+        }
 
-    callback(null, true);
-  }
-}).single('image');
+        callback(null, true);
+      }
+    }).single('image')(req, res, (error) => {
+      if (error) {
+        reject(error);
+      }
+      resolve(req);
+    });
+  });
+  return promise;
+};
+
+const isNamePicked = (userId, name) => {
+  const promise = new Promise((resolve) => {
+    Recipe
+      .findOne({ where: { userId, name } })
+      .then((recipe) => {
+        if (recipe) {
+          resolve(true);
+        } else {
+          resolve(false);
+        }
+      });
+  });
+  return promise;
+};
 
 /**
  * Class Definition for the Recipe Object
@@ -29,7 +56,7 @@ const upload = multer({
  * @export
  * @class Recipe
  */
-export default class Recipe {
+export default class Recipes {
   /**
    * Create a new recipe record
    *
@@ -39,58 +66,79 @@ export default class Recipe {
    * @memberof Recipe
    */
   createRecipe(req, res) {
-    upload(req, res, (err) => {
-      if (err) {
-        res.status(400).json({
-          success: false,
-          message: err.message
-        });
-      } else {
-        let filePath;
-        if (req.file) {
-          filePath = `recipes/${req.file.filename}`;
-        } else {
-          filePath = 'null';
-        }
-
-        const name = trimWhiteSpaces(req.body.name);
-        const description = trimWhiteSpaces(req.body.description);
-        const ingredients = trimWhiteSpaces(req.body.ingredients);
-        const direction = trimWhiteSpaces(req.body.direction);
-
-        const validateRecipeError =
-          validate.validateRecipeDetails(name, ingredients, direction);
-
-        if (validateRecipeError) {
-          return res.status(400).json({
-            success: false,
-            message: validateRecipeError
-          });
-        }
-
-        recipe
-          .create({
-            name,
-            description,
-            ingredients,
-            direction,
-            imageUrl: filePath,
-            userId: req.user.id
-          })
-          .then((createdRecipe) => {
-            res.status(201).json({
-              success: true,
-              message: 'New Recipe created',
-              recipe: createdRecipe
+    const writeToDatabase = ({
+      name, description, ingredients, procedure, imageUrl, userId, res }) => {
+      isNamePicked(userId, name)
+        .then((isPicked) => {
+          if (isPicked) {
+            return res.status(409).json({
+              success: false,
+              message: 'Recipe name already picked!'
             });
-          })
-          .catch(() => res.status(500).json({
-            success: false,
-            message: 'Error Creating Recipe'
-          }));
-      }
-    });
+          }
 
+          Recipe
+            .create({
+              name,
+              description,
+              ingredients,
+              procedure,
+              imageUrl,
+              userId
+            })
+            .then((recipe) => {
+              res.status(201).json({
+                success: true,
+                message: 'New Recipe created',
+                recipe
+              });
+            });
+        });
+    };
+
+    uploadWithMulter(req, res).then(({ file, body, user }) => {
+      let imageUrl = '';
+      const name = trimWhiteSpaces(body.name, ' ');
+      const description = trimWhiteSpaces(body.description, ' ');
+      const ingredients = trimWhiteSpaces(body.ingredients, ' ');
+      const procedure = trimWhiteSpaces(body.procedure, ' ');
+      const userId = user.id;
+
+      const isRecipeInvalid =
+        validateRecipeDetails(name, ingredients, procedure);
+
+      if (isRecipeInvalid) {
+        return res.status(400).json({
+          success: false,
+          message: isRecipeInvalid
+        });
+      }
+
+      if (file) {
+        cloudinary.uploader.upload_stream(({ error, url }) => {
+          if (!error) {
+            imageUrl = url;
+            writeToDatabase({
+              name, description, ingredients, procedure, imageUrl, userId, res
+            });
+          } else {
+            res.status(503).json({
+              success: false,
+              message: 'Error uploading image, check your network connection'
+            });
+          }
+        }).end(file.buffer);
+      } else {
+        writeToDatabase({
+          name, description, ingredients, procedure, imageUrl, userId, res
+        });
+      }
+    }).catch(({ message }) => {
+      res.status(400).json({
+        success: false,
+        message
+      });
+    });
     return this;
   }
 
@@ -103,105 +151,92 @@ export default class Recipe {
    * @memberof Recipe
    */
   modifyRecipe(req, res) {
-    let imageUrl;
-    upload(req, res, (err) => {
-      if (err) {
-        res.status(400).json({
-          success: false,
-          message: err.message
+    const updateDatabase = ({
+      name, description, ingredients, procedure, imageUrl, res, foundRecipe
+    }) => {
+      foundRecipe.updateAttributes({
+        name,
+        description,
+        ingredients,
+        imageUrl,
+        procedure
+      })
+        .then(recipeUpdated => recipeUpdated.reload())
+        .then((recipe) => {
+          res.status(201).json({
+            success: true,
+            message: 'Recipe record updated',
+            recipe
+          });
         });
-      } else {
-        if (req.file) {
-          imageUrl = `recipes/${req.file.filename}`;
+    };
+
+    uploadWithMulter(req, res).then(({ file, user, body, params }) => {
+      const userId = user.id;
+      const { recipeId } = params || 0;
+      const name = trimWhiteSpaces(body.name, '  ');
+      const description = trimWhiteSpaces(body.description, '  ');
+      const ingredients = trimWhiteSpaces(body.ingredients, '  ');
+      const procedure = trimWhiteSpaces(body.procedure, '  ');
+
+      const isRecipeInvalid =
+        validateRecipeDetails(name, ingredients,
+          procedure, recipeId);
+
+      if (isRecipeInvalid) {
+        return res.status(400).json({
+          success: false,
+          message: isRecipeInvalid
+        });
+      }
+
+      validateUserRight(Recipe, recipeId, userId).then((foundRecipe) => {
+        if (file) {
+          cloudinary.uploader.upload_stream(({ error, imageUrl }) => {
+            if (!error) {
+              updateDatabase({
+                name,
+                description,
+                ingredients,
+                procedure,
+                imageUrl,
+                res,
+                foundRecipe
+              });
+            } else {
+              res.status(503).json({
+                success: false,
+                message: 'Error uploading image, check your network connection'
+              });
+            }
+          }).end(file.buffer);
         } else {
-          imageUrl = null;
-        }
-
-        const userId = req.user.id;
-        const recipeId = req.params.recipeId || 0;
-        const name = trimWhiteSpaces(req.body.name);
-        const description = trimWhiteSpaces(req.body.description);
-        const ingredients = trimWhiteSpaces(req.body.ingredients);
-        const direction = (req.body.direction);
-
-        const validateRecipeError =
-          validate.validateRecipeDetails(name, ingredients,
-            direction, recipeId);
-
-        if (validateRecipeError) {
-          return res.status(400).json({
-            success: false,
-            message: validateRecipeError
+          const { imageUrl } = foundRecipe;
+          updateDatabase({
+            name,
+            description,
+            ingredients,
+            procedure,
+            imageUrl,
+            res,
+            foundRecipe
           });
         }
-        recipe
-          .findById(recipeId)
-          .then((recipeFound) => {
-            if (!recipeFound) {
-              return res.status(404).json({
-                success: false,
-                message: `No matching recipe with id: ${recipeId}`
-              });
-            }
-
-            if (+recipeFound.userId !== +userId) {
-              fs.unlink(`client/${folder}/${imageUrl}`, () => {
-              });
-              return res.status(401).json({
-                success: false,
-                message: 'You cannot modify a recipe not created by You!'
-              });
-            }
-
-            if (!imageUrl) {
-              imageUrl = recipeFound.imageUrl;
-            } else {
-              fs.unlink(`client/${folder}/${recipeFound.imageUrl}`, () => {
-              });
-            }
-
-            recipe.update({
-              name,
-              description,
-              ingredients,
-              imageUrl,
-              direction
-            }, {
-                where: {
-                  id: recipeId
-                },
-                returning: true
-              })
-              .then((result) => {
-                favorite
-                  .findAll({
-                    attributes: ['userId'],
-                    where: { recipeId },
-                    include: [
-                      { model: models.User, attributes: ['email'] }
-                    ]
-                  })
-                  .then((foundUsers) => {
-                    const userEmails = foundUsers.map(user => user.User.email);
-                    notify.default(userEmails,
-                      'Favorite Recipe Modified',
-                      'One of your favorite recipes has been modified');
-
-                    res.status(201).json({
-                      success: true,
-                      message: 'Recipe record updated',
-                      recipe: result[1],
-                    });
-                  });
-              });
-          })
-          .catch(() => res.status(500).json({
+      })
+        .catch(({ status, message }) => {
+          res.status(status).json({
             success: false,
-            message: 'Error Modifying Recipe'
-          }));
-      }
-      return this;
-    });
+            message
+          });
+        });
+    })
+      .catch(({ message }) => {
+        res.status(400).json({
+          success: false,
+          message
+        });
+      });
+    return this;
   }
 
   /**
@@ -212,49 +247,30 @@ export default class Recipe {
    * @returns {object} Class instance
    * @memberof Recipe
    */
-  deleteRecipe(req, res) {
-    const recipeId = req.params.recipeId;
-    const userId = req.user.id;
-    let imageUrl;
+  deleteRecipe({ params, user }, res) {
+    const { recipeId } = params;
 
-    recipe
-      .findById(recipeId)
-      .then((recipeFound) => {
-        if (!recipeFound) {
-          return res.status(404).json({
-            success: false,
-            message: `No matching recipe with id: ${recipeId}`
-          });
-        }
-
-        imageUrl = recipeFound.imageUrl;
-
-        if (+recipeFound.userId !== +userId) {
-          return res.status(401).json({
-            success: false,
-            message: 'You cannot delete this recipe'
-          });
-        }
-
-        recipe.destroy({
-          where: {
-            id: recipeId
-          },
-        })
-          .then(() => {
-            fs.unlink(`client/${folder}/${imageUrl}`, () => {
-            });
-            res.status(205).json({
-              success: true,
-              message: 'Recipe Deleted!'
-            });
-          });
+    validateUserRight(Recipe, recipeId, user.id).then(() => {
+      Recipe.destroy({
+        where: {
+          id: recipeId
+        },
       })
-      .catch(() => res.status(500).json({
+        .then(() => {
+          // TODO delete image in cloudinary
+          // cloudinary.uploader.destroy('id', () => {
+          res.status(205).json({
+            success: true,
+            message: 'Recipe Deleted!'
+          });
+          // });
+        });
+    }).catch(({ status, message }) => {
+      res.status(status).json({
         success: false,
-        message: 'Error Deleting Recipe'
-      }));
-
+        message
+      });
+    });
     return this;
   }
 
@@ -266,35 +282,22 @@ export default class Recipe {
    * @returns {object} Class instance
    * @memberof Recipe
    */
-  getRecipe(req, res) {
-    const recipeId = req.params.recipeId;
+  getRecipe({ params }, res) {
+    const { recipeId } = params;
 
-    recipe
+    Recipe
       .findOne({
         where: { id: recipeId },
         include: [
-          { model: models.User, attributes: ['name', 'updatedAt'] }
+          { model: User, attributes: ['name'] }
         ]
       })
-      .then((recipeFound) => {
-        if (!recipeFound) {
-          return res.status(404).json({
-            success: false,
-            message: `No matching recipe with id: ${recipeId}`
-          });
-        }
-
-        return recipeFound.increment('viewCount');
-      })
+      .then(recipeFound => recipeFound.increment('viewCount'))
       .then(recipesFound => recipesFound.reload())
-      .then(recipeLoaded => res.status(201).json({
+      .then(recipe => res.status(201).json({
         success: true,
         message: 'Recipe found',
-        recipe: recipeLoaded
-      }))
-      .catch(() => res.status(500).json({
-        success: false,
-        message: 'Unable to fetch recipes'
+        recipe
       }));
 
     return this;
@@ -308,34 +311,31 @@ export default class Recipe {
    * @returns {object} Class instance
    * @memberof Recipe
    */
-  getUserRecipes(req, res) {
-    const userId = req.user.id;
+  getUserRecipes({ user }, res) {
+    const userId = user.id;
 
-    recipe
+    Recipe
       .findAll({
         where: { userId },
         include: [
-          { model: models.User, attributes: ['name', 'updatedAt'] }
+          { model: User, attributes: ['name'] }
         ]
       })
-      .then((foundRecipes) => {
-        if (!foundRecipes) {
-          return res.status(404).json({
+      .then((recipes) => {
+        if (recipes.length === 0) {
+          return res.status(200).json({
             success: true,
-            message: 'No User Stored Recipes found',
+            message: 'Nothing found!',
+            recipes: []
           });
         }
 
         return res.status(201).json({
           success: true,
-          message: 'User Recipes found',
-          recipe: foundRecipes
+          message: 'Recipe(s) found',
+          recipes
         });
-      })
-      .catch(() => res.status(500).json({
-        success: false,
-        message: 'Unable to get user recipes'
-      }));
+      });
 
     return this;
   }
@@ -349,41 +349,38 @@ export default class Recipe {
    * @memberof Recipe
    */
   getAllRecipes(req, res) {
-    const newSearch = new Search.default();
+    const newSearch = new Search();
 
     if (req.query.sort === 'upvotes' && req.query.order === 'descending') {
       newSearch.sortMostUpvotes(req, res);
     } else if (req.query.ingredients) {
       newSearch.searchByIngredients(req, res);
-    } else if (req.query.recipes) {
+    } else if (req.query.name) {
       newSearch.searchByName(req, res);
     } else if (req.query.search) {
       newSearch.searchAll(req, res);
     } else {
-      recipe
+      Recipe
         .findAll({
           include: [
-            { model: models.User, attributes: ['name', 'updatedAt'] }
+            { model: User, attributes: ['name'] }
           ]
         })
-        .then((foundRecipes) => {
-          if (!foundRecipes) {
-            return res.status(404).json({
+        .then((recipes) => {
+          if (recipes.length === 0) {
+            return res.status(200).json({
               success: true,
-              message: 'No Stored Recipes found'
+              message: 'Nothing found!',
+              recipes: []
             });
           }
 
           return res.status(201).json({
             success: true,
-            message: 'Recipes found',
-            recipe: foundRecipes
+            message: 'Recipe(s) found!',
+            recipes
           });
-        })
-        .catch(() => res.status(500).json({
-          success: false,
-          message: 'Unable to fetch recipes'
-        }));
+        });
 
       return this;
     }
