@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from 'semantic-ui-react';
-import efo from '../../../images/efo.jpg';
+import efo from './../../../images/efo.jpg';
 
 const AppIntro = () => (
   <div>
