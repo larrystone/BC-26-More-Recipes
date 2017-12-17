@@ -1,0 +1,75 @@
+//colors
+$color_green_lighten_2: #256188;
+$color_nobel_approx: #b6b5b5;
+$color_white: #fff;
+$color_red: #F71111;
+$color_whitesmoke: whitesmoke;
+
+//fonts
+$font_0: Marmelad;
+$font_1: Helvetica;
+$font_2: Courgette;
+$font_3: cursive;
+
+#root, .body {
+	height: 100%;
+}
+
+
+#title {
+	color: $color_white;
+	padding-top: 180px;
+	text-align: center;
+	animation-duration: 4s;
+	animation-delay: 2s;
+}
+
+.body {
+	display: flex;
+	flex-direction: column;
+	margin: 0;
+}
+
+.desc {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+main {
+  flex: 1 0 auto;
+}
+
+footer {
+	flex: 0 0 125px;
+	margin-top: 120px;
+	color: $color_white;
+	background-color: $color_green_lighten_2;
+}
+
+.flex-row {
+	padding: 10px 15px 10px 0px;
+	display: flex;
+	flex-wrap: wrap;
+}
+
+a, a:hover {
+	color: $color_whitesmoke;
+	text-decoration: none;
+}
+
+.full-title {
+	font-family: $font_0, $font_1;
+	letter-spacing: 1px;
+	margin: 15px 0px;
+  font-size: 28px;
+  text-align: center;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.footer-item {
+	margin: 0px auto;
+}
