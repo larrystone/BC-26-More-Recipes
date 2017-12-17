@@ -1,4 +1,4 @@
-import models from './../server/models';
+import models from './../models';
 
 const user = models.User;
 const recipe = models.Recipe;

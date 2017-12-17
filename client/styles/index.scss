@@ -18,7 +18,7 @@ $font_3: cursive;
 
 #title {
 	color: $color_white;
-	padding-top: 180px;
+	padding-top: 100px;
 	text-align: center;
 	animation-duration: 4s;
 	animation-delay: 2s;
@@ -40,9 +40,19 @@ main {
   flex: 1 0 auto;
 }
 
+header {
+	color: #fff;
+	background-color: $color_green_lighten_2;
+	box-shadow: 1px 2px 2px grey;
+	position: fixed;
+	width: 100%;
+	z-index: 9;
+	padding: 20px 0px 0px 0px;
+}
+
 footer {
 	flex: 0 0 125px;
-	margin-top: 120px;
+	margin-top: 140px;
 	color: $color_white;
 	background-color: $color_green_lighten_2;
 }
@@ -51,6 +61,23 @@ footer {
 	padding: 10px 15px 10px 0px;
 	display: flex;
 	flex-wrap: wrap;
+}
+
+.flex-item {
+	margin-right: 10px;
+}
+
+.push-down {
+	top: 130px;
+	margin: 0px;
+	position: relative;
+}
+
+.brand-logo {
+	font-size: 30px;
+	font-family: $font_2, $font_3;
+	// margin: 0px auto;
+	margin: 0px auto 0px 15px;
 }
 
 a, a:hover {
