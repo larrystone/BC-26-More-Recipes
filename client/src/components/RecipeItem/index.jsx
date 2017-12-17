@@ -3,9 +3,11 @@ import PropTypes from 'prop-types';
 import { Card, Image } from 'semantic-ui-react';
 import defaultImage from '../../../images/default_image.jpg';
 
-const RecipeItem = ({ recipe: {
-  imageUrl, name, description, User
-} }) => (
+const RecipeItem = ({
+  recipe: {
+    imageUrl, name, description, User
+  }
+}) => (
   <Card
     className="wow bounceInUp"
     color="green"
