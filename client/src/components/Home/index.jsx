@@ -32,7 +32,8 @@ class Home extends PureComponent {
       authName: '',
       email: '',
       password: '',
-      password2: ''
+      password2: '',
+      isLoading: false
     };
   }
 
@@ -55,6 +56,10 @@ class Home extends PureComponent {
   };
 
   handleSignIn = () => {
+    this.setState({
+      isLoading: true
+    });
+
     this.props.signIn(this.state)
       .then(() => {
         toastr.clear();
@@ -64,12 +69,19 @@ class Home extends PureComponent {
         }, 300);
       },
       (error) => {
+        this.setState({
+          isLoading: false
+        });
         toastr.clear();
         toastr.error(error.response.data.message);
       });
   };
 
   handleSignUp = () => {
+    this.setState({
+      isLoading: true
+    });
+
     if (this.state.password === this.state.password2) {
       this.props.signUp(this.state)
         .then(() => {
@@ -80,6 +92,10 @@ class Home extends PureComponent {
           }, 300);
         },
         (error) => {
+          this.setState({
+            isLoading: false
+          });
+
           toastr.clear();
           toastr.error(error.response.data.message);
         });
@@ -99,6 +115,7 @@ class Home extends PureComponent {
       <div className="body">
         <main>
           <AppIntro
+            isLoading={this.state.isLoading}
             storeToState={this.storeToState}
             handleSignIn={this.handleSignIn}
             handleSignUp={this.handleSignUp}

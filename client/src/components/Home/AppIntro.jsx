@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import efo from './../../../images/efo.jpg';
 
-const AppIntro = ({ storeToState, handleSignIn, handleSignUp }) => (
+const AppIntro = ({ storeToState, handleSignIn, handleSignUp, isLoading }) => (
   <div>
     <div
       className="intro wow bounceInDown"
@@ -36,7 +36,7 @@ const AppIntro = ({ storeToState, handleSignIn, handleSignUp }) => (
           on="click"
           position="bottom center"
         >
-          <Form>
+          <Form loading={isLoading} >
             <Form.Input
               icon="user"
               iconPosition="left"
@@ -74,7 +74,7 @@ const AppIntro = ({ storeToState, handleSignIn, handleSignUp }) => (
           on="click"
           position="bottom right"
         >
-          <Form style={{ width: '300px' }}>
+          <Form style={{ width: '300px' }} loading={isLoading}>
             <Form.Input
               label="Enter your full name"
               placeholder="Full name"
@@ -130,14 +130,15 @@ const AppIntro = ({ storeToState, handleSignIn, handleSignUp }) => (
           {'. . . your social media for connecting with wonderful delicacies!'}
         </h2>
       </div>
-    </div>
+    </div >
   </div >
 );
 
 AppIntro.propTypes = {
   storeToState: PropTypes.func.isRequired,
   handleSignIn: PropTypes.func.isRequired,
-  handleSignUp: PropTypes.func.isRequired
+  handleSignUp: PropTypes.func.isRequired,
+  isLoading: PropTypes.bool.isRequired
 };
 
 export default AppIntro;

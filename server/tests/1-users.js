@@ -379,6 +379,9 @@ describe('/GET User profile Test', () => {
         expect(res.body.success).to.equal(true);
         expect(res.body.user).to.have.all.deep.keys(
           'userId', 'name',
+          'myFavs',
+          'myRecipes',
+          'myReviews',
           'username', 'email');
         done();
       });
