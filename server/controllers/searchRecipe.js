@@ -1,18 +1,5 @@
 import { Recipe, User } from '../models';
-
-const populatePaging = ({ count = 0, rows = [] }, currentPage, limit) => {
-  const totalRecords = count;
-  const totalPages = Math.ceil(totalRecords / limit);
-  const newRecipes = Object.assign({},
-    {
-      currentPage,
-      currentPageSize: rows.length,
-      totalPages,
-      totalRecords
-    }
-  );
-  return newRecipes;
-};
+import populatePaging from '../services/populatePaging';
 
 /**
  * Class Definition for the Search Recipe Object
@@ -30,8 +17,8 @@ export default class Search {
    * @memberof Search
    */
   sortMostUpvotes({ query }, res) {
-    const limit = query.limit || 10,
-      currentPage = (query.page || 1),
+    const limit = +query.limit || 10,
+      currentPage = (+query.page || 1),
       offset = (currentPage - 1) * limit;
 
     Recipe
@@ -76,8 +63,8 @@ export default class Search {
    * @memberof Search
    */
   searchAll({ query }, res) {
-    const limit = query.limit || 10,
-      currentPage = (query.page || 1),
+    const limit = +query.limit || 10,
+      currentPage = (+query.page || 1),
       offset = (currentPage - 1) * limit;
 
     const { search } = query;
@@ -135,8 +122,8 @@ export default class Search {
       ingredients: { $iLike: `%${item}%` }
     }));
 
-    const limit = query.limit || 10,
-      currentPage = (query.page || 1),
+    const limit = +query.limit || 10,
+      currentPage = (+query.page || 1),
       offset = (currentPage - 1) * limit;
 
     Recipe
@@ -186,8 +173,8 @@ export default class Search {
   searchByName({ query }, res) {
     const { name } = query;
 
-    const limit = query.limit || 10,
-      currentPage = (query.page || 1),
+    const limit = +query.limit || 10,
+      currentPage = (+query.page || 1),
       offset = (currentPage - 1) * limit;
 
     Recipe

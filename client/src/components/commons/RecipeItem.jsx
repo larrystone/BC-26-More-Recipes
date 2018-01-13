@@ -35,6 +35,8 @@ const RecipeItem = ({
   const myRecipesActions = () => (
     <div style={styles.actionClass}>
       <div
+        role="button"
+        tabIndex="0"
         className="clickable"
         onClick={() => {
           handleView();
@@ -44,6 +46,8 @@ const RecipeItem = ({
       </div>
       <div style={styles.itemDivider} />
       <div
+        role="button"
+        tabIndex="0"
         className="clickable"
         onClick={() => {
           actions.editRecipe(name, id, 'create_edit_recipe');
@@ -53,6 +57,8 @@ const RecipeItem = ({
       </div>
       <div style={styles.itemDivider} />
       <div
+        role="button"
+        tabIndex="0"
         className="clickable"
         onClick={() => {
           actions.addModal(name, id, 'myrecipes');
@@ -66,6 +72,8 @@ const RecipeItem = ({
   const myFavActions = () => (
     <div style={styles.actionClass}>
       <div
+        role="button"
+        tabIndex="0"
         className="clickable"
         onClick={() => {
           handleView();
@@ -75,6 +83,8 @@ const RecipeItem = ({
       </div>
       <div style={styles.itemDivider} />
       <div
+        role="button"
+        tabIndex="0"
         className="clickable"
         onClick={() => {
           actions.deleteFav(name, id);
@@ -97,14 +107,14 @@ const RecipeItem = ({
 
   return (
     <Card
-      className="wow bounceInUp"
+      className="wow bounceInUp food-card"
       color="green"
       style={{ padding: '5px', margin: '10px' }}
     >
       <Image
         alt="food image"
         src={!imageUrl ? defaultImage : imageUrl}
-        className="clickable wow bounceInUp"
+        className="clickable wow bounceInUp foodImage"
         height="180px"
         onClick={() => {
           handleView();
