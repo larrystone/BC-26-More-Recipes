@@ -1,7 +1,8 @@
 import chai, { expect } from 'chai';
 import chaiHttp from 'chai-http';
+import jwt from 'jsonwebtoken';
 
-import server from './../server/app';
+import server from './../app';
 
 chai.use(chaiHttp);
 
@@ -21,8 +22,8 @@ describe('/POST Create User and Recipe', () => {
         password: 'testing'
       })
       .end((err, res) => {
-        token = res.body.user.token;
-        userId = res.body.user.userId;
+        token = res.body.token;
+        userId = jwt.decode(token).id;
         expect(res.statusCode).to.equal(201);
         done();
       });

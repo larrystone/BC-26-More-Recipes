@@ -1,8 +1,8 @@
 import chai, { expect } from 'chai';
 import chaiHttp from 'chai-http';
-import * as Encryption from './../server/middleware/encryption';
+import * as Encryption from './../../server/middleware/encryption';
 
-import server from './../server/app';
+import server from './../app';
 
 const newEncrytion = new Encryption.default();
 

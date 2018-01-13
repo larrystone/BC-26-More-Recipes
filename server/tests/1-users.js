@@ -1,7 +1,8 @@
 import chai, { expect } from 'chai';
 import chaiHttp from 'chai-http';
+import jwt from 'jsonwebtoken';
 
-import server from './../server/app';
+import server from './../app';
 
 chai.use(chaiHttp);
 
@@ -180,8 +181,8 @@ describe('/POST User Sign Up Test', () => {
       })
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
-        expect(res.body.user).to.have.all.deep.keys(
-          'userId', 'name', 'username', 'email', 'token');
+        expect(res.body).to.have.all.deep.keys(
+          'success', 'message', 'token');
         done();
       });
   });
@@ -198,8 +199,8 @@ describe('/POST User Sign Up Test', () => {
       })
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
-        expect(res.body.user).to.have.all.deep.keys(
-          'userId', 'name', 'username', 'email', 'token');
+        expect(res.body.message).to.equal(
+          'New user created/token generated!');
         done();
       });
   });
@@ -216,8 +217,7 @@ describe('/POST User Sign Up Test', () => {
       })
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
-        expect(res.body.user).to.have.all.deep.keys(
-          'userId', 'name', 'username', 'email', 'token');
+        expect(res.body.success).to.equal(true);
         done();
       });
   });
@@ -273,10 +273,9 @@ describe('/POST User Sign In Test', () => {
         password: 'Hacknets'
       })
       .end((err, res) => {
-        expect(res.statusCode).to.equal(201);
-        expect(res.body.user).to.have.all.deep.keys(
-          'userId', 'name',
-          'username', 'email', 'token');
+        expect(res.statusCode).to.equal(200);
+        expect(res.body.message).to.equal(
+          'User Signed In/token generated!');
         done();
       });
   });
@@ -291,10 +290,9 @@ describe('/POST User Sign In Test', () => {
           password: 'westerdae',
         })
         .end((err, res) => {
-          expect(res.statusCode).to.equal(201);
-          expect(res.body.user).to.have.all.deep.keys(
-            'userId', 'name',
-            'username', 'email', 'token');
+          expect(res.statusCode).to.equal(200);
+          expect(res.body).to.have.all.deep.keys(
+            'success', 'message', 'token');
           done();
         });
     });
@@ -308,10 +306,9 @@ describe('/POST User Sign In Test', () => {
           password: 'westsddae',
         })
         .end((err, res) => {
-          expect(res.statusCode).to.equal(201);
-          expect(res.body.user).to.have.all.deep.keys(
-            'userId', 'name',
-            'username', 'email', 'token');
+          expect(res.statusCode).to.equal(200);
+          expect(res.body).to.have.all.deep.keys(
+            'success', 'message', 'token');
           done();
         });
     });
@@ -325,12 +322,10 @@ describe('/POST User Sign In Test', () => {
           password: 'westsddae',
         })
         .end((err, res) => {
-          token = res.body.user.token;
-          userId = res.body.user.userId;
-          expect(res.statusCode).to.equal(201);
-          expect(res.body.user).to.have.all.deep.keys(
-            'userId', 'name',
-            'username', 'email', 'token');
+          token = res.body.token;
+          userId = jwt.decode(token).id;
+          expect(res.statusCode).to.equal(200);
+          expect(res.body.success).to.equal(true);
           done();
         });
     });
@@ -384,6 +379,9 @@ describe('/GET User profile Test', () => {
         expect(res.body.success).to.equal(true);
         expect(res.body.user).to.have.all.deep.keys(
           'userId', 'name',
+          'myFavs',
+          'myRecipes',
+          'myReviews',
           'username', 'email');
         done();
       });

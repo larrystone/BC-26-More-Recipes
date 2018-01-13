@@ -106,7 +106,7 @@
     ]
   },
   "globals": {
-    "window": false,
+    "window": true,
     "document": false
   }
 }

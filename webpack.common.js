@@ -17,7 +17,10 @@ module.exports = {
       {
         test: /\.jsx?$/,
         loader: 'babel-loader',
-        exclude: /node_modules/
+        exclude: /node_modules/,
+        query: {
+          plugins: ['transform-class-properties', 'transform-object-rest-spread']
+        }
       },
       {
         test: /\.s?css$/,
@@ -49,5 +52,10 @@ module.exports = {
   },
   resolve: {
     extensions: ['.js', '.jsx']
+  },
+  node: {
+    dns: 'empty',
+    net: 'empty',
+    fs: 'empty'
   }
 };

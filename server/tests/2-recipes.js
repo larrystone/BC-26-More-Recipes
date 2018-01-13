@@ -1,7 +1,7 @@
 import chai, { expect } from 'chai';
 import chaiHttp from 'chai-http';
 
-import server from './../server/app';
+import server from './../app';
 
 chai.use(chaiHttp);
 
@@ -20,7 +20,7 @@ describe('/POST Create User', () => {
         password: 'testing'
       })
       .end((err, res) => {
-        token = res.body.user.token;
+        token = res.body.token;
         expect(res.statusCode).to.equal(201);
         done();
       });

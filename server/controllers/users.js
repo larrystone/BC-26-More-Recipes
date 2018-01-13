@@ -1,4 +1,4 @@
-import { User } from '../models';
+import { User, Recipe, Review, Favorite } from '../models';
 import Encryption from '../middleware/encryption';
 import Auth from '../middleware/auth';
 import { validateSignUp } from '../middleware/validate';
@@ -91,18 +91,10 @@ export default class Users {
             username: result.username,
           });
 
-          const createdUser = {
-            token,
-            userId: result.id,
-            name: result.name,
-            username: result.username,
-            email: result.email
-          };
-
           return res.status(201).json({
             success: true,
             message: 'New user created/token generated!',
-            user: createdUser
+            token
           });
         });
     }).catch(error =>
@@ -152,23 +144,15 @@ export default class Users {
         }
 
         if (newEncryption.verifyHash(req.body.password, userFound.password)) {
-          const { id, name, email, username } = userFound;
+          const { id, email, username } = userFound;
           const token = newAuth.sign({
             id, email, username
           });
 
-          const loggedUser = {
-            token,
-            name,
-            username,
-            email,
-            userId: id
-          };
-
-          return res.status(201).json({
+          return res.status(200).json({
             success: true,
             message: 'User Signed In/token generated!',
-            user: loggedUser
+            token
           });
         }
         res.status(401).json({
@@ -196,18 +180,44 @@ export default class Users {
         where: { id: userId }
       })
       .then((userFound) => {
-        const loggedUser = {
+        if (!userFound) {
+          return res.status(404).json({
+            success: false,
+            message: 'User not found!'
+          });
+        }
+        const userInfo = {
           userId: userFound.id,
           name: userFound.name,
           username: userFound.username,
           email: userFound.email,
         };
 
-        return res.status(201).json({
-          success: true,
-          message: 'User found!',
-          user: loggedUser
-        });
+        Recipe.count({
+          where: { userId },
+        })
+          .then((recipeCount) => {
+            userInfo.myRecipes = recipeCount;
+
+            Review.count({
+              where: { userId },
+            })
+              .then((reviewCount) => {
+                userInfo.myReviews = reviewCount;
+
+                Favorite.count({
+                  where: { userId },
+                })
+                  .then((favCount) => {
+                    userInfo.myFavs = favCount;
+                    return res.status(201).json({
+                      success: true,
+                      message: 'User found!',
+                      user: userInfo
+                    });
+                  });
+              });
+          });
       });
 
     return this;

@@ -1,12 +1,14 @@
 import React from 'react';
-import RecipeItem from '../RecipeItem';
-import SampleRecipes from '../../SampleRecipes';
+import RecipeItem from '../commons/RecipeItem';
+import Samples from './Samples';
 
-const SampleRecipesView = () => (
-  <div>
-    <div className="full-title wow fadeIn">Sample Recipes</div>
-    <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center' }}>
-      {SampleRecipes.map(sample => (
+const SampleRecipes = () => (
+  <div style={{ width: '100%' }}>
+    <div className="full-title wow fadeIn">{'Sample Recipes'}</div>
+    <div
+      style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}
+    >
+      {Samples.map(sample => (
         <RecipeItem
           key={sample.id}
           recipe={sample}
@@ -16,4 +18,4 @@ const SampleRecipesView = () => (
   </div>
 );
 
-export default SampleRecipesView;
+export default SampleRecipes;
