@@ -6,6 +6,7 @@ import { validateRecipeDetails } from '../middleware/validate';
 import Search from './searchRecipe';
 import trimWhiteSpaces from '../services/trimWhiteSpace';
 import validateUserRight from '../services/validateUserRight';
+import populatePaging from '../services/populatePaging';
 
 cloudinary.config({
   cloud_name: 'larrystone',
@@ -161,7 +162,6 @@ export default class Recipes {
         imageUrl,
         procedure
       })
-        .then(recipeUpdated => recipeUpdated.reload())
         .then((recipe) => {
           res.status(201).json({
             success: true,
@@ -192,14 +192,14 @@ export default class Recipes {
 
       validateUserRight(Recipe, recipeId, userId).then((foundRecipe) => {
         if (file) {
-          cloudinary.uploader.upload_stream(({ error, imageUrl }) => {
+          cloudinary.uploader.upload_stream(({ error, url }) => {
             if (!error) {
               updateDatabase({
                 name,
                 description,
                 ingredients,
                 procedure,
-                imageUrl,
+                imageUrl: url,
                 res,
                 foundRecipe
               });
@@ -293,7 +293,6 @@ export default class Recipes {
         ]
       })
       .then(recipeFound => recipeFound.increment('viewCount'))
-      .then(recipesFound => recipesFound.reload())
       .then(recipe => res.status(201).json({
         success: true,
         message: 'Recipe found',
@@ -311,20 +310,27 @@ export default class Recipes {
    * @returns {object} Class instance
    * @memberof Recipe
    */
-  getUserRecipes({ user }, res) {
-    const userId = user.id;
+  getUserRecipes({ query, user }, res) {
+    const limit = +query.limit || 10,
+      currentPage = (+query.page || 1),
+      offset = (currentPage - 1) * limit,
+      userId = user.id;
 
     Recipe
-      .findAll({
+      .findAndCountAll({
         where: { userId },
         include: [
           { model: User, attributes: ['name'] }
-        ]
+        ],
+        limit,
+        offset
       })
       .then((recipes) => {
-        if (recipes.length === 0) {
+        const pagination = populatePaging(recipes, currentPage, limit);
+        if (recipes.rows.length === 0) {
           return res.status(200).json({
             success: true,
+            pagination,
             message: 'Nothing found!',
             recipes: []
           });
@@ -333,7 +339,8 @@ export default class Recipes {
         return res.status(201).json({
           success: true,
           message: 'Recipe(s) found',
-          recipes
+          pagination,
+          recipes: recipes.rows
         });
       });
 
