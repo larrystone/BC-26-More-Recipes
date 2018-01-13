@@ -2,28 +2,26 @@ import { ADD_MODAL, REMOVE_MODAL } from '../constants';
 
 /**
  * Adds a modal to the window
- * 
+ *
  * @export
- * @param {any} modalType 
+ * @param {any} modal
  * @returns {obj} action
  */
-export function addModal(modalType) {
+export function addModal(modal) {
   return {
     type: ADD_MODAL,
-    modalType
+    modal
   };
 }
 
 /**
  * Removes a modal from the window
- * 
+ *
  * @export
- * @param {any} modalType 
  * @returns {obj} action
  */
-export function removeModal(modalType) {
+export function removeModal() {
   return {
     type: REMOVE_MODAL,
-    modalType
   };
 }
