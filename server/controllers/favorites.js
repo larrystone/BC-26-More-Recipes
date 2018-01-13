@@ -1,4 +1,4 @@
-import { Favorite, Recipe } from '../models';
+import { Favorite, Recipe, User } from '../models';
 
 /**
  * Class Definition for the Favorite Object
@@ -83,12 +83,10 @@ export default class Favorites {
     Favorite
       .findAll({
         where: { userId },
-        include: [
-          { model: Recipe }
-        ]
+        attributes: ['recipeId']
       })
-      .then((recipes) => {
-        if (recipes.length === 0) {
+      .then((favorites) => {
+        if (favorites.length === 0) {
           return res.status(200).json({
             success: true,
             message: 'Nothing found!',
@@ -96,10 +94,52 @@ export default class Favorites {
           });
         }
 
-        return res.status(201).json({
+        const ids = favorites.map(recipe => recipe.recipeId);
+        Recipe.findAll({
+          where: { id: ids },
+          include: [
+            { model: User, attributes: ['name'] }
+          ]
+        }).then(recipes => res.status(201).json({
           success: true,
           message: 'Favorite Recipes found',
           recipes
+        }));
+      });
+
+    return this;
+  }
+
+
+  /**
+ * Get a single user favorite
+ *
+ * @param {object} req - HTTP Request
+ * @param {object} res - HTTP Response
+ * @returns {object} Class instance
+ * @memberof Favorite
+ */
+  getSingleFavorite({ params }, res) {
+    const { userId, recipeId } = params;
+
+    Favorite
+      .findOne({
+        where: { userId, recipeId },
+        attributes: ['recipeId']
+      })
+      .then((recipe) => {
+        if (!recipe) {
+          return res.status(200).json({
+            success: true,
+            message: 'Nothing found!',
+            recipe: {}
+          });
+        }
+
+        return res.status(200).json({
+          success: true,
+          message: 'Favorite Recipe found',
+          recipe
         });
       });
 

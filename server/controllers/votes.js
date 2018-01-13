@@ -51,18 +51,26 @@ export default class Vote {
                 id: recipeId
               }
             }).then((option) => {
-              option.increment('upvotes');
+              option.increment('upvotes')
+                .then(cacheRecipe => cacheRecipe.reload())
+                .then((recipe) => {
+                  const { upvotes, downvotes } = recipe;
+                  return res.status(201).json({
+                    success: true,
+                    message: `Recipe with id: ${recipeId} Upvoted!`,
+                    recipe: {
+                      upvotes,
+                      downvotes
+                    }
+                  });
+                });
             });
-          return res.status(201).json({
-            success: true,
-            message: `Recipe with id: ${recipeId} Upvoted!`
+        } else {
+          return res.status(409).json({
+            success: false,
+            message: `Recipe with id: ${recipeId} Already Upvoted!`
           });
         }
-
-        return res.status(409).json({
-          success: false,
-          message: `Recipe with id: ${recipeId} Already Upvoted!`
-        });
       });
 
     return this;
@@ -112,19 +120,26 @@ export default class Vote {
                 id: recipeId
               }
             }).then((option) => {
-              option.increment('downvotes');
+              option.increment('downvotes')
+                .then(cacheRecipe => cacheRecipe.reload())
+                .then((recipe) => {
+                  const { upvotes, downvotes } = recipe;
+                  return res.status(201).json({
+                    success: true,
+                    message: `Recipe with id: ${recipeId} Downvoted!`,
+                    recipe: {
+                      upvotes,
+                      downvotes
+                    }
+                  });
+                });
             });
-
-          return res.status(201).json({
-            success: true,
-            message: `Recipe with id: ${recipeId} Downvoted!`
+        } else {
+          return res.status(409).json({
+            success: false,
+            message: `Recipe with id: ${recipeId} Already Downvoted!`
           });
         }
-
-        return res.status(409).json({
-          success: false,
-          message: `Recipe with id: ${recipeId} Already Downvoted!`
-        });
       });
 
     return this;

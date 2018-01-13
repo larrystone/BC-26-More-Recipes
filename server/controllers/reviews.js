@@ -20,9 +20,9 @@ export default class Reviews {
   postReview({ user, params, body }, res) {
     const userId = user.id;
     const { recipeId } = params;
-    const content = (body.content || '').replace(/\s+/g, ' ');
+    const message = (body.content || '').replace(/\s+/g, ' ');
 
-    const validateReviewContentError = validateReviewContent(content);
+    const validateReviewContentError = validateReviewContent(message);
     if (validateReviewContentError) {
       return res.status(400).json({
         success: false,
@@ -32,11 +32,23 @@ export default class Reviews {
 
     Review
       .create({
-        content,
+        content: message,
         userId,
         recipeId
       })
       .then((createdReview) => {
+        const { id, content, createdAt } = createdReview;
+        const review = { id, content, createdAt };
+
+        User.findOne({
+          attributes: ['name'],
+          where: { id: userId },
+        })
+          .then((reviewOwner) => {
+            const { name } = reviewOwner;
+            review.User = { name };
+          });
+
         Recipe
           .findOne({
             attributes: ['userId'],
@@ -49,13 +61,14 @@ export default class Reviews {
             const recipeOwnerEmail = recipeOwner.User.email;
             notify(recipeOwnerEmail,
               'New Review on Recipe',
-              'Someone recently posted a review on one of your Recipes'
+              `${review.User.name} recently` +
+              'posted a review on one of your Recipes'
             );
 
             return res.status(201).json({
               success: true,
               message: 'New review created',
-              createdReview
+              createdReview: review
             });
           });
       });
@@ -79,6 +92,9 @@ export default class Reviews {
         where: { recipeId },
         include: [
           { model: User, attributes: ['name'] }
+        ],
+        order: [
+          ['id', 'DESC']
         ]
       })
       .then((reviews) => {
