@@ -98,6 +98,10 @@ describe('/POST upvote Review Test', () => {
         expect(res.statusCode).to.equal(201);
         expect(res.body).deep.equal({
           success: true,
+          recipe: {
+            downvotes: 0,
+            upvotes: 1
+          },
           message: `Recipe with id: ${recipeId} Upvoted!`
         });
         done();
@@ -158,6 +162,10 @@ describe('/POST downvote Review Test', () => {
         expect(res.statusCode).to.equal(201);
         expect(res.body).deep.equal({
           success: true,
+          recipe: {
+            downvotes: 1,
+            upvotes: 0
+          },
           message: `Recipe with id: ${recipeId} Downvoted!`
         });
         done();
@@ -192,6 +200,10 @@ describe('/POST downvote Review Test', () => {
         expect(res.statusCode).to.equal(201);
         expect(res.body).deep.equal({
           success: true,
+          recipe: {
+            downvotes: 1,
+            upvotes: 0
+          },
           message: `Recipe with id: ${recipeId + 1} Downvoted!`
         });
         done();
@@ -224,6 +236,10 @@ describe('/POST upvote Review Test', () => {
         expect(res.statusCode).to.equal(201);
         expect(res.body).deep.equal({
           success: true,
+          recipe: {
+            downvotes: 0,
+            upvotes: 1
+          },
           message: `Recipe with id: ${recipeId} Upvoted!`
         });
         done();

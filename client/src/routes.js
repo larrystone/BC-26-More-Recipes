@@ -3,6 +3,7 @@ import { Route, Switch, Redirect } from 'react-router-dom';
 
 import Home from './components/Home';
 import AllRecipes from './components/allrecipes';
+import RecipeDetails from './components/recipedetails';
 
 const generalRoutes = (
   <Switch>
@@ -15,6 +16,7 @@ const protectedRoutes = (
   <Switch>
     <Route exact path="/" component={Home} />
     <Route exact path="/recipes" component={AllRecipes} />
+    <Route path="/recipe/:id" component={RecipeDetails} />
     <Redirect to="/" />
   </Switch>
 );

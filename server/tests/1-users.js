@@ -451,7 +451,7 @@ describe('/PUT Change password test', () => {
         .set('x-access-token', token)
         .send({
           oldPassword: 'westsddae',
-          newPassword: 'sdsdsdsdsds',
+          newPassword: 'sdsdsdagvdsds',
         })
         .end((err, res) => {
           expect(res.statusCode).to.equal(200);

@@ -30,6 +30,7 @@ user.put('/changePassword', newUser.changePassword);
 user.route('/:userId/recipes/:recipeId')
   .all(validateRecipeId, validateUserId, validateRecipeExist)
   .post(newFavorite.addToFavorites)
+  .get(newFavorite.getSingleFavorite)
   .delete(newFavorite.removeFromFavorites);
 
 user.get('/:userId/recipes', validateUserId, newFavorite.getFavRecipes);
