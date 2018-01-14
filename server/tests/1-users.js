@@ -379,10 +379,52 @@ describe('/GET User profile Test', () => {
         expect(res.body.success).to.equal(true);
         expect(res.body.user).to.have.all.deep.keys(
           'userId', 'name',
+          'imageUrl',
           'myFavs',
           'myRecipes',
           'myReviews',
           'username', 'email');
+        done();
+      });
+  });
+});
+
+describe('/PUT Update user profile Test', () => {
+  it('should update user details successfully', (done) => {
+    chai.request(server)
+      .put(`/api/v1/users/${userId}/profile`)
+      .set('Accept', 'application/json')
+      .set('x-access-token', token)
+      .send({
+        name: 'lane stone',
+        username: 'lanestone',
+      })
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(201);
+        expect(res.body.success).to.equal(true);
+        expect(res.body.user).to.have.all.deep.keys(
+          'name',
+          'username',
+          'imageUrl',
+          'token'
+        );
+        done();
+      });
+  });
+
+  it('should update user details successfully', (done) => {
+    chai.request(server)
+      .put(`/api/v1/users/${userId}/profile`)
+      .set('Accept', 'application/json')
+      .set('x-access-token', token)
+      .send({
+        name: 'lane stone',
+        username: 'Larrystone',
+      })
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(409);
+        expect(res.body.success).to.equal(false);
+        expect(res.body.message).to.equal('Username already taken');
         done();
       });
   });

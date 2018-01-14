@@ -6,6 +6,7 @@ import AllRecipes from './components/allrecipes';
 import RecipeDetails from './components/recipedetails';
 import MyRecipes from './components/myrecipes';
 import MyFavorites from './components/favorites';
+import Profile from './components/profile';
 
 const generalRoutes = (
   <Switch>
@@ -21,6 +22,7 @@ const protectedRoutes = (
     <Route exact path="/myrecipes" component={MyRecipes} />
     <Route path="/recipe/:id" component={RecipeDetails} />
     <Route path="/favorites" component={MyFavorites} />
+    <Route path="/profile/:userId" component={Profile} />
     <Redirect to="/" />
   </Switch>
 );

@@ -47,8 +47,14 @@ const CreateOrEdit = ({
     >
       <div style={{ display: 'flex', flexWrap: 'wrap', padding: '10px' }}>
         <div style={{ marginRight: '20px' }}>
-          <span><strong>Recipe Image</strong></span>
-          <div
+          <span>
+            <strong>
+              Recipe Image. click to choose new image (Max Size: 200kb)
+            </strong>
+          </span>
+          <label
+            htmlFor="input"
+            className="clickable"
             style={{
               display: 'flex',
               justifyContent: 'center',
@@ -63,11 +69,12 @@ const CreateOrEdit = ({
               height="300px"
               style={{ border: '2px solid gray' }}
             />
-          </div>
+          </label>
           <Form.Input
+            id="input"
+            style={{ display: 'none' }}
             disabled={loading}
             name="imageUrl"
-            label="Choose new image (Max Size: 200kb)"
             type="file"
             accept="image/*"
             onChange={(event) => {
@@ -97,9 +104,10 @@ const CreateOrEdit = ({
           />
           <Form.TextArea
             required
+            autoHeight={false}
             disabled={loading}
             label="Ingredients"
-            style={{ height: '235px' }}
+            style={{ height: '150px' }}
             placeholder="Enter ingredient list separated by comma"
             value={
               recipe.ingredients ? recipe.ingredients.replace(/;;/g, ',') : ''

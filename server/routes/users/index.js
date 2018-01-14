@@ -23,7 +23,8 @@ user.use('*', newAuth.verify);
 user.get('/myRecipes', newRecipe.getUserRecipes);
 
 user.route('/:userId/profile')
-  .get(validateUserId, newUser.getUser);
+  .get(validateUserId, newUser.getUser)
+  .put(validateUserId, newUser.modifyUser);
 
 user.put('/changePassword', newUser.changePassword);
 
@@ -35,7 +36,5 @@ user.route('/:userId/recipes/:recipeId')
 
 user.get('/:userId/recipes', validateUserId, newFavorite.getFavRecipes);
 user.get('/:userId/reviews', validateUserId, newReview.getUserReviews);
-
-user.get('/verifyUser', newUser.verifyUser);
 
 export default user;

@@ -2,7 +2,9 @@ import { User, Recipe, Review, Favorite } from '../models';
 import Encryption from '../middleware/encryption';
 import Auth from '../middleware/auth';
 import { validateSignUp } from '../middleware/validate';
+import validateUserName from '../services/validateUserName';
 import trimWhiteSpaces from '../services/trimWhiteSpace';
+import cloudinary, { uploadWithMulter } from '../services/uploadImage';
 
 const newAuth = new Auth();
 const newEncryption = new Encryption();
@@ -82,6 +84,7 @@ export default class Users {
           name,
           username,
           email,
+          imageUrl: '',
           password: newEncryption.generateHash(password),
         })
         .then((result) => {
@@ -176,7 +179,7 @@ export default class Users {
     const { userId } = params;
     User
       .findOne({
-        attributes: ['id', 'name', 'username', 'email'],
+        attributes: ['id', 'name', 'username', 'email', 'imageUrl'],
         where: { id: userId }
       })
       .then((userFound) => {
@@ -186,11 +189,13 @@ export default class Users {
             message: 'User not found!'
           });
         }
+
+        const {
+          id, name, username, email, imageUrl
+        } = userFound;
+
         const userInfo = {
-          userId: userFound.id,
-          name: userFound.name,
-          username: userFound.username,
-          email: userFound.email,
+          userId: id, name, username, email, imageUrl
         };
 
         Recipe.count({
@@ -276,36 +281,109 @@ export default class Users {
   }
 
   /**
- * Verifies if a user exits in tha database
- * based off the user id decoded from the token
- * this can be used by the backend to verify and dispatch user object
- *
- * @param {number} user - request
- * @param {any} res
- * @returns {obj} status
- * @memberof Users
- */
-  verifyUser({ user }, res) {
-    const { id } = user;
-    User
-      .findOne({
-        where: { id },
-        attributes: ['id', 'name', 'username', 'email']
-      })
-      .then((userFound) => {
-        if (userFound) {
-          return res.status(200).json({
-            success: true,
-            message: 'User is found',
-            userFound
+   * Modify user record
+   *
+   * @param {object} req - HTTP Request
+   * @param {object} res - HTTP Response
+   * @returns {object} Class instance
+   * @memberof Recipe
+   */
+  modifyUser(req, res) {
+    const updateDatabase = ({
+      name, username, imageUrl, res, userId
+    }) => {
+      User.findOne({
+        where: { id: userId }
+      }).then((foundUser) => {
+        foundUser.updateAttributes({
+          name,
+          username,
+          imageUrl: imageUrl || foundUser.imageUrl
+        })
+          .then((user) => {
+            const { id, email } = user;
+            const token = newAuth.sign({
+              id,
+              email,
+              username
+            });
+
+            return res.status(201).json({
+              success: true,
+              message: 'User record updated',
+              user: {
+                username, name, imageUrl: user.imageUrl, token
+              }
+            });
           });
-        }
-        return res.status(404).json({
+      }).catch(() => {
+        res.status(404).json({
           success: false,
           message: 'User not found'
         });
       });
+    };
 
+    uploadWithMulter(req, res).then(({ file, user, body }) => {
+      const userId = user.id;
+      const name = trimWhiteSpaces(body.name, ' ');
+      const username = trimWhiteSpaces(body.username);
+
+      if (name.length < 6 || !name.includes(' ')) {
+        return res.status(400).json({
+          success: false,
+          message: 'Enter a valid full name!'
+        });
+      }
+
+      if (username.length < 3) {
+        return res.status(400).json({
+          success: false,
+          message: 'Username must contain at least 3 alphabets!'
+        });
+      }
+
+      validateUserName(User, username, userId).then(() => {
+        if (file) {
+          cloudinary.upload_stream(({ error, url }) => {
+            if (!error) {
+              updateDatabase({
+                name,
+                username,
+                imageUrl: url,
+                res,
+                userId
+              });
+            } else {
+              res.status(503).json({
+                success: false,
+                message: 'Error uploading image, check your network connection'
+              });
+            }
+          }).end(file.buffer);
+        } else {
+          updateDatabase({
+            name,
+            username,
+            imageUrl: '',
+            res,
+            userId
+          });
+        }
+      })
+        .catch(({ status, message }) => {
+          res.status(status).json({
+            success: false,
+            message
+          });
+        });
+    })
+      .catch(({ message }) => {
+        res.status(400).json({
+          success: false,
+          message
+        });
+      });
     return this;
   }
 }

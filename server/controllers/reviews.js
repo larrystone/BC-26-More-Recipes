@@ -1,6 +1,7 @@
 import { Review, Recipe, User } from '../models';
 import { validateReviewContent } from '../middleware/validate';
 import notify from './../services/notify';
+import trimWhiteSpace from './../services/trimWhiteSpace';
 
 /**
  * Class Definition for the Review Object
@@ -20,7 +21,7 @@ export default class Reviews {
   postReview({ user, params, body }, res) {
     const userId = user.id;
     const { recipeId } = params;
-    const message = (body.content || '').replace(/\s+/g, ' ');
+    const message = trimWhiteSpace(body.content || '', ' ');
 
     const validateReviewContentError = validateReviewContent(message);
     if (validateReviewContentError) {

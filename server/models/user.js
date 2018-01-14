@@ -25,6 +25,7 @@ export default (sequelize, DataTypes) => {
         }
       }
     },
+    imageUrl: DataTypes.STRING,
     password: {
       type: DataTypes.STRING,
       allowNull: false,

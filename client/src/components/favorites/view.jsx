@@ -12,7 +12,7 @@ const View = ({
   if (isLoading) {
     return (
       <Loading
-        text={'my favorites'}
+        text="my favorites"
       />
     );
   }
