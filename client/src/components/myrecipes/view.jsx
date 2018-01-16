@@ -10,6 +10,22 @@ import NothingFound from '../commons/NothingFound';
 const View = ({
   isLoading, recipes, showDetails, addModal, editRecipe
 }) => {
+  const renderAddRecipe = () => (
+    <div style={{ display: 'flex' }}>
+      <Button
+        style={{ marginLeft: 'auto' }}
+        label="New Recipe"
+        labelPosition="right"
+        circular
+        icon="plus"
+        color="teal"
+        onClick={() => {
+          addModal(null, null, 'create_edit_recipe');
+        }}
+      />
+    </div>
+  );
+
   if (isLoading) {
     return (
       <Loading
@@ -21,6 +37,7 @@ const View = ({
     return (
       <div>
         <NothingFound />
+        {renderAddRecipe()}
       </div>
     );
   }
@@ -29,20 +46,7 @@ const View = ({
       <div className="full-title wow fadeIn">
         {'My Recipes'}
       </div>
-      <div style={{ display: 'flex' }}>
-        <Button
-          style={{ marginLeft: 'auto' }}
-          label="New Recipe"
-          labelPosition="right"
-          circular
-          icon="plus"
-          color="teal"
-          onClick={() => {
-            addModal(null, null, 'create_edit_recipe');
-          }}
-        />
-      </div>
-
+      {renderAddRecipe()}
       <div
         style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}
       >

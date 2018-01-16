@@ -8,14 +8,20 @@ const Loading = ({ text }) => (
     <div style={{ marginTop: '100px' }}>
       <img src={Loader} alt="" />
       <h3>
-        <center className="wow infinite pulse">{`Fetching ${text}`}</center>
+        <center className="wow infinite pulse">
+          {`Loading ${text || ''}`}
+        </center>
       </h3>
     </div>
   </div>
 );
 
 Loading.propTypes = {
-  text: PropTypes.string.isRequired
+  text: PropTypes.string
+};
+
+Loading.defaultProps = {
+  text: ''
 };
 
 export default Loading;

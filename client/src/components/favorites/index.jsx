@@ -93,9 +93,8 @@ class Favorites extends Component {
     this.props.removeFav(recipeId, this.props.userId)
       .then(() => {
         this.removeModal();
-        Toastr.success(
-          `You have removed <em><strong>${recipeName}</strong></em>`
-        );
+        Toastr
+          .success(`You have removed <em><strong>${recipeName}</strong></em>`);
       })
       .catch((error) => {
         this.setState({ error: error.response.data.message });
@@ -112,14 +111,14 @@ class Favorites extends Component {
     return (
       <div className="body">
         <Delete
-          modalType={'favorites'}
+          modalType="favorites"
           modal={this.props.modal}
           removeModal={this.removeModal}
           removeRecipe={this.removeRecipe}
           error={this.state.error}
         />
         <Header
-          activePage={'myfav'}
+          activePage="myfav"
         />
         <main>
           <div className="push-down">
@@ -144,7 +143,6 @@ Favorites.propTypes = {
   removeModal: PropTypes.func.isRequired,
   removeFav: PropTypes.func.isRequired,
   recipes: PropTypes.shape().isRequired,
-  match: PropTypes.shape().isRequired,
   modal: PropTypes.shape().isRequired
 };
 
@@ -161,6 +159,8 @@ const mapStateToProps = (state) => {
   };
 };
 
-const actionCreators = { fetchFavorites, addModal, removeModal, removeFav };
+const actionCreators = {
+  fetchFavorites, addModal, removeModal, removeFav
+};
 
 export default connect(mapStateToProps, actionCreators)(Favorites);

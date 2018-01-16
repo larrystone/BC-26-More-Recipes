@@ -1,45 +1,20 @@
-import multer from 'multer';
-import cloudinary from 'cloudinary';
-
 import { Recipe, User } from '../models';
 import { validateRecipeDetails } from '../middleware/validate';
 import Search from './searchRecipe';
 import trimWhiteSpaces from '../services/trimWhiteSpace';
 import validateUserRight from '../services/validateUserRight';
+import cloudinary, { uploadWithMulter } from '../services/uploadImage';
 import populatePaging from '../services/populatePaging';
-
-cloudinary.config({
-  cloud_name: 'larrystone',
-  api_key: process.env.API_KEY,
-  api_secret: process.env.API_SECRET
-});
-
-const uploadWithMulter = (req, res) => {
-  const promise = new Promise((resolve, reject) => {
-    multer({
-      storage: multer.memoryStorage(),
-      limits: { fileSize: 200 * 1024 * 1024, files: 1 },
-      fileFilter: (req, file, callback) => {
-        if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
-          return callback(new Error('Only Images are allowed !'), false);
-        }
-
-        callback(null, true);
-      }
-    }).single('image')(req, res, (error) => {
-      if (error) {
-        reject(error);
-      }
-      resolve(req);
-    });
-  });
-  return promise;
-};
 
 const isNamePicked = (userId, name) => {
   const promise = new Promise((resolve) => {
     Recipe
-      .findOne({ where: { userId, name } })
+      .findOne({
+        where: {
+          userId,
+          name: { $iLike: name }
+        }
+      })
       .then((recipe) => {
         if (recipe) {
           resolve(true);
@@ -116,7 +91,7 @@ export default class Recipes {
       }
 
       if (file) {
-        cloudinary.uploader.upload_stream(({ error, url }) => {
+        cloudinary.upload_stream(({ error, url }) => {
           if (!error) {
             imageUrl = url;
             writeToDatabase({
@@ -155,29 +130,52 @@ export default class Recipes {
     const updateDatabase = ({
       name, description, ingredients, procedure, imageUrl, res, foundRecipe
     }) => {
-      foundRecipe.updateAttributes({
-        name,
-        description,
-        ingredients,
-        imageUrl,
-        procedure
-      })
-        .then((recipe) => {
-          res.status(201).json({
+      if (foundRecipe.name.toLowerCase() === name.toLowerCase()) {
+        foundRecipe.updateAttributes({
+          name,
+          description,
+          ingredients,
+          imageUrl,
+          procedure
+        })
+          .then(recipe => res.status(201).json({
             success: true,
             message: 'Recipe record updated',
             recipe
+          }));
+      } else {
+        isNamePicked(foundRecipe.userId, name)
+          .then((isPicked) => {
+            if (isPicked) {
+              return res.status(409).json({
+                success: false,
+                message: 'Recipe name already picked!'
+              });
+            }
+
+            foundRecipe.updateAttributes({
+              name,
+              description,
+              ingredients,
+              imageUrl,
+              procedure
+            })
+              .then(recipe => res.status(201).json({
+                success: true,
+                message: 'Recipe record updated',
+                recipe
+              }));
           });
-        });
+      }
     };
 
     uploadWithMulter(req, res).then(({ file, user, body, params }) => {
       const userId = user.id;
       const { recipeId } = params || 0;
-      const name = trimWhiteSpaces(body.name, '  ');
-      const description = trimWhiteSpaces(body.description, '  ');
-      const ingredients = trimWhiteSpaces(body.ingredients, '  ');
-      const procedure = trimWhiteSpaces(body.procedure, '  ');
+      const name = trimWhiteSpaces(body.name, ' ');
+      const description = trimWhiteSpaces(body.description, ' ');
+      const ingredients = trimWhiteSpaces(body.ingredients, ' ');
+      const procedure = trimWhiteSpaces(body.procedure, ' ');
 
       const isRecipeInvalid =
         validateRecipeDetails(name, ingredients,
@@ -192,7 +190,7 @@ export default class Recipes {
 
       validateUserRight(Recipe, recipeId, userId).then((foundRecipe) => {
         if (file) {
-          cloudinary.uploader.upload_stream(({ error, url }) => {
+          cloudinary.upload_stream(({ error, url }) => {
             if (!error) {
               updateDatabase({
                 name,

@@ -44,7 +44,8 @@ class MyRecipes extends Component {
       name: '',
       description: '',
       ingredients: '',
-      procedure: ''
+      procedure: '',
+      previewImage: ''
     };
   }
 

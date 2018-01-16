@@ -1,7 +1,9 @@
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
 import setToken from '../utils/setToken';
-import { SET_CURRENT_USER, SET_USER_PROFILE } from '../constants';
+import {
+  SET_CURRENT_USER, SET_USER_PROFILE
+} from '../constants';
 
 const url = '/api/v1/users/';
 
@@ -85,4 +87,35 @@ export function getUser(userId) {
           user
         });
       });
+}
+
+/**
+ * Update user profile information
+ *
+ * @export
+ * @param {any} userId
+ * @param {any} userData
+ * @returns {object} action
+ */
+export function updateProfile(userId, userData) {
+  return dispatch => axios.put(`${url}${userId}/profile`, userData)
+    .then((response) => {
+      const {
+        user: { token }
+      } = response.data;
+      localStorage.setItem('token', token);
+      setToken(token);
+      dispatch(setCurrentUser(jwt.decode(token)));
+    });
+}
+
+/**
+ * Change user password
+ *
+ * @export
+ * @param {any} userData
+ * @returns {object} action
+ */
+export function changePassword(userData) {
+  return dispatch => axios.put(`${url}changePassword`, userData);
 }

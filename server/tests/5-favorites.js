@@ -48,6 +48,18 @@ describe('/POST Create User and Recipe', () => {
   });
 });
 
+describe('/GET user Favorite\'s Recipes Test', () => {
+  it(`should return an array of Recipes for user id: ${userId}`, (done) => {
+    chai.request(server)
+      .get(`/api/v1/users/${userId}/recipes`)
+      .set('Accept', 'application/json')
+      .set('x-access-token', token)
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(404);
+        done();
+      });
+  });
+});
 
 describe('/POST Add recipe to favorites Test', () => {
   it('should return \'Invalid User ID!\'', (done) => {
@@ -122,6 +134,19 @@ describe('/GET user Favorite\'s Recipes Test', () => {
   });
 });
 
+describe('/GET Validate if recipe is a favorite Test', () => {
+  it(`should return an array of Recipes for user id: ${userId}`, (done) => {
+    chai.request(server)
+      .get(`/api/v1/users/${userId}/recipes/${recipeId}`)
+      .set('Accept', 'application/json')
+      .set('x-access-token', token)
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(200);
+        done();
+      });
+  });
+});
+
 describe('/POST Remove recipe from favorites Test', () => {
   it(`should remove recipe id: ${recipeId} from favorites`, (done) => {
     chai.request(server)
@@ -136,14 +161,14 @@ describe('/POST Remove recipe from favorites Test', () => {
 });
 
 
-describe('/GET user Favorite\'s Recipes Test', () => {
+describe('/GET User favorite recipe by ID Recipes Test', () => {
   it(`should return an array of Recipes for user id: ${userId}`, (done) => {
     chai.request(server)
-      .get(`/api/v1/users/${userId}/recipes`)
+      .get(`/api/v1/users/${userId}/recipes/${recipeId}`)
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
-        expect(res.statusCode).to.equal(200);
+        expect(res.statusCode).to.equal(404);
         done();
       });
   });

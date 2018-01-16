@@ -87,7 +87,7 @@ export default class Favorites {
       })
       .then((favorites) => {
         if (favorites.length === 0) {
-          return res.status(200).json({
+          return res.status(404).json({
             success: true,
             message: 'Nothing found!',
             recipes: []
@@ -129,7 +129,7 @@ export default class Favorites {
       })
       .then((recipe) => {
         if (!recipe) {
-          return res.status(200).json({
+          return res.status(404).json({
             success: true,
             message: 'Nothing found!',
             recipe: {}
