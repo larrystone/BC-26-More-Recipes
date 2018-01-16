@@ -49,26 +49,26 @@ describe('/POST Create User and Recipe', () => {
 });
 
 describe('/GET all Reviews on a Recipe Test', () => {
-  it('should return an empty array of Reviews', (done) => {
+  it('should return \'Nothing found\'', (done) => {
     chai.request(server)
       .get(`/api/v1/recipes/${recipeId}/reviews`)
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
-        expect(res.statusCode).to.equal(200);
+        expect(res.statusCode).to.equal(404);
         done();
       });
   });
 });
 
 describe('/GET all Reviews by a User Test', () => {
-  it('should return an empty array of Reviews', (done) => {
+  it('should return \'Nothing found\'', (done) => {
     chai.request(server)
       .get(`/api/v1/users/${userId}/reviews`)
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
-        expect(res.statusCode).to.equal(200);
+        expect(res.statusCode).to.equal(404);
         done();
       });
   });
@@ -189,7 +189,7 @@ describe('/GET all Reviews on a Recipe Test', () => {
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
-        expect(res.statusCode).to.equal(201);
+        expect(res.statusCode).to.equal(200);
         done();
       });
   });
@@ -202,7 +202,7 @@ describe('/GET all Reviews by a User Test', () => {
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
-        expect(res.statusCode).to.equal(201);
+        expect(res.statusCode).to.equal(200);
         done();
       });
   });

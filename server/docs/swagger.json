@@ -61,7 +61,7 @@
             }
           },
           "400": {
-            "description": "Validation exception",
+            "description": "Validation error",
             "schema": {
               "$ref": "#/definitions/SignupError"
             }
@@ -111,15 +111,9 @@
             }
           },
           "401": {
-            "description": "Incorrect password!",
+            "description": "Invalid Login Credentials!",
             "schema": {
               "$ref": "#/definitions/SigninError"
-            }
-          },
-          "404": {
-            "description": "Username or email does not exist!",
-            "schema": {
-              "$ref": "#/definitions/UserNotFound"
             }
           },
           "default": {
@@ -181,6 +175,98 @@
           },
           "default": {
             "description": "Error Changing password"
+          }
+        }
+      }
+    },
+    "/users/{userId}/profile": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Get an authenticated user profile details",
+        "description": "This method is called to fetch a user in the system",
+        "operationId": "getUser",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "x-access-token",
+            "in": "header",
+            "description": "Authentication Token",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/UserResponse"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/UserNotFound"
+            }
+          },
+          "default": {
+            "description": "Unable to update user details"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Allows an authenticated user update his/her profile details",
+        "description": "By providing valid login credentials a user is able to modify his/her profile details",
+        "operationId": "modifyUser",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Form input model",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserResponse"
+            }
+          }],
+        "responses": {
+          "200": {
+            "description": "User record updated",
+            "schema": {
+              "$ref": "#/definitions/UserResponse"
+            }
+          },
+          "400": {
+            "description": "Validation exception",
+            "schema": {
+              "$ref": "#/definitions/SignupValidation"
+            }
+          },
+          "503": {
+            "description": "Image upload error"
+          },
+          "409": {
+            "description": "Validation error",
+            "schema": {
+              "$ref": "#/definitions/SignupValidation"
+            }
+          },
+          "default": {
+            "description": "Error updating profile"
           }
         }
       }
@@ -967,14 +1053,40 @@
         }
       }
     },
+    "UserResponse": {
+      "type": "object",
+      "required": [
+        "name",
+        "email",
+        "password"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "john doe"
+        },
+        "username": {
+          "type": "string",
+          "example": "johndoe"
+        },
+        "email": {
+          "type": "string",
+          "example": "johndoe@company.com"
+        },
+        "imageUrl": {
+          "type": "string",
+          "example": "http://ssfsfnsfnsnsfsfs.png"
+        }
+      }
+    },
     "Signin": {
       "type": "object",
       "required": [
         "password",
-        "usernameOrEmail"
+        "authName"
       ],
       "properties": {
-        "usernameOrEmail": {
+        "authName": {
           "type": "string",
           "example": "johndoe"
         },
@@ -989,7 +1101,7 @@
       "required": [
         "success",
         "message",
-        "user"
+        "token"
       ],
       "properties": {
         "success": {
@@ -1000,14 +1112,9 @@
           "type": "string",
           "example": "New user created/token generated"
         },
-        "user": {
-          "type": "object",
-          "example": {
-            "userId": 2,
-            "name": "john doe",
-            "email": "johndoe@company.com",
-            "password": "password"
-          }
+        "token": {
+          "type": "string",
+          "example": "WWIKN_sasSDSNJSOANOCBVBB12!"
         }
       }
     },
@@ -1080,7 +1187,7 @@
         },
         "message": {
           "type": "string",
-          "example": "Incorrect Password"
+          "example": "Invalid Login Credentials!"
         }
       }
     },
@@ -1097,7 +1204,7 @@
         },
         "message": {
           "type": "string",
-          "example": "Username or email does not exist!"
+          "example": "Username not found!"
         }
       }
     },

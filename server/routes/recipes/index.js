@@ -32,11 +32,11 @@ user.route('/:recipeId/reviews')
 user.route('/:recipeId/upvotes')
   .all(validateRecipeId, validateRecipeExist)
   .post(newVote.upvoteRecipe)
-  .get(newVote.getUserUpvotes);
+  .get(newVote.getRecipeUpvotes);
 
 user.route('/:recipeId/downvotes')
   .all(validateRecipeId, validateRecipeExist)
   .post(newVote.downvoteRecipe)
-  .get(newVote.getUserDownvotes);
+  .get(newVote.getRecipeDownvotes);
 
 export default user;

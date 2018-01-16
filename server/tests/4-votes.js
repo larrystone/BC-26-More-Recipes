@@ -63,24 +63,24 @@ describe('/POST Create User and Recipe', () => {
 });
 
 describe('/GET Upvotes/Downvotes on Recipe Test', () => {
-  it('should return an empty array of upvotes', (done) => {
+  it('should return \'Nothing found\' for upvotes', (done) => {
     chai.request(server)
       .get(`/api/v1/recipes/${recipeId}/upvotes`)
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
-        expect(res.statusCode).to.equal(200);
+        expect(res.statusCode).to.equal(404);
         done();
       });
   });
 
-  it('should return an empty array of downvotes', (done) => {
+  it('should return \'Nothing found\' for downvotes', (done) => {
     chai.request(server)
       .get(`/api/v1/recipes/${recipeId}/downvotes`)
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
-        expect(res.statusCode).to.equal(200);
+        expect(res.statusCode).to.equal(404);
         done();
       });
   });
@@ -133,18 +133,18 @@ describe('/GET Upvotes/Downvotes on Recipe Test', () => {
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
-        expect(res.statusCode).to.equal(201);
+        expect(res.statusCode).to.equal(200);
         done();
       });
   });
 
-  it('should return an empty array of downvotes', (done) => {
+  it('should return \'Nothing found\'', (done) => {
     chai.request(server)
       .get(`/api/v1/recipes/${recipeId}/downvotes`)
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
-        expect(res.statusCode).to.equal(200);
+        expect(res.statusCode).to.equal(404);
         done();
       });
   });
@@ -212,13 +212,13 @@ describe('/POST downvote Review Test', () => {
 });
 
 describe('/GET Downvotes on Recipe Test', () => {
-  it('should return am array of downvotes', (done) => {
+  it('should return an array of downvotes', (done) => {
     chai.request(server)
       .get(`/api/v1/recipes/${recipeId}/downvotes`)
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
-        expect(res.statusCode).to.equal(201);
+        expect(res.statusCode).to.equal(200);
         done();
       });
   });
@@ -254,18 +254,18 @@ describe('/GET Upvotes/Downvotes on Recipe Test', () => {
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
-        expect(res.statusCode).to.equal(201);
+        expect(res.statusCode).to.equal(200);
         done();
       });
   });
 
-  it('should return am empty array of downvotes', (done) => {
+  it('should return \'Nothing found\' for downvotes', (done) => {
     chai.request(server)
       .get(`/api/v1/recipes/${recipeId}/downvotes`)
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
-        expect(res.statusCode).to.equal(200);
+        expect(res.statusCode).to.equal(404);
         done();
       });
   });

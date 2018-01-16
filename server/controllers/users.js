@@ -8,7 +8,13 @@ import cloudinary, { uploadWithMulter } from '../services/uploadImage';
 
 const newAuth = new Auth();
 const newEncryption = new Encryption();
-
+/**
+ * Checks if email or username already exist in the database
+ *
+ * @param {any} username
+ * @param {any} email
+ * @returns {Promise} promise
+ */
 const verifyAuthName = (username, email) => {
   const promise = new Promise((resolve, reject) => {
     User
@@ -215,7 +221,7 @@ export default class Users {
                 })
                   .then((favCount) => {
                     userInfo.myFavs = favCount;
-                    return res.status(201).json({
+                    return res.status(200).json({
                       success: true,
                       message: 'User found!',
                       user: userInfo
@@ -289,6 +295,12 @@ export default class Users {
    * @memberof Recipe
    */
   modifyUser(req, res) {
+    /**
+     * Updates the user details in the database
+     *
+     * @param {any} userData
+     * @returns {object} Response
+     */
     const updateDatabase = ({
       name, username, imageUrl, res, userId
     }) => {
@@ -308,7 +320,7 @@ export default class Users {
               username
             });
 
-            return res.status(201).json({
+            return res.status(200).json({
               success: true,
               message: 'User record updated',
               user: {

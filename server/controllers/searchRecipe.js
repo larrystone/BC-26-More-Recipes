@@ -35,7 +35,7 @@ export default class Search {
       .then((foundRecipes) => {
         const pagination = populatePaging(foundRecipes, currentPage, limit);
         if (foundRecipes.rows.length === 0) {
-          return res.status(200).json({
+          return res.status(404).json({
             success: true,
             pagination,
             message: 'Nothing found!',
@@ -43,7 +43,7 @@ export default class Search {
           });
         }
 
-        return res.status(201).json({
+        return res.status(200).json({
           success: true,
           message: 'Recipe(s) found',
           pagination,
@@ -89,7 +89,7 @@ export default class Search {
       .then((foundRecipes) => {
         const pagination = populatePaging(foundRecipes, currentPage, limit);
         if (foundRecipes.rows.length === 0) {
-          return res.status(200).json({
+          return res.status(404).json({
             success: true,
             pagination,
             message: 'Nothing found!',
@@ -97,7 +97,7 @@ export default class Search {
           });
         }
 
-        return res.status(201).json({
+        return res.status(200).json({
           success: true,
           message: 'Recipe(s) found',
           pagination,
@@ -143,7 +143,7 @@ export default class Search {
       .then((foundRecipes) => {
         const pagination = populatePaging(foundRecipes, currentPage, limit);
         if (foundRecipes.rows.length === 0) {
-          return res.status(200).json({
+          return res.status(404).json({
             success: true,
             pagination,
             message: 'Nothing found!',
@@ -151,7 +151,7 @@ export default class Search {
           });
         }
 
-        return res.status(201).json({
+        return res.status(200).json({
           success: true,
           message: 'Recipe(s) found',
           pagination,
@@ -194,7 +194,7 @@ export default class Search {
       .then((foundRecipes) => {
         const pagination = populatePaging(foundRecipes, currentPage, limit);
         if (foundRecipes.rows.length === 0) {
-          return res.status(200).json({
+          return res.status(404).json({
             success: true,
             message: 'Nothing found!',
             pagination,
@@ -202,7 +202,7 @@ export default class Search {
           });
         }
 
-        return res.status(201).json({
+        return res.status(200).json({
           success: true,
           message: 'Recipe(s) found',
           pagination,

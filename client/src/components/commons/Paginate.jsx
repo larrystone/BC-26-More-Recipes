@@ -7,6 +7,12 @@ import Select from 'rc-select';
 import 'rc-pagination/assets/index.css';
 import 'rc-select/assets/index.css';
 
+/**
+ * Stateless component for rendering pagination view
+ *
+ * @param {object} props
+ * @returns {view} Paginate
+ */
 const Paginate = ({
   pagination, onChange, pageSize = '0', onShowSizeChange
 }) => (

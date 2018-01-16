@@ -153,7 +153,7 @@ export default class Vote {
    * @returns {obejct} Class instance
    * @memberof Vote
    */
-  getUserUpvotes({ params }, res) {
+  getRecipeUpvotes({ params }, res) {
     const { recipeId } = params;
 
     Upvote
@@ -166,14 +166,14 @@ export default class Vote {
       })
       .then((votes) => {
         if (votes.length === 0) {
-          return res.status(200).json({
+          return res.status(404).json({
             success: true,
             message: 'Nothing found!',
             votes: []
           });
         }
 
-        return res.status(201).json({
+        return res.status(200).json({
           success: true,
           message: 'User upvotes found',
           votes
@@ -191,7 +191,7 @@ export default class Vote {
    * @returns {object} Class instance
    * @memberof Vote
    */
-  getUserDownvotes({ params }, res) {
+  getRecipeDownvotes({ params }, res) {
     const { recipeId } = params;
 
     Downvote
@@ -204,14 +204,14 @@ export default class Vote {
       })
       .then((votes) => {
         if (votes.length === 0) {
-          return res.status(200).json({
+          return res.status(404).json({
             success: true,
             message: 'Nothing found!',
             votes: []
           });
         }
 
-        return res.status(201).json({
+        return res.status(200).json({
           success: true,
           message: 'User donwvotes found',
           votes

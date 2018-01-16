@@ -117,7 +117,7 @@ describe('/GET user Favorite\'s Recipes Test', () => {
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
-        expect(res.statusCode).to.equal(201);
+        expect(res.statusCode).to.equal(200);
         done();
       });
   });
@@ -154,7 +154,7 @@ describe('/POST Remove recipe from favorites Test', () => {
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
-        expect(res.statusCode).to.equal(205);
+        expect(res.statusCode).to.equal(200);
         done();
       });
   });

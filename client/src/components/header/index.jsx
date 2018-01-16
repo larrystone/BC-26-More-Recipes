@@ -36,7 +36,12 @@ class Header extends PureComponent {
   }
 }
 
-
+/**
+ * Maps data from redux state to componenet props
+ *
+ * @param {any} state
+ * @returns {object} props
+ */
 const mapStateToProps = state => ({
   loggedUser: state.auth.user
 });

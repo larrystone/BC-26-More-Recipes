@@ -5,15 +5,16 @@
   "description": "A Recipe management and sharing app",
   "main": "/server/app.js",
   "scripts": {
-    "start": "concurrently \"npm run prod:client\" \"npm run prod:server\"",
+    "start": "node ./build-server/app.js",
     "start:dev": "concurrently \"npm run dev:client\" \"npm run dev:server\"",
     "dev:server": "nodemon --watch server --exec babel-node -- server/app.js",
     "dev:client": "webpack --config webpack.dev.js --watch",
-    "prod:server": "babel-node server/app.js",
+    "prod:server": "babel -d ./build-server ./server -s",
     "prod:client": "webpack --config webpack.prod.js",
     "test": "mocha --timeout 500000 --compilers js:babel-core/register server/tests/",
-    "coveralls": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
-    "test:client": "jest --coverage"
+    "coveralls": "nyc npm test && nyc --no-clean npm run test:client && nyc report --reporter=text-lcov | coveralls",
+    "test:client": "jest --coverage",
+    "heroku-postbuild": "npm run prod:client && npm run prod:server"
   },
   "author": "Lawal Lanre Emmanuel",
   "license": "ISC",

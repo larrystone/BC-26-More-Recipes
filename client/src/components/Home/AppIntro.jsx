@@ -4,6 +4,13 @@ import PropTypes from 'prop-types';
 
 import efo from './../../../images/efo.jpg';
 
+/**
+ * Stateless component for rendering intro banner
+ * on landing page
+ *
+ * @param {object} props
+ * @returns {view} AppIntro
+ */
 const AppIntro = ({ storeToState, handleSignIn, handleSignUp, isLoading }) => (
   <div>
     <div

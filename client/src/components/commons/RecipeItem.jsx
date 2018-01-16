@@ -3,15 +3,26 @@ import PropTypes from 'prop-types';
 import { Card, Image, Icon } from 'semantic-ui-react';
 import toastr from 'toastr';
 
-import defaultImage from '../../../images/default_image.jpg';
+import defaultImage from '../../../images/no-image.jpg';
 import styles from '../../../styles/classes';
 
+/**
+ * Stateless component for rendering pagination view
+ *
+ * @param {object} props
+ * @returns {view} RecipeItem
+ */
 const RecipeItem = ({
   recipe: {
     id, imageUrl, name, description, User, upvotes, downvotes
   }, isAdmin, isFav, actions
 }) => {
+  /**
+   * Handles view recipe detail action
+   * @returns {null} Nothing
+   */
   const handleView = () => {
+    toastr.remove();
     if (actions.showDetails) {
       actions.showDetails(id);
     } else {
@@ -20,6 +31,10 @@ const RecipeItem = ({
     }
   };
 
+  /**
+   * Render recipe action available on home page
+   * @returns {view} actions
+   */
   const homeActions = () => (
     <div style={styles.actionClass}>
       <div>
@@ -32,6 +47,10 @@ const RecipeItem = ({
     </div >
   );
 
+  /**
+   * Render recipe action available on user recipes page
+   * @returns {view} actions
+   */
   const myRecipesActions = () => (
     <div style={styles.actionClass}>
       <div
@@ -61,7 +80,7 @@ const RecipeItem = ({
         tabIndex="0"
         className="clickable"
         onClick={() => {
-          actions.addModal(name, id, 'myrecipes');
+          actions.deleteRecipe(name, id, 'myrecipes');
         }}
       >
         <Icon name="delete" color="red" />Delete
@@ -69,6 +88,10 @@ const RecipeItem = ({
     </div>
   );
 
+  /**
+   * Render recipe action available on user's favorite recipe page
+   * @returns {view} actions
+   */
   const myFavActions = () => (
     <div style={styles.actionClass}>
       <div
@@ -95,6 +118,10 @@ const RecipeItem = ({
     </div>
   );
 
+  /**
+   * Set recipe action to show
+   * @returns {view} actions
+   */
   const showRecipeActions = () => {
     if (isAdmin) {
       return myRecipesActions();

@@ -88,7 +88,7 @@ class RecipeDetails extends PureComponent {
   }
 
   upvote = () => {
-    Toastr.clear();
+    Toastr.remove();
     this.props.upvote(this.props.recipe.id)
       .then(() => {
         Toastr.success('Recipe upvoted');
@@ -99,7 +99,7 @@ class RecipeDetails extends PureComponent {
   }
 
   downvote = () => {
-    Toastr.clear();
+    Toastr.remove();
     this.props.downvote(this.props.recipe.id)
       .then(() => {
         Toastr.success('Recipe downvoted');
@@ -122,6 +122,7 @@ class RecipeDetails extends PureComponent {
       index: 0
     });
 
+    Toastr.remove();
     this.props.addRecipeReview(this.props.recipe.id, { content })
       .then(() => {
         this.setState({
@@ -175,6 +176,12 @@ class RecipeDetails extends PureComponent {
   }
 }
 
+/**
+ * Maps data from state to props
+ *
+ * @param {any} state
+ * @returns {object} props
+ */
 const mapStateToProps = state => ({
   userId: state.auth.user.id,
   recipe: state.recipe.currentRecipe,

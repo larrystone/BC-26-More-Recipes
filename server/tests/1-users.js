@@ -375,7 +375,7 @@ describe('/GET User profile Test', () => {
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
-        expect(res.statusCode).to.equal(201);
+        expect(res.statusCode).to.equal(200);
         expect(res.body.success).to.equal(true);
         expect(res.body.user).to.have.all.deep.keys(
           'userId', 'name',
@@ -400,7 +400,7 @@ describe('/PUT Update user profile Test', () => {
         username: 'lanestone',
       })
       .end((err, res) => {
-        expect(res.statusCode).to.equal(201);
+        expect(res.statusCode).to.equal(200);
         expect(res.body.success).to.equal(true);
         expect(res.body.user).to.have.all.deep.keys(
           'name',

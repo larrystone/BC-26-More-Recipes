@@ -1,5 +1,10 @@
 import React from 'react';
 
+/**
+ * Stateless component for rendering the foooter
+ *
+ * @returns {view} FooterView
+ */
 const FooterView = () => (
   <footer style={{ padding: '15px 0px' }}>
     <div className="flex-row" style={{ justifyContent: 'space-around' }}>

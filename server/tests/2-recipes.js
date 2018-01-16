@@ -28,24 +28,24 @@ describe('/POST Create User', () => {
 });
 
 describe('/GET all Recipes Test', () => {
-  it('should return an empty array of Recipes', (done) => {
+  it('should return a \'not found\'', (done) => {
     chai.request(server)
       .get('/api/v1/recipes')
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
-        expect(res.statusCode).to.equal(200);
+        expect(res.statusCode).to.equal(404);
         done();
       });
   });
 
-  it('should return an epmty array (sort by most upvotes)', (done) => {
+  it('should return an empty array (sort by most upvotes)', (done) => {
     chai.request(server)
       .get('/api/v1/recipes?sort=upvotes&order=descending ')
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
-        expect(res.statusCode).to.equal(200);
+        expect(res.statusCode).to.equal(404);
         done();
       });
   });
@@ -172,7 +172,7 @@ describe('/GET all Recipes by User Test', () => {
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
-        expect(res.statusCode).to.equal(201);
+        expect(res.statusCode).to.equal(200);
         done();
       });
   });
@@ -185,7 +185,7 @@ describe('/GET Search recipe by ingredient', () => {
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
-        expect(res.statusCode).to.equal(201);
+        expect(res.statusCode).to.equal(200);
         expect(res.body.success).to.equal(true);
         expect(res.body.recipes.length).to.equal(3);
         done();
@@ -198,7 +198,7 @@ describe('/GET Search recipe by ingredient', () => {
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
-        expect(res.statusCode).to.equal(201);
+        expect(res.statusCode).to.equal(200);
         expect(res.body.success).to.equal(true);
         expect(res.body.recipes.length).to.equal(3);
         done();
@@ -211,20 +211,20 @@ describe('/GET Search recipe by ingredient', () => {
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
-        expect(res.statusCode).to.equal(201);
+        expect(res.statusCode).to.equal(200);
         expect(res.body.success).to.equal(true);
         expect(res.body.recipes.length).to.equal(1);
         done();
       });
   });
 
-  it('should return 0 recipe when search by \'garri\'', (done) => {
+  it('should return \'Not Found\' when search by \'garri\'', (done) => {
     chai.request(server)
       .get('/api/v1/recipes?ingredients=garri')
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
-        expect(res.statusCode).to.equal(200);
+        expect(res.statusCode).to.equal(404);
         expect(res.body.success).to.equal(true);
         done();
       });
@@ -236,7 +236,7 @@ describe('/GET Search recipe by ingredient', () => {
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
-        expect(res.statusCode).to.equal(201);
+        expect(res.statusCode).to.equal(200);
         expect(res.body.success).to.equal(true);
         expect(res.body.recipes.length).to.equal(1);
         done();
@@ -249,7 +249,7 @@ describe('/GET Search recipe by ingredient', () => {
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
-        expect(res.statusCode).to.equal(201);
+        expect(res.statusCode).to.equal(200);
         expect(res.body.success).to.equal(true);
         expect(res.body.recipes.length).to.equal(1);
         done();
@@ -265,7 +265,7 @@ describe('/GET Search recipe by valid anything (Generic search)', () => {
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
-        expect(res.statusCode).to.equal(201);
+        expect(res.statusCode).to.equal(200);
         expect(res.body.success).to.equal(true);
         expect(res.body.recipes.length).to.equal(1);
         done();
@@ -278,7 +278,7 @@ describe('/GET Search recipe by valid anything (Generic search)', () => {
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
-        expect(res.statusCode).to.equal(201);
+        expect(res.statusCode).to.equal(200);
         expect(res.body.success).to.equal(true);
         expect(res.body.recipes.length).to.equal(3);
         done();
@@ -291,49 +291,51 @@ describe('/GET Search recipe by valid anything (Generic search)', () => {
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
-        expect(res.statusCode).to.equal(201);
+        expect(res.statusCode).to.equal(200);
         expect(res.body.success).to.equal(true);
         expect(res.body.recipes.length).to.equal(2);
         done();
       });
   });
 
-  it('should return 0 recipes when search by \'createrecipetester@test.com\'',
-    (done) => {
-      chai.request(server)
-        .get('/api/v1/recipes?search=createrecipetester@test.com')
-        .set('Accept', 'application/json')
-        .set('x-access-token', token)
-        .end((err, res) => {
-          expect(res.statusCode).to.equal(200);
-          expect(res.body.success).to.equal(true);
-          expect(res.body.recipes.length).to.equal(0);
-          done();
-        });
-    });
+  it('should return \'Nothing found\' when' +
+    ' search by \'createrecipetester@test.com\'', (done) => {
+    chai.request(server)
+      .get('/api/v1/recipes?search=createrecipetester@test.com')
+      .set('Accept', 'application/json')
+      .set('x-access-token', token)
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(404);
+        expect(res.body.success).to.equal(true);
+        expect(res.body.recipes.length).to.equal(0);
+        done();
+      });
+  });
 
-  it('should return 0 recipes when search by \'createREcipetester\'',
+  it(
+    'should return \'Nothing found\' when search by \'createREcipetester\'',
     (done) => {
       chai.request(server)
         .get('/api/v1/recipes?search=createREcipetester')
         .set('Accept', 'application/json')
         .set('x-access-token', token)
         .end((err, res) => {
-          expect(res.statusCode).to.equal(200);
+          expect(res.statusCode).to.equal(404);
           expect(res.body.success).to.equal(true);
           expect(res.body.recipes.length).to.equal(0);
           done();
         });
     });
 
-  it('should return 0 recipes when search by \'createreipetester\'',
+  it(
+    'should return \'Nothing found\' when search by \'createreipetester\'',
     (done) => {
       chai.request(server)
         .get('/api/v1/recipes?search=createreipetester')
         .set('Accept', 'application/json')
         .set('x-access-token', token)
         .end((err, res) => {
-          expect(res.statusCode).to.equal(200);
+          expect(res.statusCode).to.equal(404);
           expect(res.body.success).to.equal(true);
           expect(res.body.recipes.length).to.equal(0);
           done();
@@ -348,7 +350,7 @@ describe('/GET Search recipe by recipe name', () => {
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
-        expect(res.statusCode).to.equal(201);
+        expect(res.statusCode).to.equal(200);
         expect(res.body.success).to.equal(true);
         expect(res.body.recipes.length).to.equal(1);
         done();
@@ -361,7 +363,7 @@ describe('/GET Search recipe by recipe name', () => {
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
-        expect(res.statusCode).to.equal(201);
+        expect(res.statusCode).to.equal(200);
         expect(res.body.success).to.equal(true);
         expect(res.body.recipes.length).to.equal(2);
         done();
@@ -374,20 +376,20 @@ describe('/GET Search recipe by recipe name', () => {
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
-        expect(res.statusCode).to.equal(201);
+        expect(res.statusCode).to.equal(200);
         expect(res.body.success).to.equal(true);
         expect(res.body.recipes.length).to.equal(1);
         done();
       });
   });
 
-  it('should return 0 recipe when search by \'garri\'', (done) => {
+  it('should return \'Nothing found\' when search by \'garri\'', (done) => {
     chai.request(server)
       .get('/api/v1/recipes?name=garri')
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
-        expect(res.statusCode).to.equal(200);
+        expect(res.statusCode).to.equal(404);
         expect(res.body.success).to.equal(true);
         done();
       });
@@ -401,7 +403,7 @@ describe('/GET Recipe and log View count', () => {
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
-        expect(res.statusCode).to.equal(201);
+        expect(res.statusCode).to.equal(200);
         expect(res.body.success).to.equal(true);
         expect(res.body.recipe.viewCount).to.equal(1);
         done();
@@ -414,7 +416,7 @@ describe('/GET Recipe and log View count', () => {
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
-        expect(res.statusCode).to.equal(201);
+        expect(res.statusCode).to.equal(200);
         expect(res.body.success).to.equal(true);
         expect(res.body.recipe.viewCount).to.equal(2);
         done();
@@ -427,7 +429,7 @@ describe('/GET Recipe and log View count', () => {
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
-        expect(res.statusCode).to.equal(201);
+        expect(res.statusCode).to.equal(200);
         expect(res.body.success).to.equal(true);
         expect(res.body.recipe.viewCount).to.equal(3);
         done();
@@ -440,7 +442,7 @@ describe('/GET Recipe and log View count', () => {
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
-        expect(res.statusCode).to.equal(201);
+        expect(res.statusCode).to.equal(200);
         expect(res.body.success).to.equal(true);
         expect(res.body.recipe.viewCount).to.equal(1);
         done();
@@ -453,7 +455,7 @@ describe('/GET Recipe and log View count', () => {
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
-        expect(res.statusCode).to.equal(201);
+        expect(res.statusCode).to.equal(200);
         expect(res.body.success).to.equal(true);
         expect(res.body.recipe.viewCount).to.equal(2);
         done();
@@ -466,7 +468,7 @@ describe('/GET Recipe and log View count', () => {
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
-        expect(res.statusCode).to.equal(201);
+        expect(res.statusCode).to.equal(200);
         expect(res.body.success).to.equal(true);
         expect(res.body.recipe.viewCount).to.equal(3);
         done();
@@ -516,7 +518,7 @@ describe('/PUT User Recipes Test', () => {
         procedure: 'Light stove and come back here to see this'
       })
       .end((err, res) => {
-        expect(res.statusCode).to.equal(201);
+        expect(res.statusCode).to.equal(200);
         expect(res.body.success).to.equal(true);
         done();
       });
@@ -573,7 +575,7 @@ describe('/GET all Recipes Test', () => {
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
-        expect(res.statusCode).to.equal(201);
+        expect(res.statusCode).to.equal(200);
         done();
       });
   });
@@ -584,7 +586,7 @@ describe('/GET all Recipes Test', () => {
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
-        expect(res.statusCode).to.equal(201);
+        expect(res.statusCode).to.equal(200);
         done();
       });
   });
@@ -597,7 +599,7 @@ describe('/DELETE User Recipes Test', () => {
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
-        expect(res.statusCode).to.equal(205);
+        expect(res.statusCode).to.equal(200);
         done();
       });
   });
@@ -608,7 +610,7 @@ describe('/DELETE User Recipes Test', () => {
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
-        expect(res.statusCode).to.equal(205);
+        expect(res.statusCode).to.equal(200);
         done();
       });
   });
@@ -639,7 +641,7 @@ ${recipeId + 2}`,
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
-        expect(res.statusCode).to.equal(205);
+        expect(res.statusCode).to.equal(200);
         done();
       });
   });
@@ -673,20 +675,20 @@ describe('/GET all Recipes Test', () => {
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
-        expect(res.statusCode).to.equal(200);
+        expect(res.statusCode).to.equal(404);
         done();
       });
   });
 });
 
 describe('/GET all Recipes by User Test', () => {
-  it('should return an array of Recipes', (done) => {
+  it('should return an empty array of Recipes', (done) => {
     chai.request(server)
       .get('/api/v1/users/myRecipes')
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
-        expect(res.statusCode).to.equal(200);
+        expect(res.statusCode).to.equal(404);
         done();
       });
   });

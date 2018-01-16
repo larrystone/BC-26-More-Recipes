@@ -19,11 +19,6 @@ const NULL_INDEX = -1;
  * Profile page container component
  *
  * @class Profile
- * @param {string} value
- * @param {string} key
- * @param {object} event
- * @param {number} userId
- * @param {object} titleProps
  * @extends {Component}
  */
 class Profile extends Component {
@@ -76,6 +71,13 @@ class Profile extends Component {
     }
   }
 
+  /**
+   * Fetch user profile
+   *
+   * @memberof Profile
+   * @param {number} userId
+   * @returns {null} Nothing
+   */
   getUserProfile = (userId) => {
     this.setState({
       isLoading: true
@@ -109,6 +111,14 @@ class Profile extends Component {
       });
   }
 
+  /**
+   * Handle image change
+   * For displaying image thumbnail
+   *
+   * @memberof Profile
+   * @param {object} event
+   * @returns {null} Nothing
+   */
   handleImageChange = (event) => {
     event.preventDefault();
     if (event.target.files && event.target.files[0]) {
@@ -127,12 +137,28 @@ class Profile extends Component {
     }
   }
 
+  /**
+   * Stores data into the component state object
+   *
+   * @memberof Profile
+   * @param {string} key
+   * @param {string} value
+   * @returns {null} Nothing
+   */
   storeToState = (key, value) => {
     this.setState({
       [key]: value
     });
   }
 
+  /**
+   * Handles togling the accordion component
+   *
+   * @memberof Profile
+   * @param {object} event
+   * @param {object} titleProps
+   * @returns {null} Nothing
+   */
   handleAccordionClick = (event, titleProps) => {
     const { index } = titleProps;
     const { activeIndex } = this.state;
@@ -141,6 +167,12 @@ class Profile extends Component {
     this.setState({ activeIndex: newIndex });
   }
 
+  /**
+   * Parse data and calls the updateProfile action creator
+   *
+   * @memberof Profile
+   * @returns {null} Nothing
+   */
   updateProfile = () => {
     const userData = new FormData();
 
@@ -152,6 +184,7 @@ class Profile extends Component {
     userData.append('username', username);
     userData.append('image', imageUrl);
 
+    Toastr.remove();
     this.storeToState('isLoading', true);
 
     this.props.updateProfile(this.props.userId, userData)
@@ -165,9 +198,10 @@ class Profile extends Component {
       });
   }
 
+
   changePassword = () => {
     const { oldPassword, newPassword, newPassword2 } = this.state;
-
+    Toastr.remove();
     if (newPassword.trim().length > 5 && (newPassword === newPassword2)) {
       this.storeToState('isLoading', true);
       this.props.changePassword({ oldPassword, newPassword })
@@ -232,6 +266,12 @@ class Profile extends Component {
   }
 }
 
+/**
+ * Maps State to props
+ *
+ * @param {any} state
+ * @returns {object} Props
+ */
 const mapStateToProps = (state) => {
   const {
     auth: {

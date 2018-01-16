@@ -42,12 +42,12 @@ export default class Reviews {
         const review = { id, content, createdAt };
 
         User.findOne({
-          attributes: ['name'],
+          attributes: ['name', 'imageUrl'],
           where: { id: userId },
         })
           .then((reviewOwner) => {
-            const { name } = reviewOwner;
-            review.User = { name };
+            const { name, imageUrl } = reviewOwner;
+            review.User = { name, imageUrl };
           });
 
         Recipe
@@ -92,7 +92,7 @@ export default class Reviews {
       .findAll({
         where: { recipeId },
         include: [
-          { model: User, attributes: ['name'] }
+          { model: User, attributes: ['name', 'imageUrl'] }
         ],
         order: [
           ['id', 'DESC']
@@ -100,13 +100,13 @@ export default class Reviews {
       })
       .then((reviews) => {
         if (reviews.length === 0) {
-          return res.status(200).json({
+          return res.status(404).json({
             success: true,
             message: 'Nothing found',
             reviews: []
           });
         }
-        return res.status(201).json({
+        return res.status(200).json({
           success: true,
           message: 'Review(s) found',
           reviews
@@ -136,14 +136,14 @@ export default class Reviews {
       })
       .then((reviews) => {
         if (reviews.length === 0) {
-          return res.status(200).json({
+          return res.status(404).json({
             success: true,
             message: 'Nothing found!',
             reviews: []
           });
         }
 
-        return res.status(201).json({
+        return res.status(200).json({
           success: true,
           message: 'User review(s) found',
           reviews

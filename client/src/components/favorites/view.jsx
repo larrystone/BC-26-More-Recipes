@@ -6,6 +6,12 @@ import RecipeItem from '../commons/RecipeItem';
 import Loading from '../commons/Loading';
 import NothingFound from '../commons/NothingFound';
 
+/**
+ * Stateless component for rendering favorite recipes
+ *
+ * @param {object} props
+ * @returns {view} View
+ */
 const View = ({
   isLoading, recipes, showDetails, addModal
 }) => {

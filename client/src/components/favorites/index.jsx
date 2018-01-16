@@ -14,19 +14,14 @@ import { addModal, removeModal } from '../../actions/modalActions';
 /**
  * My recipes container with pagination
  *
- * @class Recipes
+ * @class Favorites
  * @extends {Component}
- * @param {string} page - current page
- * @param {string} pageSize - selected page size
- * @param {string} newPage - selected page
- * @param {string} recipeName - recipe name
- * @param {number} recipeId - recipe ID
  */
 class Favorites extends Component {
   /**
-   * Creates an instance of Recipes.
+   * Creates an instance of Favorites.
    * @param {any} props
-   * @memberof Recipes
+   * @memberof Favorites
    */
   constructor(props) {
     super(props);
@@ -40,7 +35,7 @@ class Favorites extends Component {
   /**
    * Fetches favorite recipes of the user
    *
-   * @memberof Recipes
+   * @memberof Favorites
    * @returns {void} Null
    */
   componentWillMount() {
@@ -59,24 +54,56 @@ class Favorites extends Component {
           isLoading: false
         });
         const { data: { message } } = error.response;
+        Toastr.remove();
         Toastr.error(message);
       });
   }
 
-  onPageSizeChange = (page, pageSize) => {
+  /**
+   * Handles fetching recipe on new page size request
+   *
+   * @memberof Favorites
+   * @param {number} currentPage
+   * @param {number} pageSize
+   * @returns {null} Nothing
+   */
+  onPageSizeChange = (currentPage, pageSize) => {
     const { url } = this.state;
-    this.context.router.history.push(`${url}page=${page}&limit=${pageSize}`);
+    this.context.router.history
+      .push(`${url}page=${currentPage}&limit=${pageSize}`);
   };
 
+  /**
+   * Handles fetching recipe on new page request
+   *
+   * @memberof Favorites
+   * @param {number} newPage
+   * @returns {null} Nothing
+   */
   onPageChange = (newPage) => {
     const { url, limit } = this.state;
     this.context.router.history.push(`${url}page=${newPage}&limit=${limit}`);
   };
 
+  /**
+   * Calls the route that allow recipe detail to viewed
+   *
+   * @memberof Favorites
+   * @param {number} recipeId
+   * @returns {null} Nothing
+   */
   showDetails = (recipeId) => {
     this.context.router.history.push(`/recipe/${recipeId}`);
   };
 
+  /**
+   * Adds the modal for removing recipe to the window
+   *
+   * @memberof Favorites
+   * @param {string} recipeName
+   * @param {number} recipeId
+   * @returns {null} Nothing
+   */
   addModal = (recipeName, recipeId) => {
     this.props.addModal({
       type: 'favorites',
@@ -85,10 +112,26 @@ class Favorites extends Component {
     });
   }
 
+  /**
+   * Removes the modal from the window
+   *
+   * @memberof Favorites
+   * @param {string} recipeName
+   * @param {number} recipeId
+   * @returns {null} Nothing
+   */
   removeModal = () => {
     this.props.removeModal();
   }
 
+  /**
+   * Remove recipe from the database
+   *
+   * @memberof Favorites
+   * @param {string} recipeName
+   * @param {number} recipeId
+   * @returns {null} Nothing
+   */
   removeRecipe = (recipeName, recipeId) => {
     this.props.removeFav(recipeId, this.props.userId)
       .then(() => {
@@ -105,7 +148,7 @@ class Favorites extends Component {
   * Call Views for component rendering
   *
   * @returns {object} View
-  * @memberof Recipes
+  * @memberof Favorites
   */
   render() {
     return (
@@ -150,6 +193,12 @@ Favorites.contextTypes = {
   router: PropTypes.object.isRequired
 };
 
+/**
+ * Maps data from state to props
+ *
+ * @param {any} state
+ * @returns {object} props
+ */
 const mapStateToProps = (state) => {
   const { modal, favorite } = state;
   return {

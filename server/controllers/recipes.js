@@ -6,6 +6,13 @@ import validateUserRight from '../services/validateUserRight';
 import cloudinary, { uploadWithMulter } from '../services/uploadImage';
 import populatePaging from '../services/populatePaging';
 
+/**
+ * Check if recipe name is picked
+ *
+ * @param {any} userId
+ * @param {any} name
+ * @returns {Promise} promise
+ */
 const isNamePicked = (userId, name) => {
   const promise = new Promise((resolve) => {
     Recipe
@@ -27,7 +34,7 @@ const isNamePicked = (userId, name) => {
 };
 
 /**
- * Class Definition for the Recipe Object
+ * Class Definition for the Recipes Object
  *
  * @export
  * @class Recipe
@@ -39,9 +46,15 @@ export default class Recipes {
    * @param {object} req - HTTP Request
    * @param {object} res - HTTP Response
    * @returns {object} - Class instance
-   * @memberof Recipe
+   * @memberof Recipes
    */
   createRecipe(req, res) {
+    /**
+     * Stores data to database
+     *
+     * @param {object} recipeData
+     * @returns {null} Nothing
+     */
     const writeToDatabase = ({
       name, description, ingredients, procedure, imageUrl, userId, res }) => {
       isNamePicked(userId, name)
@@ -124,9 +137,15 @@ export default class Recipes {
    * @param {object} req - HTTP Request
    * @param {object} res - HTTP Response
    * @returns {object} Class instance
-   * @memberof Recipe
+   * @memberof Recipes
    */
   modifyRecipe(req, res) {
+    /**
+     * Updates data in the database
+     *
+     * @param {object} recipeData
+     * @returns {null} Nothing
+     */
     const updateDatabase = ({
       name, description, ingredients, procedure, imageUrl, res, foundRecipe
     }) => {
@@ -138,7 +157,7 @@ export default class Recipes {
           imageUrl,
           procedure
         })
-          .then(recipe => res.status(201).json({
+          .then(recipe => res.status(200).json({
             success: true,
             message: 'Recipe record updated',
             recipe
@@ -243,7 +262,7 @@ export default class Recipes {
    * @param {object} req - HTTP Request
    * @param {object} res - HTTP Response
    * @returns {object} Class instance
-   * @memberof Recipe
+   * @memberof Recipes
    */
   deleteRecipe({ params, user }, res) {
     const { recipeId } = params;
@@ -257,7 +276,7 @@ export default class Recipes {
         .then(() => {
           // TODO delete image in cloudinary
           // cloudinary.uploader.destroy('id', () => {
-          res.status(205).json({
+          res.status(200).json({
             success: true,
             message: 'Recipe Deleted!'
           });
@@ -278,7 +297,7 @@ export default class Recipes {
    * @param {object} req - HTTP Request
    * @param {object} res - HTTP Response
    * @returns {object} Class instance
-   * @memberof Recipe
+   * @memberof Recipes
    */
   getRecipe({ params }, res) {
     const { recipeId } = params;
@@ -291,7 +310,7 @@ export default class Recipes {
         ]
       })
       .then(recipeFound => recipeFound.increment('viewCount'))
-      .then(recipe => res.status(201).json({
+      .then(recipe => res.status(200).json({
         success: true,
         message: 'Recipe found',
         recipe
@@ -306,7 +325,7 @@ export default class Recipes {
    * @param {object} req - HTTP Request
    * @param {object} res - HTTP Response
    * @returns {object} Class instance
-   * @memberof Recipe
+   * @memberof Recipes
    */
   getUserRecipes({ query, user }, res) {
     const limit = +query.limit || 10,
@@ -326,7 +345,7 @@ export default class Recipes {
       .then((recipes) => {
         const pagination = populatePaging(recipes, currentPage, limit);
         if (recipes.rows.length === 0) {
-          return res.status(200).json({
+          return res.status(404).json({
             success: true,
             pagination,
             message: 'Nothing found!',
@@ -334,7 +353,7 @@ export default class Recipes {
           });
         }
 
-        return res.status(201).json({
+        return res.status(200).json({
           success: true,
           message: 'Recipe(s) found',
           pagination,
@@ -351,7 +370,7 @@ export default class Recipes {
    * @param {object} req - HTTP Request
    * @param {object} res - HTTP Response
    * @returns {object} Class instance
-   * @memberof Recipe
+   * @memberof Recipes
    */
   getAllRecipes(req, res) {
     const newSearch = new Search();
@@ -373,14 +392,14 @@ export default class Recipes {
         })
         .then((recipes) => {
           if (recipes.length === 0) {
-            return res.status(200).json({
+            return res.status(404).json({
               success: true,
               message: 'Nothing found!',
               recipes: []
             });
           }
 
-          return res.status(201).json({
+          return res.status(200).json({
             success: true,
             message: 'Recipe(s) found!',
             recipes

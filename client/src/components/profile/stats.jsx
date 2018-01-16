@@ -3,6 +3,12 @@ import { Card, Label } from 'semantic-ui-react';
 import { Chart } from 'react-google-charts';
 import PropTypes from 'prop-types';
 
+/**
+ * Stateless component for rendering user analytics
+ *
+ * @param {object} props
+ * @returns {view} Stats
+ */
 const Stats = ({
   username,
   profile: {

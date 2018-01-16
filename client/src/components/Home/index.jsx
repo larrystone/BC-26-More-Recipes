@@ -60,9 +60,9 @@ class Home extends PureComponent {
       isLoading: true
     });
 
+    toastr.remove();
     this.props.signIn(this.state)
       .then(() => {
-        toastr.clear();
         toastr.success(`Welcome back <br/><em>${this.state.authName}</em>`);
         setTimeout(() => {
           window.location = '/recipes/?page=1&limit=10';
@@ -72,7 +72,6 @@ class Home extends PureComponent {
         this.setState({
           isLoading: false
         });
-        toastr.clear();
         toastr.error(error.response.data.message);
       });
   };
@@ -82,10 +81,10 @@ class Home extends PureComponent {
       isLoading: true
     });
 
+    toastr.remove();
     if (this.state.password === this.state.password2) {
       this.props.signUp(this.state)
         .then(() => {
-          toastr.clear();
           toastr.info(`Welcome <br/><em>${this.state.username}</em>`);
           setTimeout(() => {
             window.location = '/recipes/?page=1&limit=10';
@@ -96,7 +95,6 @@ class Home extends PureComponent {
             isLoading: false
           });
 
-          toastr.clear();
           toastr.error(error.response.data.message);
         });
     } else {

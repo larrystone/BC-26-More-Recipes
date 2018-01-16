@@ -2,9 +2,21 @@ import React from 'react';
 import { Button, Icon, Label, Menu, Popup } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 
+/**
+ * Stateless component for rendering header view
+ *
+ * @param {object} props
+ * @returns {view} View
+ */
 const View = ({
   loggedUser, signOut, activePage, goTo
 }) => {
+  /**
+   * Checks if a link is the active
+   *
+   * @param {any} link
+   * @returns {boolean} isActive
+   */
   const isActive = link => link === activePage;
   return (
     <header>

@@ -7,9 +7,19 @@ import RecipeItem from '../commons/RecipeItem';
 import Loading from '../commons/Loading';
 import NothingFound from '../commons/NothingFound';
 
+/**
+ * Stateless component for rendering user owned recipes
+ *
+ * @param {object} props
+ * @returns {view} View
+ */
 const View = ({
-  isLoading, recipes, showDetails, addModal, editRecipe
+  isLoading, recipes, showDetails, deleteRecipe, newRecipe, editRecipe
 }) => {
+  /**
+   * Renders the new recipe button
+   * @returns {view} Button
+   */
   const renderAddRecipe = () => (
     <div style={{ display: 'flex' }}>
       <Button
@@ -20,7 +30,7 @@ const View = ({
         icon="plus"
         color="teal"
         onClick={() => {
-          addModal(null, null, 'create_edit_recipe');
+          newRecipe('create_edit_recipe');
         }}
       />
     </div>
@@ -59,7 +69,7 @@ const View = ({
               isAdmin
               actions={{
                 showDetails,
-                addModal,
+                deleteRecipe,
                 editRecipe
               }}
               recipe={recipe}
@@ -74,8 +84,9 @@ View.propTypes = {
   isLoading: PropTypes.bool.isRequired,
   recipes: PropTypes.shape().isRequired,
   showDetails: PropTypes.func.isRequired,
-  addModal: PropTypes.func.isRequired,
-  editRecipe: PropTypes.func.isRequired
+  editRecipe: PropTypes.func.isRequired,
+  deleteRecipe: PropTypes.func.isRequired,
+  newRecipe: PropTypes.func.isRequired
 };
 
 export default View;

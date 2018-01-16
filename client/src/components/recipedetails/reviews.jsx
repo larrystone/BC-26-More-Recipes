@@ -12,11 +12,22 @@ import { dateOptions } from '../../constants';
 const MAX_COUNT = 10,
   EMPTY = 0;
 
+/**
+ * Stateless component for rendering pagination view
+ *
+ * @param {object} props
+ * @returns {view} RecipeItem
+ */
 const ReviewsView = ({
   actions, reviews, newReview,
   index, posting
 }) => {
-  const showReviews = () => {
+  /**
+   * Returns the reviews
+   *
+   * @returns {view} reviews
+   */
+  const getReviews = () => {
     const visibleReviews = reviews
       .slice(index, index + MAX_COUNT);
     return (
@@ -27,7 +38,7 @@ const ReviewsView = ({
         return (
           <Comment key={id} style={{ marginBottom: '10px' }}>
             <Comment.Avatar
-              src={avatar}
+              src={User.imageUrl || avatar}
               style={{ height: '36px', width: '36px' }}
             />
             <Comment.Content>
@@ -56,6 +67,11 @@ const ReviewsView = ({
     );
   };
 
+  /**
+   * Render the reviews on a recipe
+   *
+   * @returns {view} view
+   */
   const renderReviews = () => {
     if (!reviews) {
       return (
@@ -78,11 +94,16 @@ const ReviewsView = ({
     }
     return (
       <div>
-        {showReviews()}
+        {getReviews()}
       </div>
     );
   };
 
+  /**
+   * Render the next button if available
+   *
+   * @returns {view} Button
+   */
   const showLoadNewer = () => {
     if (index > EMPTY) {
       return (
@@ -94,13 +115,18 @@ const ReviewsView = ({
               actions.storeToState('index', index - MAX_COUNT);
             }}
           >
-            &lt;&lt; Load Newer
+            {'Load newer'}
           </button>
         </center>
       );
     }
   };
 
+  /**
+   * Render the previous button if available
+   *
+   * @returns {view} Button
+   */
   const showLoadOlder = () => {
     if (reviews) {
       if (index < reviews.length - MAX_COUNT) {
@@ -113,7 +139,7 @@ const ReviewsView = ({
                 actions.storeToState('index', index + MAX_COUNT);
               }}
             >
-              {'Load Older >>'}
+              {'Load older'}
             </button>
           </center>
         );

@@ -2,6 +2,12 @@ import React from 'react';
 import { Message } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 
+/**
+ * Stateless component for rendering no result
+ *
+ * @param {object} props
+ * @returns {view} NothingFound
+ */
 const NothingFound = ({ text }) => (
   <Message
     style={{ width: '95%', margin: '10px auto' }}

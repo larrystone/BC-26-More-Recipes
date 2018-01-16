@@ -6,12 +6,23 @@ import avatar from '../../../images/avatar.png';
 
 const ZERO = 0;
 
+/**
+ * Stateless component for viewing and editing user profile details
+ *
+ * @param {object} props
+ * @returns {view} ProfileView
+ */
 const ProfileView = ({
   actions, loading, activeIndex,
   profile: {
     username, email, name, previewImage
   }, isAdmin
 }) => {
+  /**
+   * Renders the profile details
+   *
+   * @returns {view} View
+   */
   const renderProfileDetails = () => (
     <Card.Content>
       <label

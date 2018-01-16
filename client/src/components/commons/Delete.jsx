@@ -2,6 +2,12 @@ import React from 'react';
 import { Modal, Button, Header } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 
+/**
+ * Stateless component for rendering recipe removal modal
+ *
+ * @param {object} props
+ * @returns {view} Delete
+ */
 const Delete = ({
   error, modalType, modal, removeModal, removeRecipe
 }) => (

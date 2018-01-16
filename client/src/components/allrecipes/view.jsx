@@ -13,6 +13,13 @@ const options = [
   { key: 'search', text: 'All', value: 'search' }
 ];
 
+
+/**
+ * All recipes Stateless view component
+ *
+ * @param {object} props
+ * @returns {view} View
+ */
 const View = ({
   isLoading, recipes, storeToState, search, searchCategory, sought, showDetails
 }) => {

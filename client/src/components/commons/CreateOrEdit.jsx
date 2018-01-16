@@ -3,10 +3,22 @@ import { Modal, Button, Form } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 
 import Loading from '../commons/Loading';
+import defaultImage from '../../../images/no-image.jpg';
 
+/**
+ * Stateless component for rendering Creating or Editing recipe view
+ *
+ * @param {object} props
+ * @returns {view} CreateOrEdit
+ */
 const CreateOrEdit = ({
   modal, actions, loading, recipe, previewImage
 }) => {
+  /**
+   * Renders button type (Update or Save buttons)
+   *
+   * @returns {view} Button
+   */
   const renderButton = () => {
     if (modal.recipeId) {
       return (
@@ -34,6 +46,11 @@ const CreateOrEdit = ({
     );
   };
 
+  /**
+   * Shows form header
+   *
+   * @returns {string} heading
+   */
   const showHeading = () => {
     if (modal.recipeId) {
       return 'Edit ';
@@ -41,6 +58,11 @@ const CreateOrEdit = ({
     return 'Create ';
   };
 
+  /**
+   * Renders the form component
+   *
+   * @returns {form} Form
+   */
   const renderForm = () => (
     <Form
       loading={loading}
@@ -64,7 +86,7 @@ const CreateOrEdit = ({
             }}
           >
             <img
-              src={previewImage || ''}
+              src={previewImage || defaultImage}
               alt=""
               height="300px"
               style={{ border: '2px solid gray' }}

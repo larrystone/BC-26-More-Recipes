@@ -66,15 +66,31 @@ class Recipes extends Component {
     }
   }
 
-
-  onPageSizeChange = (page, pageSize) => {
+  /**
+   * Handles fetching recipe on new page size request
+   *
+   * @memberof Recipes
+   * @param {number} currentPage
+   * @param {number} pageSize
+   * @returns {null} Nothing
+   */
+  onPageSizeChange = (currentPage, pageSize) => {
     const { url } = this.state;
-    this.context.router.history.push(`${url}page=${page}&limit=${pageSize}`);
+    this.context.router.history
+      .push(`${url}page=${currentPage}&limit=${pageSize}`);
   }
 
-  onPageChange = (page) => {
+  /**
+   * Handles fetching recipe on new page request
+   *
+   * @memberof Recipes
+   * @param {number} newPage
+   * @returns {null} Nothing
+   */
+  onPageChange = (newPage) => {
     const { url, limit } = this.state;
-    this.context.router.history.push(`${url}page=${page}&limit=${limit}`);
+    this.context.router.history
+      .push(`${url}page=${newPage}&limit=${limit}`);
   }
 
   /**
@@ -122,6 +138,14 @@ class Recipes extends Component {
     }
   }
 
+  /**
+   * Stores value to component's state
+   *
+   * @memberof Recipes
+   * @param {string} key
+   * @param {string} value
+   * @returns {null} Nothing
+   */
   storeToState = (key, value) => {
     this.setState({
       [key]: value
@@ -136,8 +160,15 @@ class Recipes extends Component {
     }
   }
 
-  showDetails = (id) => {
-    this.context.router.history.push(`/recipe/${id}`);
+  /**
+   * Calls the route that allow recipe detail to viewed
+   *
+   * @memberof Recipes
+   * @param {number} recipeId
+   * @returns {null} Nothing
+   */
+  showDetails = (recipeId) => {
+    this.context.router.history.push(`/recipe/${recipeId}`);
   }
 
   /**
@@ -196,6 +227,12 @@ Recipes.contextTypes = {
   router: PropTypes.object.isRequired
 };
 
+/**
+ * Maps state to a props object
+ *
+ * @param {any} state
+ * @returns {object} props
+ */
 const mapStateToProps = (state) => {
   const { allRecipes } = state.recipe;
   return {

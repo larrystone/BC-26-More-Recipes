@@ -1,7 +1,7 @@
 import { Favorite, Recipe, User } from '../models';
 
 /**
- * Class Definition for the Favorite Object
+ * Class Definition for the Favorites Object
  *
  * @export
  * @class Favorite
@@ -13,7 +13,7 @@ export default class Favorites {
    * @param {object} req - HTTP Request
    * @param {object} res - HTTP Response
    * @returns {object} Class instance
-   * @memberof Favorite
+   * @memberof Favorites
    */
   addToFavorites({ user, params }, res) {
     const userId = user.id;
@@ -44,7 +44,7 @@ export default class Favorites {
    * @param {object} req - HTTP Request
    * @param {object} res - HTTP Response
    * @returns {object} Class instance
-   * @memberof Favorite
+   * @memberof Favorites
    */
   removeFromFavorites({ params }, res) {
     const { recipeId, userId } = params;
@@ -59,7 +59,7 @@ export default class Favorites {
       })
       .then((status) => {
         if (status === 1) {
-          res.status(205).json({
+          res.status(200).json({
             success: true,
             message: `Recipe with ID: ${recipeId} Removed from Favorites`
           });
@@ -75,7 +75,7 @@ export default class Favorites {
    * @param {object} req - HTTP Request
    * @param {object} res - HTTP Response
    * @returns {object} Class instance
-   * @memberof Favorite
+   * @memberof Favorites
    */
   getFavRecipes({ params }, res) {
     const { userId } = params;
@@ -100,7 +100,7 @@ export default class Favorites {
           include: [
             { model: User, attributes: ['name'] }
           ]
-        }).then(recipes => res.status(201).json({
+        }).then(recipes => res.status(200).json({
           success: true,
           message: 'Favorite Recipes found',
           recipes
@@ -117,7 +117,7 @@ export default class Favorites {
  * @param {object} req - HTTP Request
  * @param {object} res - HTTP Response
  * @returns {object} Class instance
- * @memberof Favorite
+ * @memberof Favorites
  */
   getSingleFavorite({ params }, res) {
     const { userId, recipeId } = params;
