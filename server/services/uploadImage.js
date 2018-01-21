@@ -7,6 +7,15 @@ cloudinary.config({
   api_secret: process.env.API_SECRET
 });
 
+/**
+ * @description - Upload image to memory with multer
+ *
+ * @param {any} req - HTTP request
+ *
+ * @param {any} res - HTTP response
+ *
+ * @returns {Promise} promise - Asynchronous response
+ */
 export const uploadWithMulter = (req, res) => {
   const promise = new Promise((resolve, reject) => {
     multer({

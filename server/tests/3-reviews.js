@@ -2,7 +2,7 @@ import chai, { expect } from 'chai';
 import chaiHttp from 'chai-http';
 import jwt from 'jsonwebtoken';
 
-import server from './../app';
+import app from './../app';
 
 chai.use(chaiHttp);
 
@@ -11,8 +11,8 @@ let recipeId;
 let userId;
 
 describe('/POST Create User and Recipe', () => {
-  it('should create a user (to get save token)', (done) => {
-    chai.request(server)
+  it('should create a user (to get token)', (done) => {
+    chai.request(app)
       .post('/api/v1/users/signup')
       .set('Accept', 'application/json')
       .send({
@@ -30,7 +30,7 @@ describe('/POST Create User and Recipe', () => {
   });
 
   it('should create a recipe (to get recipeId)', (done) => {
-    chai.request(server)
+    chai.request(app)
       .post('/api/v1/recipes')
       .set('Accept', 'application/json')
       .send({
@@ -49,26 +49,28 @@ describe('/POST Create User and Recipe', () => {
 });
 
 describe('/GET all Reviews on a Recipe Test', () => {
-  it('should return \'Nothing found\'', (done) => {
-    chai.request(server)
+  it('should return \'Nothing found!\' when no recipe is found', (done) => {
+    chai.request(app)
       .get(`/api/v1/recipes/${recipeId}/reviews`)
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
         expect(res.statusCode).to.equal(404);
+        expect(res.body.message).to.equal('Nothing found!');
         done();
       });
   });
 });
 
 describe('/GET all Reviews by a User Test', () => {
-  it('should return \'Nothing found\'', (done) => {
-    chai.request(server)
+  it('should return \'Nothing found!\' when no recipe is found', (done) => {
+    chai.request(app)
       .get(`/api/v1/users/${userId}/reviews`)
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
         expect(res.statusCode).to.equal(404);
+        expect(res.body.message).to.equal('Nothing found!');
         done();
       });
   });
@@ -76,8 +78,9 @@ describe('/GET all Reviews by a User Test', () => {
 
 
 describe('/POST Review Test', () => {
-  it('should return \'Review message too short!\' for length<5 ', (done) => {
-    chai.request(server)
+  it('should return \'Review message too short!\'' +
+    'for review length < 5 ', (done) => {
+    chai.request(app)
       .post(`/api/v1/recipes/${recipeId}/reviews`)
       .set('Accept', 'application/json')
       .send({
@@ -95,7 +98,7 @@ describe('/POST Review Test', () => {
   });
 
   it('should return \'Review message too short!\' for null review', (done) => {
-    chai.request(server)
+    chai.request(app)
       .post(`/api/v1/recipes/${recipeId}/reviews`)
       .set('Accept', 'application/json')
       .send({
@@ -111,8 +114,8 @@ describe('/POST Review Test', () => {
       });
   });
 
-  it('should create and return a review', (done) => {
-    chai.request(server)
+  it('should create and return a review on recipe', (done) => {
+    chai.request(app)
       .post(`/api/v1/recipes/${recipeId}/reviews`)
       .set('Accept', 'application/json')
       .send({
@@ -121,12 +124,14 @@ describe('/POST Review Test', () => {
       })
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
+        expect(res.body.createdReview.content)
+          .to.equal('This is a test review 1');
         done();
       });
   });
 
-  it('should create and return a review', (done) => {
-    chai.request(server)
+  it('should create and return a review on recipe', (done) => {
+    chai.request(app)
       .post(`/api/v1/recipes/${recipeId}/reviews`)
       .set('Accept', 'application/json')
       .send({
@@ -135,12 +140,14 @@ describe('/POST Review Test', () => {
       })
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
+        expect(res.body.createdReview.content)
+          .to.equal('This is a test review 2');
         done();
       });
   });
 
-  it('should create and return a review', (done) => {
-    chai.request(server)
+  it('should create and return a review on recipe', (done) => {
+    chai.request(app)
       .post(`/api/v1/recipes/${recipeId}/reviews`)
       .set('Accept', 'application/json')
       .send({
@@ -149,12 +156,14 @@ describe('/POST Review Test', () => {
       })
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
+        expect(res.body.createdReview.content)
+          .to.equal('This is a test review 3');
         done();
       });
   });
 
-  it('should create and return a review', (done) => {
-    chai.request(server)
+  it('should create and return a review on recipe', (done) => {
+    chai.request(app)
       .post(`/api/v1/recipes/${recipeId}/reviews`)
       .set('Accept', 'application/json')
       .send({
@@ -163,12 +172,14 @@ describe('/POST Review Test', () => {
       })
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
+        expect(res.body.createdReview.content)
+          .to.equal('This is a test review 4');
         done();
       });
   });
 
-  it('should create and return a review', (done) => {
-    chai.request(server)
+  it('should create and return a review on recipe', (done) => {
+    chai.request(app)
       .post(`/api/v1/recipes/${recipeId}/reviews`)
       .set('Accept', 'application/json')
       .send({
@@ -177,6 +188,8 @@ describe('/POST Review Test', () => {
       })
       .end((err, res) => {
         expect(res.statusCode).to.equal(201);
+        expect(res.body.createdReview.content)
+          .to.equal('This is a test review 5');
         done();
       });
   });
@@ -184,12 +197,13 @@ describe('/POST Review Test', () => {
 
 describe('/GET all Reviews on a Recipe Test', () => {
   it('should return an array of Reviews', (done) => {
-    chai.request(server)
+    chai.request(app)
       .get(`/api/v1/recipes/${recipeId}/reviews`)
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
         expect(res.statusCode).to.equal(200);
+        expect(res.body.reviews.length).to.equal(5);
         done();
       });
   });
@@ -197,12 +211,13 @@ describe('/GET all Reviews on a Recipe Test', () => {
 
 describe('/GET all Reviews by a User Test', () => {
   it('should return an array of Reviews', (done) => {
-    chai.request(server)
+    chai.request(app)
       .get(`/api/v1/users/${userId}/reviews`)
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
         expect(res.statusCode).to.equal(200);
+        expect(res.body.reviews.length).to.equal(5);
         done();
       });
   });

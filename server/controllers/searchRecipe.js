@@ -2,24 +2,29 @@ import { Recipe, User } from '../models';
 import populatePaging from '../services/populatePaging';
 
 /**
- * Class Definition for the Search Recipe Object
+ * @description - Class Definition for the Search Recipe Object
  *
  * @export
+ *
  * @class Search
  */
 export default class Search {
   /**
-   * Fetch list of recipes ordered (descending) by number of upvotes
+   * @description - Fetch list of recipes ordered
+   * (descending) by number of upvotes
    *
    * @param {object} req - HTTP Request
+   *
    * @param {object} res - HTTP Response
-   * @returns {object} Class instance
+   *
+   * @return {object} this - Class instance
+   *
    * @memberof Search
    */
   sortMostUpvotes({ query }, res) {
-    const limit = +query.limit || 10,
-      currentPage = (+query.page || 1),
-      offset = (currentPage - 1) * limit;
+    const limit = Number(query.limit) || 10;
+    const currentPage = Number(query.page) || 1;
+    const offset = (currentPage - 1) * limit;
 
     Recipe
       .findAndCountAll({
@@ -49,23 +54,31 @@ export default class Search {
           pagination,
           recipes: foundRecipes.rows
         });
-      });
+      })
+      .catch((/* error */) => res.status(500).json({
+        success: false,
+        message: 'Error fetching recipes'
+      }));
 
     return this;
   }
 
   /**
-   * Search for recipe by Recipe name, Ingredients or Name of User
+   * @description - Search for recipe by Recipe name,
+   * Ingredients or Name of User
    *
    * @param {object} req - HTTP Request
+   *
    * @param {object} res - HTTP Response
-   * @returns {object} Class instance
+   *
+   * @return {object} this - Class instance
+   *
    * @memberof Search
    */
   searchAll({ query }, res) {
-    const limit = +query.limit || 10,
-      currentPage = (+query.page || 1),
-      offset = (currentPage - 1) * limit;
+    const limit = Number(query.limit) || 10;
+    const currentPage = Number(query.page) || 1;
+    const offset = (currentPage - 1) * limit;
 
     const { search } = query;
     const ingredClause = search.split(' ').map(item => ({
@@ -103,17 +116,24 @@ export default class Search {
           pagination,
           recipes: foundRecipes.rows
         });
-      });
+      })
+      .catch((/* error */) => res.status(500).json({
+        success: false,
+        message: 'Error fetching recipes'
+      }));
 
     return this;
   }
 
   /**
-   * Fetch list of recipes based ingredients supplied
+   * @description - Fetch list of recipes based on ingredients supplied
    *
    * @param {object} req - HTTP Request
+   *
    * @param {object} res - HTTP Response
-   * @returns {object} Class instance
+   *
+   * @return {object} this - Class instance
+   *
    * @memberof Search
    */
   searchByIngredients({ query }, res) {
@@ -122,9 +142,9 @@ export default class Search {
       ingredients: { $iLike: `%${item}%` }
     }));
 
-    const limit = +query.limit || 10,
-      currentPage = (+query.page || 1),
-      offset = (currentPage - 1) * limit;
+    const limit = Number(query.limit) || 10;
+    const currentPage = Number(query.page) || 1;
+    const offset = (currentPage - 1) * limit;
 
     Recipe
       .findAndCountAll({
@@ -157,25 +177,32 @@ export default class Search {
           pagination,
           recipes: foundRecipes.rows
         });
-      });
+      })
+      .catch((/* error */) => res.status(500).json({
+        success: false,
+        message: 'Error fetching recipes'
+      }));
 
     return this;
   }
 
   /**
-   * Fetch list of recipes based on name supplied
+   * @description - Fetch list of recipes based on name supplied
    *
-   * @param {any} req
-   * @param {any} res
-   * @returns {object} Classs instance
+   * @param {any} req - HTTP request
+   *
+   * @param {any} res - HTTP response
+   *
+   * @return {object} this - Classs instance
+   *
    * @memberof Search
    */
   searchByName({ query }, res) {
     const { name } = query;
 
-    const limit = +query.limit || 10,
-      currentPage = (+query.page || 1),
-      offset = (currentPage - 1) * limit;
+    const limit = Number(query.limit) || 10;
+    const currentPage = Number(query.page) || 1;
+    const offset = (currentPage - 1) * limit;
 
     Recipe
       .findAndCountAll({
@@ -208,7 +235,11 @@ export default class Search {
           pagination,
           recipes: foundRecipes.rows
         });
-      });
+      })
+      .catch((/* error */) => res.status(500).json({
+        success: false,
+        message: 'Error fetching recipes'
+      }));
 
     return this;
   }

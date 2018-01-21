@@ -8,11 +8,13 @@ import {
 const url = '/api/v1/users/';
 
 /**
- * Sets the current user in the store
+ * @description - Sets the current user in the store
  *
  * @export
- * @param {any} userData
- * @returns {obj} action
+ *
+ * @param {object} userData - User details
+ *
+ * @returns {object} action - Created user action
  */
 export function setCurrentUser(userData) {
   return {
@@ -22,10 +24,11 @@ export function setCurrentUser(userData) {
 }
 
 /**
- * Signs out a user
+ * @description - Signs out a user
  *
  * @export
- * @returns {obj} promise
+ *
+ * @returns {object} dispatch - Dispatched action
  */
 export function signOut() {
   return (dispatch) => {
@@ -37,11 +40,13 @@ export function signOut() {
 }
 
 /**
- * Signs in a user
+ * @description - Signs in a user
  *
  * @export
- * @param {any} userData
- * @returns {obj} promise
+ *
+ * @param {object} userData - User credential
+ *
+ * @returns {object} dispatch - Dispatched action
  */
 export function signIn(userData) {
   return dispatch => axios.post(`${url}signin`, userData)
@@ -54,11 +59,13 @@ export function signIn(userData) {
 }
 
 /**
- * Signs up a user
+ * @description - Signs up a user
  *
  * @export
- * @param {any} userData
- * @returns {obj} promise
+ *
+ * @param {object} userData - User details
+ *
+ * @returns {object} dispatch - Dispatched action
  */
 export function signUp(userData) {
   return dispatch => axios.post(`${url}signup`, userData)
@@ -71,11 +78,13 @@ export function signUp(userData) {
 }
 
 /**
- * Get User information and stats
+ * @description - Get User information and stats
  *
  * @export
+ *
  * @param {number} userId - User ID
- * @returns {object} action
+ *
+ * @returns {object} dispatch - Dispatched action
  */
 export function getUser(userId) {
   return dispatch =>
@@ -90,12 +99,15 @@ export function getUser(userId) {
 }
 
 /**
- * Update user profile information
+ * @description - Update user profile information
  *
  * @export
- * @param {any} userId
- * @param {any} userData
- * @returns {object} action
+ *
+ * @param {Number} userId - User ID
+ *
+ * @param {object} userData - User details
+ *
+ * @returns {object} dispatch - Dispatched action
  */
 export function updateProfile(userId, userData) {
   return dispatch => axios.put(`${url}${userId}/profile`, userData)
@@ -110,11 +122,13 @@ export function updateProfile(userId, userData) {
 }
 
 /**
- * Change user password
+ * @description - Change user password
  *
  * @export
- * @param {any} userData
- * @returns {object} action
+ *
+ * @param {object} userData - User details
+ *
+ * @returns {object} dispatch - Dispatched action
  */
 export function changePassword(userData) {
   return dispatch => axios.put(`${url}changePassword`, userData);

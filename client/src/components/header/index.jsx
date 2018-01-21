@@ -2,15 +2,17 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import View from './view';
+import View from './View';
 
 import { signOut } from '../../actions/authActions';
 
 /**
- * Header Container component
+ * @description - Header Container component
  *
  * @class Header
- * @param {string} route
+ *
+ * @param {string} route - new Route
+ *
  * @extends {PureComponent}
  */
 class Header extends PureComponent {
@@ -19,9 +21,10 @@ class Header extends PureComponent {
   };
 
   /**
-   * Calls view for component rendering
+   * @description - Calls view for component rendering
    *
-   * @returns {object} View
+   * @returns {object} View - Rendered view
+   *
    * @memberof Header
    */
   render() {
@@ -37,10 +40,11 @@ class Header extends PureComponent {
 }
 
 /**
- * Maps data from redux state to componenet props
+ * @description - Maps data from redux state to componenet props
  *
- * @param {any} state
- * @returns {object} props
+ * @param {object} state - Redux state
+ *
+ * @returns {object} props - Mapped props
  */
 const mapStateToProps = state => ({
   loggedUser: state.auth.user

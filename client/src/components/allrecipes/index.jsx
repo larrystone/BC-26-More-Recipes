@@ -3,27 +3,27 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 
-import Header from '../header';
-import View from './view';
+import Header from '../Header';
+import View from './View';
 import Paginate from '../commons/Paginate';
 import Footer from '../commons/Footer';
 
 import { fetchPagedRecipe, searchRecipe } from '../../actions/recipeActions';
 
 /**
- * Top recipe container with pagination
+ * @description - Top recipe container with pagination
  *
  * @class Recipes
+ *
  * @extends {Component}
- * @param {string} page - selected page
- * @param {string} pageSize - Max number of items on a page
- * @param {string} key
- * @param {string} value
+ *
  */
 class Recipes extends Component {
   /**
-   * Creates an instance of Recipes.
-   * @param {any} props
+   * @description - Creates an instance of Recipes.
+   *
+   * @param {object} props - Props object
+   *
    * @memberof Recipes
    */
   constructor(props) {
@@ -39,11 +39,12 @@ class Recipes extends Component {
   }
 
   /**
-   * Fetches recipes based on page and limit
+   * @description - Fetches recipes based on page and limit
    * parameters when components loads
    *
    * @memberof Recipes
-   * @returns {void} Null
+   *
+   * @returns {void} Nothing
    */
   componentWillMount() {
     const { location } = this.props;
@@ -51,11 +52,13 @@ class Recipes extends Component {
   }
 
   /**
-   * Fetches recipes based on page and limit
+   * @description - Fetches recipes based on page and limit
    * parameters when components page changes
    *
    * @memberof Recipes
+   *
    * @param {object} nextProps - The new prop
+   *
    * @returns {void} Null
    */
   componentWillReceiveProps(nextProps) {
@@ -67,12 +70,15 @@ class Recipes extends Component {
   }
 
   /**
-   * Handles fetching recipe on new page size request
+   * @description - Handles fetching recipe on new page size request
    *
    * @memberof Recipes
-   * @param {number} currentPage
-   * @param {number} pageSize
-   * @returns {null} Nothing
+   *
+   * @param {Number} currentPage - Current Page
+   *
+   * @param {Number} pageSize - Page size
+   *
+   * @returns {void} Nothing
    */
   onPageSizeChange = (currentPage, pageSize) => {
     const { url } = this.state;
@@ -81,11 +87,13 @@ class Recipes extends Component {
   }
 
   /**
-   * Handles fetching recipe on new page request
+   * @description - Handles fetching recipe on new page request
    *
    * @memberof Recipes
-   * @param {number} newPage
-   * @returns {null} Nothing
+   *
+   * @param {number} newPage - New page
+   *
+   * @returns {void} Nothing
    */
   onPageChange = (newPage) => {
     const { url, limit } = this.state;
@@ -94,12 +102,14 @@ class Recipes extends Component {
   }
 
   /**
-   * Fetches recipes based on page and query parameters
+   * @description - Fetches recipes based on page and query parameters
    * from the location object
    *
-   * @param {any} location
+   * @param {object} location - Window location object
+   *
    * @memberof Recipes
-   * @returns {null} Nothing
+   *
+   * @returns {void} Nothing
    */
   fetchRecipes(location) {
     const query = new URLSearchParams(location.search);
@@ -126,6 +136,16 @@ class Recipes extends Component {
             isLoading: false,
             sought: true
           });
+        })
+        .catch(() => {
+          this.setState({
+            isLoading: false,
+            sought: true
+          });
+          if (page && page > 1) {
+            this.context.router.history
+              .push(`${location.pathname}?page=${page - 1}&limit=${limit}`);
+          }
         });
     } else {
       this.props.fetchPagedRecipe(page, limit)
@@ -134,17 +154,30 @@ class Recipes extends Component {
             isLoading: false,
             sought: false
           });
+        })
+        .catch(() => {
+          this.setState({
+            isLoading: false,
+            sought: false
+          });
+          if (page && page > 1) {
+            this.context.router.history
+              .push(`${location.pathname}?page=${page - 1}&limit=${limit}`);
+          }
         });
     }
   }
 
   /**
-   * Stores value to component's state
+   * @description - Stores value to component's state
    *
    * @memberof Recipes
-   * @param {string} key
-   * @param {string} value
-   * @returns {null} Nothing
+   *
+   * @param {string} key - Key to use for storing data
+   *
+   * @param {string} value - value to store to key
+   *
+   * @returns {void} Nothing
    */
   storeToState = (key, value) => {
     this.setState({
@@ -161,20 +194,23 @@ class Recipes extends Component {
   }
 
   /**
-   * Calls the route that allow recipe detail to viewed
+   * @description - Calls the route that allow recipe detail to viewed
    *
    * @memberof Recipes
-   * @param {number} recipeId
-   * @returns {null} Nothing
+   *
+   * @param {number} recipeId - Recipe ID
+   *
+   * @returns {void} Nothing
    */
   showDetails = (recipeId) => {
     this.context.router.history.push(`/recipe/${recipeId}`);
   }
 
   /**
-  * Call Views for component rendering
+  * @description - Call Views for component rendering
   *
-  * @returns {object} View
+  * @returns {object} View - Rendered view
+  *
   * @memberof Recipes
   */
   render() {
@@ -194,11 +230,11 @@ class Recipes extends Component {
               sought={this.state.sought}
               searchCategory={this.state.searchCategory}
             />
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <div className="flex">
               {
                 _.size(this.props.recipes) > 0 ?
                   <Paginate
-                    pageSize={`${this.state.limit}`}
+                    pageSize={`${Number(this.state.limit) || 10}`}
                     pagination={this.props.pagination}
                     onChange={this.onPageChange}
                     onShowSizeChange={this.onPageSizeChange}

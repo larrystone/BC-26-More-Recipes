@@ -2,11 +2,11 @@ import React from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 
 import Home from './components/Home';
-import AllRecipes from './components/allrecipes';
-import RecipeDetails from './components/recipedetails';
-import MyRecipes from './components/myrecipes';
-import MyFavorites from './components/favorites';
-import Profile from './components/profile';
+import AllRecipes from './components/AllRecipes';
+import RecipeDetails from './components/RecipeDetails';
+import MyRecipes from './components/MyRecipes';
+import MyFavorites from './components/Favorites';
+import Profile from './components/Profile';
 
 const generalRoutes = (
   <Switch>

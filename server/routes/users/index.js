@@ -1,20 +1,23 @@
 import express from 'express';
 
-import User from '../../controllers/users';
-import Recipe from '../../controllers/recipes';
-import Favorite from '../../controllers/favorites';
-import Review from '../../controllers/reviews';
-import { validateRecipeId, validateUserId } from '../../middleware/validate';
-import validateRecipeExist from '../../middleware/validateRecipeExist';
+import Users from '../../controllers/users';
+import Recipes from '../../controllers/recipes';
+import Favorites from '../../controllers/favorites';
+import Reviews from '../../controllers/reviews';
 import Auth from '../../middleware/auth';
+import {
+  validateRecipeId,
+  validateUserId,
+  validateRecipeExist
+} from '../../middleware/validate';
 
 const user = express.Router();
 
-const newUser = new User();
-const newRecipe = new Recipe();
-const newFavorite = new Favorite();
+const newUser = new Users();
+const newRecipe = new Recipes();
+const newFavorite = new Favorites();
 const newAuth = new Auth();
-const newReview = new Review();
+const newReview = new Reviews();
 
 user.post('/signup', newUser.signUp);
 user.post('/signin', newUser.signIn);
@@ -31,7 +34,7 @@ user.put('/changePassword', newUser.changePassword);
 user.route('/:userId/recipes/:recipeId')
   .all(validateRecipeId, validateUserId, validateRecipeExist)
   .post(newFavorite.addToFavorites)
-  .get(newFavorite.getSingleFavorite)
+  .get(newFavorite.getFavRecipe)
   .delete(newFavorite.removeFromFavorites);
 
 user.get('/:userId/recipes', validateUserId, newFavorite.getFavRecipes);

@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Toastr from 'toastr';
+import toastr from 'toastr';
 import _ from 'lodash';
 
-import Header from '../header';
-import View from './view';
+import Header from '../Header';
+import View from './View';
 import Paginate from '../commons/Paginate';
 import Footer from '../commons/Footer';
 import Delete from '../commons/Delete';
-import CreateOrEdit from '../commons/CreateOrEdit';
+import ManageRecipe from '../commons/ManageRecipe';
 
 import {
   fetchMyRecipes, deleteRecipe, addRecipe, editRecipe, fetchRecipeDetails
@@ -18,19 +18,18 @@ import { addModal, removeModal } from '../../actions/modalActions';
 import { signOut } from '../../actions/authActions';
 
 /**
- * My recipes container with pagination
+ * @description - My recipes container with pagination
  *
  * @class MyRecipes
+ *
  * @extends {Component}
- * @param {string} newPage - selected page
- * @param {string} pageSize - Max number of items on a page
- * @param {string} nextPage - Next page
- * @param {number} recipeId - Recipe Id
  */
 class MyRecipes extends Component {
   /**
-   * Creates an instance of MyRecipes.
-   * @param {any} props
+   * @description - Creates an instance of MyRecipes
+   *
+   * @param {object} props - Component's props
+   *
    * @memberof Recipes
    */
   constructor(props) {
@@ -50,11 +49,12 @@ class MyRecipes extends Component {
   }
 
   /**
-   * Fetches recipes based on page and limit
+   * @description - Fetches recipes based on page and limit
    * parameters when components loads
    *
    * @memberof Recipes
-   * @returns {void} Null
+   *
+   * @returns {void} Nothing
    */
   componentWillMount() {
     const { location } = this.props;
@@ -62,11 +62,13 @@ class MyRecipes extends Component {
   }
 
   /**
-   * Fetches recipes when pagination events occur
+   * @description - Fetches recipes when pagination events occur
    *
-   * @param {any} nextProps
+   * @param {object} nextProps - Incoming props
+   *
    * @memberof MyRecipes
-   * @returns {void} Null
+   *
+   * @returns {void} Nothing
    */
   componentWillReceiveProps(nextProps) {
     const { location } = nextProps;
@@ -76,12 +78,15 @@ class MyRecipes extends Component {
   }
 
   /**
-   * Handles fetching recipe on new page size request
+   * @description - Handles fetching recipe on new page size request
    *
    * @memberof MyRecipes
-   * @param {number} currentPage
-   * @param {number} pageSize
-   * @returns {null} Nothing
+   *
+   * @param {number} currentPage - Current page
+   *
+   * @param {number} pageSize - New page size
+   *
+   * @returns {void} Nothing
    */
   onPageSizeChange = (currentPage, pageSize) => {
     const { url } = this.state;
@@ -90,11 +95,13 @@ class MyRecipes extends Component {
   };
 
   /**
-   * Handles fetching recipe on new page request
+   * @description - Handles fetching recipe on new page request
    *
    * @memberof MyRecipes
-   * @param {number} newPage
-   * @returns {null} Nothing
+   *
+   * @param {number} newPage - New page
+   *
+   * @returns {void} Nothing
    */
   onPageChange = (newPage) => {
     const { url, limit } = this.state;
@@ -102,23 +109,27 @@ class MyRecipes extends Component {
   };
 
   /**
-   * Calls the route that allow recipe detail to viewed
+   * @description - Calls the route that allow recipe detail to viewed
    *
    * @memberof MyRecipes
-   * @param {number} recipeId
-   * @returns {null} Nothing
+   *
+   * @param {number} recipeId - Recipe ID
+   *
+   * @returns {void} Nothing
    */
   showDetails = (recipeId) => {
     this.context.router.history.push(`/recipe/${recipeId}`);
   }
 
   /**
-   * Handle image change
+   * @description - Handle image change
    * For displaying image thumbnail
    *
    * @memberof MyRecipes
-   * @param {object} event
-   * @returns {null} Nothing
+   *
+   * @param {object} event - Form event object
+   *
+   * @returns {void} Nothing
    */
   handleImageChange = (event) => {
     event.preventDefault();
@@ -139,12 +150,15 @@ class MyRecipes extends Component {
   }
 
   /**
-   * Stores value to component's state
+   * @description - Stores value to component's state
    *
    * @memberof Recipes
-   * @param {string} key
-   * @param {string} value
-   * @returns {null} Nothing
+   *
+   * @param {string} key - Key name to store in component's state
+   *
+   * @param {string} value - Value to store in component's state
+   *
+   * @returns {void} Nothing
    */
   storeToState = (key, value) => {
     this.setState({
@@ -153,12 +167,14 @@ class MyRecipes extends Component {
   };
 
   /**
-   * Parse the location object
+   * @description - Parse the location object
    * and fetch the recipes
    *
-   * @param {any} location
+   * @param {object} location - Window's location object
+   *
    * @memberof MyRecipes
-   * @returns {void} Null
+   *
+   * @returns {void} Nothing
    */
   fetchRecipes(location) {
     const query = new URLSearchParams(location.search);
@@ -179,8 +195,8 @@ class MyRecipes extends Component {
         });
       })
       .catch((error) => {
-        Toastr.remove();
-        Toastr.error(error.response.data.message);
+        toastr.remove();
+        toastr.error(error.response.data.message);
         this.setState({
           isLoading: false,
           sought: false
@@ -203,13 +219,13 @@ class MyRecipes extends Component {
 
     this.setState({ isLoading: true });
 
-    Toastr.remove();
+    toastr.remove();
     this.props.addRecipe(data)
       .then(() => {
         this.setState({
           isLoading: false
         });
-        Toastr.success(`New recipe created <br/>${name}`);
+        toastr.success(`New recipe created <br/>${name}`);
         this.removeModal();
       })
       .catch((error) => {
@@ -217,16 +233,18 @@ class MyRecipes extends Component {
           isLoading: false
         });
         const { data: { message } } = error.response;
-        Toastr.error(message);
+        toastr.error(message);
       });
   }
 
   /**
-   * Removes a recipe from user recipe list
+   * @description - Removes a recipe from user recipe list
    *
    * @memberof Recipes
-   * @param {number} recipeId
-   * @returns {null} Nothing
+   *
+   * @param {number} recipeId - Recipe ID
+   *
+   * @returns {void} Nothing
    */
   updateRecipe = (recipeId) => {
     const data = new FormData();
@@ -245,11 +263,11 @@ class MyRecipes extends Component {
       isLoading: true
     });
 
-    Toastr.remove();
+    toastr.remove();
     this.props.editRecipe(recipeId, data)
       .then(() => {
         this.setState({ isLoading: false });
-        Toastr.success(`Recipe updated <br/>${name}`);
+        toastr.success(`Recipe updated <br/>${name}`);
         this.removeModal();
       })
       .catch((error) => {
@@ -257,18 +275,22 @@ class MyRecipes extends Component {
           isLoading: false
         });
         const { data: { message } } = error.response;
-        Toastr.error(message);
+        toastr.error(message);
       });
   }
 
   /**
-   * Adds the modal for creating or editing recipe
+   * @description - Adds the modal for creating or editing recipe
    *
    * @memberof Favorites
-   * @param {string} recipeName
-   * @param {number} recipeId
-   * @param {string} modalType
-   * @returns {null} Nothing
+   *
+   * @param {string} recipeName - Recipe name to show in modal
+   *
+   * @param {number} recipeId - Recipe ID
+   *
+   * @param {string} modalType - Modal type string
+   *
+   * @returns {void} Nothing
    */
   addModal = (recipeName, recipeId, modalType) => {
     this.props.addModal({
@@ -279,11 +301,13 @@ class MyRecipes extends Component {
   }
 
   /**
-   * Shows the create recipe modal
+   * @description - Shows the create recipe modal
    *
    * @memberof MyRecipes
-   * @param {string} modalType
-   * @returns {null} Nothing
+   *
+   * @param {string} modalType - Modal type to show
+   *
+   * @returns {void} Nothing
    *
    */
   newRecipe = (modalType) => {
@@ -299,13 +323,17 @@ class MyRecipes extends Component {
   }
 
   /**
-   * Shows the edit recipe modal
+   * @description - Shows the edit recipe modal
    *
    * @memberof MyRecipes
-   * @param {string} recipeName
-   * @param {number} recipeId
-   * @param {string} modalType
-   * @returns {null} Nothing
+   *
+   * @param {string} recipeName - Name of recipe
+   *
+   * @param {number} recipeId - Recipe ID
+   *
+   * @param {string} modalType - Type of modal
+   *
+   * @returns {void} Nothing
    *
    */
   editRecipe = (recipeName, recipeId, modalType) => {
@@ -330,42 +358,54 @@ class MyRecipes extends Component {
   }
 
   /**
-   * Removes the modal from the window
+   * @description - Removes the modal from the window
    *
    * @memberof MyRecipes
-   * @param {string} recipeName
-   * @param {number} recipeId
-   * @returns {null} Nothing
+   *
+   * @returns {void} Nothing
    */
   removeModal = () => {
     this.props.removeModal();
   }
 
   /**
-   * Removes a recipe from the database
+   * @description - Removes a recipe from the database
    *
    * @memberof MyRecipes
-   * @param {string} recipeName
-   * @param {number} recipeId
-   * @returns {null} Nothing
+   *
+   * @param {string} recipeName - Name of recipe
+   *
+   * @param {number} recipeId - Recipe ID
+   *
+   * @returns {void} Nothing
    */
   removeRecipe = (recipeName, recipeId) => {
+    const { location } = this.props;
+    const query = new URLSearchParams(location.search);
+    const page = query.get('page');
+    const limit = query.get('limit');
+
     this.props.deleteRecipe(recipeId)
       .then(() => {
         this.removeModal();
-        Toastr
+        if (_.size(this.props.recipe) === 0 && page > 0) {
+          this.context.router.history
+            .push(`${location.pathname}?page=${page - 1}&limit=${limit}`);
+        }
+        toastr
           .success(`You have removed <em><strong>${recipeName}</strong></em>`);
       })
       .catch((error) => {
-        Toastr
+        toastr
           .error(error.response.data.message);
       });
   }
 
   /**
-  * Call Views for component rendering
+  * @description - Call Views for component rendering
   *
-  * @returns {object} View
+  * @returns {object} View - Rendered view
+  *
   * @memberof Recipes
   */
   render() {
@@ -374,7 +414,7 @@ class MyRecipes extends Component {
     } = this.state;
     return (
       <div className="body">
-        <CreateOrEdit
+        <ManageRecipe
           modal={this.props.modal}
           recipe={{
             imageUrl, name, description, ingredients, procedure
@@ -413,11 +453,11 @@ class MyRecipes extends Component {
               sought={this.state.sought}
               searchCategory={this.state.searchCategory}
             />
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <div className="flex">
               {
                 _.size(this.props.recipes) > 0 ?
                   <Paginate
-                    pageSize={`${this.state.limit}`}
+                    pageSize={`${Number(this.state.limit) || 10}`}
                     pagination={this.props.pagination}
                     onChange={this.onPageChange}
                     onShowSizeChange={this.onPageSizeChange}
@@ -439,7 +479,6 @@ MyRecipes.propTypes = {
   deleteRecipe: PropTypes.func.isRequired,
   editRecipe: PropTypes.func.isRequired,
   fetchRecipeDetails: PropTypes.func.isRequired,
-  signOut: PropTypes.func.isRequired,
   addRecipe: PropTypes.func.isRequired,
   recipes: PropTypes.shape().isRequired,
   recipe: PropTypes.shape().isRequired,
@@ -455,10 +494,11 @@ MyRecipes.contextTypes = {
 };
 
 /**
- * Maps data from state to component props
+ * @description - Maps data from redux state to component props
  *
- * @param {any} state
- * @returns {object} props
+ * @param {object} state - Redux state
+ *
+ * @returns {object} props - Mapped props
  */
 const mapStateToProps = (state) => {
   const { recipe: { myRecipes, currentRecipe }, modal, auth } = state;

@@ -1,11 +1,13 @@
 import { ADD_MODAL, REMOVE_MODAL } from '../constants';
 
 /**
- * Adds a modal to the window
+ * @description - Adds a modal to the window
  *
  * @export
- * @param {any} modal
- * @returns {obj} action
+ *
+ * @param {object} modal - modal Details
+ *
+ * @returns {object} action - Modal action
  */
 export function addModal(modal) {
   return {
@@ -15,10 +17,11 @@ export function addModal(modal) {
 }
 
 /**
- * Removes a modal from the window
+ * @description - Removes a modal from the window
  *
  * @export
- * @returns {obj} action
+ *
+ * @returns {object} action
  */
 export function removeModal() {
   return {

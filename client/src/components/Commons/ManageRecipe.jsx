@@ -3,17 +3,19 @@ import { Modal, Button, Form } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 
 import Loading from '../commons/Loading';
-import defaultImage from '../../../images/no-image.jpg';
+import noImage from '../../../images/noImage.jpg';
 
 /**
- * Stateless component for rendering Creating or Editing recipe view
+ * @description - Stateless component for rendering
+ * the Create or Edit recipe view
  *
- * @param {object} props
- * @returns {view} CreateOrEdit
+ * @param {object} props - Internal props object
+ *
+ * @returns {view} CreateOrEdit - Rendered view
  */
-const CreateOrEdit = ({
+function CreateOrEdit({
   modal, actions, loading, recipe, previewImage
-}) => {
+}) {
   /**
    * Renders button type (Update or Save buttons)
    *
@@ -27,6 +29,7 @@ const CreateOrEdit = ({
           icon="checkmark"
           labelPosition="right"
           content="Update"
+          disabled={loading}
           onClick={() => {
             actions.updateRecipe(modal.recipeId);
           }}
@@ -39,6 +42,7 @@ const CreateOrEdit = ({
         icon="checkmark"
         labelPosition="right"
         content="Save"
+        disabled={loading}
         onClick={() => {
           actions.saveRecipe();
         }}
@@ -67,8 +71,8 @@ const CreateOrEdit = ({
     <Form
       loading={loading}
     >
-      <div style={{ display: 'flex', flexWrap: 'wrap', padding: '10px' }}>
-        <div style={{ marginRight: '20px' }}>
+      <div className="flex flex__wrap pad__10">
+        <div className="form--image">
           <span>
             <strong>
               Recipe Image. click to choose new image (Max Size: 200kb)
@@ -76,25 +80,17 @@ const CreateOrEdit = ({
           </span>
           <label
             htmlFor="input"
-            className="clickable"
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              width: '100%',
-              marginBottom: '20px',
-              flexBasis: '0 0'
-            }}
+            className="clickable flex image-src"
           >
             <img
-              src={previewImage || defaultImage}
+              src={previewImage || noImage}
               alt=""
               height="300px"
-              style={{ border: '2px solid gray' }}
             />
           </label>
           <Form.Input
             id="input"
-            style={{ display: 'none' }}
+            className="hidden"
             disabled={loading}
             name="imageUrl"
             type="file"
@@ -104,7 +100,7 @@ const CreateOrEdit = ({
             }}
           />
         </div>
-        <div style={{ flexGrow: '1' }}>
+        <div className="basic-info">
           <Form.Input
             required
             disabled={loading}
@@ -129,7 +125,7 @@ const CreateOrEdit = ({
             autoHeight={false}
             disabled={loading}
             label="Ingredients"
-            style={{ height: '150px' }}
+            className="recipe--ingredient"
             placeholder="Enter ingredient list separated by comma"
             value={
               recipe.ingredients ? recipe.ingredients.replace(/;;/g, ',') : ''
@@ -143,7 +139,7 @@ const CreateOrEdit = ({
       <Form.TextArea
         required
         disabled={loading}
-        style={{ height: '235px' }}
+        className="recipe--procedure"
         label="Preparation Procedure"
         placeholder="Enter recipe preparation procedure"
         value={recipe.procedure}
@@ -168,6 +164,7 @@ const CreateOrEdit = ({
           icon="close"
           labelPosition="right"
           content="Cancel"
+          disabled={loading}
           onClick={() => {
             actions.removeModal();
           }}
@@ -176,7 +173,7 @@ const CreateOrEdit = ({
       </Modal.Actions>
     </Modal>
   );
-};
+}
 
 CreateOrEdit.propTypes = {
   modal: PropTypes.shape().isRequired,

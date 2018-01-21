@@ -1,15 +1,16 @@
 import express from 'express';
-import { validateRecipeId } from '../../middleware/validate';
-import validateRecipeExist from '../../middleware/validateRecipeExist';
-import Recipe from '../../controllers/recipes';
-import Review from '../../controllers/reviews';
-import Vote from '../../controllers/votes';
+import {
+  validateRecipeId, validateRecipeExist
+} from '../../middleware/validate';
+import Recipes from '../../controllers/recipes';
+import Reviews from '../../controllers/reviews';
+import Votes from '../../controllers/votes';
 import Auth from '../../middleware/auth';
 
 const user = express.Router();
-const newRecipe = new Recipe();
-const newReview = new Review();
-const newVote = new Vote();
+const newRecipe = new Recipes();
+const newReview = new Reviews();
+const newVote = new Votes();
 const newAuth = new Auth();
 
 user.use('*', newAuth.verify);

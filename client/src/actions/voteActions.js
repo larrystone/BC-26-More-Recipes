@@ -7,12 +7,15 @@ import {
 const url = '/api/v1/recipes';
 
 /**
- * Upvotes a recipe
+ * @description - Upvotes a recipe
  *
  * @export
- * @param {any} recipeId
- * @param {any} userId
- * @returns {obj} promise
+ *
+ * @param {Number} recipeId - Recipe ID
+ *
+ * @param {Number} userId - User ID
+ *
+ * @returns {object} dispatch - Dispatched action
  */
 export function upvote(recipeId) {
   return dispatch => axios.post(`${url}/${recipeId}/upvotes`)
@@ -26,12 +29,15 @@ export function upvote(recipeId) {
 }
 
 /**
- * Downvotes a recipe
+ * @description - Downvotes a recipe
  *
  * @export
- * @param {any} recipeId
- * @param {any} userId
- * @returns {obj} promise
+ *
+ * @param {Number} recipeId - Recipe ID
+ *
+ * @param {Number} userId - User ID
+ *
+ * @returns {object} dispatch - Dispatched action
  */
 export function downvote(recipeId) {
   return dispatch => axios.post(`${url}/${recipeId}/downvotes`)
@@ -45,12 +51,15 @@ export function downvote(recipeId) {
 }
 
 /**
- * Fetch user list for recipe upvotes
+ * @description - Fetch user list for recipe upvotes
  *
  * @export
- * @param {any} recipeId
- * @param {any} userId
- * @returns {obj} promise
+ *
+ * @param {Number} recipeId - Recipe ID
+ *
+ * @param {Number} userId - User ID
+ *
+ * @returns {object} dispatch - Dispatched action
  */
 export function fetchUpvotes(recipeId) {
   return dispatch => axios.get(`${url}/${recipeId}/upvotes`)
@@ -63,11 +72,14 @@ export function fetchUpvotes(recipeId) {
 }
 
 /**
- * Fetch user list for recipe downvotes
+ * @description - Fetch user list for recipe downvotes
  *
  * @export
- * @param {any} recipeId
- * @param {any} userId
+ *
+ * @param {Number} recipeId - Recipe ID
+ *
+ * @param {Number} userId - User ID
+ *
  * @returns {obj} promise
  */
 export function fetchDownvotes(recipeId) {

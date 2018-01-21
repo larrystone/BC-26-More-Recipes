@@ -13,19 +13,20 @@ const MAX_COUNT = 10,
   EMPTY = 0;
 
 /**
- * Stateless component for rendering pagination view
+ * @description - Stateless component for rendering pagination view
  *
- * @param {object} props
- * @returns {view} RecipeItem
+ * @param {object} props - Component's props
+ *
+ * @returns {view} RecipeItem - Rendered view
  */
-const ReviewsView = ({
+function ReviewsView({
   actions, reviews, newReview,
   index, posting
-}) => {
+}) {
   /**
-   * Returns the reviews
+   * @description - Returns the reviews
    *
-   * @returns {view} reviews
+   * @returns {view} reviews - Rendered reviews
    */
   const getReviews = () => {
     const visibleReviews = reviews
@@ -36,10 +37,10 @@ const ReviewsView = ({
           content, User, createdAt, id
         } = review;
         return (
-          <Comment key={id} style={{ marginBottom: '10px' }}>
+          <Comment key={id} className="comment">
             <Comment.Avatar
               src={User.imageUrl || avatar}
-              style={{ height: '36px', width: '36px' }}
+              className="comment__avatar"
             />
             <Comment.Content>
               <Comment.Author as="span">{User.name}</Comment.Author>
@@ -68,9 +69,9 @@ const ReviewsView = ({
   };
 
   /**
-   * Render the reviews on a recipe
+   * @description - Render the reviews on a recipe
    *
-   * @returns {view} view
+   * @returns {view} view - Rendered view
    */
   const renderReviews = () => {
     if (!reviews) {
@@ -100,17 +101,16 @@ const ReviewsView = ({
   };
 
   /**
-   * Render the next button if available
+   * @description - Render the next button if available
    *
-   * @returns {view} Button
+   * @returns {view} Button - Rendered view
    */
   const showLoadNewer = () => {
     if (index > EMPTY) {
       return (
         <center>
           <button
-            style={{ border: 'none', color: 'blue' }}
-            className="clickable"
+            className="clickable button--no-border__blue"
             onClick={() => {
               actions.storeToState('index', index - MAX_COUNT);
             }}
@@ -123,9 +123,9 @@ const ReviewsView = ({
   };
 
   /**
-   * Render the previous button if available
+   * @description - Render the previous button if available
    *
-   * @returns {view} Button
+   * @returns {view} Button - Rendered view
    */
   const showLoadOlder = () => {
     if (reviews) {
@@ -133,8 +133,7 @@ const ReviewsView = ({
         return (
           <center>
             <button
-              style={{ border: 'none', color: 'blue' }}
-              className="clickable"
+              className="clickable button--no-border__blue"
               onClick={() => {
                 actions.storeToState('index', index + MAX_COUNT);
               }}
@@ -148,12 +147,11 @@ const ReviewsView = ({
   };
 
   return (
-    <Card color="blue" style={{ padding: '20px', width: '450px' }}>
+    <Card color="blue" className="card--review">
       <Comment.Group>
         <Header as="h3">Reviews</Header>
         <Form reply>
           <Form.TextArea
-            style={{ maxHeight: '100px' }}
             placeholder="Write a review"
             value={newReview}
             disabled={posting}

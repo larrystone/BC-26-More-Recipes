@@ -1,32 +1,40 @@
-import jwt from 'jsonwebtoken';
+import jasonwebtoken from 'jsonwebtoken';
 
 /**
- * Class Definition for the Authentication Object using Jason Web Token
+ * @description - Class Definition for the Authentication
+ * using Jason Web Token
  *
  * @export
+ *
  * @class Auth
  */
 export default class Auth {
   /**
-   * Verify JWT token
+   * @description - Verify JWT token
    *
    * @param {object} req - HTTP Request
+   *
    * @param {object} res - HTTP Response
-   * @param {function} next - HTTP Next()
-   * @returns {object} Class instance
+   *
+   * @param {function} next - HTTP Next() function
+   *
+   * @returns {object} this - Class instance
+   *
    * @memberof Auth
    */
   verify(req, res, next) {
     const token = req.body.token
-    || req.query.token
-    || req.headers['x-access-token'];
+      || req.query.token
+      || req.headers['x-access-token'];
 
     if (token) {
       const secret = process.env.secret || '!^sl1@#=5';
-      jwt.verify(token, secret, (err, decoded) => {
+      jasonwebtoken.verify(token, secret, (err, decoded) => {
         if (err) {
-          return res.status(401).json({ success: false,
-            message: 'Failed to authenticate token.' });
+          return res.status(401).json({
+            success: false,
+            message: 'Failed to authenticate token.'
+          });
         }
         req.user = decoded;
         next();
@@ -42,14 +50,16 @@ export default class Auth {
   }
 
   /**
-   * Sign (Hash) User ID with JWT token
+   * @description - Sign (Hash) User details with JWT token
    *
-   * @param {object} user - User id and email address
-   * @returns {string} Encrypted string
+   * @param {object} user - User object (id and email address)
+   *
+   * @returns {string} jwtToken - Encrypted string
+   *
    * @memberof Auth
    */
   sign(user) {
     this.secret = process.env.secret || '!^sl1@#=5';
-    return jwt.sign(user, this.secret);
+    return jasonwebtoken.sign(user, this.secret);
   }
 }

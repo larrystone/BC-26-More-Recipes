@@ -1,10 +1,20 @@
-/** Validate user input for signup
+import { Recipe } from '../models';
+import trimWhiteSpaces from '../services/trimWhiteSpaces';
+
+/**
+ * @description - Validate user input for signup
+ *
  * @exports validateSignUp
+ *
  * @param  {string} name - Full Name
+ *
  * @param  {string} username - Username
+ *
  * @param  {string} email - Username
+ *
  * @param  {string} password - Username
- * @return {string} The status
+ *
+ * @return {string} status - The status
  */
 export const validateSignUp = (name, username, email, password) => {
   const pattern = /\S{3,}@\S{2,}\.\S{2,}/;
@@ -27,25 +37,35 @@ export const validateSignUp = (name, username, email, password) => {
   return false;
 };
 
-/** Validate an ID to be sure its a valid  number
+/**
+ * @description - Validate an ID to be sure its a valid  number
+ *
  * @exports validateId
+ *
  * @param  {string} id - ID
- * @return {string} The status
+ *
+ * @return {string} status - The status
  */
 export const validateId = (id) => {
-  if (isNaN(+id)) {
+  if (Number.isNaN(id)) {
     return 'Invalid';
   }
 
   return 'Valid';
 };
 
-/** Validate user input for recipe
+/**
+ * @description - Validate user input for recipe
+ *
  * @exports validateRecipeDetails
+ *
  * @param  {string} name - Recipe Name
+ *
  * @param  {string} ingredients - Recipe Ingredients
+ *
  * @param  {string} direction - Recipe directioins
- * @return {string} The status
+ *
+ * @return {string} message - Validation error message
  */
 export const validateRecipeDetails = (name, ingredients, direction) => {
   if (name.length < 3) {
@@ -61,10 +81,14 @@ export const validateRecipeDetails = (name, ingredients, direction) => {
   }
 };
 
-/** Validate user input for review on recipe
+/**
+ * @description - Validate user input for review on recipe
+ *
  * @exports validateReviewContent
+ *
  * @param  {string} message - Recipe review message
- * @return {string} The status
+ *
+ * @return {string} message - Validation error message
  */
 export const validateReviewContent = (message) => {
   if (message.length < 5) {
@@ -72,12 +96,18 @@ export const validateReviewContent = (message) => {
   }
 };
 
-/** Validate recipe ID on protected routes
+/**
+ * @description - Validate recipe ID on protected routes
+ *
  * @exports validateRecipeId
- * @param  {object} req - Request
- * @param  {object} res - Response
- * @param  {function} next - Next controller
- * @return {object} The status/next()
+ *
+ * @param  {object} req - HTTP Request
+ *
+ * @param  {object} res - HTTP Response
+ *
+ * @param  {function} next - HTTP Next function
+ *
+ * @return {object} response - HTTP response
  */
 export const validateRecipeId = ({ params }, res, next) => {
   const isValid = validateId(params.recipeId);
@@ -90,6 +120,17 @@ export const validateRecipeId = ({ params }, res, next) => {
   next();
 };
 
+/**
+ * @description - Validates the user ID
+ *
+ * @param {object} req - HTTP request
+ *
+ * @param {object} res - HTTP response
+ *
+ * @param {object} next - HTTP next function
+ *
+ * @returns {object} response - HTTP response
+ */
 export const validateUserId = ({ params }, res, next) => {
   const isValid = validateId(params.userId);
   if (isValid === 'Invalid') {
@@ -99,4 +140,97 @@ export const validateUserId = ({ params }, res, next) => {
     });
   }
   next();
+};
+
+/**
+ * @description - Checks if a recipe exists in the database
+ *
+ * @param {object} req -  HTTP request
+ *
+ * @param {object} res - HTTP response
+ *
+ * @param {function} next - HTTP next function
+ *
+ * @returns {object} response - Status of request
+ */
+export const validateRecipeExist = ({ params }, res, next) => {
+  const { recipeId } = params;
+
+  Recipe
+    .findById(recipeId)
+    .then((recipe) => {
+      if (recipe) {
+        next();
+      } else {
+        res.status(404).json({
+          success: false,
+          message: 'Recipe does not exist!'
+        });
+      }
+    });
+};
+
+/**
+ * @description - Validate the username if taken
+ *
+ * @param {object} User - User model
+ *
+ * @param {string} username - User name
+ *
+ * @param {number} userId - User ID
+ *
+ * @returns {Promise} promise - Request status
+ */
+export const validateUserName = (User, username, userId) => {
+  const promise = new Promise((resolve, reject) => {
+    User
+      .findOne({
+        where: {
+          username: {
+            $iLike: trimWhiteSpaces(username)
+          },
+          id: {
+            $ne: Number(userId)
+          }
+        },
+        attributes: ['id']
+      })
+      .then((userFound) => {
+        if (!userFound) {
+          resolve();
+        } else {
+          reject(new Error({
+            status: 409,
+            message: 'Username already taken'
+          }));
+        }
+      });
+  });
+  return promise;
+};
+
+/**
+ * @description - Validate if user has the right to manage recipe
+ *
+ * @param {any} recipeId - Recipe ID
+ *
+ * @param {any} userId - User ID
+ *
+ * @returns {Promise} promise - Status of request
+ */
+export const validateUserRight = (recipeId, userId) => {
+  const promise = new Promise((resolve, reject) => {
+    Recipe
+      .findById(recipeId)
+      .then((recipeFound) => {
+        if (Number(recipeFound.userId) !== Number(userId)) {
+          reject(new Error({
+            status: 401,
+            message: 'You cannot modify a recipe not created by You!'
+          }));
+        }
+        resolve(recipeFound);
+      });
+  });
+  return promise;
 };

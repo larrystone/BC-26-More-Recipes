@@ -8,31 +8,35 @@ import Loading from '../commons/Loading';
 import NothingFound from '../commons/NothingFound';
 
 /**
- * Stateless component for rendering user owned recipes
+ * @description - Stateless component for rendering user owned recipes
  *
- * @param {object} props
- * @returns {view} View
+ * @param {object} props - Component's props
+ *
+ * @returns {view} View - Rendered view
  */
-const View = ({
+function View({
   isLoading, recipes, showDetails, deleteRecipe, newRecipe, editRecipe
-}) => {
+}) {
   /**
-   * Renders the new recipe button
-   * @returns {view} Button
+   * @description - Renders the new recipe button
+   *
+   * @returns {view} Button - Rendered button
    */
   const renderAddRecipe = () => (
-    <div style={{ display: 'flex' }}>
-      <Button
-        style={{ marginLeft: 'auto' }}
-        label="New Recipe"
-        labelPosition="right"
-        circular
-        icon="plus"
-        color="teal"
-        onClick={() => {
-          newRecipe('create_edit_recipe');
-        }}
-      />
+    <div className="flex">
+      <div className="auto__left">
+        <Button
+          size="huge"
+          label="New Recipe"
+          labelPosition="right"
+          circular
+          icon="plus"
+          color="teal"
+          onClick={() => {
+            newRecipe('create_edit_recipe');
+          }}
+        />
+      </div>
     </div>
   );
 
@@ -57,9 +61,7 @@ const View = ({
         {'My Recipes'}
       </div>
       {renderAddRecipe()}
-      <div
-        style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}
-      >
+      <div className="flex flex__wrap">
         {Object.values(recipes)
           .sort((first, next) => next.id - first.id)
           .map(recipe => (
@@ -78,7 +80,7 @@ const View = ({
       </div>
     </div>
   );
-};
+}
 
 View.propTypes = {
   isLoading: PropTypes.bool.isRequired,

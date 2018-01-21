@@ -6,31 +6,30 @@ import {
 } from 'semantic-ui-react';
 import PropTypes, { string, object } from 'prop-types';
 
-import Reviews from './reviews';
+import Reviews from './Reviews';
 import Loading from '../commons/Loading';
 
 import { dateOptions } from '../../constants';
-import defaultImage from '../../../images/no-image.jpg';
-
-import styles from '../../../styles/classes';
+import noImage from '../../../images/noImage.jpg';
 
 const EMPTY = 0;
 
 /**
- * Stateless component for rendering recipe details
+ * @description - Stateless component for rendering recipe details
  *
- * @param {object} props
- * @returns {view} RecipeDetailsView
+ * @param {object} props - Component's props
+ *
+ * @returns {view} RecipeDetailsView - Rendered view
  */
-const RecipeDetailsView = ({
+function RecipeDetailsView({
   actions, newReview, posting,
   isFav, loading, likedBy = [], dislikedBy = [],
   index, recipe, reviews
-}) => {
+}) {
   /**
-   * Renders the ingredients list
+   * @description - Renders the ingredients list
    *
-   * @returns {view} View
+   * @returns {view} View - Rendered view
    */
   const renderIngredients = () => (
     <List
@@ -41,9 +40,9 @@ const RecipeDetailsView = ({
   );
 
   /**
-   * Toggles the favorite avatar
+   * @description - Toggles the favorite avatar
    *
-   * @returns {view} view
+   * @returns {view} view - Rendered view
    */
   const renderIsFavorite = () => {
     if (isFav) {
@@ -75,9 +74,9 @@ const RecipeDetailsView = ({
   };
 
   /**
-   * Render the like button
+   * @description - Render the like button
    *
-   * @returns {view} button
+   * @returns {view} likeButton - Rendered button
    */
   const likeButton = () => (
     <Button
@@ -97,9 +96,9 @@ const RecipeDetailsView = ({
   );
 
   /**
-   * Render the dislike button
+   * @description - Render the dislike button
    *
-   * @returns {view} button
+   * @returns {view} dislikeButton - Rendered button
    */
   const dislikeButton = () => (
     <Button
@@ -119,9 +118,9 @@ const RecipeDetailsView = ({
   );
 
   /**
-   * Render the likedBy view
+   * @description - Render the likedBy view
    *
-   * @returns {view} popup
+   * @returns {view} popup - Rendered view
    */
   const showUserLiked = () => {
     if (likedBy.length !== EMPTY) {
@@ -144,9 +143,9 @@ const RecipeDetailsView = ({
   };
 
   /**
-   * Render the dislikedBy view
+   * @description - Render the dislikedBy view
    *
-   * @returns {view} pupop
+   * @returns {view} pupop - Rendered view
    */
   const showUserDisliked = () => {
     if (dislikedBy.length !== EMPTY) {
@@ -169,9 +168,9 @@ const RecipeDetailsView = ({
   };
 
   /**
-   * Get the recipe details views
+   * @description - Get the recipe details views
    *
-   * @returns {view} Card
+   * @returns {view} Card - Rendered view
    */
   const recipeDetails = () => {
     const {
@@ -181,12 +180,12 @@ const RecipeDetailsView = ({
     } = recipe;
     return (
       <div>
-        <Card.Group style={{ justifyContent: 'center', padding: '20px' }}>
-          <Card color="blue" style={{ width: '966px' }}>
+        <Card.Group className="flex pad__10">
+          <Card color="blue" className="card--recipe-details">
             <Image
               alt="food image"
               height="450px"
-              src={imageUrl === '' ? defaultImage : imageUrl}
+              src={imageUrl === '' ? noImage : imageUrl}
             />
             <Card.Content>
               <Card.Header>{name} {renderIsFavorite()}</Card.Header>
@@ -209,7 +208,7 @@ const RecipeDetailsView = ({
                 />
               </Card.Meta>
               <br />
-              <div style={styles.actionClass}>
+              <div className="card--action">
                 <Button
                   basic
                   color="blue"
@@ -223,9 +222,9 @@ const RecipeDetailsView = ({
                     content: `${viewCount}`
                   }}
                 />
-                <div style={styles.itemDivider} />
+                <div className="item-divider" />
                 {showUserLiked()}
-                <div style={styles.itemDivider} />
+                <div className="item-divider" />
                 {showUserDisliked()}
               </div>
               <br />
@@ -257,10 +256,10 @@ const RecipeDetailsView = ({
   };
 
   /**
-   * Renders the recipe details view
+   * @description - Renders the recipe details view
    * or a loader
    *
-   * @returns {view} View
+   * @returns {view} View - Rendered view
    */
   const renderRecipeDetails = () => {
     if (!recipe.id) {

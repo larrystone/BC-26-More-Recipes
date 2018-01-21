@@ -1,8 +1,8 @@
 import cake from './../../../images/cake.jpg';
 import bhindi from './../../../images/bhindi.jpg';
-import friedRice from './../../../images/fried-rice.jpg';
-import dodo from './../../../images/Dodo.jpg';
-import egusi from './../../../images/egusi-soup.jpg';
+import friedRice from './../../../images/friedRice.jpg';
+import dodo from './../../../images/dodo.jpg';
+import egusi from './../../../images/egusi.jpg';
 
 export default [
   {

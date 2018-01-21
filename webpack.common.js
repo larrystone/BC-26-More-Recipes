@@ -1,6 +1,7 @@
 const webpack = require('webpack');
 const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const DotEnv = require('dotenv-webpack');
 
 module.exports = {
   entry: [path.join(__dirname, 'client/Index.jsx')],
@@ -10,7 +11,8 @@ module.exports = {
     publicPath: '/'
   },
   plugins: [
-    new ExtractTextPlugin('./css/styles.css')
+    new ExtractTextPlugin('./css/styles.css'),
+    new DotEnv()
   ],
   module: {
     rules: [
@@ -37,15 +39,11 @@ module.exports = {
         })
       },
       {
-        test: /\.(jpe?g|gif|png)$/,
+        test: /\.(jpe?g|gif|png|svg)$/,
         loader: 'file-loader?name=images/[name].[ext]'
       },
       {
-        test: /\.mp4$/,
-        // options: {
-        //   limit: 2000000,
-        //   mimetype: 'video/mp4'
-        // }
+        test: /\.(eot|woff|woff2|ttf)$/,
         loader: 'file-loader'
       }
     ]

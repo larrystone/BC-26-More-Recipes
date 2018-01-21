@@ -8,12 +8,15 @@ import {
 const url = '/api/v1/users';
 
 /**
- * Removes a recipe from user favorites
+ * @description - Removes a recipe from user favorites
  *
  * @export
- * @param {any} recipeId
- * @param {any} userId
- * @returns {obj} promise
+ *
+ * @param {Number} recipeId - Recipe ID
+ *
+ * @param {Number} userId - User ID
+ *
+ * @returns {object} dispatch - Dispatched action
  */
 export function addFav(recipeId, userId) {
   return dispatch => axios.post(`${url}/${userId}/recipes/${recipeId}`)
@@ -27,12 +30,15 @@ export function addFav(recipeId, userId) {
 
 
 /**
- * Removes a recipe from user favorites
+ * @description - Removes a recipe from user favorites
  *
  * @export
- * @param {any} recipeId
- * @param {any} userId
- * @returns {obj} promise
+ *
+ * @param {Number} recipeId - Recipe ID
+ *
+ * @param {Number} userId - User ID
+ *
+ * @returns {object} dispatch - Dispatched action
  */
 export function removeFav(recipeId, userId) {
   return dispatch => axios.delete(`${url}/${userId}/recipes/${recipeId}`)
@@ -45,11 +51,13 @@ export function removeFav(recipeId, userId) {
 }
 
 /**
- * Fetch paginated my recipes asynchronously
+ * @description - Fetch paginated my recipes asynchronously
  *
  * @export
- * @param {any} userId - ID of user
- * @returns {object} action
+ *
+ * @param {Number} userId - User ID
+ *
+ * @returns {object} dispatch - Dispatched action
  */
 export function fetchFavorites(userId) {
   return dispatch =>
@@ -64,12 +72,15 @@ export function fetchFavorites(userId) {
 }
 
 /**
- * Check if recipe is in favorite list
+ * @description - Check if recipe is in favorite list
  *
  * @export
- * @param {any} userId - ID of user
- * @param {any} recipeId - ID of recipe
- * @returns {object} action
+ *
+ * @param {Number} userId - User ID
+ *
+ * @param {Number} recipeId - Recipe ID
+ *
+ * @returns {object} dispatch - Dispatched action
  */
 export function fetchSingleFavorite(userId, recipeId) {
   return dispatch =>

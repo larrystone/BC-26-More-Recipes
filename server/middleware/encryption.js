@@ -1,17 +1,20 @@
 import bcrypt from 'bcrypt';
 
 /**
- * Class Definition for the Encryption Object
+ * @description - Class Definition for the Encryption Object
  *
  * @export
+ *
  * @class Encryption
  */
 export default class Encryption {
   /**
-   * Generate Hash for password string
+   * @description - Generate Hash for password string
    *
-   * @param {string} password
-   * @returns {string} hashed password
+   * @param {string} password - User password
+   *
+   * @return {string} hashedPassword - hashed password
+   *
    * @memberof Encryption
    */
   generateHash(password) {
@@ -22,12 +25,17 @@ export default class Encryption {
   }
 
 
-  /** Verify Decrypt password
- * @exports verifyHash
- * @param  {string} password -User Password
- * @param  {string} hash -User Password
- * @return {boolean} The status of decryption
- */
+  /**
+   * @description - Verify/Decrypt password
+   *
+   * @exports verifyHash
+   *
+   * @param  {string} password - User Password
+   *
+   * @param  {string} hash - hashed User Password
+   *
+   * @return {boolean} status - The status of decryption
+   */
   verifyHash(password, hash) {
     this.status = bcrypt.compareSync(password, hash);
     return this.status;

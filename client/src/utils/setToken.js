@@ -2,11 +2,13 @@ import axios from 'axios';
 import Toastr from 'toastr';
 
 /**
- * Sets token for subsequent axios calls
+ * @description - Sets token for subsequent axios calls
  *
  * @export
- * @param {any} token
- * @returns {null} Nothing
+ *
+ * @param {string} token - Token
+ *
+ * @returns {void} Nothing
  */
 export default function setToken(token) {
   if (token) {

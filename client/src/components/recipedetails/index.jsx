@@ -3,8 +3,8 @@ import PropTypes, { object } from 'prop-types';
 import { connect } from 'react-redux';
 import Toastr from 'toastr';
 
-import Header from '../header';
-import View from './view';
+import Header from '../Header';
+import View from './View';
 import Footer from '../commons/Footer';
 
 import { fetchRecipeDetails } from '../../actions/recipeActions';
@@ -18,17 +18,22 @@ import {
 } from '../../actions/reviewActions';
 
 /**
- * Container component for fetching recipe details
+ * @description - Container component for fetching recipe details
  *
  * @class RecipeDetails
- * @param {string} key
- * @param {string} value
+ *
+ * @param {string} key - Name for item to store in state
+ *
+ * @param {string} value - Value to be stored in state
+ *
  * @extends {PureComponent}
  */
 class RecipeDetails extends PureComponent {
   /**
-   * Creates an instance of RecipeDetails.
-   * @param {any} props
+   * @description - Creates an instance of RecipeDetails.
+   *
+   * @param {object} props - Component's props
+   *
    * @memberof RecipeDetails
    */
   constructor(props) {
@@ -43,10 +48,11 @@ class RecipeDetails extends PureComponent {
   }
 
   /**
-   * Component will mount
+   * @description - Component will mount
    *
    * @memberof RecipeDetails
-   * @returns {null} Nothing
+   *
+   * @returns {void} Nothing
    */
   componentWillMount() {
     const { id } = this.props.match.params;
@@ -139,9 +145,10 @@ class RecipeDetails extends PureComponent {
   }
 
   /**
-   * Renders component
+   * @description - Renders component
    *
-   * @returns {null} Nothing
+   * @returns {view} view - Rendered view
+   *
    * @memberof RecipeDetails
    */
   render() {
@@ -177,10 +184,11 @@ class RecipeDetails extends PureComponent {
 }
 
 /**
- * Maps data from state to props
+ * @description - Maps data from redux state to props
  *
- * @param {any} state
- * @returns {object} props
+ * @param {object} state - Redux state
+ *
+ * @returns {object} props - Component's props
  */
 const mapStateToProps = state => ({
   userId: state.auth.user.id,

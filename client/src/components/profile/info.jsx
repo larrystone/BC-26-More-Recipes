@@ -7,45 +7,42 @@ import avatar from '../../../images/avatar.png';
 const ZERO = 0;
 
 /**
- * Stateless component for viewing and editing user profile details
+ * @description - Stateless component for viewing
+ * and editing user profile details
  *
- * @param {object} props
- * @returns {view} ProfileView
+ * @param {object} props - Component's props
+ *
+ * @returns {view} ProfileView - Rendered view
  */
-const ProfileView = ({
+function ProfileView({
   actions, loading, activeIndex,
   profile: {
     username, email, name, previewImage
   }, isAdmin
-}) => {
+}) {
   /**
-   * Renders the profile details
+   * @description Renders the profile details
    *
-   * @returns {view} View
+   * @returns {view} View - Profile details
    */
   const renderProfileDetails = () => (
     <Card.Content>
       <label
         htmlFor="file-chooser"
-        className="clickable"
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          padding: '20px',
-        }}
+        className="clickable flex pad__10"
       >
         <img
           alt=""
           width="250px"
           height="250px"
           src={previewImage || avatar}
-          style={{ borderRadius: '50%', boxShadow: '1px 2px 2px 2px gray' }}
+          className="profile--img"
         />
       </label>
       <Form.Input
         disabled={!isAdmin}
         id="file-chooser"
-        style={{ display: 'none' }}
+        className="hidden"
         name="imageUrl"
         type="file"
         accept="image/*"
@@ -95,7 +92,7 @@ const ProfileView = ({
           index={ZERO}
           onClick={actions.handleAccordionClick}
         >
-          <Label style={{ width: '100%' }}>
+          <Label className="full-width">
             <Icon name="dropdown" />
             {'Change Password'}
           </Label>
@@ -126,7 +123,7 @@ const ProfileView = ({
               placeholder="Re-enter Password"
               type="password"
               onChange={(event) => {
-                actions.storeToState('newPassword2', event.target.value);
+                actions.storeToState('confirmPassword', event.target.value);
               }}
             />
             <Form.Button
@@ -145,12 +142,12 @@ const ProfileView = ({
   );
 
   return (
-    <Card style={{ width: '550px' }}>
+    <Card className="card--profile">
       <Label attached="top"><h3>Basic Information</h3></Label>
       {renderProfileDetails()}
     </Card>
   );
-};
+}
 
 ProfileView.propTypes = {
   profile: PropTypes.shape().isRequired,

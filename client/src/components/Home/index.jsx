@@ -11,18 +11,22 @@ import SampleRecipes from './SampleRecipes';
 import { signIn, signUp } from '../../actions/authActions';
 
 /**
- * Container component for the homepage (Landing page)
+ * @description - Container component for the homepage (Landing page)
  *
  * @class Home
- * @param {string} key
- * @param {string} value
+ *
+ * @param {string} key - Key name for storing data in state
+ *
+ * @param {string} value - value to store in state
+ *
  * @extends {PureComponent}
  */
 class Home extends PureComponent {
   /**
-   * Creates an instance of Home.
+   * @description - Creates an instance of Home.
    *
-   * @param {any} props
+   * @param {any} props - Component's props
+   *
    * @memberof Home
    */
   constructor(props) {
@@ -32,17 +36,18 @@ class Home extends PureComponent {
       authName: '',
       email: '',
       password: '',
-      password2: '',
+      confirmPassword: '',
       isLoading: false
     };
   }
 
   /**
-   * When component is mounted,
+   * @description - When component is mounted,
    * load wow animation library
    *
    * @memberof Home
-   * @returns {obj} null
+   *
+   * @returns {void} Nothing
    */
   componentDidMount() {
     new WOW.WOW().init();
@@ -82,7 +87,7 @@ class Home extends PureComponent {
     });
 
     toastr.remove();
-    if (this.state.password === this.state.password2) {
+    if (this.state.password === this.state.confirmPassword) {
       this.props.signUp(this.state)
         .then(() => {
           toastr.info(`Welcome <br/><em>${this.state.username}</em>`);
@@ -98,14 +103,18 @@ class Home extends PureComponent {
           toastr.error(error.response.data.message);
         });
     } else {
+      this.setState({
+        isLoading: false
+      });
       toastr.error('Passwords don\'t match!');
     }
   };
 
   /**
-   * Renders the Home view
+   * @description - Renders the Home view
    *
-   * @returns {any} view
+   * @returns {view} view - Rendered view
+   *
    * @memberof Home
    */
   render() {
