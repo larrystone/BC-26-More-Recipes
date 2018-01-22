@@ -1,18 +1,22 @@
 import { Upvote, Downvote, Recipe, User } from '../models';
 
 /**
- * Class Definition for the Vote Object
+ * @description - Class Definition for the Vote Object
  *
  * @export
+ *
  * @class Vote
  */
 export default class Vote {
   /**
-   * Upvote a Recipe
+   * @description - Upvote a Recipe
    *
    * @param {object} req - HTTP Request
+   *
    * @param {object} res - HTTP Response
-   * @returns {object} Class instance
+   *
+   * @return {object} this - Class instance
+   *
    * @memberof Vote
    */
   upvoteRecipe({ user, params }, res) {
@@ -39,7 +43,11 @@ export default class Vote {
               option.decrement('downvotes');
             });
         }
-      });
+      })
+      .catch((/* error */) => res.status(500).json({
+        success: false,
+        message: 'An error occured'
+      }));
 
     Upvote
       .findOrCreate({ where: { userId, recipeId } })
@@ -68,20 +76,27 @@ export default class Vote {
         } else {
           return res.status(409).json({
             success: false,
-            message: `Recipe with id: ${recipeId} Already Upvoted!`
+            message: 'Recipe already Upvoted!'
           });
         }
-      });
+      })
+      .catch((/* error */) => res.status(500).json({
+        success: false,
+        message: 'An error occured'
+      }));
 
     return this;
   }
 
   /**
-   * Downvote a recipe
+   * @description - Downvote a recipe
    *
    * @param {object} req - HTTP Request
+   *
    * @param {object} res - HTTP Response
-   * @returns {object} Class instance
+   *
+   * @return {object} this - Class instance
+   *
    * @memberof Vote
    */
   downvoteRecipe({ user, params }, res) {
@@ -108,7 +123,11 @@ export default class Vote {
               option.decrement('upvotes');
             });
         }
-      });
+      })
+      .catch((/* error */) => res.status(500).json({
+        success: false,
+        message: 'An error occured'
+      }));
 
     Downvote
       .findOrCreate({ where: { userId, recipeId } })
@@ -137,23 +156,30 @@ export default class Vote {
         } else {
           return res.status(409).json({
             success: false,
-            message: `Recipe with id: ${recipeId} Already Downvoted!`
+            message: 'Recipe already Downvoted!'
           });
         }
-      });
+      })
+      .catch((/* error */) => res.status(500).json({
+        success: false,
+        message: 'An error occured'
+      }));
 
     return this;
   }
 
   /**
-   * Fetch a list of users that upvoted a recipe
+   * @description - Fetch a list of users that upvoted a recipe
    *
    * @param {object} req - HTTP Request
+   *
    * @param {object} res - HTTP Response
-   * @returns {obejct} Class instance
+   *
+   * @return {obejct} this - Class instance
+   *
    * @memberof Vote
    */
-  getUserUpvotes({ params }, res) {
+  getRecipeUpvotes({ params }, res) {
     const { recipeId } = params;
 
     Upvote
@@ -166,32 +192,39 @@ export default class Vote {
       })
       .then((votes) => {
         if (votes.length === 0) {
-          return res.status(200).json({
+          return res.status(404).json({
             success: true,
             message: 'Nothing found!',
             votes: []
           });
         }
 
-        return res.status(201).json({
+        return res.status(200).json({
           success: true,
           message: 'User upvotes found',
           votes
         });
-      });
+      })
+      .catch((/* error */) => res.status(500).json({
+        success: false,
+        message: 'Error fetching upvotes'
+      }));
 
     return this;
   }
 
   /**
-   * Fetch a list of users that downvoted a recipe
+   * @description - Fetch a list of users that downvoted a recipe
    *
    * @param {object} req - HTTP Request
+   *
    * @param {object} res - HTTP Response
-   * @returns {object} Class instance
+   *
+   * @return {object} this - Class instance
+   *
    * @memberof Vote
    */
-  getUserDownvotes({ params }, res) {
+  getRecipeDownvotes({ params }, res) {
     const { recipeId } = params;
 
     Downvote
@@ -204,19 +237,23 @@ export default class Vote {
       })
       .then((votes) => {
         if (votes.length === 0) {
-          return res.status(200).json({
+          return res.status(404).json({
             success: true,
             message: 'Nothing found!',
             votes: []
           });
         }
 
-        return res.status(201).json({
+        return res.status(200).json({
           success: true,
           message: 'User donwvotes found',
           votes
         });
-      });
+      })
+      .catch((/* error */) => res.status(500).json({
+        success: false,
+        message: 'Error fetching downvotes'
+      }));
 
     return this;
   }

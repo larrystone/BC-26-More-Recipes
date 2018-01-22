@@ -1,20 +1,29 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Loader from '../../../images/loading.gif';
+import loading from '../../../images/loading.gif';
 
-const Loading = ({ text }) => (
-  <div style={{ display: 'flex', justifyContent: 'center' }}>
-    <div style={{ marginTop: '100px' }}>
-      <img src={Loader} alt="" />
-      <h3>
-        <center className="wow infinite pulse">
-          {`Loading ${text || ''}`}
-        </center>
-      </h3>
+/**
+ * @description - Stateless component for rendering custom app loader
+ *
+ * @param {object} props - props object
+ *
+ * @returns {view} Loading - Rendered view
+ */
+function Loading({ text }) {
+  return (
+    <div className="flex">
+      <div className="loading--img">
+        <img src={loading} alt="" />
+        <h3>
+          <center className="wow infinite pulse">
+            {`Loading ${text || ''}`}
+          </center>
+        </h3>
+      </div>
     </div>
-  </div>
-);
+  );
+}
 
 Loading.propTypes = {
   text: PropTypes.string

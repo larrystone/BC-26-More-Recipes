@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import thunk from 'redux-thunk';
 import jwt from 'jsonwebtoken';
+import 'semantic-ui-css/semantic.min.css';
 
 import setToken from './src/utils/setToken';
 import { SET_CURRENT_USER } from './src/constants';

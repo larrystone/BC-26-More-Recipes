@@ -1,19 +1,23 @@
 import { Favorite, Recipe, User } from '../models';
 
 /**
- * Class Definition for the Favorite Object
+ * Class Definition for the Favorites Object
  *
  * @export
- * @class Favorite
+ *
+ * @class Favorites
  */
 export default class Favorites {
   /**
-   * Add a recipe to user favorite
+   * @description - Adds a recipe to user favorite list
    *
    * @param {object} req - HTTP Request
+   *
    * @param {object} res - HTTP Response
-   * @returns {object} Class instance
-   * @memberof Favorite
+   *
+   * @returns {object} this - Favorites class instance
+   *
+   * @memberof Favorites
    */
   addToFavorites({ user, params }, res) {
     const userId = user.id;
@@ -25,26 +29,33 @@ export default class Favorites {
         if (created) {
           return res.status(201).json({
             success: true,
-            message: `Recipe with id: ${recipeId} added to favorites!`
+            message: 'Recipe added to favorites!'
           });
         }
 
         return res.status(409).json({
           success: false,
-          message: `Recipe with id: ${recipeId} Already added!`
+          message: 'Recipe already added!'
         });
-      });
+      })
+      .catch((/* error */) => res.status(500).json({
+        success: false,
+        message: 'Error adding recipe to favorite'
+      }));
 
     return this;
   }
 
   /**
-   * Remove a recipe from user favorites
+   * @description - Removes a recipe from user favorites
    *
    * @param {object} req - HTTP Request
+   *
    * @param {object} res - HTTP Response
-   * @returns {object} Class instance
-   * @memberof Favorite
+   *
+   * @return {object} this - Favorites class instance
+   *
+   * @memberof Favorites
    */
   removeFromFavorites({ params }, res) {
     const { recipeId, userId } = params;
@@ -59,23 +70,29 @@ export default class Favorites {
       })
       .then((status) => {
         if (status === 1) {
-          res.status(205).json({
+          res.status(200).json({
             success: true,
             message: `Recipe with ID: ${recipeId} Removed from Favorites`
           });
         }
-      });
-
+      })
+      .catch((/* error */) => res.status(500).json({
+        success: false,
+        message: 'Error removing recipe from favorites'
+      }));
     return this;
   }
 
   /**
-   * Get a list of user's favorite recipes
+   * @description - Get a list of user's favorite recipes
    *
    * @param {object} req - HTTP Request
+   *
    * @param {object} res - HTTP Response
-   * @returns {object} Class instance
-   * @memberof Favorite
+   *
+   * @return {object} this - Favorite Class instance
+   *
+   * @memberof Favorites
    */
   getFavRecipes({ params }, res) {
     const { userId } = params;
@@ -100,26 +117,33 @@ export default class Favorites {
           include: [
             { model: User, attributes: ['name'] }
           ]
-        }).then(recipes => res.status(201).json({
+        }).then(recipes => res.status(200).json({
           success: true,
           message: 'Favorite Recipes found',
           recipes
         }));
-      });
+      })
+      .catch((/* error */) => res.status(500).json({
+        success: false,
+        message: 'Error fetching favorite recipes'
+      }));
 
     return this;
   }
 
 
   /**
- * Get a single user favorite
+ * @description - Get a user favorite recipe
  *
  * @param {object} req - HTTP Request
+ *
  * @param {object} res - HTTP Response
- * @returns {object} Class instance
- * @memberof Favorite
+ *
+ * @return {object} this - Favorites Class instance
+ *
+ * @memberof Favorites
  */
-  getSingleFavorite({ params }, res) {
+  getFavRecipe({ params }, res) {
     const { userId, recipeId } = params;
 
     Favorite
@@ -141,7 +165,11 @@ export default class Favorites {
           message: 'Favorite Recipe found',
           recipe
         });
-      });
+      })
+      .catch((/* error */) => res.status(500).json({
+        success: false,
+        message: 'Error fetching favorite recipe'
+      }));
 
     return this;
   }

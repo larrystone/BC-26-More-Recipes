@@ -6,21 +6,31 @@ import {
 } from 'semantic-ui-react';
 import PropTypes, { string, object } from 'prop-types';
 
-import Reviews from './reviews';
+import Reviews from './Reviews';
 import Loading from '../commons/Loading';
 
 import { dateOptions } from '../../constants';
-import defaultImage from '../../../images/default_image.jpg';
-
-import styles from '../../../styles/classes';
+import noImage from '../../../images/noImage.jpg';
 
 const EMPTY = 0;
 
-const RecipeDetailsView = ({
+/**
+ * @description - Stateless component for rendering recipe details
+ *
+ * @param {object} props - Component's props
+ *
+ * @returns {view} RecipeDetailsView - Rendered view
+ */
+function RecipeDetailsView({
   actions, newReview, posting,
   isFav, loading, likedBy = [], dislikedBy = [],
   index, recipe, reviews
-}) => {
+}) {
+  /**
+   * @description - Renders the ingredients list
+   *
+   * @returns {view} View - Rendered view
+   */
   const renderIngredients = () => (
     <List
       bulleted
@@ -29,6 +39,11 @@ const RecipeDetailsView = ({
     />
   );
 
+  /**
+   * @description - Toggles the favorite avatar
+   *
+   * @returns {view} view - Rendered view
+   */
   const renderIsFavorite = () => {
     if (isFav) {
       return (
@@ -58,28 +73,55 @@ const RecipeDetailsView = ({
     );
   };
 
+  /**
+   * @description - Render the like button
+   *
+   * @returns {view} likeButton - Rendered button
+   */
   const likeButton = () => (
     <Button
-      compact
+      basic
       color="green"
-      icon="thumbs outline up"
-      label={recipe.upvotes}
-      labelPosition="right"
+      content="Likes"
+      icon="thumbs up"
+      label={{
+        as: 'a',
+        basic: true,
+        color: 'green',
+        pointing: 'left',
+        content: `${recipe.upvotes}`
+      }}
       onClick={() => actions.upvote(recipe.id)}
     />
   );
 
+  /**
+   * @description - Render the dislike button
+   *
+   * @returns {view} dislikeButton - Rendered button
+   */
   const dislikeButton = () => (
     <Button
-      compact
+      basic
       color="red"
-      icon="thumbs outline down"
-      label={recipe.downvotes}
-      labelPosition="right"
+      content="Dislikes"
+      icon="thumbs down"
+      label={{
+        as: 'a',
+        basic: true,
+        color: 'red',
+        pointing: 'left',
+        content: `${recipe.downvotes}`
+      }}
       onClick={() => actions.downvote(recipe.id)}
     />
   );
 
+  /**
+   * @description - Render the likedBy view
+   *
+   * @returns {view} popup - Rendered view
+   */
   const showUserLiked = () => {
     if (likedBy.length !== EMPTY) {
       return (
@@ -100,6 +142,11 @@ const RecipeDetailsView = ({
     return likeButton();
   };
 
+  /**
+   * @description - Render the dislikedBy view
+   *
+   * @returns {view} pupop - Rendered view
+   */
   const showUserDisliked = () => {
     if (dislikedBy.length !== EMPTY) {
       return (
@@ -120,6 +167,11 @@ const RecipeDetailsView = ({
     return dislikeButton();
   };
 
+  /**
+   * @description - Get the recipe details views
+   *
+   * @returns {view} Card - Rendered view
+   */
   const recipeDetails = () => {
     const {
       User, createdAt, description,
@@ -128,13 +180,12 @@ const RecipeDetailsView = ({
     } = recipe;
     return (
       <div>
-        <Card.Group style={{ justifyContent: 'center', padding: '20px' }}>
-          <Card color="blue" style={{ width: '966px' }}>
+        <Card.Group className="flex pad__10">
+          <Card color="blue" className="card--recipe-details">
             <Image
               alt="food image"
               height="450px"
-              // width="966px"
-              src={imageUrl === '' ? defaultImage : imageUrl}
+              src={imageUrl === '' ? noImage : imageUrl}
             />
             <Card.Content>
               <Card.Header>{name} {renderIsFavorite()}</Card.Header>
@@ -157,17 +208,23 @@ const RecipeDetailsView = ({
                 />
               </Card.Meta>
               <br />
-              <div style={styles.actionClass}>
+              <div className="card--action">
                 <Button
-                  compact
+                  basic
                   color="blue"
+                  content="Views"
                   icon="eye"
-                  label={viewCount}
-                  labelPosition="right"
+                  label={{
+                    as: 'a',
+                    basic: true,
+                    color: 'blue',
+                    pointing: 'left',
+                    content: `${viewCount}`
+                  }}
                 />
-                <div style={styles.itemDivider} />
+                <div className="item-divider" />
                 {showUserLiked()}
-                <div style={styles.itemDivider} />
+                <div className="item-divider" />
                 {showUserDisliked()}
               </div>
               <br />
@@ -198,6 +255,12 @@ const RecipeDetailsView = ({
     );
   };
 
+  /**
+   * @description - Renders the recipe details view
+   * or a loader
+   *
+   * @returns {view} View - Rendered view
+   */
   const renderRecipeDetails = () => {
     if (!recipe.id) {
       return (

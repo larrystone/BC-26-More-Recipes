@@ -1,7 +1,7 @@
 import chai, { expect } from 'chai';
 import chaiHttp from 'chai-http';
 
-import server from './../app';
+import app from './../app';
 
 chai.use(chaiHttp);
 
@@ -9,8 +9,8 @@ let token;
 let recipeId;
 
 describe('/POST Create User and Recipe', () => {
-  it('should create a user (to get save token)', (done) => {
-    chai.request(server)
+  it('should create a user (to get token)', (done) => {
+    chai.request(app)
       .post('/api/v1/users/signup')
       .set('Accept', 'application/json')
       .send({
@@ -27,7 +27,7 @@ describe('/POST Create User and Recipe', () => {
   });
 
   it('should create a recipe (to get recipeId)', (done) => {
-    chai.request(server)
+    chai.request(app)
       .post('/api/v1/recipes')
       .set('Accept', 'application/json')
       .send({
@@ -45,7 +45,7 @@ describe('/POST Create User and Recipe', () => {
   });
 
   it('should create a recipe (to get recipeId)', (done) => {
-    chai.request(server)
+    chai.request(app)
       .post('/api/v1/recipes')
       .set('Accept', 'application/json')
       .send({
@@ -63,32 +63,36 @@ describe('/POST Create User and Recipe', () => {
 });
 
 describe('/GET Upvotes/Downvotes on Recipe Test', () => {
-  it('should return an empty array of upvotes', (done) => {
-    chai.request(server)
+  it('should return \'Nothing found\' for upvotes', (done) => {
+    chai.request(app)
       .get(`/api/v1/recipes/${recipeId}/upvotes`)
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
-        expect(res.statusCode).to.equal(200);
+        expect(res.statusCode).to.equal(404);
+        expect(res.body.votes.length).to.equal(0);
         done();
       });
   });
 
-  it('should return an empty array of downvotes', (done) => {
-    chai.request(server)
+  it('should return \'Nothing found\' for downvotes', (done) => {
+    chai.request(app)
       .get(`/api/v1/recipes/${recipeId}/downvotes`)
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
-        expect(res.statusCode).to.equal(200);
+        expect(res.statusCode).to.equal(404);
+        expect(res.body.votes.length).to.equal(0);
+        expect(res.body.success).to.equal(true);
+        expect(res.body.message).to.equal('Nothing found!');
         done();
       });
   });
 });
 
-describe('/POST upvote Review Test', () => {
-  it('should return \'Review upvoted\'', (done) => {
-    chai.request(server)
+describe('/POST upvote Review on recipe Test', () => {
+  it(`should return \'Review upvoted\' for id ${recipeId}`, (done) => {
+    chai.request(app)
       .post(`/api/v1/recipes/${recipeId}/upvotes`)
       .set('Accept', 'application/json')
       .send({
@@ -108,51 +112,57 @@ describe('/POST upvote Review Test', () => {
       });
   });
 
-  it('should return \'Recipe Already upvoted\'', (done) => {
-    chai.request(server)
-      .post(`/api/v1/recipes/${recipeId}/upvotes`)
-      .set('Accept', 'application/json')
-      .send({
-        token
-      })
-      .end((err, res) => {
-        expect(res.statusCode).to.equal(409);
-        expect(res.body).deep.equal({
-          success: false,
-          message: `Recipe with id: ${recipeId} Already Upvoted!`
+  it(`should return \'Recipe already upvoted\' 
+  for an already upvoted recipe`, (done) => {
+      chai.request(app)
+        .post(`/api/v1/recipes/${recipeId}/upvotes`)
+        .set('Accept', 'application/json')
+        .send({
+          token
+        })
+        .end((err, res) => {
+          expect(res.statusCode).to.equal(409);
+          expect(res.body).deep.equal({
+            success: false,
+            message: 'Recipe already Upvoted!'
+          });
+          done();
         });
-        done();
-      });
-  });
+    });
 });
 
 describe('/GET Upvotes/Downvotes on Recipe Test', () => {
   it('should return an array of upvotes', (done) => {
-    chai.request(server)
+    chai.request(app)
       .get(`/api/v1/recipes/${recipeId}/upvotes`)
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
-        expect(res.statusCode).to.equal(201);
+        expect(res.statusCode).to.equal(200);
+        expect(res.body.votes.length).to.equal(1);
+        expect(res.body.success).to.equal(true);
+        expect(res.body.message).to.equal('User upvotes found');
         done();
       });
   });
 
-  it('should return an empty array of downvotes', (done) => {
-    chai.request(server)
+  it('should return \'Nothing found\'', (done) => {
+    chai.request(app)
       .get(`/api/v1/recipes/${recipeId}/downvotes`)
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
-        expect(res.statusCode).to.equal(200);
+        expect(res.statusCode).to.equal(404);
+        expect(res.body.success).to.equal(true);
+        expect(res.body.message).to.equal('Nothing found!');
         done();
       });
   });
 });
 
-describe('/POST downvote Review Test', () => {
-  it('should return \'Review downvoted\'', (done) => {
-    chai.request(server)
+describe('/POST downvote Review on recipe Test', () => {
+  it(`should return \'Review downvoted\' for id: ${recipeId}`, (done) => {
+    chai.request(app)
       .post(`/api/v1/recipes/${recipeId}/downvotes`)
       .set('Accept', 'application/json')
       .send({
@@ -172,25 +182,26 @@ describe('/POST downvote Review Test', () => {
       });
   });
 
-  it('should return \'Review Already downvoted\'', (done) => {
-    chai.request(server)
-      .post(`/api/v1/recipes/${recipeId}/downvotes`)
-      .set('Accept', 'application/json')
-      .send({
-        token
-      })
-      .end((err, res) => {
-        expect(res.statusCode).to.equal(409);
-        expect(res.body).deep.equal({
-          success: false,
-          message: `Recipe with id: ${recipeId} Already Downvoted!`
+  it(`should return \'Review Already downvoted\'
+  for an already downvoted recipe`, (done) => {
+      chai.request(app)
+        .post(`/api/v1/recipes/${recipeId}/downvotes`)
+        .set('Accept', 'application/json')
+        .send({
+          token
+        })
+        .end((err, res) => {
+          expect(res.statusCode).to.equal(409);
+          expect(res.body).deep.equal({
+            success: false,
+            message: 'Recipe already Downvoted!'
+          });
+          done();
         });
-        done();
-      });
-  });
+    });
 
   it('should return \'Review downvoted\'', (done) => {
-    chai.request(server)
+    chai.request(app)
       .post(`/api/v1/recipes/${recipeId + 1}/downvotes`)
       .set('Accept', 'application/json')
       .send({
@@ -212,13 +223,14 @@ describe('/POST downvote Review Test', () => {
 });
 
 describe('/GET Downvotes on Recipe Test', () => {
-  it('should return am array of downvotes', (done) => {
-    chai.request(server)
+  it('should return an array of downvotes', (done) => {
+    chai.request(app)
       .get(`/api/v1/recipes/${recipeId}/downvotes`)
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
-        expect(res.statusCode).to.equal(201);
+        expect(res.statusCode).to.equal(200);
+        expect(res.body.votes.length).to.equal(1);
         done();
       });
   });
@@ -226,7 +238,7 @@ describe('/GET Downvotes on Recipe Test', () => {
 
 describe('/POST upvote Review Test', () => {
   it('should return \'Review upvoted\'', (done) => {
-    chai.request(server)
+    chai.request(app)
       .post(`/api/v1/recipes/${recipeId}/upvotes`)
       .set('Accept', 'application/json')
       .send({
@@ -249,23 +261,27 @@ describe('/POST upvote Review Test', () => {
 
 describe('/GET Upvotes/Downvotes on Recipe Test', () => {
   it('should return an array of upvotes', (done) => {
-    chai.request(server)
+    chai.request(app)
       .get(`/api/v1/recipes/${recipeId}/upvotes`)
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
-        expect(res.statusCode).to.equal(201);
+        expect(res.statusCode).to.equal(200);
+        expect(res.body.votes.length).to.equal(1);
         done();
       });
   });
 
-  it('should return am empty array of downvotes', (done) => {
-    chai.request(server)
+  it('should return \'Nothing found\' for' +
+    'downvotes when none is found', (done) => {
+    chai.request(app)
       .get(`/api/v1/recipes/${recipeId}/downvotes`)
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
-        expect(res.statusCode).to.equal(200);
+        expect(res.statusCode).to.equal(404);
+        expect(res.body.success).to.equal(true);
+        expect(res.body.message).to.equal('Nothing found!');
         done();
       });
   });

@@ -13,6 +13,14 @@ const options = [
   { key: 'search', text: 'All', value: 'search' }
 ];
 
+
+/**
+ * @description - All recipes Stateless view component
+ *
+ * @param {object} props - Internal props object
+ *
+ * @returns {view} View - Rendered view
+ */
 const View = ({
   isLoading, recipes, storeToState, search, searchCategory, sought, showDetails
 }) => {
@@ -27,7 +35,7 @@ const View = ({
     return (
       <div>
         <NothingFound />
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <div className="flex">
           <Input
             type="text"
             placeholder="Search for recipe by..."
@@ -38,7 +46,6 @@ const View = ({
           >
             <input />
             <Select
-              style={{ width: '100px' }}
               compact
               options={options}
               value={searchCategory}
@@ -65,9 +72,9 @@ const View = ({
   }
   return (
     <div>
-      <div style={{ display: 'flex' }}>
+      <div className="flex">
         <Input
-          style={{ marginLeft: 'auto' }}
+          className="auto__left"
           type="text"
           placeholder="Search for recipe by..."
           action
@@ -77,7 +84,6 @@ const View = ({
         >
           <input />
           <Select
-            style={{ width: '100px' }}
             compact
             options={options}
             value={searchCategory}
@@ -105,7 +111,7 @@ const View = ({
         }
       </div>
       <div
-        style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}
+        className="flex flex__wrap"
       >
         {Object.values(recipes)
           .sort((first, next) => next.upvotes - first.upvotes)

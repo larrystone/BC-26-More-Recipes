@@ -3,15 +3,27 @@ import PropTypes from 'prop-types';
 import { Card, Image, Icon } from 'semantic-ui-react';
 import toastr from 'toastr';
 
-import defaultImage from '../../../images/default_image.jpg';
-import styles from '../../../styles/classes';
+import noImage from '../../../images/noImage.jpg';
 
-const RecipeItem = ({
+/**
+ * @description - Stateless component for rendering pagination view
+ *
+ * @param {object} props - Props object
+ *
+ * @returns {view} RecipeItem - Rendered view
+ */
+function RecipeItem({
   recipe: {
     id, imageUrl, name, description, User, upvotes, downvotes
   }, isAdmin, isFav, actions
-}) => {
+}) {
+  /**
+   * @description - Handles view recipe detail action
+   *
+   * @returns {void} Nothing
+   */
   const handleView = () => {
+    toastr.remove();
     if (actions.showDetails) {
       actions.showDetails(id);
     } else {
@@ -20,20 +32,30 @@ const RecipeItem = ({
     }
   };
 
+  /**
+   * @description - Render recipe action available on home page
+   *
+   * @returns {view} view - home actions view
+   */
   const homeActions = () => (
-    <div style={styles.actionClass}>
+    <div className="card--action">
       <div>
         <Icon name="thumbs up" color="green" size="large" />{upvotes}
       </div>
-      <div style={styles.itemDivider} />
+      <div className="item-divider" />
       <div>
         <Icon name="thumbs down" color="red" size="large" />{downvotes}
       </div>
     </div >
   );
 
+  /**
+   * @description - Render recipe action available on user recipes page
+   *
+   * @returns {view} view - my recipe actions view
+   */
   const myRecipesActions = () => (
-    <div style={styles.actionClass}>
+    <div className="card--action">
       <div
         role="button"
         tabIndex="0"
@@ -44,7 +66,7 @@ const RecipeItem = ({
       >
         <Icon name="eye" color="blue" />View
       </div>
-      <div style={styles.itemDivider} />
+      <div className="item-divider" />
       <div
         role="button"
         tabIndex="0"
@@ -55,13 +77,13 @@ const RecipeItem = ({
       >
         <Icon name="edit" color="green" />Edit
       </div>
-      <div style={styles.itemDivider} />
+      <div className="item-divider" />
       <div
         role="button"
         tabIndex="0"
         className="clickable"
         onClick={() => {
-          actions.addModal(name, id, 'myrecipes');
+          actions.deleteRecipe(name, id, 'myrecipes');
         }}
       >
         <Icon name="delete" color="red" />Delete
@@ -69,8 +91,14 @@ const RecipeItem = ({
     </div>
   );
 
+  /**
+   * @description - Render recipe action available on user's
+   * favorite recipe page
+   *
+   * @returns {view} view - favorite recipe actions view
+   */
   const myFavActions = () => (
-    <div style={styles.actionClass}>
+    <div className="card--action">
       <div
         role="button"
         tabIndex="0"
@@ -81,7 +109,7 @@ const RecipeItem = ({
       >
         <Icon name="eye" color="blue" />View
       </div>
-      <div style={styles.itemDivider} />
+      <div className="item-divider" />
       <div
         role="button"
         tabIndex="0"
@@ -95,6 +123,11 @@ const RecipeItem = ({
     </div>
   );
 
+  /**
+   * @description - Set recipe action view to render
+   *
+   * @returns {view} view - Action view
+   */
   const showRecipeActions = () => {
     if (isAdmin) {
       return myRecipesActions();
@@ -109,11 +142,10 @@ const RecipeItem = ({
     <Card
       className="wow bounceInUp food-card"
       color="green"
-      style={{ padding: '5px', margin: '10px' }}
     >
       <Image
         alt="food image"
-        src={!imageUrl ? defaultImage : imageUrl}
+        src={!imageUrl ? noImage : imageUrl}
         className="clickable wow bounceInUp foodImage"
         height="180px"
         onClick={() => {
@@ -131,7 +163,7 @@ const RecipeItem = ({
       </Card.Content>
     </Card>
   );
-};
+}
 
 RecipeItem.propTypes = {
   recipe: PropTypes.shape().isRequired,

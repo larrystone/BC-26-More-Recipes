@@ -4,11 +4,13 @@ import { SET_RECIPE_REVIEWS, ADD_REVIEW } from '../constants';
 
 const url = '/api/v1/recipes';
 /**
- * Sets currently viewed recipe reviews
+ * @description - Sets currently viewed recipe reviews
  *
  * @export
- * @param {any} reviews
- * @returns {obj} action
+ *
+ * @param {object} reviews - Reviews object
+ *
+ * @returns {object} action - review action
  */
 export function setReviews(reviews) {
   return {
@@ -18,11 +20,13 @@ export function setReviews(reviews) {
 }
 
 /**
- * Fetch reviews for a recipe
+ * @description - Fetch reviews for a recipe
  *
  * @export
+ *
  * @param {number} recipeId - Recipe ID
- * @returns {object} action
+ *
+ * @returns {object} dispatch - Dispatched action
  */
 export function fetchRecipeReviews(recipeId) {
   return dispatch =>
@@ -34,11 +38,14 @@ export function fetchRecipeReviews(recipeId) {
 }
 
 /**
- * Post a review for a recipe
+ * @description - Post a review for a recipe
  *
  * @export
+ *
  * @param {number} recipeId - Recipe ID
- * @param {object} reviewData - Review Review
+ *
+ * @param {object} reviewData - Review Details
+ *
  * @returns {object} action
  */
 export function addRecipeReview(recipeId, reviewData) {

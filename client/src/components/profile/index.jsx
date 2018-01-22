@@ -4,9 +4,9 @@ import { connect } from 'react-redux';
 import { Card } from 'semantic-ui-react';
 import Toastr from 'toastr';
 
-import Header from '../header';
-import Info from './info';
-import Stats from './stats';
+import Header from '../Header';
+import Info from './Info';
+import Stats from './Stats';
 import Footer from '../commons/Footer';
 
 import {
@@ -16,20 +16,18 @@ import {
 const NULL_INDEX = -1;
 
 /**
- * Profile page container component
+ * @description - Profile page container component
  *
  * @class Profile
- * @param {string} value
- * @param {string} key
- * @param {object} event
- * @param {number} userId
- * @param {object} titleProps
+ *
  * @extends {Component}
  */
 class Profile extends Component {
   /**
-   * Creates an instance of Profile.
-   * @param {object} props
+   * @description - Creates an instance of Profile
+   *
+   * @param {object} props - Component's props
+   *
    * @memberof Profile
    */
   constructor(props) {
@@ -41,7 +39,7 @@ class Profile extends Component {
       email: '',
       oldPassword: '',
       newPassword: '',
-      newPassword2: '',
+      confirmPassword: '',
       isLoading: false,
       previewImage: '',
       imageUrl: ''
@@ -49,10 +47,11 @@ class Profile extends Component {
   }
 
   /**
-   * Called before component mounts
+   * @description - Get user profile details
    *
    * @memberof Profile
-   * @returns {null} Nothing
+   *
+   * @returns {void} Nothing
    */
   componentWillMount() {
     const { userId } = this.props.match.params;
@@ -61,12 +60,14 @@ class Profile extends Component {
 
 
   /**
- * Fetches recipes based on page and limit
+ * @description - Fetches recipes based on page and limit
  * parameters when components page changes
  *
  * @memberof Recipes
- * @param {object} nextProps - The new prop
- * @returns {void} Null
+ *
+ * @param {object} nextProps - The new props
+ *
+ * @returns {void} Nothing
  */
   componentWillReceiveProps(nextProps) {
     const { userId } = nextProps.match.params;
@@ -76,6 +77,15 @@ class Profile extends Component {
     }
   }
 
+  /**
+   * @description - Fetch user profile
+   *
+   * @memberof Profile
+   *
+   * @param {number} userId - User ID
+   *
+   * @returns {void} Nothing
+   */
   getUserProfile = (userId) => {
     this.setState({
       isLoading: true
@@ -109,6 +119,16 @@ class Profile extends Component {
       });
   }
 
+  /**
+   * @description - Handle image change
+   * For displaying image thumbnail
+   *
+   * @memberof Profile
+   *
+   * @param {object} event - Form item event object
+   *
+   * @returns {void} Nothing
+   */
   handleImageChange = (event) => {
     event.preventDefault();
     if (event.target.files && event.target.files[0]) {
@@ -127,12 +147,34 @@ class Profile extends Component {
     }
   }
 
+  /**
+   * @description - Stores data into the component state object
+   *
+   * @memberof Profile
+   *
+   * @param {string} key - Name for storing item in component's state
+   *
+   * @param {string} value - Value to store in component's state
+   *
+   * @returns {void} Nothing
+   */
   storeToState = (key, value) => {
     this.setState({
       [key]: value
     });
   }
 
+  /**
+   * @description - Handles togling the accordion component
+   *
+   * @memberof Profile
+   *
+   * @param {object} event - Form item event object
+   *
+   * @param {object} titleProps - Accordion Title Properties
+   *
+   * @returns {void} Nothing
+   */
   handleAccordionClick = (event, titleProps) => {
     const { index } = titleProps;
     const { activeIndex } = this.state;
@@ -141,6 +183,13 @@ class Profile extends Component {
     this.setState({ activeIndex: newIndex });
   }
 
+  /**
+   * @description - Parse data and calls the updateProfile action creator
+   *
+   * @memberof Profile
+   *
+   * @returns {void} Nothing
+   */
   updateProfile = () => {
     const userData = new FormData();
 
@@ -152,6 +201,7 @@ class Profile extends Component {
     userData.append('username', username);
     userData.append('image', imageUrl);
 
+    Toastr.remove();
     this.storeToState('isLoading', true);
 
     this.props.updateProfile(this.props.userId, userData)
@@ -165,10 +215,11 @@ class Profile extends Component {
       });
   }
 
-  changePassword = () => {
-    const { oldPassword, newPassword, newPassword2 } = this.state;
 
-    if (newPassword.trim().length > 5 && (newPassword === newPassword2)) {
+  changePassword = () => {
+    const { oldPassword, newPassword, confirmPassword } = this.state;
+    Toastr.remove();
+    if (newPassword.trim().length > 5 && (newPassword === confirmPassword)) {
       this.storeToState('isLoading', true);
       this.props.changePassword({ oldPassword, newPassword })
         .then(() => {
@@ -188,9 +239,10 @@ class Profile extends Component {
   }
 
   /**
-   * Calls the view components to render UI
+   * @description - Calls the view components to render UI
    *
-   * @returns {null} Nothing
+   * @returns {view} view - Rendered view
+   *
    * @memberof Profile
    */
   render() {
@@ -202,7 +254,7 @@ class Profile extends Component {
         <Header />
         <main>
           <div className="push-down">
-            <Card.Group style={{ justifyContent: 'center' }}>
+            <Card.Group className="flex">
               <Info
                 actions={{
                   storeToState: this.storeToState,
@@ -232,6 +284,13 @@ class Profile extends Component {
   }
 }
 
+/**
+ * @description - Maps data from Redux state to props
+ *
+ * @param {object} state - Redux state
+ *
+ * @returns {object} Props - Component's props
+ */
 const mapStateToProps = (state) => {
   const {
     auth: {

@@ -101,10 +101,157 @@ a, a:hover {
 	margin: 0px auto;
 }
 
+.food-card {
+	padding: 5px !important; 
+	margin: 10px !important;
+}
+
 .food-card:hover {
 	transform: scale(1.05);
 }
 
 .toast-top-center {
 	top: 70px !important;
+}
+
+.flex {
+	display: flex !important;
+	justify-content: center !important;
+}
+
+.flex__wrap {
+	flex-wrap: 'wrap';	
+}
+
+.auto__left {
+	margin-left: auto !important;
+	margin-right: 30px !important;
+}
+
+.footer {
+	padding: 15px 0px;
+}
+
+.flex__space-around {
+	justify-content: space-around;
+}
+
+.loading--img {
+	margin-top: 100px;
+}
+
+.pad__10 {
+	padding: 10px !important;
+}
+
+.pad__0 {
+	padding: 0px !important;
+}
+
+.form--image {
+	margin-right: 20px;
+}
+
+.image-src {
+	width: 100%;
+	margin-bottom: 20px;
+	flex-basis: 1 1;
+}
+
+.hidden {
+	display: none;
+}
+
+.basic-info {
+	flex-grow: 1;
+}
+
+.recipe--ingredient {
+	height: 150px;
+}
+
+.recipe--procedure {
+	height: 235px;
+}
+
+.not-found--message {
+	width: 95%;
+	margin: 10px auto;
+}
+
+.pagination {
+	padding: 15px;
+}
+
+.menu--dropdown {
+	width: 100px !important;
+}
+
+.banner--image {
+	background-size: 100% !important;
+  width: 100% !important;
+  height: 450px !important;
+  margin: 0px 0px 15px 0px !important;
+}
+
+.button--auth {
+	padding: 30px 10px 0px 0px;
+}
+
+.form--signup {
+	width: 300px !important;
+}
+
+.text--heading {
+	font-size: 40px;
+}
+
+.comment__avatar {
+	height: 36px !important;
+	width: 36px !important;
+}
+
+.card--review {
+	padding: 20px !important;
+	width: 450px !important;
+}
+
+.button--no-border__blue {
+	border: none;
+	color: blue;
+}
+
+.comment {
+	margin-bottom: 10px !important;
+}
+
+.card--profile {
+	width: 550px !important;
+}
+
+.card--profile__pad-top {
+	padding-top: 70px !important;
+}
+
+.full-width {
+	width: 100% !important;
+}
+
+.profile--img {
+	border-radius: 50%; 
+	box-shadow: 1px 2px 2px 2px gray;
+}
+
+.card--recipe-details {
+	width: 966px !important;
+}
+
+.card--action {
+	display: flex;
+	justify-content: space-around;
+	flex-wrap: wrap;
+}
+
+.item-divider {
+	border-left: 1px solid lightgrey;
 }

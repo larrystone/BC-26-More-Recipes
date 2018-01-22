@@ -12,11 +12,23 @@ import { dateOptions } from '../../constants';
 const MAX_COUNT = 10,
   EMPTY = 0;
 
-const ReviewsView = ({
+/**
+ * @description - Stateless component for rendering pagination view
+ *
+ * @param {object} props - Component's props
+ *
+ * @returns {view} RecipeItem - Rendered view
+ */
+function ReviewsView({
   actions, reviews, newReview,
   index, posting
-}) => {
-  const showReviews = () => {
+}) {
+  /**
+   * @description - Returns the reviews
+   *
+   * @returns {view} reviews - Rendered reviews
+   */
+  const getReviews = () => {
     const visibleReviews = reviews
       .slice(index, index + MAX_COUNT);
     return (
@@ -25,10 +37,10 @@ const ReviewsView = ({
           content, User, createdAt, id
         } = review;
         return (
-          <Comment key={id} style={{ marginBottom: '10px' }}>
+          <Comment key={id} className="comment">
             <Comment.Avatar
-              src={avatar}
-              style={{ height: '36px', width: '36px' }}
+              src={User.imageUrl || avatar}
+              className="comment__avatar"
             />
             <Comment.Content>
               <Comment.Author as="span">{User.name}</Comment.Author>
@@ -56,6 +68,11 @@ const ReviewsView = ({
     );
   };
 
+  /**
+   * @description - Render the reviews on a recipe
+   *
+   * @returns {view} view - Rendered view
+   */
   const renderReviews = () => {
     if (!reviews) {
       return (
@@ -78,42 +95,50 @@ const ReviewsView = ({
     }
     return (
       <div>
-        {showReviews()}
+        {getReviews()}
       </div>
     );
   };
 
+  /**
+   * @description - Render the next button if available
+   *
+   * @returns {view} Button - Rendered view
+   */
   const showLoadNewer = () => {
     if (index > EMPTY) {
       return (
         <center>
           <button
-            style={{ border: 'none', color: 'blue' }}
-            className="clickable"
+            className="clickable button--no-border__blue"
             onClick={() => {
               actions.storeToState('index', index - MAX_COUNT);
             }}
           >
-            &lt;&lt; Load Newer
+            {'Load newer'}
           </button>
         </center>
       );
     }
   };
 
+  /**
+   * @description - Render the previous button if available
+   *
+   * @returns {view} Button - Rendered view
+   */
   const showLoadOlder = () => {
     if (reviews) {
       if (index < reviews.length - MAX_COUNT) {
         return (
           <center>
             <button
-              style={{ border: 'none', color: 'blue' }}
-              className="clickable"
+              className="clickable button--no-border__blue"
               onClick={() => {
                 actions.storeToState('index', index + MAX_COUNT);
               }}
             >
-              {'Load Older >>'}
+              {'Load older'}
             </button>
           </center>
         );
@@ -122,12 +147,11 @@ const ReviewsView = ({
   };
 
   return (
-    <Card color="blue" style={{ padding: '20px', width: '450px' }}>
+    <Card color="blue" className="card--review">
       <Comment.Group>
         <Header as="h3">Reviews</Header>
         <Form reply>
           <Form.TextArea
-            style={{ maxHeight: '100px' }}
             placeholder="Write a review"
             value={newReview}
             disabled={posting}

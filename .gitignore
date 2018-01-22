@@ -1,5 +1,6 @@
 /build
 /coverage
+/build-server
 /node_modules
 npm-debug.log
 .env

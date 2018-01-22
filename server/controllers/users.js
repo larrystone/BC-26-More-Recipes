@@ -1,14 +1,24 @@
 import { User, Recipe, Review, Favorite } from '../models';
 import Encryption from '../middleware/encryption';
 import Auth from '../middleware/auth';
-import { validateSignUp } from '../middleware/validate';
-import validateUserName from '../services/validateUserName';
-import trimWhiteSpaces from '../services/trimWhiteSpace';
+import { validateSignUp, validateUserName } from '../middleware/validate';
+import trimWhiteSpaces from '../services/trimWhiteSpaces';
 import cloudinary, { uploadWithMulter } from '../services/uploadImage';
+
+import * as Mailer from '../services/mailer';
 
 const newAuth = new Auth();
 const newEncryption = new Encryption();
-
+const notify = new Mailer.default();
+/**
+ * @description - Checks if email or username already exist in the database
+ *
+ * @param {string} username - Username
+ *
+ * @param {string} email - Email address
+ *
+ * @returns {Promise} promise - Asynchronous promise
+ */
 const verifyAuthName = (username, email) => {
   const promise = new Promise((resolve, reject) => {
     User
@@ -47,19 +57,23 @@ const verifyAuthName = (username, email) => {
 };
 
 /**
- * Class Definition for the User Object
+ * @description - Class Definition for the User Object
  *
  * @export
- * @class User
+ *
+ * @class Users
  */
 export default class Users {
   /**
-   * Sign Up user (Create new user)
+   * @description - Sign Up user (Create new user)
    *
    * @param {object} req - HTTP Request
+   *
    * @param {object} res - HTTP Response
-   * @returns {object} Class instance
-   * @memberof User
+   *
+   * @return {object} this - Class instance
+   *
+   * @memberof Users
    */
   signUp({ body }, res) {
     const name = trimWhiteSpaces(body.name, ' ');
@@ -94,12 +108,24 @@ export default class Users {
             username: result.username,
           });
 
+          notify.send({
+            type: 'welcome',
+            email,
+            name,
+            userId: result.id,
+            subject: 'Welcome to more recipe'
+          });
+
           return res.status(201).json({
             success: true,
             message: 'New user created/token generated!',
             token
           });
-        });
+        })
+        .catch((/* error */) => res.status(500).json({
+          success: false,
+          message: 'Error creating user'
+        }));
     }).catch(error =>
       res.status(409).json({
         success: false,
@@ -110,12 +136,15 @@ export default class Users {
   }
 
   /**
-   * Sign In a user (Search for user)
+   * @description - Sign In a user (Search for user)
    *
    * @param {object} req - HTTP Request
+   *
    * @param {object} res - HTTP Response
-   * @returns {object} Class instance
-   * @memberof User
+   *
+   * @return {object} this - Class instance
+   *
+   * @memberof Users
    */
   signIn(req, res) {
     const authName =
@@ -162,18 +191,25 @@ export default class Users {
           success: false,
           message: 'Invalid Login Credentials!'
         });
-      });
+      })
+      .catch((/* error */) => res.status(500).json({
+        success: false,
+        message: 'An error occured'
+      }));
 
     return this;
   }
 
   /**
-   * Get the user record (e.g for profile page)
+   * @description - Get the user record (e.g for profile page)
    *
-   * @param {any} req
-   * @param {any} res
-   * @returns {null} Null
-   * @memberof User
+   * @param {any} req - HTTP request
+   *
+   * @param {any} res - HTTP reponse
+   *
+   * @returns {void} Nothing
+   *
+   * @memberof Users
    */
   getUser({ params }, res) {
     const { userId } = params;
@@ -215,26 +251,37 @@ export default class Users {
                 })
                   .then((favCount) => {
                     userInfo.myFavs = favCount;
-                    return res.status(201).json({
+                    return res.status(200).json({
                       success: true,
                       message: 'User found!',
                       user: userInfo
                     });
                   });
               });
-          });
-      });
+          })
+          .catch((/* error */) => res.status(500).json({
+            success: false,
+            message: 'Error fetching other details'
+          }));
+      })
+      .catch((/* error */) => res.status(500).json({
+        success: false,
+        message: 'Error fetching user details'
+      }));
 
     return this;
   }
 
   /**
-   * Get the user record (e.g for profile page)
+   * @description - Change user password
    *
-   * @param {any} req
-   * @param {any} res
-   * @returns {null} Null
-   * @memberof User
+   * @param {any} req - HTTP request
+   *
+   * @param {any} res - HTTP response
+   *
+   * @returns {void} Nothing
+   *
+   * @memberof Users
    */
   changePassword({ body, user }, res) {
     const { id } = user;
@@ -275,53 +322,74 @@ export default class Users {
           success: true,
           message: 'Password Changed Successfully'
         }));
-      });
+      })
+      .catch((/* error */) => res.status(500).json({
+        success: false,
+        message: 'An error occured'
+      }));
 
     return this;
   }
 
   /**
-   * Modify user record
+   * @description - Modify user record
    *
    * @param {object} req - HTTP Request
+   *
    * @param {object} res - HTTP Response
-   * @returns {object} Class instance
-   * @memberof Recipe
+   *
+   * @return {object} this - Class instance
+   *
+   * @memberof Users
    */
   modifyUser(req, res) {
+    /**
+     * @description - Updates the user details in the database
+     *
+     * @param {object} userData - User details
+     *
+     * @returns {object} Response - HTTP Response
+     */
     const updateDatabase = ({
       name, username, imageUrl, res, userId
     }) => {
       User.findOne({
         where: { id: userId }
-      }).then((foundUser) => {
-        foundUser.updateAttributes({
-          name,
-          username,
-          imageUrl: imageUrl || foundUser.imageUrl
-        })
-          .then((user) => {
-            const { id, email } = user;
-            const token = newAuth.sign({
-              id,
-              email,
-              username
+      })
+        .then((foundUser) => {
+          if (!foundUser) {
+            return res.status(404).json({
+              success: false,
+              message: 'User not found'
             });
+          }
 
-            return res.status(201).json({
-              success: true,
-              message: 'User record updated',
-              user: {
-                username, name, imageUrl: user.imageUrl, token
-              }
+          foundUser.updateAttributes({
+            name,
+            username,
+            imageUrl: imageUrl || foundUser.imageUrl
+          })
+            .then((user) => {
+              const { id, email } = user;
+              const token = newAuth.sign({
+                id,
+                email,
+                username
+              });
+
+              return res.status(200).json({
+                success: true,
+                message: 'User record updated',
+                user: {
+                  username, name, imageUrl: user.imageUrl, token
+                }
+              });
             });
-          });
-      }).catch(() => {
-        res.status(404).json({
+        })
+        .catch((/* error */) => res.status(500).json({
           success: false,
-          message: 'User not found'
-        });
-      });
+          message: 'An error occured'
+        }));
     };
 
     uploadWithMulter(req, res).then(({ file, user, body }) => {

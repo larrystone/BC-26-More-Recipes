@@ -2,9 +2,23 @@ import React from 'react';
 import { Button, Icon, Label, Menu, Popup } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 
-const View = ({
+/**
+ * @description - Stateless component for rendering header view
+ *
+ * @param {object} props - Component's props
+ *
+ * @returns {view} View - Rendered view
+ */
+function View({
   loggedUser, signOut, activePage, goTo
-}) => {
+}) {
+  /**
+   * @description - Checks if a link is the active
+   *
+   * @param {string} link - Link to check
+   *
+   * @returns {boolean} isActive - Link's active status
+   */
   const isActive = link => link === activePage;
   return (
     <header>
@@ -28,7 +42,7 @@ const View = ({
         </div>
         <div className="flex-item">
           <Popup
-            style={{ padding: '0px' }}
+            className="pad__0"
             trigger={
               <div className="clickable">
                 {loggedUser.username}
@@ -39,7 +53,7 @@ const View = ({
           >
             <Menu
               vertical
-              style={{ width: '100px' }}
+              className="menu--dropdown"
             >
               <Menu.Item
                 onClick={() => {
@@ -64,6 +78,7 @@ const View = ({
         <Button.Group>
           <Button
             basic
+            color="white"
             onClick={() => {
               goTo('/recipes/?page=1&limit=10');
             }}

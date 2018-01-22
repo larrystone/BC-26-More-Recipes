@@ -1,27 +1,33 @@
 import { Review, Recipe, User } from '../models';
 import { validateReviewContent } from '../middleware/validate';
-import notify from './../services/notify';
-import trimWhiteSpace from './../services/trimWhiteSpace';
+import trimWhiteSpaces from './../services/trimWhiteSpaces';
 
+import * as Mailer from '../services/mailer';
+
+const notify = new Mailer.default();
 /**
- * Class Definition for the Review Object
+ * @description - Class Definition for the Review Object
  *
  * @export
- * @class Review
+ *
+ * @class Reviews
  */
 export default class Reviews {
   /**
-   * Post a review on a recipe
+   * @description - Post a review on a recipe
    *
    * @param {object} req - HTTP Request
+   *
    * @param {object} res - HTTP Response
-   * @returns {object} Class instance
-   * @memberof Review
+   *
+   * @return {object} this - Class instance
+   *
+   * @memberof Reviews
    */
   postReview({ user, params, body }, res) {
     const userId = user.id;
     const { recipeId } = params;
-    const message = trimWhiteSpace(body.content || '', ' ');
+    const message = trimWhiteSpaces(body.content, ' ');
 
     const validateReviewContentError = validateReviewContent(message);
     if (validateReviewContentError) {
@@ -42,12 +48,12 @@ export default class Reviews {
         const review = { id, content, createdAt };
 
         User.findOne({
-          attributes: ['name'],
+          attributes: ['name', 'imageUrl'],
           where: { id: userId },
         })
           .then((reviewOwner) => {
-            const { name } = reviewOwner;
-            review.User = { name };
+            const { name, imageUrl } = reviewOwner;
+            review.User = { name, imageUrl };
           });
 
         Recipe
@@ -60,31 +66,40 @@ export default class Reviews {
           })
           .then((recipeOwner) => {
             const recipeOwnerEmail = recipeOwner.User.email;
-            notify(recipeOwnerEmail,
-              'New Review on Recipe',
-              `${review.User.name} recently` +
-              'posted a review on one of your Recipes'
-            );
+            notify.send({
+              type: 'review',
+              email: recipeOwnerEmail,
+              reviewFrom: `${review.User.name}`,
+              reviewMessage: `${review.content}`,
+              reviewTime: `${review.createdAt}`
+            });
 
             return res.status(201).json({
               success: true,
               message: 'New review created',
               createdReview: review
             });
-          });
+          })
+          .catch((/* error */) => res.status(500).json({
+            success: false,
+            message: 'Error posting review'
+          }));
       });
 
     return this;
   }
 
   /**
-   * Get a list of reviews on a recipe
-   *
-   * @param {object} req - HTTP Request
-   * @param {object} res - HTTP Response
-   * @returns {object} Class instance
-   * @memberof Review
-   */
+ * @description - Get a list of reviews on a recipe
+ *
+ * @param {object} req - HTTP Request
+ *
+ * @param {object} res - HTTP Response
+ *
+ * @return {object} this - Class instance
+ *
+ * @memberof Reviews
+ */
   getRecipeReviews({ params }, res) {
     const recipeId = params.recipeId;
 
@@ -92,7 +107,7 @@ export default class Reviews {
       .findAll({
         where: { recipeId },
         include: [
-          { model: User, attributes: ['name'] }
+          { model: User, attributes: ['name', 'imageUrl'] }
         ],
         order: [
           ['id', 'DESC']
@@ -100,30 +115,37 @@ export default class Reviews {
       })
       .then((reviews) => {
         if (reviews.length === 0) {
-          return res.status(200).json({
+          return res.status(404).json({
             success: true,
-            message: 'Nothing found',
+            message: 'Nothing found!',
             reviews: []
           });
         }
-        return res.status(201).json({
+        return res.status(200).json({
           success: true,
           message: 'Review(s) found',
           reviews
         });
-      });
+      })
+      .catch((/* error */) => res.status(500).json({
+        success: false,
+        message: 'Error fetching reviews'
+      }));
 
     return this;
   }
 
   /**
-   * Get a list of reviews by a user
-   *
-   * @param {object} req - HTTP Request
-   * @param {object} res - HTTP Response
-   * @returns {object} Class instance
-   * @memberof Review
-   */
+ * @description - Get a list of reviews by a user
+ *
+ * @param {object} req - HTTP Request
+ *
+ * @param {object} res - HTTP Response
+ *
+ * @return {object} this - Class instance
+ *
+ * @memberof Reviews
+ */
   getUserReviews({ params }, res) {
     const { userId } = params;
 
@@ -136,19 +158,23 @@ export default class Reviews {
       })
       .then((reviews) => {
         if (reviews.length === 0) {
-          return res.status(200).json({
+          return res.status(404).json({
             success: true,
             message: 'Nothing found!',
             reviews: []
           });
         }
 
-        return res.status(201).json({
+        return res.status(200).json({
           success: true,
           message: 'User review(s) found',
           reviews
         });
-      });
+      })
+      .catch((/* error */) => res.status(500).json({
+        success: false,
+        message: 'Error fetching reviews'
+      }));
 
     return this;
   }

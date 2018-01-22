@@ -8,11 +8,13 @@ import {
 
 const url = '/api/v1/recipes';
 /**
- * Sets paginated recipe in the store
+ * @description - Sets paginated recipe in the store
  *
  * @export
- * @param {any} recipes
- * @returns {obj} action
+ *
+ * @param {object} recipes - Recipe details
+ *
+ * @returns {object} action - Page action
  */
 export function setPaginatedRecipes(recipes) {
   return {
@@ -22,12 +24,15 @@ export function setPaginatedRecipes(recipes) {
 }
 
 /**
- * Fetch paginated recipes asynchronously
+ * @description - Fetch paginated recipes asynchronously
  *
  * @export
- * @param {any} page - Page to fetch
- * @param {any} limit - Limit of results
- * @returns {object} action
+ *
+ * @param {Number} page - Page to fetch
+ *
+ * @param {Number} limit - Limit of results
+ *
+ * @returns {object} dispatch - Dispatched action
  */
 export function fetchPagedRecipe(page, limit) {
   return dispatch =>
@@ -42,14 +47,19 @@ export function fetchPagedRecipe(page, limit) {
 }
 
 /**
- * Search for recipe (paginated)
+ * @description - Search for recipe (paginated)
  *
  * @export
- * @param {string} searchCategory
- * @param {string} searchString
+ *
+ * @param {string} searchCategory - Category of search
+ *
+ * @param {string} searchString - Search string
+ *
  * @param {string} page - Page to fetch
+ *
  * @param {string} limit - Limit of results
- * @returns {object} action
+ *
+ * @returns {object} dispatch - Dispatched action
  */
 export function searchRecipe(searchCategory, searchString, page, limit) {
   return dispatch =>
@@ -65,11 +75,13 @@ export function searchRecipe(searchCategory, searchString, page, limit) {
 
 
 /**
- * Search for recipe (paginated)
+ * @description - Search for recipe (paginated)
  *
  * @export
- * @param {number} recipeId - Limit of results
- * @returns {object} action
+ *
+ * @param {number} recipeId - Recipe ID
+ *
+ * @returns {object} dispatch - Dispatched action
  */
 export function fetchRecipeDetails(recipeId) {
   return dispatch =>
@@ -84,12 +96,15 @@ export function fetchRecipeDetails(recipeId) {
 }
 
 /**
- * Fetch paginated my recipes asynchronously
+ * @description - Fetch paginated my recipes asynchronously
  *
  * @export
- * @param {any} page - Page to fetch
- * @param {any} limit - Limit of results
- * @returns {object} action
+ *
+ * @param {Number} page - Page to fetch
+ *
+ * @param {Number} limit - Limit of results
+ *
+ * @returns {object} dispatch - Dispatched action
  */
 export function fetchMyRecipes(page, limit) {
   return dispatch =>
@@ -109,11 +124,13 @@ export function fetchMyRecipes(page, limit) {
 
 
 /**
- * Removes a recipe from user favorites
+ * @description - Removes a recipe from user favorites
  *
  * @export
- * @param {any} recipeId
- * @returns {obj} promise
+ *
+ * @param {Number} recipeId - Recipe ID
+ *
+ * @returns {object} dispatch - Dispatched action
  */
 export function deleteRecipe(recipeId) {
   return dispatch => axios.delete(`${url}/${recipeId}`)
@@ -126,11 +143,13 @@ export function deleteRecipe(recipeId) {
 }
 
 /**
- * Create a new recipe
+ * @description - Create a new recipe
  *
  * @export
- * @param {any} recipeData
- * @returns {obj} promise
+ *
+ * @param {object} recipeData - Recipe details
+ *
+ * @returns {object} dispatch - Dispatched action
  */
 export function addRecipe(recipeData) {
   return dispatch => axios.post(`${url}`, recipeData)
@@ -145,12 +164,15 @@ export function addRecipe(recipeData) {
 
 
 /**
- * Edit a recipe
+ * @description - Edit a recipe
  *
  * @export
- * @param {number} recipeId
- * @param {object} recipeData
- * @returns {object} promise
+ *
+ * @param {number} recipeId - Recipe ID
+ *
+ * @param {object} recipeData - Recipe details
+ *
+ * @returns {object} dispatch - Dispatched action
  */
 export function editRecipe(recipeId, recipeData) {
   return dispatch => axios.put(`${url}/${recipeId}`, recipeData)

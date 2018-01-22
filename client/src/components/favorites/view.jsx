@@ -6,9 +6,16 @@ import RecipeItem from '../commons/RecipeItem';
 import Loading from '../commons/Loading';
 import NothingFound from '../commons/NothingFound';
 
-const View = ({
+/**
+ * @description - Stateless component for rendering favorite recipes
+ *
+ * @param {object} props - Component's props
+ *
+ * @returns {view} View - Rendered view
+ */
+function View({
   isLoading, recipes, showDetails, addModal
-}) => {
+}) {
   if (isLoading) {
     return (
       <Loading
@@ -28,9 +35,7 @@ const View = ({
       <div className="full-title wow fadeIn">
         {'My Favorites'}
       </div>
-      <div
-        style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}
-      >
+      <div className="flex flex__wrap">
         {Object.keys(recipes).map(index => (
           <RecipeItem
             isFav
@@ -45,7 +50,7 @@ const View = ({
       </div>
     </div>
   );
-};
+}
 
 View.propTypes = {
   isLoading: PropTypes.bool.isRequired,
