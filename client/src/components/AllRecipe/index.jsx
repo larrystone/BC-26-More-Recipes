@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 
 import Header from '../Header';
-import View from './View.jsx';
+import View from './View';
 import Paginate from '../commons/Paginate';
 import Footer from '../commons/Footer';
 

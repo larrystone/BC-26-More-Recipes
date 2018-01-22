@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import toastr from 'toastr';
 
 import Header from '../Header';
-import View from './View.jsx';
+import View from './View';
 import Footer from '../commons/Footer';
 import Delete from '../commons/Delete';
 
