@@ -1,7 +1,6 @@
 const webpack = require('webpack');
 const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const DotEnv = require('dotenv-webpack');
 
 module.exports = {
   entry: [path.join(__dirname, 'client/Index.jsx')],
@@ -11,8 +10,7 @@ module.exports = {
     publicPath: '/'
   },
   plugins: [
-    new ExtractTextPlugin('./css/styles.css'),
-    new DotEnv()
+    new ExtractTextPlugin('./css/styles.css')
   ],
   module: {
     rules: [
