@@ -455,7 +455,7 @@ class MyRecipes extends Component {
             />
             <div className="flex">
               {
-                _.size(this.props.recipes) > 0 ?
+                _.size(this.props.recipes) > 0 && !this.state.isLoading ?
                   <Paginate
                     pageSize={`${Number(this.state.limit) || 10}`}
                     pagination={this.props.pagination}
