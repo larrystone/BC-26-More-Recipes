@@ -177,7 +177,7 @@ function ReviewsView({
       </Comment.Group>
     </Card>
   );
-};
+}
 
 ReviewsView.propTypes = {
   actions: PropTypes.shape().isRequired,

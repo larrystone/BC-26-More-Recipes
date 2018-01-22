@@ -47,7 +47,7 @@ export const validateSignUp = (name, username, email, password) => {
  * @return {string} status - The status
  */
 export const validateId = (id) => {
-  if (Number.isNaN(id)) {
+  if (isNaN(Number(id))) {
     return 'Invalid';
   }
 
@@ -199,10 +199,10 @@ export const validateUserName = (User, username, userId) => {
         if (!userFound) {
           resolve();
         } else {
-          reject(new Error({
+          reject({
             status: 409,
             message: 'Username already taken'
-          }));
+          });
         }
       });
   });
@@ -224,10 +224,10 @@ export const validateUserRight = (recipeId, userId) => {
       .findById(recipeId)
       .then((recipeFound) => {
         if (Number(recipeFound.userId) !== Number(userId)) {
-          reject(new Error({
+          reject({
             status: 401,
             message: 'You cannot modify a recipe not created by You!'
-          }));
+          });
         }
         resolve(recipeFound);
       });

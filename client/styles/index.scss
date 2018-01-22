@@ -166,17 +166,9 @@ a, a:hover {
 	flex-grow: 1;
 }
 
-.recipe--ingredient {
-	height: 150px;
-}
-
-.recipe--procedure {
-	height: 235px;
-}
-
 .not-found--message {
-	width: 95%;
-	margin: 10px auto;
+	width: 96%;
+	margin: 10px auto !important;
 }
 
 .pagination {

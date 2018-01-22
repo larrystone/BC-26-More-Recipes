@@ -122,10 +122,10 @@ function CreateOrEdit({
           />
           <Form.TextArea
             required
+            rows="7"
             autoHeight={false}
             disabled={loading}
             label="Ingredients"
-            className="recipe--ingredient"
             placeholder="Enter ingredient list separated by comma"
             value={
               recipe.ingredients ? recipe.ingredients.replace(/;;/g, ',') : ''
@@ -138,8 +138,8 @@ function CreateOrEdit({
       </div>
       <Form.TextArea
         required
+        rows="12"
         disabled={loading}
-        className="recipe--procedure"
         label="Preparation Procedure"
         placeholder="Enter recipe preparation procedure"
         value={recipe.procedure}
