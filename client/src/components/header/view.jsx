@@ -78,7 +78,6 @@ function View({
         <Button.Group>
           <Button
             basic
-            color="white"
             onClick={() => {
               goTo('/recipes/?page=1&limit=10');
             }}
@@ -111,7 +110,7 @@ function View({
       </div>
     </header>
   );
-};
+}
 
 View.propTypes = {
   loggedUser: PropTypes.shape().isRequired,
