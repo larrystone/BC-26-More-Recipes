@@ -58,20 +58,24 @@ export default class Reviews {
 
         Recipe
           .findOne({
-            attributes: ['userId'],
+            attributes: ['userId', 'name', 'imageUrl'],
             where: { id: recipeId },
             include: [
-              { model: User, attributes: ['email'] }
+              { model: User, attributes: ['email', 'username'] }
             ]
           })
-          .then((recipeOwner) => {
-            const recipeOwnerEmail = recipeOwner.User.email;
+          .then((recipe) => {
+            const { name, imageUrl } = recipe;
+            const recipeOwnerEmail = recipe.User.email;
             notify.send({
               type: 'review',
+              review,
+              imageUrl,
+              recipeId,
+              subject: 'New recipe review',
+              username: recipe.User.username,
+              recipeName: name,
               email: recipeOwnerEmail,
-              reviewFrom: `${review.User.name}`,
-              reviewMessage: `${review.content}`,
-              reviewTime: `${review.createdAt}`
             });
 
             return res.status(201).json({

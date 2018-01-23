@@ -10,7 +10,7 @@ import 'semantic-ui-css/semantic.min.css';
 import setToken from './src/utils/setToken';
 import { SET_CURRENT_USER } from './src/constants';
 
-import reducer from './src/reducers';
+import reducers from './src/reducers';
 import routes from './src/routes';
 
 import './styles/index.scss';
@@ -18,10 +18,11 @@ import './styles/animate.css';
 import './styles/toastr.css';
 
 const store = createStore(
-  reducer,
+  reducers,
   compose(
     applyMiddleware(thunk),
-    window.devToolsExtension ? window.devToolsExtension() : f => f
+    window.devToolsExtension && process.env.NODE_ENV === 'development'
+      ? window.devToolsExtension() : f => f
   )
 );
 

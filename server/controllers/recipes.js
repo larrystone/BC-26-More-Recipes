@@ -1,4 +1,4 @@
-import { Recipe, User } from '../models';
+import { Recipe, User, Favorite } from '../models';
 import {
   validateRecipeDetails, validateUserRight
 } from '../middleware/validate';
@@ -7,6 +7,9 @@ import trimWhiteSpaces from '../services/trimWhiteSpaces';
 import cloudinary, { uploadWithMulter } from '../services/uploadImage';
 import populatePaging from '../services/populatePaging';
 
+import * as Mailer from '../services/mailer';
+
+const notify = new Mailer.default();
 /**
  * @description - Check if recipe name is already picked
  *
@@ -176,11 +179,42 @@ export default class Recipes {
         imageUrl,
         procedure
       })
-        .then(recipe => res.status(200).json({
-          success: true,
-          message: 'Recipe record updated',
-          recipe
-        }))
+        .then((recipe) => {
+          // Notify affected users
+          Favorite
+            .findAll({
+              where: { recipeId: foundRecipe.id },
+              attributes: ['userId']
+            })
+            .then((favorites) => {
+              const recipeFavoriteIds = favorites
+                .map(favorite => favorite.userId);
+
+              User
+                .findAll({
+                  where: { id: recipeFavoriteIds },
+                  attributes: ['email']
+                })
+                .then((users) => {
+                  const recipeFavoriteEmails = users
+                    .map(user => user.email);
+
+                  notify.send({
+                    type: 'recipe',
+                    imageUrl: recipe.imageUrl,
+                    recipeId: foundRecipe.id,
+                    subject: 'Favorite recipe updated',
+                    email: recipeFavoriteEmails
+                  });
+                });
+            });
+
+          return res.status(200).json({
+            success: true,
+            message: 'Recipe record updated',
+            recipe
+          });
+        })
         .catch((/* error */) => res.status(500).json({
           success: false,
           message: 'Error updating recipe'

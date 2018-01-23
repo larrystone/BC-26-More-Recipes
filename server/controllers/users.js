@@ -111,9 +111,9 @@ export default class Users {
           notify.send({
             type: 'welcome',
             email,
-            name,
+            username,
             userId: result.id,
-            subject: 'Welcome to more recipe'
+            subject: 'Welcome to More-Recipe'
           });
 
           return res.status(201).json({
