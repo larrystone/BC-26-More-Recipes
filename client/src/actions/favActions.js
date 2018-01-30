@@ -14,12 +14,10 @@ const url = '/api/v1/users';
  *
  * @param {Number} recipeId - Recipe ID
  *
- * @param {Number} userId - User ID
- *
  * @returns {object} dispatch - Dispatched action
  */
-export function addFav(recipeId, userId) {
-  return dispatch => axios.post(`${url}/${userId}/recipes/${recipeId}`)
+export function addFav(recipeId) {
+  return dispatch => axios.post(`${url}/recipes/${recipeId}`)
     .then(() => {
       dispatch({
         type: SET_IS_FAV,
@@ -40,8 +38,8 @@ export function addFav(recipeId, userId) {
  *
  * @returns {object} dispatch - Dispatched action
  */
-export function removeFav(recipeId, userId) {
-  return dispatch => axios.delete(`${url}/${userId}/recipes/${recipeId}`)
+export function removeFav(recipeId) {
+  return dispatch => axios.delete(`${url}/recipes/${recipeId}`)
     .then(() => {
       dispatch({
         type: REMOVE_FAV,
@@ -76,20 +74,24 @@ export function fetchFavorites(userId) {
  *
  * @export
  *
- * @param {Number} userId - User ID
- *
  * @param {Number} recipeId - Recipe ID
  *
  * @returns {object} dispatch - Dispatched action
  */
-export function fetchSingleFavorite(userId, recipeId) {
+export function fetchSingleFavorite(recipeId) {
   return dispatch =>
-    axios.get(`/api/v1/users/${userId}/recipes/${recipeId}`)
+    axios.get(`/api/v1/users/recipes/${recipeId}`)
       .then((response) => {
         const { recipe } = response.data;
         dispatch({
           type: SET_IS_FAV,
           isFav: _.size(recipe) > 0
+        });
+      })
+      .catch(() => {
+        dispatch({
+          type: SET_IS_FAV,
+          isFav: false
         });
       });
 }

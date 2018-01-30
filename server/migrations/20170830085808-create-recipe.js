@@ -11,16 +11,19 @@ module.exports = {
         type: Sequelize.STRING
       },
       description: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       imageUrl: {
         type: Sequelize.STRING
       },
-      ingredients: {
+      imageId: {
         type: Sequelize.STRING
       },
+      ingredients: {
+        type: Sequelize.TEXT
+      },
       procedure: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       viewCount: {
         type: Sequelize.INTEGER,

@@ -11,9 +11,10 @@
     "dev:client": "webpack --config webpack.dev.js --watch",
     "prod:server": "babel -d ./build-server ./server -s",
     "prod:client": "webpack --config webpack.prod.js",
-    "test": "mocha --timeout 500000 --compilers js:babel-core/register server/tests/",
-    "coveralls": "nyc npm test && nyc --no-clean npm run test:client && nyc report --reporter=text-lcov | coveralls",
-    "test:client": "jest --coverage",
+    "test:server": "mocha --timeout 500000 --compilers js:babel-core/register server/tests/",
+    "test:client": "jest && codecov",
+    "coveralls": "nyc npm run test:server && nyc report --reporter=text-lcov | coveralls",
+    "test:coverage": "npm run test:client && npm run coveralls",
     "heroku-postbuild": "npm run prod:client && npm run prod:server"
   },
   "author": "Lawal Lanre Emmanuel",
@@ -100,6 +101,8 @@
     "webpack-dev-server": "^2.9.4"
   },
   "jest": {
+    "coverageDirectory": "./coverage/",
+    "collectCoverage": true,
     "testEnvironment": "jsdom",
     "globals": {
       "window": true

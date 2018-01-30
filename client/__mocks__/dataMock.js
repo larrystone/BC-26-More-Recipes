@@ -12,6 +12,18 @@ const data = {
     email: 'lanestione@gmail.com',
     password: 'abcdefg'
   },
+  userProfileResponse: {
+    user: {
+      userId: 98,
+      name: 'lane stone emmanuel',
+      username: 'lanestone1',
+      email: 'lanestone1@gmail.com',
+      imageUrl: '',
+      myRecipes: 1,
+      myReviews: 1,
+      myFavs: 0
+    }
+  },
   signInResponse: {
     success: true,
     message: 'User Signed In/token generated!',

@@ -21,6 +21,9 @@ module.exports = {
       imageUrl: {
         type: Sequelize.STRING
       },
+      imageId: {
+        type: Sequelize.STRING
+      },
       password: {
         type: Sequelize.STRING
       },

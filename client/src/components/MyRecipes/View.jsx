@@ -31,7 +31,7 @@ function View({
           labelPosition="right"
           circular
           icon="plus"
-          color="teal"
+          color="brown"
           onClick={() => {
             newRecipe('create_edit_recipe');
           }}

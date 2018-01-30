@@ -55,7 +55,7 @@ const View = ({
             />
             <Button
               animated
-              positive
+              color="brown"
               onClick={() => {
                 search();
               }}
@@ -93,7 +93,7 @@ const View = ({
           />
           <Button
             animated
-            positive
+            color="brown"
             onClick={() => {
               search();
             }}

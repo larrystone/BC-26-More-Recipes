@@ -1,7 +1,6 @@
 import { Recipe, User } from '../models';
-import {
-  validateRecipeDetails, validateUserRight
-} from '../middleware/validate';
+import { validateRecipeDetails } from '../middleware/inputValidation';
+import { validateUserRight } from '../middleware/userValidation';
 import searchRecipe from './searchRecipe';
 import trimWhiteSpaces from '../services/trimWhiteSpaces';
 import cloudinary, { uploadWithMulter } from '../services/uploadImage';
@@ -67,7 +66,14 @@ export default class Recipes {
      * @return {void} Nothing
      */
     const addRecipe = ({
-      name, description, ingredients, procedure, imageUrl, userId, res
+      name,
+      description,
+      ingredients,
+      procedure,
+      imageUrl,
+      userId,
+      res,
+      imageId
     }) => {
       isNamePicked(userId, name)
         .then((isPicked) => {
@@ -85,7 +91,8 @@ export default class Recipes {
               ingredients,
               procedure,
               imageUrl,
-              userId
+              userId,
+              imageId
             })
             .then((recipe) => {
               res.status(201).json({
@@ -94,7 +101,7 @@ export default class Recipes {
                 recipe
               });
             })
-            .catch((/* error */) => res.status(500).json({
+            .catch(() => res.status(500).json({
               success: false,
               message: 'Error creating recipe'
             }));
@@ -109,22 +116,29 @@ export default class Recipes {
       const procedure = trimWhiteSpaces(body.procedure, ' ');
       const userId = user.id;
 
-      const isRecipeInvalid =
-        validateRecipeDetails(name, ingredients, procedure);
+      const recipeDetailsError =
+        validateRecipeDetails({ name, ingredients, procedure });
 
-      if (isRecipeInvalid) {
+      if (recipeDetailsError.length > 0) {
         return res.status(400).json({
           success: false,
-          message: isRecipeInvalid
+          message: recipeDetailsError
         });
       }
 
       if (file) {
-        cloudinary.upload_stream(({ error, url }) => {
+        cloudinary.upload_stream(({ error, url, public_id }) => {
           if (!error) {
             imageUrl = url;
             addRecipe({
-              name, description, ingredients, procedure, imageUrl, userId, res
+              name,
+              description,
+              ingredients,
+              procedure,
+              imageUrl,
+              userId,
+              res,
+              imageId: public_id
             });
           } else {
             res.status(503).json({
@@ -135,7 +149,14 @@ export default class Recipes {
         }).end(file.buffer);
       } else {
         addRecipe({
-          name, description, ingredients, procedure, imageUrl, userId, res
+          name,
+          description,
+          ingredients,
+          procedure,
+          imageUrl,
+          userId,
+          res,
+          imageId: ''
         });
       }
     }).catch(({ message }) => {
@@ -167,14 +188,22 @@ export default class Recipes {
      * @returns {void} Nothing
      */
     const updateRecipe = ({
-      name, description, ingredients, procedure, imageUrl, res, foundRecipe
+      name,
+      description,
+      ingredients,
+      procedure,
+      imageUrl,
+      imageId,
+      res,
+      foundRecipe
     }) => {
       foundRecipe.updateAttributes({
         name,
         description,
         ingredients,
         imageUrl,
-        procedure
+        procedure,
+        imageId
       })
         .then(recipe => res.status(200).json({
           success: true,
@@ -197,7 +226,14 @@ export default class Recipes {
     * @returns {Promise} isPicked - Status of request
     */
     const verifyNameChange = ({
-      name, description, ingredients, procedure, imageUrl, res, foundRecipe
+      name,
+      description,
+      ingredients,
+      procedure,
+      imageUrl,
+      imageId,
+      res,
+      foundRecipe
     }) => {
       if (foundRecipe.name.toLowerCase() === name.toLowerCase()) {
         updateRecipe({
@@ -206,6 +242,7 @@ export default class Recipes {
           ingredients,
           procedure,
           imageUrl,
+          imageId,
           res,
           foundRecipe
         });
@@ -224,6 +261,7 @@ export default class Recipes {
               ingredients,
               procedure,
               imageUrl,
+              imageId,
               res,
               foundRecipe
             });
@@ -240,10 +278,14 @@ export default class Recipes {
       const procedure = trimWhiteSpaces(body.procedure, ' ');
 
       const validateRecipeError =
-        validateRecipeDetails(name, ingredients,
-          procedure, recipeId);
+        validateRecipeDetails({
+          name,
+          ingredients,
+          procedure,
+          recipeId
+        });
 
-      if (validateRecipeError) {
+      if (validateRecipeError.length > 0) {
         return res.status(400).json({
           success: false,
           message: validateRecipeError
@@ -252,15 +294,16 @@ export default class Recipes {
 
       validateUserRight(recipeId, userId).then((foundRecipe) => {
         if (file) {
-          cloudinary.upload_stream(({ error, url }) => {
+          cloudinary.upload_stream(({ error, url, public_id }) => {
             if (!error) {
-              // TODO delete the old picture
-              // cloudinary.destroy('id');
+              cloudinary.destroy(foundRecipe.imageId, () => {
+              });
               verifyNameChange({
                 name,
                 description,
                 ingredients,
                 procedure,
+                imageId: public_id,
                 imageUrl: url,
                 res,
                 foundRecipe
@@ -273,13 +316,14 @@ export default class Recipes {
             }
           }).end(file.buffer);
         } else {
-          const { imageUrl } = foundRecipe;
+          const { imageUrl, imageId } = foundRecipe;
           verifyNameChange({
             name,
             description,
             ingredients,
             procedure,
             imageUrl,
+            imageId,
             res,
             foundRecipe
           });
@@ -316,18 +360,27 @@ export default class Recipes {
     const { recipeId } = params;
 
     validateUserRight(recipeId, user.id).then(() => {
-      Recipe.destroy({
+      Recipe.findOne({
         where: {
           id: recipeId
-        },
+        }
       })
-        .then(() => {
-          // TODO delete the old picture
-          // cloudinary.destroy('id');
+        .then((recipe) => {
+          recipe.destroy()
+            .then(() => {
+              // TODO delete the old image
+              cloudinary.destroy(recipe.imageId);
 
+              res.status(200).json({
+                success: true,
+                message: 'Recipe Deleted!'
+              });
+            });
+        })
+        .catch(() => {
           res.status(200).json({
-            success: true,
-            message: 'Recipe Deleted!'
+            success: false,
+            message: 'Error deleting recipe'
           });
         });
     }).catch(({ status, message }) => {

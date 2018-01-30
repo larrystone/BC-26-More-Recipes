@@ -13,8 +13,8 @@ import Toastr from 'toastr';
 export default function setToken(token) {
   if (token) {
     axios.defaults.headers.common['x-access-token'] = token;
-    Toastr.options.positionClass = 'toast-top-center';
-    Toastr.options.closeOnHover = true;
+    Toastr.options.positionClass = 'toast-bottom-left';
+    Toastr.options.timeOut = 700;
   } else {
     delete axios.defaults.headers.common['x-access-token'];
   }

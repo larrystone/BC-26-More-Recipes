@@ -1,15 +1,18 @@
+import jsonwebtoken from 'jsonwebtoken';
 import { User, Recipe, Review, Favorite } from '../models';
 import Encryption from '../middleware/encryption';
-import Auth from '../middleware/auth';
-import { validateSignUp, validateUserName } from '../middleware/validate';
+import { validateUserName } from '../middleware/userValidation';
+import { validateSignUp } from '../middleware/inputValidation';
 import trimWhiteSpaces from '../services/trimWhiteSpaces';
 import cloudinary, { uploadWithMulter } from '../services/uploadImage';
 
 import * as Mailer from '../services/mailer';
 
-const newAuth = new Auth();
 const newEncryption = new Encryption();
 const notify = new Mailer.default();
+
+const { JWT_SECRET } = process.env;
+
 /**
  * @description - Checks if email or username already exist in the database
  *
@@ -82,10 +85,14 @@ export default class Users {
     const password = (body.password || '');
 
     const validateSignUpError =
-      validateSignUp(name,
-        username, email, password);
+      validateSignUp({
+        name,
+        username,
+        email,
+        password
+      });
 
-    if (validateSignUpError) {
+    if (validateSignUpError.length > 0) {
       return res.status(400).json({
         success: false,
         message: validateSignUpError
@@ -102,11 +109,11 @@ export default class Users {
           password: newEncryption.generateHash(password),
         })
         .then((result) => {
-          const token = newAuth.sign({
+          const token = jsonwebtoken.sign({
             id: result.id,
-            email: result.email,
             username: result.username,
-          });
+            exp: Math.floor(Date.now() / 1000) + (60 * 60 * 24)
+          }, JWT_SECRET);
 
           notify.send({
             type: 'welcome',
@@ -122,9 +129,9 @@ export default class Users {
             token
           });
         })
-        .catch((/* error */) => res.status(500).json({
+        .catch(error => res.status(500).json({
           success: false,
-          message: 'Error creating user'
+          message: `Error creating user ${error.message}`
         }));
     }).catch(error =>
       res.status(409).json({
@@ -176,10 +183,12 @@ export default class Users {
         }
 
         if (newEncryption.verifyHash(req.body.password, userFound.password)) {
-          const { id, email, username } = userFound;
-          const token = newAuth.sign({
-            id, email, username
-          });
+          const { id, username } = userFound;
+          const token = jsonwebtoken.sign({
+            id,
+            username,
+            exp: Math.floor(Date.now() / 1000) + (60 * 60 * 24)
+          }, JWT_SECRET);
 
           return res.status(200).json({
             success: true,
@@ -351,10 +360,10 @@ export default class Users {
      * @returns {object} Response - HTTP Response
      */
     const updateDatabase = ({
-      name, username, imageUrl, res, userId
+      name, username, imageUrl, res, userId, imageId
     }) => {
       User.findOne({
-        where: { id: userId }
+        where: { id: userId },
       })
         .then((foundUser) => {
           if (!foundUser) {
@@ -364,18 +373,23 @@ export default class Users {
             });
           }
 
+          if (imageId !== foundUser.imageId) {
+            cloudinary.destroy(foundUser.imageId, () => { });
+          }
+
           foundUser.updateAttributes({
             name,
             username,
-            imageUrl: imageUrl || foundUser.imageUrl
+            imageUrl: imageUrl || foundUser.imageUrl,
+            imageId: imageId || foundUser.imageId
           })
             .then((user) => {
-              const { id, email } = user;
-              const token = newAuth.sign({
+              const { id } = user;
+              const token = jsonwebtoken.sign({
                 id,
-                email,
-                username
-              });
+                username,
+                exp: Math.floor(Date.now() / 1000) + (60 * 60 * 24)
+              }, JWT_SECRET);
 
               return res.status(200).json({
                 success: true,
@@ -413,14 +427,15 @@ export default class Users {
 
       validateUserName(User, username, userId).then(() => {
         if (file) {
-          cloudinary.upload_stream(({ error, url }) => {
+          cloudinary.upload_stream(({ error, url, public_id }) => {
             if (!error) {
               updateDatabase({
                 name,
                 username,
-                imageUrl: url,
                 res,
-                userId
+                userId,
+                imageUrl: url,
+                imageId: public_id
               });
             } else {
               res.status(503).json({
@@ -433,9 +448,10 @@ export default class Users {
           updateDatabase({
             name,
             username,
-            imageUrl: '',
             res,
-            userId
+            userId,
+            imageUrl: '',
+            imageId: ''
           });
         }
       })

@@ -26,6 +26,7 @@ export default (sequelize, DataTypes) => {
       }
     },
     imageUrl: DataTypes.STRING,
+    imageId: DataTypes.STRING,
     password: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -33,6 +34,10 @@ export default (sequelize, DataTypes) => {
         min: {
           args: 6,
           msg: 'Password must be minimum of 6 characters'
+        },
+        max: {
+          args: 50,
+          msg: 'Password must be maximum of 50 characters'
         }
       }
     },

@@ -57,8 +57,9 @@ export default class Favorites {
    *
    * @memberof Favorites
    */
-  removeFromFavorites({ params }, res) {
-    const { recipeId, userId } = params;
+  removeFromFavorites({ params, user }, res) {
+    const { recipeId } = params;
+    const userId = user.id;
     Favorite
       .destroy({
         where: {
@@ -94,8 +95,8 @@ export default class Favorites {
    *
    * @memberof Favorites
    */
-  getFavRecipes({ params }, res) {
-    const { userId } = params;
+  getFavRecipes({ user }, res) {
+    const userId = user.id;
 
     Favorite
       .findAll({
@@ -143,8 +144,9 @@ export default class Favorites {
  *
  * @memberof Favorites
  */
-  getFavRecipe({ params }, res) {
-    const { userId, recipeId } = params;
+  getFavRecipe({ params, user: { id } }, res) {
+    const { recipeId } = params;
+    const userId = id;
 
     Favorite
       .findOne({

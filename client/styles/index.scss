@@ -1,5 +1,5 @@
 //colors
-$color_green_lighten_2: #256188;
+$color_green_lighten_2: #9D6946;
 $color_nobel_approx: #b6b5b5;
 $color_white: #fff;
 $color_red: #F71111;
@@ -15,13 +15,34 @@ $font_3: cursive;
 	height: 100%;
 }
 
+.foods {
+	margin-left: auto;
+	animation-name: foods;
+	animation-duration: 5s;
+	animation-iteration-count: infinite;
+	animation-direction: reverse;
+	animation-timing-function: linear;
+	@media screen and (max-width: 600px){
+    display: none;
+	}
+}
 
 #title {
 	color: $color_white;
-	padding-top: 100px;
-	text-align: center;
+	margin: 350px 100px;
 	animation-duration: 4s;
 	animation-delay: 2s;
+	font-family: "Marmelad",sans-serif;
+	font-size: 5.5rem;
+	@media screen and (max-width: 600px){
+    margin: 50px 30px;
+	}
+}
+
+@keyframes foods {
+	0%   {transform:translateY(30%);}
+	50% {transform:translateY(40%);}
+	100% {transform:translateY(30%);}
 }
 
 .body {
@@ -30,10 +51,22 @@ $font_3: cursive;
 	margin: 0;
 }
 
+.ui.basic.button, .ui.basic.buttons .button {
+	color: white !important;
+}
+
+.sub-title {
+	color: rgba(255,255,255,0.6);
+	font-size: 1.1rem;
+}
 .desc {
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
+}
+
+.word-wrap {
+	word-wrap: break-word;
 }
 
 main {
@@ -51,10 +84,12 @@ header {
 }
 
 footer {
+	box-shadow: 1px -2px 2px grey;
 	flex: 0 0 125px;
 	margin-top: 140px;
 	color: $color_white;
-	background-color: $color_green_lighten_2;
+	background-size: cover !important;
+  background-position: center !important;
 }
 
 .flex-row {
@@ -76,7 +111,6 @@ footer {
 .brand-logo {
 	font-size: 30px;
 	font-family: $font_2, $font_3;
-	// margin: 0px auto;
 	margin: 0px auto 0px 15px;
 }
 
@@ -110,17 +144,19 @@ a, a:hover {
 	transform: scale(1.05);
 }
 
-.toast-top-center {
-	top: 70px !important;
+.toast-bottom-left {
+	bottom: 150px !important;
 }
 
 .flex {
 	display: flex !important;
 	justify-content: center !important;
+	align-self: baseline;
+	justify-self: flex-end;
 }
 
 .flex__wrap {
-	flex-wrap: 'wrap';	
+	flex-wrap: wrap !important;	
 }
 
 .auto__left {
@@ -158,7 +194,7 @@ a, a:hover {
 	flex-basis: 1 1;
 }
 
-.hidden {
+.hide {
 	display: none;
 }
 
@@ -175,15 +211,23 @@ a, a:hover {
 	padding: 15px;
 }
 
+.rc-pagination-item-active {
+	background-color: #a5673f;
+	border-color: #a5673f;
+}
+
+.rc-pagination-item:hover {
+	border-color: #a5673f;
+}
+
 .menu--dropdown {
 	width: 100px !important;
 }
 
 .banner--image {
-	background-size: 100% !important;
-  width: 100% !important;
-  height: 450px !important;
-  margin: 0px 0px 15px 0px !important;
+	margin: 0px 0px 15px 0px !important;
+	background:linear-gradient(to left, $color_green_lighten_2 10%, #1ca4f6 100%);
+	background-size: cover !important;
 }
 
 .button--auth {
@@ -195,7 +239,10 @@ a, a:hover {
 }
 
 .text--heading {
-	font-size: 40px;
+	font-size: 4.5rem;
+	@media screen and (max-width: 600px){
+    font-size: 2.5rem;
+	}
 }
 
 .comment__avatar {
@@ -235,7 +282,7 @@ a, a:hover {
 }
 
 .card--recipe-details {
-	width: 966px !important;
+	width: 680px !important;
 }
 
 .card--action {
@@ -246,4 +293,9 @@ a, a:hover {
 
 .item-divider {
 	border-left: 1px solid lightgrey;
+}
+
+.ui.compact.selection.dropdown {
+	 min-width: 100px !important;
+	 max-width: 110px !important;
 }

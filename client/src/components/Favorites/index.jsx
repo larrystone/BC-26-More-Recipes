@@ -11,6 +11,8 @@ import Delete from '../commons/Delete';
 import { fetchFavorites, removeFav } from '../../actions/favActions';
 import { addModal, removeModal } from '../../actions/modalActions';
 
+import notify from '../../utils/notify';
+
 /**
  * @description - User recipes container
  *
@@ -58,8 +60,7 @@ class Favorites extends Component {
           isLoading: false
         });
         const { data: { message } } = error.response;
-        toastr.remove();
-        toastr.error(message);
+        notify('error', message);
       });
   }
 
@@ -148,7 +149,7 @@ class Favorites extends Component {
    * @returns {void} Nothing
    */
   removeRecipe = (recipeName, recipeId) => {
-    this.props.removeFav(recipeId, this.props.userId)
+    this.props.removeFav(recipeId)
       .then(() => {
         this.removeModal();
         toastr

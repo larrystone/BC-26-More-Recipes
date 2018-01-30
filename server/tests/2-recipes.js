@@ -73,7 +73,7 @@ for invalid recipe name (Ew)`, (done) => {
           expect(res.statusCode).to.equal(400);
           expect(res.body).deep.equal({
             success: false,
-            message: 'Enter a valid recipe name!'
+            message: ['* Enter a valid recipe name!']
           });
           done();
         });
@@ -94,7 +94,7 @@ for invalid ingredient list (water)`, (done) => {
           expect(res.statusCode).to.equal(400);
           expect(res.body).deep.equal({
             success: false,
-            message: 'Enter a valid list of ingredients!'
+            message: ['<br/>* Enter a valid list of ingredients!']
           });
           done();
         });
@@ -115,7 +115,7 @@ for an invalid cooking procedure`, (done) => {
           expect(res.statusCode).to.equal(400);
           expect(res.body).deep.equal({
             success: false,
-            message: 'Explain the procedures clearly please!'
+            message: ['<br/>* Explain the procedures clearly please!']
           });
           done();
         });
@@ -644,7 +644,7 @@ describe('/DELETE User Recipes Test', () => {
       });
   });
 
-  it(`should return 'You cannot modify a recipe not created by You!' for id: 
+  it(`should return 'Failed to authenticate token.' for invalid user token: 
 ${recipeId + 2}`,
   (done) => {
     chai.request(app)
@@ -658,7 +658,7 @@ ${recipeId + 2}`,
         expect(res.statusCode).to.equal(401);
         expect(res.body).deep.equal({
           success: false,
-          message: 'You cannot modify a recipe not created by You!'
+          message: 'Failed to authenticate token.'
         });
         done();
       });

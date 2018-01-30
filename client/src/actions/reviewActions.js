@@ -34,6 +34,9 @@ export function fetchRecipeReviews(recipeId) {
       .then((response) => {
         const { reviews } = response.data;
         dispatch(setReviews(reviews));
+      })
+      .catch(() => {
+        dispatch(setReviews([]));
       });
 }
 

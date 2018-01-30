@@ -13,7 +13,7 @@ function NothingFound({ text }) {
   return (
     <Message
       className="not-found--message"
-      color="green"
+      color="brown"
       size="large"
     >
       <Message.Header content="Nothing found!" />

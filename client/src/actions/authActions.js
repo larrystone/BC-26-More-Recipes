@@ -35,7 +35,7 @@ export function signOut() {
     localStorage.removeItem('token');
     setToken(false);
     dispatch(setCurrentUser({}));
-    window.location.reload();
+    window.location = '/';
   };
 }
 
@@ -103,14 +103,12 @@ export function getUser(userId) {
  *
  * @export
  *
- * @param {Number} userId - User ID
- *
  * @param {object} userData - User details
  *
  * @returns {object} dispatch - Dispatched action
  */
-export function updateProfile(userId, userData) {
-  return dispatch => axios.put(`${url}${userId}/profile`, userData)
+export function updateProfile(userData) {
+  return dispatch => axios.put(`${url}profile`, userData)
     .then((response) => {
       const {
         user: { token }

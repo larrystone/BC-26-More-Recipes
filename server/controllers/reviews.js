@@ -1,5 +1,5 @@
 import { Review, Recipe, User } from '../models';
-import { validateReviewContent } from '../middleware/validate';
+import { validateReviewContent } from '../middleware/inputValidation';
 import trimWhiteSpaces from './../services/trimWhiteSpaces';
 
 import * as Mailer from '../services/mailer';

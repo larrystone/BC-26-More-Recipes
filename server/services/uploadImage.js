@@ -10,9 +10,9 @@ cloudinary.config({
 /**
  * @description - Upload image to memory with multer
  *
- * @param {any} req - HTTP request
+ * @param {object} req - HTTP request
  *
- * @param {any} res - HTTP response
+ * @param {object} res - HTTP response
  *
  * @returns {Promise} promise - Asynchronous response
  */
