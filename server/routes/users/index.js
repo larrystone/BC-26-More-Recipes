@@ -8,8 +8,8 @@ import Auth from '../../middleware/auth';
 import {
   validateRecipeId,
   validateUserId,
-  validateRecipeExist
-} from '../../middleware/validate';
+} from '../../middleware/inputValidation';
+import validateRecipeExist from '../../middleware/recipeValidation';
 
 const user = express.Router();
 
@@ -25,14 +25,14 @@ user.post('/signin', newUser.signIn);
 user.use('*', newAuth.verify);
 user.get('/myRecipes', newRecipe.getUserRecipes);
 
-user.route('/:userId/profile')
-  .get(validateUserId, newUser.getUser)
-  .put(validateUserId, newUser.modifyUser);
+user.get('/:userId/profile', validateUserId, newUser.getUser);
+
+user.put('/profile', newUser.modifyUser);
 
 user.put('/changePassword', newUser.changePassword);
 
-user.route('/:userId/recipes/:recipeId')
-  .all(validateRecipeId, validateUserId, validateRecipeExist)
+user.route('/recipes/:recipeId')
+  .all(validateRecipeId, validateRecipeExist)
   .post(newFavorite.addToFavorites)
   .get(newFavorite.getFavRecipe)
   .delete(newFavorite.removeFromFavorites);

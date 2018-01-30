@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes, { object } from 'prop-types';
 import { connect } from 'react-redux';
-import Toastr from 'toastr';
 
 import Header from '../Header';
 import View from './View';
@@ -12,10 +11,10 @@ import {
   fetchSingleFavorite, addFav, removeFav
 } from '../../actions/favActions';
 import { upvote, downvote } from '../../actions/voteActions';
-
 import {
   fetchRecipeReviews, addRecipeReview
 } from '../../actions/reviewActions';
+import notify from '../../utils/notify';
 
 /**
  * @description - Container component for fetching recipe details
@@ -72,46 +71,44 @@ class RecipeDetails extends PureComponent {
           isLoading: false
         });
         const { data: { message } } = error.response;
-        Toastr.error(message);
+        notify('error', message);
       });
 
-    this.props.fetchSingleFavorite(this.props.userId, id);
+    this.props.fetchSingleFavorite(id);
     this.props.fetchRecipeReviews(id);
   }
 
   addFav = () => {
-    this.props.addFav(this.props.recipe.id, this.props.userId)
+    this.props.addFav(this.props.recipe.id)
       .catch((error) => {
         this.setState({ error: error.response.data.message });
       });
   }
 
   removeFav = () => {
-    this.props.removeFav(this.props.recipe.id, this.props.userId)
+    this.props.removeFav(this.props.recipe.id)
       .catch((error) => {
         this.setState({ error: error.response.data.message });
       });
   }
 
   upvote = () => {
-    Toastr.remove();
     this.props.upvote(this.props.recipe.id)
       .then(() => {
-        Toastr.success('Recipe upvoted');
+        notify('success', 'Recipe upvoted');
       })
       .catch((error) => {
-        Toastr.error(error.response.data.message);
+        notify('error', error.response.data.message);
       });
   }
 
   downvote = () => {
-    Toastr.remove();
     this.props.downvote(this.props.recipe.id)
       .then(() => {
-        Toastr.success('Recipe downvoted');
+        notify('success', 'Recipe downvoted');
       })
       .catch((error) => {
-        Toastr.error(error.response.data.message);
+        notify('error', error.response.data.message);
       });
   }
 
@@ -128,7 +125,6 @@ class RecipeDetails extends PureComponent {
       index: 0
     });
 
-    Toastr.remove();
     this.props.addRecipeReview(this.props.recipe.id, { content })
       .then(() => {
         this.setState({
@@ -140,7 +136,7 @@ class RecipeDetails extends PureComponent {
         this.setState({
           posting: false
         });
-        Toastr.error(error.response.data.message);
+        notify('error', error.response.data.message);
       });
   }
 

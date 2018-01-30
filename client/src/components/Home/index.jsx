@@ -2,22 +2,18 @@ import React, { PureComponent } from 'react';
 import WOW from 'wowjs';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import toastr from 'toastr';
 
-import Footer from '../commons/Footer';
 import AppIntro from './AppIntro';
-import SampleRecipes from './SampleRecipes';
+
+import { validateSignUp } from '../../../../server/middleware/inputValidation';
 
 import { signIn, signUp } from '../../actions/authActions';
+import notify from '../../utils/notify';
 
 /**
  * @description - Container component for the homepage (Landing page)
  *
  * @class Home
- *
- * @param {string} key - Key name for storing data in state
- *
- * @param {string} value - value to store in state
  *
  * @extends {PureComponent}
  */
@@ -33,6 +29,7 @@ class Home extends PureComponent {
     super(props);
     this.state = {
       name: '',
+      username: '',
       authName: '',
       email: '',
       password: '',
@@ -55,7 +52,15 @@ class Home extends PureComponent {
       this.context.router.history.push('/recipes/?page=1&limit=10');
     }
   }
-
+  /**
+   * @description Stores data into component's state
+   *
+   * @param {string} key - Key name for storing data in state
+   *
+   * @param {string} value - value to store in state
+   *
+   * @returns {void} Nothing
+   */
   storeToState = (key, value) => {
     this.setState({ [key]: value });
   };
@@ -65,10 +70,9 @@ class Home extends PureComponent {
       isLoading: true
     });
 
-    toastr.remove();
     this.props.signIn(this.state)
       .then(() => {
-        toastr.success(`Welcome back <br/><em>${this.state.authName}</em>`);
+        notify('success', `Welcome back <br/><em>${this.state.authName}</em>`);
         setTimeout(() => {
           window.location = '/recipes/?page=1&limit=10';
         }, 300);
@@ -77,7 +81,7 @@ class Home extends PureComponent {
         this.setState({
           isLoading: false
         });
-        toastr.error(error.response.data.message);
+        notify('error', error.response.data.message);
       });
   };
 
@@ -86,11 +90,16 @@ class Home extends PureComponent {
       isLoading: true
     });
 
-    toastr.remove();
-    if (this.state.password === this.state.confirmPassword) {
+    const validation = validateSignUp(this.state);
+    if (validation.length > 0) {
+      this.setState({
+        isLoading: false
+      });
+      notify('error', validation);
+    } else if (this.state.password === this.state.confirmPassword) {
       this.props.signUp(this.state)
         .then(() => {
-          toastr.info(`Welcome <br/><em>${this.state.username}</em>`);
+          notify('info', `Welcome <br/><em>${this.state.username}</em>`);
           setTimeout(() => {
             window.location = '/recipes/?page=1&limit=10';
           }, 300);
@@ -99,14 +108,13 @@ class Home extends PureComponent {
           this.setState({
             isLoading: false
           });
-
-          toastr.error(error.response.data.message);
+          notify('error', error.response.data.message.replace(';;', '\n'));
         });
     } else {
       this.setState({
         isLoading: false
       });
-      toastr.error('Passwords don\'t match!');
+      notify('error', 'Passwords don\'t match!');
     }
   };
 
@@ -127,9 +135,7 @@ class Home extends PureComponent {
             handleSignIn={this.handleSignIn}
             handleSignUp={this.handleSignUp}
           />
-          <SampleRecipes />
         </main>
-        <Footer />
       </div>
     );
   }

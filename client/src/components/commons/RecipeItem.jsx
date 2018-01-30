@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Card, Image, Icon } from 'semantic-ui-react';
-import toastr from 'toastr';
 
 import noImage from '../../../images/noImage.jpg';
+import notify from '../../utils/notify';
 
 /**
  * @description - Stateless component for rendering pagination view
@@ -23,11 +23,10 @@ function RecipeItem({
    * @returns {void} Nothing
    */
   const handleView = () => {
-    toastr.remove();
     if (actions.showDetails) {
       actions.showDetails(id);
     } else {
-      toastr.error(`Please sign up or sign in to view 
+      notify('error', `Please sign up or sign in to view 
       <br/><em><strong>${name} </strong></em>`);
     }
   };
@@ -141,7 +140,7 @@ function RecipeItem({
   return (
     <Card
       className="wow bounceInUp food-card"
-      color="green"
+      color="brown"
     >
       <Image
         alt="food image"
@@ -153,7 +152,7 @@ function RecipeItem({
         }}
       />
       <Card.Content>
-        <Card.Header>{name}</Card.Header>
+        <Card.Header className="word-wrap">{name}</Card.Header>
         <Card.Description className="desc">{description}</Card.Description>
         {User ? <em>by {User.name}</em> : ''}
 

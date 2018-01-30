@@ -42,7 +42,7 @@ function ProfileView({
       <Form.Input
         disabled={!isAdmin}
         id="file-chooser"
-        className="hidden"
+        className="hide"
         name="imageUrl"
         type="file"
         accept="image/*"

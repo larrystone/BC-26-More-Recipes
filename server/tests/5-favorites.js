@@ -66,7 +66,7 @@ describe('/POST Add recipe to favorites Test', () => {
   it(`should return 'Failed to authenticate token.' 
 for invalid user token`, (done) => {
       chai.request(app)
-        .post(`/api/v1/users/${userId}/recipes/${recipeId}`)
+        .post(`/api/v1/users/recipes/${recipeId}`)
         .set('Accept', 'application/json')
         .send({
           token: 'eyJNiJ9.c2Rz.H9g9SB2Uvbhj.hl50q3fbZQk' +
@@ -87,7 +87,7 @@ for invalid user token`, (done) => {
 
   it(`should add recipe id: ${recipeId} to user favorites`, (done) => {
     chai.request(app)
-      .post(`/api/v1/users/${userId}/recipes/${recipeId}`)
+      .post(`/api/v1/users/recipes/${recipeId}`)
       .set('Accept', 'application/json')
       .send({
         token
@@ -102,7 +102,7 @@ for invalid user token`, (done) => {
 
   it(`should return 'Recipe with id: ${recipeId} Already added!'`, (done) => {
     chai.request(app)
-      .post(`/api/v1/users/${userId}/recipes/${recipeId}`)
+      .post(`/api/v1/users/recipes/${recipeId}`)
       .set('Accept', 'application/json')
       .send({
         token
@@ -148,7 +148,7 @@ describe('/GET user Favorite\'s Recipes Test', () => {
 describe('/GET Validate if recipe is a favorite Test', () => {
   it(`should return an array of Recipes for user id: ${userId}`, (done) => {
     chai.request(app)
-      .get(`/api/v1/users/${userId}/recipes/${recipeId}`)
+      .get(`/api/v1/users/recipes/${recipeId}`)
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {
@@ -163,7 +163,7 @@ describe('/GET Validate if recipe is a favorite Test', () => {
 describe('/POST Remove recipe from favorites Test', () => {
   it(`should remove recipe id: ${recipeId} from favorites`, (done) => {
     chai.request(app)
-      .delete(`/api/v1/users/${userId}/recipes/${recipeId}`)
+      .delete(`/api/v1/users/recipes/${recipeId}`)
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .end((err, res) => {

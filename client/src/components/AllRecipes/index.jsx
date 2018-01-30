@@ -9,6 +9,7 @@ import Paginate from '../commons/Paginate';
 import Footer from '../commons/Footer';
 
 import { fetchPagedRecipe, searchRecipe } from '../../actions/recipeActions';
+import notify from '../../utils/notify';
 
 /**
  * @description - Top recipe container with pagination
@@ -142,10 +143,6 @@ class Recipes extends Component {
             isLoading: false,
             sought: true
           });
-          if (page && page > 1) {
-            this.context.router.history
-              .push(`${location.pathname}?page=${page - 1}&limit=${limit}`);
-          }
         });
     } else {
       this.props.fetchPagedRecipe(page, limit)
@@ -155,7 +152,7 @@ class Recipes extends Component {
             sought: false
           });
         })
-        .catch(() => {
+        .catch((error) => {
           this.setState({
             isLoading: false,
             sought: false
@@ -164,6 +161,8 @@ class Recipes extends Component {
             this.context.router.history
               .push(`${location.pathname}?page=${page - 1}&limit=${limit}`);
           }
+          const { data: { message } } = error.response;
+          notify('error', message);
         });
     }
   }

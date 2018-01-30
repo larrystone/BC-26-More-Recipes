@@ -20,7 +20,10 @@ module.exports = merge(common, {
   devtool: 'cheap-module-source-map',
   plugins: [
     new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify('production')
+      'process.env': {
+        NODE_ENV: JSON.stringify('production'),
+        JWT_SECRET: JSON.stringify(process.env.JWT_SECRET)
+      }
     }),
     new webpack.optimize.UglifyJsPlugin({
       compress: {

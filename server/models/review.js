@@ -6,7 +6,7 @@
  */
 export default (sequelize, DataTypes) => {
   const Review = sequelize.define('Review', {
-    content: DataTypes.STRING,
+    content: DataTypes.TEXT,
     recipeId: {
       type: DataTypes.INTEGER,
       onDelete: 'CASCADE',

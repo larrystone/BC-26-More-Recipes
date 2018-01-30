@@ -28,12 +28,18 @@ export default class Auth {
       || req.headers['x-access-token'];
 
     if (token) {
-      const secret = process.env.secret || '!^sl1@#=5';
-      jasonwebtoken.verify(token, secret, (err, decoded) => {
+      const jwtSecret = process.env.JWT_SECRET;
+      jasonwebtoken.verify(token, jwtSecret, (err, decoded) => {
         if (err) {
           return res.status(401).json({
             success: false,
             message: 'Failed to authenticate token.'
+          });
+        }
+        if (decoded.exp < new Date().getTime() / 1000) {
+          return res.status(401).json({
+            success: false,
+            message: 'Token has expired, please sign in again'
           });
         }
         req.user = decoded;
@@ -47,19 +53,5 @@ export default class Auth {
     }
 
     return this;
-  }
-
-  /**
-   * @description - Sign (Hash) User details with JWT token
-   *
-   * @param {object} user - User object (id and email address)
-   *
-   * @returns {string} jwtToken - Encrypted string
-   *
-   * @memberof Auth
-   */
-  sign(user) {
-    this.secret = process.env.secret || '!^sl1@#=5';
-    return jasonwebtoken.sign(user, this.secret);
   }
 }

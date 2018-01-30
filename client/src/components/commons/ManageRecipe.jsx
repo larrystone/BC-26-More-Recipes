@@ -90,7 +90,7 @@ function CreateOrEdit({
           </label>
           <Form.Input
             id="input"
-            className="hidden"
+            className="hide"
             disabled={loading}
             name="imageUrl"
             type="file"
@@ -104,7 +104,7 @@ function CreateOrEdit({
           <Form.Input
             required
             disabled={loading}
-            label="Recipe Name"
+            label="Recipe Name (Max. 100 characters)"
             placeholder="Enter recipe name"
             value={recipe.name}
             onChange={(event) => {
@@ -113,7 +113,7 @@ function CreateOrEdit({
           />
           <Form.Input
             disabled={loading}
-            label="Recipe Description"
+            label="Recipe Description (Max. 250 characters)"
             placeholder="Enter a short description"
             value={recipe.description}
             onChange={(event) => {

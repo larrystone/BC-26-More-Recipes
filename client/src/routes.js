@@ -8,25 +8,20 @@ import MyRecipes from './components/MyRecipes';
 import MyFavorites from './components/Favorites';
 import Profile from './components/Profile';
 
-const generalRoutes = (
-  <Switch>
-    <Route exact path="/" component={Home} />
-    <Redirect to="/" />
-  </Switch>
-);
+import requireAuth from './utils/requireAuth';
 
-const protectedRoutes = (
+const routes = (
   <Switch>
     <Route exact path="/" component={Home} />
-    <Route exact path="/recipes" component={AllRecipes} />
-    <Route exact path="/myrecipes" component={MyRecipes} />
-    <Route path="/recipe/:id" component={RecipeDetails} />
-    <Route path="/favorites" component={MyFavorites} />
-    <Route path="/profile/:userId" component={Profile} />
+    <Route exact path="/recipes" component={requireAuth(AllRecipes)} />
+    <Route exact path="/myrecipes" component={requireAuth(MyRecipes)} />
+    <Route path="/recipe/:id" component={requireAuth(RecipeDetails)} />
+    <Route path="/favorites" component={requireAuth(MyFavorites)} />
+    <Route path="/profile/:userId" component={requireAuth(Profile)} />
     <Redirect to="/" />
   </Switch>
 );
 
 export default (
-  localStorage.getItem('token') ? protectedRoutes : generalRoutes
+  routes
 );

@@ -24,9 +24,80 @@ const getMailType = (mailData) => {
   switch (mailData.type) {
     case 'welcome':
       return `
-        <div style="padding:20px">
-        <div style="max-width:600px;margin:0 auto">
-            <div style="
+      <div style="padding:20px">
+    <div style="max-width:600px;margin:0 auto">
+      <div style="
+            background:#FAFAFA;
+            font:14px sans-serif;
+            color:#686f7a ;
+            margin-bottom:10px">
+        <div style="
+              background:#256188;
+              color:#ffffff;
+              border-bottom:1px solid #f2f3f5 ;
+              padding-bottom:20px;
+              padding-top:20px">
+          <h4 style="
+                padding-top:0;
+                padding-left:20px;
+                margin:0;
+                font-size:20px;
+                font-family:Roboto-Regular,Helvetica,Arial,sans-serif;
+                color:#ffffff;
+                line-height:1.25;
+                min-width:300px">
+            Welcome to More-Recipes
+          </h4>
+        </div>
+        <center>
+          <img 
+  src="http://res.cloudinary.com/larrystone/image/upload/v1516629887/default_food.jpg"
+          width="600px" height="300px"
+          />
+        </center>
+        <div style="padding:10px 20px;line-height:1.5em;color:#686f7a ">
+          <p style="
+                padding-bottom:20px;
+                margin:20px 0;
+                color:#686f7a ">
+            Hello <strong><em>${mailData.username}</em></strong>,
+          </p>
+          <p style="
+                padding-bottom:20px;
+                margin:20px 0;
+                color:#686f7a ">
+            Thank you for joining our network of food enthusiasts.
+            <br />
+          </p>
+          <p>Please click
+            <strong>
+              <a style="text-decoration: none" 
+      href="https://more-recipe.herokuapp.com/profile/${mailData.userId}">
+                here
+              </a>
+            </strong> to update your profile.</p>
+          <p>
+            <a style="text-decoration: none" 
+            href="https://more-recipe.herokuapp.com">
+              Or just start sharing/viewing great recipes ideas
+            </a>
+          </p>
+        </div>
+      </div>
+      <div style=
+      "font-family:Roboto-Regular,Helvetica,Arial,sans-serif;
+      font-size:10px;
+      color:#666666;
+      line-height:18px;
+      padding-bottom:10px">
+        <div style="direction:ltr;text-align:left">© 2018 More-Recipes</div>
+      </div>
+    </div>
+  </div>`;
+    case 'review':
+      return `  <div style="padding:20px">
+      <div style="max-width:600px;margin:0 auto">
+        <div style="
               background:#FAFAFA;
               font:14px sans-serif;
               color:#686f7a ;

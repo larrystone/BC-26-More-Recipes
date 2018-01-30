@@ -2,7 +2,8 @@ import React from 'react';
 import { Button, Popup, Form } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 
-import efo from './../../../images/efo.jpg';
+import foods from './../../../images/foods.png';
+import cake from './../../../images/cake.jpg';
 
 /**
  * @description - Stateless component for rendering intro banner
@@ -18,10 +19,10 @@ function AppIntro({
   return (
     <div>
       <div
-        className="intro wow bounceInDown banner--image"
+        className="intro banner--image"
         style={
           {
-            background: `url(${efo}) no-repeat`
+            background: `url(${cake}) no-repeat`
           }
         }
       >
@@ -30,7 +31,7 @@ function AppIntro({
         >
           <Popup
             trigger={
-              <Button size="large" className="auto__left">
+              <Button color="brown" size="large" className="auto__left">
                 {'Sign In'}
               </Button>
             }
@@ -40,6 +41,7 @@ function AppIntro({
           >
             <Form loading={isLoading} >
               <Form.Input
+                required
                 icon="user"
                 iconPosition="left"
                 label="Username or Email"
@@ -49,6 +51,7 @@ function AppIntro({
                 }}
               />
               <Form.Input
+                required
                 icon="lock"
                 iconPosition="left"
                 label="Password"
@@ -60,7 +63,7 @@ function AppIntro({
               />
               <Form.Button
                 fluid
-                positive
+                color="brown"
                 onClick={() => {
                   handleSignIn();
                 }}
@@ -71,35 +74,39 @@ function AppIntro({
           </Popup>
 
           <Popup
-            trigger={<Button size="large">Sign Up</Button>}
+            trigger={<Button color="brown" size="large">Sign Up</Button>}
             flowing
             on="click"
             position="bottom right"
           >
             <Form className="form--signup" loading={isLoading}>
               <Form.Input
-                label="Enter your full name"
+                required
+                label="Enter your full name (Max. 100 characters)"
                 placeholder="Full name"
                 onChange={(event) => {
                   storeToState('name', event.target.value);
                 }}
               />
               <Form.Input
-                label="Pick a username"
+                required
+                label="Pick a username (Max. 50 characters)"
                 placeholder="Username"
                 onChange={(event) => {
                   storeToState('username', event.target.value);
                 }}
               />
               <Form.Input
-                label="Enter email address"
+                required
+                label="Enter email address (Max. 50 characters)"
                 placeholder="Email Address"
                 onChange={(event) => {
                   storeToState('email', event.target.value);
                 }}
               />
               <Form.Input
-                label="Enter Password"
+                required
+                label="Enter Password (Max. 50 characters)"
                 placeholder="Password"
                 type="password"
                 onChange={(event) => {
@@ -107,6 +114,7 @@ function AppIntro({
                 }}
               />
               <Form.Input
+                required
                 label="Re-enter Password"
                 placeholder="Re-enter Password"
                 type="password"
@@ -115,8 +123,8 @@ function AppIntro({
                 }}
               />
               <Form.Button
+                color="brown"
                 fluid
-                positive
                 onClick={() => {
                   handleSignUp();
                 }}
@@ -126,11 +134,30 @@ function AppIntro({
             </Form>
           </Popup>
         </div>
-        <div id="title" className="wow infinite pulse">
-          <h1 className="text--heading">More-Recipes</h1>
-          <h2>
-            . . . your social media for connecting with wonderful delicacies!
-          </h2>
+        <div className="flex flex__wrap">
+          <div id="title">
+            <span className="text--heading">More-Recipes</span>
+            <br /><br />
+            <p className="sub-title">
+              &nbsp;&nbsp;&nbsp;* Explore our recipe collections
+            </p>
+            <p className="sub-title">
+              &nbsp;&nbsp;&nbsp;* Share your recipe ideas
+            </p>
+            <p className="sub-title">
+              &nbsp;&nbsp;&nbsp;* Review recipes
+            </p>
+            <p className="sub-title">
+              &nbsp;&nbsp;&nbsp;* And lots more...
+            </p>
+          </div>
+          <img
+            src={`${foods}`}
+            alt=""
+            height="500px"
+            width="600px"
+            className="foods"
+          />
         </div>
       </div >
     </div >

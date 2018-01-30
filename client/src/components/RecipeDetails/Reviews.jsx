@@ -165,7 +165,7 @@ function ReviewsView({
             content="Post review"
             labelPosition="left"
             icon="edit"
-            primary
+            color="brown"
             onClick={() => actions.addReview()}
           />
         </Form>

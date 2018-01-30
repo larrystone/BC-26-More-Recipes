@@ -25,7 +25,7 @@ for invalid password entry`, (done) => {
             expect(res.statusCode).to.equal(400);
             expect(res.body).deep.equal({
               success: false,
-              message: 'Password must be at least 6 characters!'
+              message: ['<br/>* Password must be at least 6 characters!']
             });
             done();
           });
@@ -46,7 +46,7 @@ for invalid password entry`, (done) => {
           expect(res.statusCode).to.equal(400);
           expect(res.body).deep.equal({
             success: false,
-            message: 'Enter a valid full name!'
+            message: ['* Enter a valid full name!']
           });
           done();
         });
@@ -66,7 +66,7 @@ for invalid password entry`, (done) => {
           expect(res.statusCode).to.equal(400);
           expect(res.body).deep.equal({
             success: false,
-            message: 'Enter a valid full name!'
+            message: ['* Enter a valid full name!']
           });
           done();
         });
@@ -88,7 +88,7 @@ for null Username`, (done) => {
             expect(res.statusCode).to.equal(400);
             expect(res.body).deep.equal({
               success: false,
-              message: 'Username must contain at least 3 alphabets!'
+              message: ['<br/>* Username must contain at least 3 alphabets!']
             });
             done();
           });
@@ -111,7 +111,7 @@ for null Username`, (done) => {
             expect(res.statusCode).to.equal(400);
             expect(res.body).deep.equal({
               success: false,
-              message: 'Enter a valid email address'
+              message: ['<br/>* Enter a valid email address']
             });
             done();
           });
@@ -131,7 +131,7 @@ for null Username`, (done) => {
             expect(res.statusCode).to.equal(400);
             expect(res.body).deep.equal({
               success: false,
-              message: 'Enter a valid email address'
+              message: ['<br/>* Enter a valid email address']
             });
             done();
           });
@@ -151,7 +151,7 @@ for null Username`, (done) => {
             expect(res.statusCode).to.equal(400);
             expect(res.body).deep.equal({
               success: false,
-              message: 'Enter a valid email address'
+              message: ['<br/>* Enter a valid email address']
             });
             done();
           });
@@ -400,7 +400,7 @@ describe('/GET User profile Test', () => {
 describe('/PUT Update user profile Test', () => {
   it('should update user details successfully', (done) => {
     chai.request(app)
-      .put(`/api/v1/users/${userId}/profile`)
+      .put('/api/v1/users/profile')
       .set('Accept', 'application/json')
       .set('x-access-token', token)
       .send({
@@ -425,7 +425,7 @@ describe('/PUT Update user profile Test', () => {
   it(`should return 'Username already taken' 
 when user picks an already taken username (larrystone)`, (done) => {
       chai.request(app)
-        .put(`/api/v1/users/${userId}/profile`)
+        .put('/api/v1/users/profile')
         .set('Accept', 'application/json')
         .set('x-access-token', token)
         .send({
@@ -460,25 +460,25 @@ describe('/PUT Change password test', () => {
         });
     });
 
-  it('should return \'User does not exit\' for invalid token',
-    (done) => {
-      chai.request(app)
-        .put('/api/v1/users/changePassword')
-        .set('Accept', 'application/json')
-        .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI' +
+  it('should return \'Failed to authenticate token.\' '
+    + 'for invalid token', (done) => {
+    chai.request(app)
+      .put('/api/v1/users/changePassword')
+      .set('Accept', 'application/json')
+      .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI' +
         '6NDY4LCJlbWFpbCI6ImpvaG5kb2VAY29tcGFueS5jb20iLCJ1c2VybmFtZSI6ImpvaG' +
         '5kb2UiLCJpYXQiOjE1MTA1OTI3Nzd9.Oa9wuSqolP2oM5-uKWN0ZukagWx2ZC1kN2tP' +
         'XGZoM-s')
-        .send({
-          oldPassword: 'westsddae',
-          newPassword: 'ywhahdbidvsdv',
-        })
-        .end((err, res) => {
-          expect(res.statusCode).to.equal(404);
-          expect(res.body.message).to.equal('User does not exist!');
-          done();
-        });
-    });
+      .send({
+        oldPassword: 'westsddae',
+        newPassword: 'ywhahdbidvsdv',
+      })
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(401);
+        expect(res.body.message).to.equal('Failed to authenticate token.');
+        done();
+      });
+  });
 
   it('should return \'Incorrect Password\' for incorrect password', (done) => {
     chai.request(app)

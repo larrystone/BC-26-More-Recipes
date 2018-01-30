@@ -29,7 +29,7 @@ function View({
         <div className="flex-item">
           <Popup
             trigger={
-              <Label as="a" color="teal" >
+              <Label as="a">
                 <Icon name="alarm outline" />
                 <Label.Detail>0</Label.Detail>
               </Label>}

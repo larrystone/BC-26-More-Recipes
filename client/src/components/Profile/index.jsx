@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Card } from 'semantic-ui-react';
-import Toastr from 'toastr';
 
 import Header from '../Header';
 import Info from './Info';
@@ -12,6 +11,7 @@ import Footer from '../commons/Footer';
 import {
   getUser, updateProfile, changePassword
 } from '../../actions/authActions';
+import notify from '../../utils/notify';
 
 const NULL_INDEX = -1;
 
@@ -111,7 +111,7 @@ class Profile extends Component {
         const {
           data: { message }
         } = error.response;
-        Toastr.error(message);
+        notify('error', message);
 
         setTimeout(() => {
           this.context.router.history.push('/');
@@ -201,40 +201,37 @@ class Profile extends Component {
     userData.append('username', username);
     userData.append('image', imageUrl);
 
-    Toastr.remove();
     this.storeToState('isLoading', true);
 
-    this.props.updateProfile(this.props.userId, userData)
+    this.props.updateProfile(userData)
       .then(() => {
-        Toastr.success('User record updated');
+        notify('success', 'User record updated');
         this.storeToState('isLoading', false);
       })
       .catch((error) => {
         this.storeToState('isLoading', false);
-        Toastr.error(error.response.data.message);
+        notify('error', error.response.data.message);
       });
   }
 
 
   changePassword = () => {
     const { oldPassword, newPassword, confirmPassword } = this.state;
-    Toastr.remove();
     if (newPassword.trim().length > 5 && (newPassword === confirmPassword)) {
       this.storeToState('isLoading', true);
       this.props.changePassword({ oldPassword, newPassword })
         .then(() => {
           this.storeToState('isLoading', false);
-          Toastr.success('Password change successful');
+          notify('success', 'Password change successful');
         })
         .catch(() => {
-          Toastr.error('Unable to change password');
+          notify('error', 'Unable to change password');
           this.storeToState('isLoading', false);
         });
     } else {
-      Toastr
-        .error(`${newPassword.trim().length < 6 ?
-          'Password must be at least 6 characters in length!' :
-          "Passwords don't match!"}`);
+      notify('error', `${newPassword.trim().length < 6 ?
+        'Password must be at least 6 characters in length!' :
+        "Passwords don't match!"}`);
     }
   }
 

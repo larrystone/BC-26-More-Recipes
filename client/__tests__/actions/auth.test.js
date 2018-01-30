@@ -4,8 +4,13 @@ import thunk from 'redux-thunk';
 import moxios from 'moxios';
 import jwt from 'jsonwebtoken';
 import mockData from '../../__mocks__/dataMock';
-import { signIn, signUp, signOut } from '../../src/actions/authActions';
-import { SET_CURRENT_USER } from '../../src/constants';
+import {
+  signIn,
+  signUp,
+  signOut,
+  getUser
+} from '../../src/actions/authActions';
+import { SET_CURRENT_USER, SET_USER_PROFILE } from '../../src/constants';
 
 import mockLocalStorage from '../../__mocks__/localStorageMock';
 
@@ -67,4 +72,46 @@ describe('Authentication actions', () => {
     expect(store.getActions()).toEqual(expectedActions);
     done();
   });
+
+  it('gets a user details', async (done) => {
+    const { userProfileResponse } = mockData;
+    moxios.stubRequest('/api/v1/users/12/profile', {
+      status: 200,
+      response: userProfileResponse
+    });
+
+    const {
+      user: {
+        userId,
+        name,
+        username,
+        email,
+        imageUrl,
+        myRecipes,
+        myReviews,
+        myFavs
+      }
+    } = userProfileResponse;
+
+    const expectedActions = [{
+      type: SET_USER_PROFILE,
+      user: {
+        userId,
+        name,
+        username,
+        email,
+        imageUrl,
+        myRecipes,
+        myReviews,
+        myFavs
+      }
+    }];
+    const store = mockStore({});
+    await store.dispatch(getUser(12))
+      .then(() => {
+        expect(store.getActions()).toEqual(expectedActions);
+      });
+    done();
+  });
 });
+

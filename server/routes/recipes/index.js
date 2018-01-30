@@ -1,7 +1,6 @@
 import express from 'express';
-import {
-  validateRecipeId, validateRecipeExist
-} from '../../middleware/validate';
+import validateRecipeExist from '../../middleware/recipeValidation';
+import { validateRecipeId } from '../../middleware/inputValidation';
 import Recipes from '../../controllers/recipes';
 import Reviews from '../../controllers/reviews';
 import Votes from '../../controllers/votes';

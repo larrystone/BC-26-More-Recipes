@@ -70,6 +70,11 @@ export function searchRecipe(searchCategory, searchString, page, limit) {
         dispatch(setPaginatedRecipes({
           recipes: _.mapKeys(recipes, 'id'), pagination
         }));
+      })
+      .catch(() => {
+        dispatch(setPaginatedRecipes({
+          recipes: {}, pagination: {}
+        }));
       });
 }
 

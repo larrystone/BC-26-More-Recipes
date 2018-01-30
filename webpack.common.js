@@ -42,7 +42,11 @@ module.exports = {
       },
       {
         test: /\.(eot|woff|woff2|ttf)$/,
-        loader: 'file-loader'
+        loader: 'file-loader?name=fonts/[name].[ext]'
+      },
+      {
+        test: /\.(mp3)$/,
+        loader: 'file-loader?name=sounds/[name].[ext]'
       }
     ]
   },

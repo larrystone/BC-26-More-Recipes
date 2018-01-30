@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import toastr from 'toastr';
 import _ from 'lodash';
 
 import Header from '../Header';
@@ -16,7 +15,10 @@ import {
 } from '../../actions/recipeActions';
 import { addModal, removeModal } from '../../actions/modalActions';
 import { signOut } from '../../actions/authActions';
-
+import notify from '../../utils/notify';
+import {
+  validateRecipeDetails
+} from '../../../../server/middleware/inputValidation';
 /**
  * @description - My recipes container with pagination
  *
@@ -195,8 +197,7 @@ class MyRecipes extends Component {
         });
       })
       .catch((error) => {
-        toastr.remove();
-        toastr.error(error.response.data.message);
+        notify('error', error.response.data.message);
         this.setState({
           isLoading: false,
           sought: false
@@ -211,30 +212,35 @@ class MyRecipes extends Component {
       imageUrl, name, description, ingredients, procedure
     } = this.state;
 
-    data.append('name', name);
-    data.append('description', description);
-    data.append('ingredients', ingredients.replace(/,/g, ';;'));
-    data.append('procedure', procedure);
-    data.append('image', imageUrl);
+    const recipeDetailsError = validateRecipeDetails(this.state);
 
-    this.setState({ isLoading: true });
+    if (recipeDetailsError.length > 0) {
+      notify('error', recipeDetailsError);
+    } else {
+      data.append('name', name);
+      data.append('description', description);
+      data.append('ingredients', ingredients.replace(/,/g, ';;'));
+      data.append('procedure', procedure);
+      data.append('image', imageUrl);
 
-    toastr.remove();
-    this.props.addRecipe(data)
-      .then(() => {
-        this.setState({
-          isLoading: false
+      this.setState({ isLoading: true });
+
+      this.props.addRecipe(data)
+        .then(() => {
+          this.setState({
+            isLoading: false
+          });
+          notify('success', `New recipe created <br/>${name}`);
+          this.removeModal();
+        })
+        .catch((error) => {
+          this.setState({
+            isLoading: false
+          });
+          const { data: { message } } = error.response;
+          notify('error', message);
         });
-        toastr.success(`New recipe created <br/>${name}`);
-        this.removeModal();
-      })
-      .catch((error) => {
-        this.setState({
-          isLoading: false
-        });
-        const { data: { message } } = error.response;
-        toastr.error(message);
-      });
+    }
   }
 
   /**
@@ -253,30 +259,35 @@ class MyRecipes extends Component {
       imageUrl, name, description, ingredients, procedure
     } = this.state;
 
-    data.append('name', name);
-    data.append('description', description);
-    data.append('ingredients', (ingredients).replace(/,/g, ';;'));
-    data.append('procedure', procedure);
-    data.append('image', imageUrl);
+    const recipeDetailsError = validateRecipeDetails(this.state);
 
-    this.setState({
-      isLoading: true
-    });
+    if (recipeDetailsError.length > 0) {
+      notify('error', recipeDetailsError);
+    } else {
+      data.append('name', name);
+      data.append('description', description);
+      data.append('ingredients', (ingredients).replace(/,/g, ';;'));
+      data.append('procedure', procedure);
+      data.append('image', imageUrl);
 
-    toastr.remove();
-    this.props.editRecipe(recipeId, data)
-      .then(() => {
-        this.setState({ isLoading: false });
-        toastr.success(`Recipe updated <br/>${name}`);
-        this.removeModal();
-      })
-      .catch((error) => {
-        this.setState({
-          isLoading: false
-        });
-        const { data: { message } } = error.response;
-        toastr.error(message);
+      this.setState({
+        isLoading: true
       });
+
+      this.props.editRecipe(recipeId, data)
+        .then(() => {
+          this.setState({ isLoading: false });
+          notify('success', `Recipe updated <br/>${name}`);
+          this.removeModal();
+        })
+        .catch((error) => {
+          this.setState({
+            isLoading: false
+          });
+          const { data: { message } } = error.response;
+          notify('error', message);
+        });
+    }
   }
 
   /**
@@ -392,12 +403,11 @@ class MyRecipes extends Component {
           this.context.router.history
             .push(`${location.pathname}?page=${page - 1}&limit=${limit}`);
         }
-        toastr
-          .success(`You have removed <em><strong>${recipeName}</strong></em>`);
+        notify('success', `You have removed 
+        <em><strong>${recipeName}</strong></em>`);
       })
       .catch((error) => {
-        toastr
-          .error(error.response.data.message);
+        notify('error', error.response.data.message);
       });
   }
 
