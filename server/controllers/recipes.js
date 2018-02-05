@@ -1,10 +1,13 @@
-import { Recipe, User } from '../models';
+import { Recipe, User, Favorite } from '../models';
 import { validateRecipeDetails } from '../middleware/inputValidation';
 import { validateUserRight } from '../middleware/userValidation';
 import searchRecipe from './searchRecipe';
 import trimWhiteSpaces from '../services/trimWhiteSpaces';
 import cloudinary, { uploadWithMulter } from '../services/uploadImage';
 import populatePaging from '../services/populatePaging';
+import * as Mailer from '../services/mailer';
+
+const notify = new Mailer.default();
 
 /**
  * @description - Check if recipe name is already picked
@@ -127,9 +130,9 @@ export default class Recipes {
       }
 
       if (file) {
-        cloudinary.upload_stream(({ error, url, public_id }) => {
+        cloudinary.upload_stream(({ error, secure_url, public_id }) => {
           if (!error) {
-            imageUrl = url;
+            imageUrl = secure_url; //eslint-disable-line
             addRecipe({
               name,
               description,
@@ -205,11 +208,41 @@ export default class Recipes {
         procedure,
         imageId
       })
-        .then(recipe => res.status(200).json({
-          success: true,
-          message: 'Recipe record updated',
-          recipe
-        }))
+        .then((recipe) => {
+          Favorite
+            .findAll({
+              attributes: ['userId'],
+              where: { id: recipe.id }
+            })
+            .then((favorites) => {
+              const userIds = favorites
+                .map(favorite => favorite.userId);
+
+              User.findAll({
+                attributes: ['email'],
+                where: {
+                  id: userIds
+                }
+              })
+                .then((users) => {
+                  const userEmails = users
+                    .map(user => user.userId);
+
+                  notify.send({
+                    recipe,
+                    type: 'favorite',
+                    subject: 'Favorite recipe updated',
+                    email: userEmails
+                  });
+                });
+            });
+
+          return res.status(200).json({
+            success: true,
+            message: 'Recipe record updated',
+            recipe
+          });
+        })
         .catch((/* error */) => res.status(500).json({
           success: false,
           message: 'Error updating recipe'
@@ -294,7 +327,7 @@ export default class Recipes {
 
       validateUserRight(recipeId, userId).then((foundRecipe) => {
         if (file) {
-          cloudinary.upload_stream(({ error, url, public_id }) => {
+          cloudinary.upload_stream(({ error, secure_url, public_id }) => {
             if (!error) {
               cloudinary.destroy(foundRecipe.imageId, () => {
               });
@@ -304,7 +337,7 @@ export default class Recipes {
                 ingredients,
                 procedure,
                 imageId: public_id,
-                imageUrl: url,
+                imageUrl: secure_url,
                 res,
                 foundRecipe
               });
@@ -368,7 +401,6 @@ export default class Recipes {
         .then((recipe) => {
           recipe.destroy()
             .then(() => {
-              // TODO delete the old image
               cloudinary.destroy(recipe.imageId);
 
               res.status(200).json({

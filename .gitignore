@@ -7,3 +7,6 @@ npm-debug.log
 .nyc_output
 .coveralls.yml
 .DS_Store
+*.log
+/e2ereports
+/screenshots

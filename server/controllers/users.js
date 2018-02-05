@@ -411,30 +411,30 @@ export default class Users {
       const name = trimWhiteSpaces(body.name, ' ');
       const username = trimWhiteSpaces(body.username);
 
-      if (name.length < 6 || !name.includes(' ')) {
+      if (name.length < 3 || name.length > 100) {
         return res.status(400).json({
           success: false,
-          message: 'Enter a valid full name!'
+          message: 'Name must be between 3 to 100 characters!'
         });
       }
 
-      if (username.length < 3) {
+      if (username.length < 3 || username.length > 50) {
         return res.status(400).json({
           success: false,
-          message: 'Username must contain at least 3 alphabets!'
+          message: 'Username must be between 3 to 50 character!'
         });
       }
 
       validateUserName(User, username, userId).then(() => {
         if (file) {
-          cloudinary.upload_stream(({ error, url, public_id }) => {
+          cloudinary.upload_stream(({ error, secure_url, public_id }) => {
             if (!error) {
               updateDatabase({
                 name,
                 username,
                 res,
                 userId,
-                imageUrl: url,
+                imageUrl: secure_url,
                 imageId: public_id
               });
             } else {

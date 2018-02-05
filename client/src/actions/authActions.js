@@ -1,8 +1,8 @@
 import axios from 'axios';
-import jwt from 'jsonwebtoken';
+import jsonwebtoken from 'jsonwebtoken';
 import setToken from '../utils/setToken';
 import {
-  SET_CURRENT_USER, SET_USER_PROFILE
+  SET_CURRENT_USER, SET_USER_PROFILE, PASSWORD_CHANGED
 } from '../constants';
 
 const url = '/api/v1/users/';
@@ -54,7 +54,8 @@ export function signIn(userData) {
       const { token } = response.data;
       localStorage.setItem('token', token);
       setToken(token);
-      dispatch(setCurrentUser(jwt.decode(localStorage.getItem('token'))));
+      dispatch(setCurrentUser(jsonwebtoken
+        .decode(localStorage.getItem('token'))));
     });
 }
 
@@ -73,7 +74,8 @@ export function signUp(userData) {
       const { token } = response.data;
       localStorage.setItem('token', token);
       setToken(token);
-      dispatch(setCurrentUser(jwt.decode(localStorage.getItem('token'))));
+      dispatch(setCurrentUser(jsonwebtoken
+        .decode(localStorage.getItem('token'))));
     });
 }
 
@@ -115,7 +117,7 @@ export function updateProfile(userData) {
       } = response.data;
       localStorage.setItem('token', token);
       setToken(token);
-      dispatch(setCurrentUser(jwt.decode(token)));
+      dispatch(setCurrentUser(jsonwebtoken.decode(token)));
     });
 }
 
@@ -129,5 +131,10 @@ export function updateProfile(userData) {
  * @returns {object} dispatch - Dispatched action
  */
 export function changePassword(userData) {
-  return dispatch => axios.put(`${url}changePassword`, userData);
+  return dispatch => axios.put(`${url}changePassword`, userData)
+    .then(() => {
+      dispatch({
+        type: PASSWORD_CHANGED
+      });
+    });
 }

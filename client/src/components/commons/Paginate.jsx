@@ -15,7 +15,7 @@ import 'rc-select/assets/index.css';
  * @returns {view} Paginate - Rendered view
  */
 function Paginate({
-  pagination, onChange, pageSize = '0', onShowSizeChange
+  pagination, onChange, pageSize, onShowSizeChange
 }) {
   return (
     <Pagination
@@ -40,7 +40,11 @@ Paginate.propTypes = {
   pagination: PropTypes.shape().isRequired,
   onChange: PropTypes.func.isRequired,
   onShowSizeChange: PropTypes.func.isRequired,
-  pageSize: PropTypes.string.isRequired
+  pageSize: PropTypes.string
+};
+
+Paginate.defaultProps = {
+  pageSize: '0'
 };
 
 export default Paginate;

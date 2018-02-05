@@ -76,7 +76,17 @@ The app uses:
 
 - `npm run test:server` - for backend testing
 - `npm run test:client` - for client testing
-- `npm run test:coverage` - for client and server side test (with coverage)
+- `npm run test:coverage` - for client and server side test 
+(with coverage)
+- `npm run e2e:setup`, start the server and `npm run e2e:test` - for end to end testing
+
+## Limitations
+- Users can only access full application features when they are logged in
+- Users can neither edit nor remove reviews they post on recipe
+- Password reset feature is currently not available on the app
+- Users cannot deactivate their accounts
+- Users will have to obtain a new token every 24 hours
+
 
 ## Directories
 
@@ -98,13 +108,43 @@ This directory holds all routes, controllers, middleware, migrations that serves
 * [React](https://www.reactjs.org/) - A JavaScript library for building user interfaces by Facebook.
 * [Redux](http://redux.js.org/) - A predictable state container for JavaScript apps.
 
-## Author
+## Contributing
+If you are interested in contributing to development of this project, follow the instructions below to contribute.
 
-* **Lawal Lanre E. (Larrystone)** - Aspiring Software Dev.
+* Fork the repository
+
+* Make your change
+
+* Commit your change to your forked repository
+
+* Provide a detailed commit description
+
+* Raise a pull request against the develop branch
+
+* Please see [Project wiki](https://github.com/larrystone/BC-26-More-Recipes/wiki) for project conventions
 
 ## License
 
-This project is licensed under the Apache License - see the [LICENSE](LICENSE) file for details
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
+
+## FAQ
+
+#### Who can contribute?
+
+    Anyone can! Just follow the contribution guidelines above
+    
+#### Is there a set standard for PRs to this repository?
+
+    Yes please check the project wiki for project conventions.
+    
+#### Can I clone this application for personal use?
+
+    Yes!. This application is licensed under MIT, and is open for
+    everybody
+
+## Author
+
+* **Lawal Lanre E. (Larrystone)** - Aspiring Software Dev.
 
 ## Acknowledgments
 

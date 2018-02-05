@@ -2,7 +2,7 @@ import React from 'react';
 import { Modal, Button, Form } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 
-import Loading from '../commons/Loading';
+import Loading from './Loading';
 import noImage from '../../../images/noImage.jpg';
 
 /**
@@ -102,6 +102,8 @@ function CreateOrEdit({
         </div>
         <div className="basic-info">
           <Form.Input
+            id="name"
+            name="name"
             required
             disabled={loading}
             label="Recipe Name (Max. 100 characters)"
@@ -112,6 +114,7 @@ function CreateOrEdit({
             }}
           />
           <Form.Input
+            name="description"
             disabled={loading}
             label="Recipe Description (Max. 250 characters)"
             placeholder="Enter a short description"
@@ -121,6 +124,7 @@ function CreateOrEdit({
             }}
           />
           <Form.TextArea
+            name="ingredients"
             required
             rows="7"
             autoHeight={false}
@@ -137,6 +141,7 @@ function CreateOrEdit({
         </div>
       </div>
       <Form.TextArea
+        name="procedure"
         required
         rows="12"
         disabled={loading}

@@ -2,3 +2,5 @@ node-modules
 !client/src
 webpack.*
 build*
+server/tests
+client/__tests__

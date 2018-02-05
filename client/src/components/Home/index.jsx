@@ -17,13 +17,13 @@ import notify from '../../utils/notify';
  *
  * @extends {PureComponent}
  */
-class Home extends PureComponent {
+export class HomeView extends PureComponent {
   /**
    * @description - Creates an instance of Home.
    *
    * @param {any} props - Component's props
    *
-   * @memberof Home
+   * @memberof HomeView
    */
   constructor(props) {
     super(props);
@@ -36,13 +36,17 @@ class Home extends PureComponent {
       confirmPassword: '',
       isLoading: false
     };
+
+    this.storeToState = this.storeToState.bind(this);
+    this.handleSignIn = this.handleSignIn.bind(this);
+    this.handleSignUp = this.handleSignUp.bind(this);
   }
 
   /**
    * @description - When component is mounted,
    * load wow animation library
    *
-   * @memberof Home
+   * @memberof HomeView
    *
    * @returns {void} Nothing
    */
@@ -61,11 +65,18 @@ class Home extends PureComponent {
    *
    * @returns {void} Nothing
    */
-  storeToState = (key, value) => {
+  storeToState(key, value) {
     this.setState({ [key]: value });
-  };
+  }
 
-  handleSignIn = () => {
+  /**
+   * @description Handles user sign in
+   *
+   * @memberof HomeView
+   *
+   * @returns {void} Nothing
+   */
+  handleSignIn() {
     this.setState({
       isLoading: true
     });
@@ -83,9 +94,16 @@ class Home extends PureComponent {
         });
         notify('error', error.response.data.message);
       });
-  };
+  }
 
-  handleSignUp = () => {
+  /**
+   * @description Handles user sign up
+   *
+   * @memberof HomeView
+   *
+   * @returns {void} Nothing
+   */
+  handleSignUp() {
     this.setState({
       isLoading: true
     });
@@ -116,14 +134,14 @@ class Home extends PureComponent {
       });
       notify('error', 'Passwords don\'t match!');
     }
-  };
+  }
 
   /**
    * @description - Renders the Home view
    *
    * @returns {view} view - Rendered view
    *
-   * @memberof Home
+   * @memberof HomeView
    */
   render() {
     return (
@@ -141,13 +159,13 @@ class Home extends PureComponent {
   }
 }
 
-Home.propTypes = {
+HomeView.propTypes = {
   signUp: PropTypes.func.isRequired,
   signIn: PropTypes.func.isRequired
 };
 
-Home.contextTypes = {
+HomeView.contextTypes = {
   router: PropTypes.object.isRequired
 };
 
-export default connect(null, { signIn, signUp })(Home);
+export default connect(null, { signIn, signUp })(HomeView);

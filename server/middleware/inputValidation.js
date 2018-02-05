@@ -36,16 +36,12 @@ export const validateSignUp = ({
 }) => {
   const pattern = /\S{3,}@\S{2,}\.\S{2,}/;
   const errors = [];
-  if (name.length < 6 || !name.includes(' ')) {
-    errors.push('* Enter a valid full name!');
-  } else if (isTextTooLong(name, 100)) {
-    errors.push('* Name too long!');
+  if (name.length < 3 || isTextTooLong(name, 100)) {
+    errors.push('* Name must be between 3 to 100 characters!');
   }
 
-  if (username.length < 3) {
-    errors.push('<br/>* Username must contain at least 3 alphabets!');
-  } else if (isTextTooLong(username, 50)) {
-    errors.push('<br/>* Username too long!');
+  if (username.length < 3 || isTextTooLong(username, 50)) {
+    errors.push('<br/>* Username must be between 3 to 50 characters!');
   }
 
   if (!pattern.test(email)) {
@@ -54,10 +50,9 @@ export const validateSignUp = ({
     errors.push('<br/>* Email address too long!');
   }
 
-  if (password.trim().length === 0 || password.length < 6) {
-    errors.push('<br/>* Password must be at least 6 characters!');
-  } else if (isTextTooLong(password, 50)) {
-    errors.push('<br/>* Password too long!');
+  if (password.trim().length === 0
+    || password.length < 6 || isTextTooLong(password, 50)) {
+    errors.push('<br/>* Password must be between 6 to 50 characters!');
   }
 
   return errors;
@@ -180,22 +175,17 @@ export const validateUserName = (User, username, userId) => {
  */
 export const validateRecipeDetails = ({ name, ingredients, procedure }) => {
   const errors = [];
-  if (name.length < 3) {
-    errors.push('* Enter a valid recipe name!');
-  } else if (isTextTooLong(name, 100)) {
-    errors.push('* Recipe name is too long!');
+  if (name.length < 3 || isTextTooLong(name, 100)) {
+    errors.push('* Recipe name must be between 3 to 100 characters!');
   }
 
-  if (ingredients.length < 10) {
-    errors.push('<br/>* Enter a valid list of ingredients!');
-  } else if (isTextTooLong(procedure, 2000)) {
-    errors.push('<br/>* Ingredients list is too long!');
+  if (ingredients.length < 10 || isTextTooLong(procedure, 2000)) {
+    errors
+      .push('<br/>* Ingredients list must be between 10 to 2000 characters!');
   }
 
-  if (procedure.length < 15) {
-    errors.push('<br/>* Explain the procedures clearly please!');
-  } else if (isTextTooLong(procedure, 4000)) {
-    errors.push('<br/>* Name too long!');
+  if (procedure.length < 15 || isTextTooLong(procedure, 4000)) {
+    errors.push('<br/>* Procedures must be between 15 to 4000 characters!');
   }
 
   return errors;
@@ -211,10 +201,8 @@ export const validateRecipeDetails = ({ name, ingredients, procedure }) => {
  * @return {string} message - Validation error message
  */
 export const validateReviewContent = (message) => {
-  if (message.length < 5) {
-    return 'Review message too short!';
-  } else if (isTextTooLong(message, 4000)) {
-    return 'Review message too long!';
+  if (message.length < 3 || isTextTooLong(message, 4000)) {
+    return 'Review message must be between 3 to 4000 characters!';
   }
 };
 

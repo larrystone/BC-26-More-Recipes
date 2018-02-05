@@ -59,7 +59,7 @@ export function removeFav(recipeId) {
  */
 export function fetchFavorites(userId) {
   return dispatch =>
-    axios.get(`/api/v1/users/${userId}/recipes`)
+    axios.get(`${url}/${userId}/recipes`)
       .then((response) => {
         const { recipes } = response.data;
         dispatch({

@@ -1,24 +1,30 @@
 import React from 'react';
-import { Route, Switch, Redirect } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 
 import Home from './components/Home';
-import AllRecipes from './components/AllRecipes';
-import RecipeDetails from './components/RecipeDetails';
-import MyRecipes from './components/MyRecipes';
-import MyFavorites from './components/Favorites';
-import Profile from './components/Profile';
+import AllRecipes from './components/allrecipes';
+import RecipeDetails from './components/recipedetails';
+import MyRecipes from './components/myrecipes';
+import Favorites from './components/favorites';
+import Profile from './components/profile';
 
 import requireAuth from './utils/requireAuth';
 
-const routes = (
+/**
+ * @description Routes component
+ *
+ * @returns {object} routes
+ *
+ */
+const routes = () => (
   <Switch>
     <Route exact path="/" component={Home} />
     <Route exact path="/recipes" component={requireAuth(AllRecipes)} />
     <Route exact path="/myrecipes" component={requireAuth(MyRecipes)} />
     <Route path="/recipe/:id" component={requireAuth(RecipeDetails)} />
-    <Route path="/favorites" component={requireAuth(MyFavorites)} />
+    <Route path="/favorites" component={requireAuth(Favorites)} />
     <Route path="/profile/:userId" component={requireAuth(Profile)} />
-    <Redirect to="/" />
+    {/* <Route path="/*" component={PageNotFound} /> */}
   </Switch>
 );
 
