@@ -1,5 +1,4 @@
 import React from 'react';
-import cake from '../../../images/cake.jpg';
 
 /**
  * @description - Stateless component for rendering the foooter
@@ -10,9 +9,6 @@ function FooterView() {
   return (
     <footer
       className="footer"
-      style={{
-        background: `url(${cake})`
-      }}
     >
       <div className="flex-row flex__space-around">
         <div className="footer-item">

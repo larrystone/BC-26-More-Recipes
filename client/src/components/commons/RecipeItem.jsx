@@ -141,6 +141,7 @@ function RecipeItem({
     <Card
       className="wow bounceInUp food-card"
       color="brown"
+      id={`recipe-${id}`}
     >
       <Image
         alt="food image"
@@ -155,7 +156,6 @@ function RecipeItem({
         <Card.Header className="word-wrap">{name}</Card.Header>
         <Card.Description className="desc">{description}</Card.Description>
         {User ? <em>by {User.name}</em> : ''}
-
       </Card.Content>
       <Card.Content extra>
         {showRecipeActions()}

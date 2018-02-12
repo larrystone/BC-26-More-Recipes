@@ -4,14 +4,14 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import thunk from 'redux-thunk';
-import jwt from 'jsonwebtoken';
+import jsonwebtoken from 'jsonwebtoken';
 import 'semantic-ui-css/semantic.min.css';
 
 import setToken from './src/utils/setToken';
 import { SET_CURRENT_USER } from './src/constants';
 
 import reducer from './src/reducers';
-import routes from './src/routes';
+import Routes from './src/routes';
 
 import './styles/index.scss';
 import './styles/animate.css';
@@ -30,14 +30,14 @@ if (localStorage.token) {
   setToken(localStorage.token);
   store.dispatch({
     type: SET_CURRENT_USER,
-    userData: jwt.decode(localStorage.token)
+    userData: jsonwebtoken.decode(localStorage.token)
   });
 }
 
 render(
   <Provider store={store}>
     <BrowserRouter>
-      {routes}
+      <Routes />
     </BrowserRouter>
   </Provider>, document.querySelector('#root')
 );

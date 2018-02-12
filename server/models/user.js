@@ -9,11 +9,23 @@ export default (sequelize, DataTypes) => {
     name: {
       type: DataTypes.STRING,
       allowNull: false,
+      validate: {
+        notEmpty: {
+          args: true,
+          msg: 'name cannot be empty'
+        }
+      }
     },
     username: {
       type: DataTypes.STRING,
       unique: true,
       allowNull: false,
+      validate: {
+        notEmpty: {
+          args: true,
+          msg: 'username cannot be empty'
+        }
+      }
     },
     email: {
       type: DataTypes.STRING,
@@ -38,6 +50,10 @@ export default (sequelize, DataTypes) => {
         max: {
           args: 50,
           msg: 'Password must be maximum of 50 characters'
+        },
+        notEmpty: {
+          args: true,
+          msg: 'Password cannot be empty'
         }
       }
     },

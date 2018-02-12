@@ -84,6 +84,7 @@ header {
 }
 
 footer {
+	background-image: url('/images/cake.jpg');
 	box-shadow: 1px -2px 2px grey;
 	flex: 0 0 125px;
 	margin-top: 140px;
@@ -225,8 +226,8 @@ a, a:hover {
 }
 
 .banner--image {
+	background: url('/images/cake.jpg') no-repeat;
 	margin: 0px 0px 15px 0px !important;
-	background:linear-gradient(to left, $color_green_lighten_2 10%, #1ca4f6 100%);
 	background-size: cover !important;
 }
 

@@ -11,11 +11,14 @@
     "dev:client": "webpack --config webpack.dev.js --watch",
     "prod:server": "babel -d ./build-server ./server -s",
     "prod:client": "webpack --config webpack.prod.js",
-    "test:server": "mocha --timeout 500000 --compilers js:babel-core/register server/tests/",
-    "test:client": "jest && codecov",
-    "coveralls": "nyc npm run test:server && nyc report --reporter=text-lcov | coveralls",
+    "pre:test": "sequelize db:migrate:undo:all && sequelize db:migrate",
+    "test:server": "mocha --timeout 500000 --compilers js:babel-core/register server/tests/*",
+    "test:client": "jest /client/* && codecov",
+    "coveralls": "nyc npm run test:server && nyc report --reporter=lcov --reporter=text-lcov | coveralls",
     "test:coverage": "npm run test:client && npm run coveralls",
-    "heroku-postbuild": "npm run prod:client && npm run prod:server"
+    "heroku-postbuild": "npm run prod:client && npm run prod:server",
+    "e2e:setup": "node_modules/selenium-standalone/bin/selenium-standalone install",
+    "e2e:test": "npm run pre:test && nightwatch ./e2etests/*.js"
   },
   "author": "Lawal Lanre Emmanuel",
   "license": "ISC",
@@ -37,6 +40,7 @@
     "css-loader": "^0.28.7",
     "dotenv": "^4.0.0",
     "dotenv-webpack": "^1.5.4",
+    "enzyme-adapter-react-16": "^1.1.1",
     "expect": "^22.0.3",
     "express": "^4.15.4",
     "extract-text-webpack-plugin": "^3.0.2",
@@ -54,6 +58,7 @@
     "node-sass": "^4.6.1",
     "nodemailer": "^4.1.0",
     "nodemon": "^1.12.1",
+    "path": "^0.12.7",
     "pg": "^6.4.1",
     "pg-hstore": "^2.3.2",
     "prop-types": "^15.6.0",
@@ -73,8 +78,10 @@
     "semantic-ui-react": "^0.76.0",
     "sequelize": "^4.8.0",
     "sfcookies": "^1.0.2",
+    "sinon": "^4.2.2",
     "style-loader": "^0.19.0",
     "toastr": "^2.1.4",
+    "url-search-params-polyfill": "^2.0.3",
     "webpack": "^3.5.5",
     "webpack-merge": "^4.1.1",
     "wowjs": "^1.1.3"
@@ -85,32 +92,49 @@
     "chai": "^4.1.2",
     "chai-http": "^3.0.0",
     "coveralls": "^2.13.1",
-    "enzyme": "^3.2.0",
+    "enzyme": "^3.3.0",
     "eslint": "^4.2.0",
     "eslint-config-airbnb": "^15.0.2",
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-jsx-a11y": "^5.1.1",
     "eslint-plugin-react": "^7.1.0",
     "identity-obj-proxy": "^3.0.0",
-    "jest": "^21.2.1",
+    "jest": "21.2.1",
     "mocha-lcov-reporter": "^1.3.0",
     "nyc": "^11.1.0",
+    "react-addons-test-utils": "^15.6.2",
     "react-test-renderer": "^16.2.0",
+    "selenium-standalone": "^6.12.0",
     "should": "^11.2.1",
     "url-loader": "^0.6.2",
     "webpack-dev-server": "^2.9.4"
   },
   "jest": {
-    "coverageDirectory": "./coverage/",
+    "verbose": true,
+    "coverageDirectory": "./coverage/client/",
     "collectCoverage": true,
+    "collectCoverageFrom": [
+      "client/src/**/*.{js,jsx}"
+    ],
     "testEnvironment": "jsdom",
     "globals": {
       "window": true
     },
     "moduleNameMapper": {
       "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/client/__mocks__/fileMock.js",
-      "\\.(css|less)$": "identity-obj-proxy"
-    }
+      "\\.(css|scss)$": "identity-obj-proxy"
+    },
+    "moduleFileExtensions": [
+      "jsx",
+      "js"
+    ],
+    "unmockedModulePathPatterns": [
+      "react"
+    ],
+    "setupFiles": [
+      "<rootDir>/client/setups/shim.js",
+      "<rootDir>/client/setups/setupTests.js"
+    ]
   },
   "repository": {
     "type": "git",

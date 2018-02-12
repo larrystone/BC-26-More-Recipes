@@ -9,12 +9,36 @@ export default (sequelize, DataTypes) => {
     name: {
       type: DataTypes.STRING,
       allowNull: false,
+      validate: {
+        notEmpty: {
+          args: true,
+          msg: 'recipe name cannot be empty'
+        }
+      }
     },
     description: DataTypes.TEXT,
-    ingredients: DataTypes.TEXT,
+    ingredients: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          args: true,
+          msg: 'ingredients cannot be empty'
+        }
+      }
+    },
     imageUrl: DataTypes.STRING,
     imageId: DataTypes.STRING,
-    procedure: DataTypes.TEXT,
+    procedure: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          args: true,
+          msg: 'enter procedure clearly'
+        }
+      }
+    },
     viewCount: {
       type: DataTypes.INTEGER,
       defaultValue: 0,

@@ -2,15 +2,19 @@ import expect from 'expect';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import moxios from 'moxios';
-import jwt from 'jsonwebtoken';
-import mockData from '../../__mocks__/dataMock';
+import jsonwebtoken from 'jsonwebtoken';
+import mockData from '../../__mocks__/mockData';
 import {
   signIn,
   signUp,
   signOut,
-  getUser
+  getUser,
+  updateProfile,
+  changePassword
 } from '../../src/actions/authActions';
-import { SET_CURRENT_USER, SET_USER_PROFILE } from '../../src/constants';
+import {
+  SET_CURRENT_USER, SET_USER_PROFILE, PASSWORD_CHANGED
+} from '../../src/constants';
 
 import mockLocalStorage from '../../__mocks__/localStorageMock';
 
@@ -18,22 +22,24 @@ const middlewares = [thunk];
 
 const mockStore = configureMockStore(middlewares);
 
+const url = '/api/v1/users/';
+
 window.localStorage = mockLocalStorage;
 
 describe('Authentication actions', () => {
   beforeEach(() => moxios.install());
   afterEach(() => moxios.uninstall());
 
-  it('signs up a new user', async (done) => {
+  it('sign up action', async (done) => {
     const { signUpData, signUpresponse } = mockData;
-    moxios.stubRequest('/api/v1/users/signup', {
+    moxios.stubRequest(`${url}signup`, {
       status: 200,
       response: signUpresponse
     });
     const { token } = signUpresponse;
     const expectedActions = [{
       type: SET_CURRENT_USER,
-      userData: jwt.decode(token)
+      userData: jsonwebtoken.decode(token)
     }];
     const store = mockStore({});
     await store.dispatch(signUp(signUpData))
@@ -43,16 +49,16 @@ describe('Authentication actions', () => {
     done();
   });
 
-  it('signs in a user', async (done) => {
+  it('sign in action', async (done) => {
     const { signInData, signInResponse } = mockData;
-    moxios.stubRequest('/api/v1/users/signin', {
+    moxios.stubRequest(`${url}signin`, {
       status: 200,
       response: signInResponse
     });
     const { token } = signInResponse;
     const expectedActions = [{
       type: SET_CURRENT_USER,
-      userData: jwt.decode(token)
+      userData: jsonwebtoken.decode(token)
     }];
     const store = mockStore({});
     await store.dispatch(signIn(signInData))
@@ -62,7 +68,7 @@ describe('Authentication actions', () => {
     done();
   });
 
-  it('signs out a user', async (done) => {
+  it('sign out action', async (done) => {
     const expectedActions = [{
       type: SET_CURRENT_USER,
       userData: {}
@@ -73,9 +79,9 @@ describe('Authentication actions', () => {
     done();
   });
 
-  it('gets a user details', async (done) => {
+  it('get user profile', async (done) => {
     const { userProfileResponse } = mockData;
-    moxios.stubRequest('/api/v1/users/12/profile', {
+    moxios.stubRequest(`${url}12/profile`, {
       status: 200,
       response: userProfileResponse
     });
@@ -108,6 +114,43 @@ describe('Authentication actions', () => {
     }];
     const store = mockStore({});
     await store.dispatch(getUser(12))
+      .then(() => {
+        expect(store.getActions()).toEqual(expectedActions);
+      });
+    done();
+  });
+
+  it('update user profile', async (done) => {
+    const { signInResponse: { token } } = mockData;
+    moxios.stubRequest(`${url}profile`, {
+      status: 200,
+      response: { user: { token } }
+    });
+
+    const expectedActions = [{
+      type: SET_CURRENT_USER,
+      userData: jsonwebtoken.decode(token)
+    }];
+    const store = mockStore({});
+    await store.dispatch(updateProfile({ name: 'New name' }))
+      .then(() => {
+        expect(store.getActions()).toEqual(expectedActions);
+      });
+    done();
+  });
+
+  it('update user password', async (done) => {
+    moxios.stubRequest(`${url}changePassword`, {
+      status: 200,
+    });
+
+    const expectedActions = [{
+      type: PASSWORD_CHANGED
+    }];
+    const store = mockStore({});
+    await store.dispatch(changePassword({
+      oldPassword: 'password', newPassword: 'kdffsfsk'
+    }))
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions);
       });

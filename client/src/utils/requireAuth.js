@@ -29,8 +29,8 @@ export default function ValidateUser(ChildComponent) {
      *
      */
     componentWillMount() {
-      const JWT_SECRET = process.env.JWT_SECRET || '!\'s_aka*@#0';
-      const { token } = localStorage;
+      const JWT_SECRET = process.env.JWT_SECRET || '!s_aka*@#0';
+      const token = localStorage.getItem('token');
       if (!token) {
         this.props.signOut();
       } else if (token) {

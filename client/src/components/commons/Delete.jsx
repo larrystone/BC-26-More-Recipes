@@ -24,8 +24,8 @@ function Delete({
     >
       <Header icon="archive" content={modal.recipeName} />
       <Modal.Content>
-        <p>Are you sure you want to remove this recipe from your
-          {modal.type === 'favorites' ? 'favorite' : ''} recipes list?
+        <p>Are you sure you want to remove this recipe from your&nbsp;
+          {modal.type === 'favorites' ? 'favorite' : ''}recipes list?
         </p>
         <div className="error">
           {error}

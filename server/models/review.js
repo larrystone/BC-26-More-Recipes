@@ -6,7 +6,15 @@
  */
 export default (sequelize, DataTypes) => {
   const Review = sequelize.define('Review', {
-    content: DataTypes.TEXT,
+    content: {
+      type: DataTypes.TEXT,
+      validate: {
+        notEmpty: {
+          args: true,
+          msg: 'review cannot be empty'
+        }
+      }
+    },
     recipeId: {
       type: DataTypes.INTEGER,
       onDelete: 'CASCADE',
@@ -14,7 +22,7 @@ export default (sequelize, DataTypes) => {
         model: 'Recipes',
         key: 'id',
         as: 'recipeId',
-      }
+      },
     },
     userId: {
       type: DataTypes.INTEGER,

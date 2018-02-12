@@ -3,7 +3,7 @@ import { Button, Popup, Form } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 
 import foods from './../../../images/foods.png';
-import cake from './../../../images/cake.jpg';
+import './../../../images/cake.jpg';
 
 /**
  * @description - Stateless component for rendering intro banner
@@ -20,18 +20,18 @@ function AppIntro({
     <div>
       <div
         className="intro banner--image"
-        style={
-          {
-            background: `url(${cake}) no-repeat`
-          }
-        }
       >
         <div
           className="wow bounceInUp flex button--auth"
         >
           <Popup
             trigger={
-              <Button color="brown" size="large" className="auto__left">
+              <Button
+                color="brown"
+                size="large"
+                className="auto__left"
+                id="signIn"
+              >
                 {'Sign In'}
               </Button>
             }
@@ -42,6 +42,7 @@ function AppIntro({
             <Form loading={isLoading} >
               <Form.Input
                 required
+                name="authName"
                 icon="user"
                 iconPosition="left"
                 label="Username or Email"
@@ -52,6 +53,7 @@ function AppIntro({
               />
               <Form.Input
                 required
+                name="password"
                 icon="lock"
                 iconPosition="left"
                 label="Password"
@@ -74,7 +76,9 @@ function AppIntro({
           </Popup>
 
           <Popup
-            trigger={<Button color="brown" size="large">Sign Up</Button>}
+            trigger={
+              <Button color="brown" size="large" id="signUp">Sign Up</Button>
+            }
             flowing
             on="click"
             position="bottom right"
@@ -82,6 +86,7 @@ function AppIntro({
             <Form className="form--signup" loading={isLoading}>
               <Form.Input
                 required
+                name="name"
                 label="Enter your full name (Max. 100 characters)"
                 placeholder="Full name"
                 onChange={(event) => {
@@ -90,6 +95,7 @@ function AppIntro({
               />
               <Form.Input
                 required
+                name="username"
                 label="Pick a username (Max. 50 characters)"
                 placeholder="Username"
                 onChange={(event) => {
@@ -98,6 +104,7 @@ function AppIntro({
               />
               <Form.Input
                 required
+                name="email"
                 label="Enter email address (Max. 50 characters)"
                 placeholder="Email Address"
                 onChange={(event) => {
@@ -106,6 +113,7 @@ function AppIntro({
               />
               <Form.Input
                 required
+                name="password"
                 label="Enter Password (Max. 50 characters)"
                 placeholder="Password"
                 type="password"
@@ -115,6 +123,7 @@ function AppIntro({
               />
               <Form.Input
                 required
+                name="confirmPassword"
                 label="Re-enter Password"
                 placeholder="Re-enter Password"
                 type="password"
