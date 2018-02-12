@@ -29,7 +29,10 @@ describe('Components: RecipeDetails > View', () => {
       loading: false,
       index: 0,
       recipe: {},
-      reviews: []
+      reviews: [],
+      match: {
+        params: ''
+      }
     };
     mountedComponent = undefined;
   });

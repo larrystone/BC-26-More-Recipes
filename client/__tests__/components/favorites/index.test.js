@@ -43,7 +43,12 @@ describe('Component: AllRecipes', () => {
       },
       fetchFavorites: () => Promise.resolve(),
       pagination: {},
-      recipes: {}
+      recipes: {},
+      userId: 1,
+      addModal: jest.fn(),
+      removeModal: jest.fn(),
+      removeFav: jest.fn(),
+      modal: {}
     };
     mountedComponent = undefined;
   });

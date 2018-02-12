@@ -13,7 +13,7 @@ import noImage from '../../../images/noImage.jpg';
  *
  * @returns {view} CreateOrEdit - Rendered view
  */
-function CreateOrEdit({
+function ManageRecipe({
   modal, actions, loading, recipe, previewImage
 }) {
   /**
@@ -180,7 +180,7 @@ function CreateOrEdit({
   );
 }
 
-CreateOrEdit.propTypes = {
+ManageRecipe.propTypes = {
   modal: PropTypes.shape().isRequired,
   actions: PropTypes.shape().isRequired,
   loading: PropTypes.bool.isRequired,
@@ -188,4 +188,4 @@ CreateOrEdit.propTypes = {
   previewImage: PropTypes.string.isRequired
 };
 
-export default CreateOrEdit;
+export default ManageRecipe;

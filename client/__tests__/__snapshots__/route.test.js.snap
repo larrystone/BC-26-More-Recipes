@@ -45,6 +45,10 @@ ShallowWrapper {
           component={[Function]}
           path="/profile/:userId"
         />,
+        <Route
+          component={[Function]}
+          path="/*"
+        />,
       ],
     },
     "ref": null,
@@ -124,6 +128,18 @@ ShallowWrapper {
         "rendered": null,
         "type": [Function],
       },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "class",
+        "props": Object {
+          "component": [Function],
+          "path": "/*",
+        },
+        "ref": null,
+        "rendered": null,
+        "type": [Function],
+      },
     ],
     "type": [Function],
   },
@@ -160,6 +176,10 @@ ShallowWrapper {
           <Route
             component={[Function]}
             path="/profile/:userId"
+          />,
+          <Route
+            component={[Function]}
+            path="/*"
           />,
         ],
       },
@@ -235,6 +255,18 @@ ShallowWrapper {
           "props": Object {
             "component": [Function],
             "path": "/profile/:userId",
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "component": [Function],
+            "path": "/*",
           },
           "ref": null,
           "rendered": null,
