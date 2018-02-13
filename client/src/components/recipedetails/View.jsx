@@ -210,7 +210,7 @@ function RecipeDetailsView({
    * @returns {view} View - Rendered view
    */
   const renderRecipeDetails = () => {
-    if (!recipe.id) {
+    if (loading || !recipe.id) {
       return (
         <Loading
           text="Recipe"

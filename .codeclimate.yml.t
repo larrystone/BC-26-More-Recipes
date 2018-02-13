@@ -40,3 +40,4 @@ exclude_patterns:
   - "client/build"
   - "client/scripts"
   - "client/config"
+  - "**.test.js"

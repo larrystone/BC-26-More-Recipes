@@ -72,6 +72,8 @@ export class RecipeDetail extends PureComponent {
         this.setState({
           isLoading: false
         });
+        this.props.fetchSingleFavorite(id);
+        this.props.fetchRecipeReviews(id);
       })
       .catch((error) => {
         this.setState({
@@ -79,9 +81,6 @@ export class RecipeDetail extends PureComponent {
         });
         notify('error', error.response.data.message);
       });
-
-    this.props.fetchSingleFavorite(id);
-    this.props.fetchRecipeReviews(id);
   }
 
   /**
