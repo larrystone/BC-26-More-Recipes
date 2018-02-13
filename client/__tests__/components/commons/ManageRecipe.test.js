@@ -34,7 +34,7 @@ describe('Component: ManageRecipe', () => {
         type: 'create_edit_recipe'
       },
       recipe: {},
-      previewImage: ''
+      previewImage: 'ooo'
     };
     mountedComponent = undefined;
   });

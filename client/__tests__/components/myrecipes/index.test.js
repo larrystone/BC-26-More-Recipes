@@ -45,6 +45,8 @@ describe('Component: AllRecipes', () => {
       addRecipe: () => Promise.resolve(),
       editRecipe: () => Promise.resolve(),
       addModal: () => Promise.resolve(),
+      removeModal: jest.fn(),
+      modal: {},
       fetchRecipeDetails: () => Promise.resolve(),
       deleteRecipe: () => Promise.resolve(),
       pagination: {},

@@ -41,6 +41,13 @@ describe('Component: RecipeDetails', () => {
       recipe: {
         id: 2
       },
+      reviews: [],
+      isFav: false,
+      addRecipeReview: jest.fn(),
+      downvote: jest.fn(),
+      upvote: jest.fn(),
+      removeFav: jest.fn(),
+      addFav: jest.fn(),
       fetchRecipeDetails: () => Promise.resolve(),
       fetchSingleFavorite: () => Promise.resolve(),
       fetchRecipeReviews: () => Promise.resolve(),

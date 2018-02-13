@@ -1,8 +1,10 @@
 //colors
 $color_green_lighten_2: #9D6946;
+$color_subtitle: rgba(255,255,255,0.6);
 $color_nobel_approx: #b6b5b5;
 $color_white: #fff;
 $color_red: #F71111;
+$color_paging: #a5673f;
 $color_whitesmoke: whitesmoke;
 
 //fonts
@@ -52,11 +54,11 @@ $font_3: cursive;
 }
 
 .ui.basic.button, .ui.basic.buttons .button {
-	color: white !important;
+	color: $color_white !important;
 }
 
 .sub-title {
-	color: rgba(255,255,255,0.6);
+	color: $color_subtitle;
 	font-size: 1.1rem;
 }
 .desc {
@@ -74,13 +76,16 @@ main {
 }
 
 header {
-	color: #fff;
+	color: $color_white;
 	background-color: $color_green_lighten_2;
 	box-shadow: 1px 2px 2px grey;
 	position: fixed;
 	width: 100%;
 	z-index: 9;
 	padding: 20px 0px 0px 0px;
+	&#not-found {
+		padding: 25px;
+	}
 }
 
 footer {
@@ -153,7 +158,6 @@ a, a:hover {
 	display: flex !important;
 	justify-content: center !important;
 	align-self: baseline;
-	justify-self: flex-end;
 }
 
 .flex__wrap {
@@ -213,12 +217,12 @@ a, a:hover {
 }
 
 .rc-pagination-item-active {
-	background-color: #a5673f;
-	border-color: #a5673f;
+	background-color: $color_paging;
+	border-color: $color_paging;
 }
 
 .rc-pagination-item:hover {
-	border-color: #a5673f;
+	border-color: $color_paging;
 }
 
 .menu--dropdown {
@@ -299,4 +303,20 @@ a, a:hover {
 .ui.compact.selection.dropdown {
 	 min-width: 100px !important;
 	 max-width: 110px !important;
+}
+
+.not-found {
+	display: flex;
+	padding: 20px;
+	justify-content: center;
+	h1 {
+		font-size: 250px;
+		color: $color_green_lighten_2;
+		font-family: $font_2;
+	}
+	@media (max-width: 768px) {
+		flex-direction: column;
+		align-items: center;
+		padding: 0px;
+	}
 }

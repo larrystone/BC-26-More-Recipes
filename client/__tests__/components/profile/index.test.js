@@ -13,6 +13,13 @@ const mockStore = configureMockStore(middlewares);
 
 let props;
 let mountedComponent;
+const context = {
+  router: {
+    history: {
+      push: jest.fn()
+    }
+  }
+};
 
 /**
  * @description Initialise the component
@@ -21,7 +28,7 @@ let mountedComponent;
  */
 const getComponent = () => {
   if (!mountedComponent) {
-    mountedComponent = shallow(<ProfileContainer {...props} />);
+    mountedComponent = shallow(<ProfileContainer {...props} />, { context });
   }
   return mountedComponent;
 };
@@ -32,6 +39,7 @@ describe('Component: Profile', () => {
       match: {
         params: { userId: 1 }
       },
+      changePassword: jest.fn(),
       getUser: () => Promise.resolve(),
       updateProfile: () => Promise.resolve(),
       fetchPagedRecipe: () => Promise.resolve(),

@@ -7,6 +7,7 @@ import RecipeDetails from './components/recipedetails';
 import MyRecipes from './components/myrecipes';
 import Favorites from './components/favorites';
 import Profile from './components/profile';
+import PageNotFound from './components/commons/PageNotFound';
 
 import requireAuth from './utils/requireAuth';
 
@@ -24,7 +25,7 @@ const routes = () => (
     <Route path="/recipe/:id" component={requireAuth(RecipeDetails)} />
     <Route path="/favorites" component={requireAuth(Favorites)} />
     <Route path="/profile/:userId" component={requireAuth(Profile)} />
-    {/* <Route path="/*" component={PageNotFound} /> */}
+    <Route path="/*" component={PageNotFound} />
   </Switch>
 );
 

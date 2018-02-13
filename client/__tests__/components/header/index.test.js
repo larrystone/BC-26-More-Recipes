@@ -40,6 +40,8 @@ describe('Component: Header', () => {
         search: '?page=2&limit=10'
       },
       fetchFavorites: () => Promise.resolve(),
+      signOut: jest.fn(),
+      loggedUser: {},
       pagination: {},
       recipes: {}
     };

@@ -54,32 +54,33 @@ export default class Reviews {
           .then((reviewOwner) => {
             const { name, imageUrl } = reviewOwner;
             review.User = { name, imageUrl };
-          });
+            // });
 
-        Recipe
-          .findOne({
-            attributes: ['userId', 'imageUrl', 'name'],
-            where: { id: recipeId },
-            include: [
-              { model: User, attributes: ['email', 'name'] }
-            ]
-          })
-          .then((recipe) => {
-            const recipeOwnerEmail = recipe.User.email;
-            notify.send({
-              review,
-              recipe,
-              recipeId,
-              type: 'review',
-              subject: 'New recipe review',
-              email: recipeOwnerEmail
-            });
+            Recipe
+              .findOne({
+                attributes: ['userId', 'imageUrl', 'name'],
+                where: { id: recipeId },
+                include: [
+                  { model: User, attributes: ['email', 'name'] }
+                ]
+              })
+              .then((recipe) => {
+                const recipeOwnerEmail = recipe.User.email;
+                notify.send({
+                  review,
+                  recipe,
+                  recipeId,
+                  type: 'review',
+                  subject: 'New recipe review',
+                  email: recipeOwnerEmail
+                });
 
-            return res.status(201).json({
-              success: true,
-              message: 'New review created',
-              createdReview: review
-            });
+                return res.status(201).json({
+                  success: true,
+                  message: 'New review created',
+                  createdReview: review
+                });
+              });
           })
           .catch((/* error */) => res.status(500).json({
             success: false,

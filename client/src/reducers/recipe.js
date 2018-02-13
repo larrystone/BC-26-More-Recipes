@@ -66,7 +66,7 @@ export default (state = initialState, action) => {
         myRecipes: {
           pagination: {
             ...state.myRecipes.pagination,
-            totalRecords: state.myRecipes.pagination.totalRecords + 1
+            totalRecords: (state.myRecipes.pagination.totalRecords || 0) + 1
           },
           recipes: {
             ...state.myRecipes.recipes, [action.recipe.id]: action.recipe

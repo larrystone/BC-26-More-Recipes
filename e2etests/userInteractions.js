@@ -296,6 +296,7 @@ module.exports = {
         'let us just start cooking, shall we?')
         .pause(long)
         .click('.ui.icon.positive.right.labeled.button')
+        .pause(long)
         .waitForElementVisible('.toast-message', short)
         .assert.containsText('.toast-message', 'Recipe name already picked!')
         .assert.elementNotPresent('.ui.brown.large.message.not-found--message')
@@ -507,7 +508,7 @@ module.exports = {
         .pause(long)
         .click('.ui.brown.icon.left.labeled.button')
         .pause(long)
-        .waitForElementVisible('.comment__avatar', short)
+        .waitForElementVisible('.comment__avatar', long)
         .assert.visible('.comment__avatar')
         .assert.containsText('.content .text', 'Automated food review')
         .assert.containsText('.content .author', 'lovelace')
@@ -627,7 +628,19 @@ module.exports = {
         .click('.ui.red.button')
         .waitForElementVisible('.toast-message', short)
         .assert.containsText('.toast-message', 'Password change successful')
+        .pause(long);
+    },
+  'user gets redirected to the 404 page when requesting an invalid route':
+    (browser) => {
+      browser
+        .url(`${baseUrl}/funnyplace`)
+        .pause(long)
+        .assert.containsText('h2', 'Oh no...the page you requested was not found')
+        .assert.attributeEquals('img', 'src', `${baseUrl}/images/zero.svg`)
+        .assert.visible('.ui.brown.large.button')
+        .pause(long)
+        .click('.ui.brown.large.button')
         .pause(long)
         .end();
-    }
+    },
 };

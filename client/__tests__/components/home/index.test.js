@@ -48,7 +48,9 @@ describe('Component: Home', () => {
       },
       fetchFavorites: () => Promise.resolve(),
       pagination: {},
-      recipes: {}
+      recipes: {},
+      signUp: jest.fn(),
+      signIn: jest.fn()
     };
     mountedComponent = undefined;
   });
